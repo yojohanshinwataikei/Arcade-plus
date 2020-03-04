@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - ArcaeaNote
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - PostProcessing
+  - ArcaeaGameplay
+  - ArcadeEditor
+  - ArcadeComposing
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Track
+    uniqueID: 2829105111
+    locked: 0
+  - name: Note
+    uniqueID: 847068993
+    locked: 0
+  - name: Arc
+    uniqueID: 1689115309
+    locked: 0
+  - name: Effect
+    uniqueID: 3236498083
+    locked: 0
+  - name: UI
+    uniqueID: 3169236845
+    locked: 0
+  - name: EditorUI
+    uniqueID: 867310387
+    locked: 0

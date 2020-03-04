@@ -1,0 +1,14 @@
+{
+    "name": "Arcade",
+    "references": [
+        "Demigiant.DOTween"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
