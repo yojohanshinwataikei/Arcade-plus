@@ -229,7 +229,7 @@ namespace Arcade.Compose
 			TopBar.DOAnchorPosY(TopBar.sizeDelta.y, ModeSwitchDuration).SetEase(ToPlayerModeEase);
 			BottomBar.DOAnchorPosY(-BottomBar.sizeDelta.y, ModeSwitchDuration).SetEase(ToPlayerModeEase);
 			LeftBar.DOAnchorPosX(-LeftBar.sizeDelta.x, ModeSwitchDuration).SetEase(ToPlayerModeEase);
-			RightBar.DOAnchorPosX(RightBar.sizeDelta.x, ModeSwitchDuration).SetEase(ToPlayerModeEase).OnComplete(() => { Bars.gameObject.SetActive(false); switchingMode = false; });
+			RightBar.DOAnchorPosX(RightBar.sizeDelta.x, ModeSwitchDuration).SetEase(ToPlayerModeEase).OnComplete(() => {switchingMode = false; });
 			GameplayCamera.DORect(new Rect(0, 0, 1, 1), ModeSwitchDuration).SetEase(ToPlayerModeEase);
 
 			PauseButtonImage.sprite = PausePause;
@@ -249,7 +249,6 @@ namespace Arcade.Compose
 			switchingMode = true;
 
 			GameplayManager.Pause();
-			Bars.gameObject.SetActive(true);
 			TopBar.DOAnchorPosY(0, ModeSwitchDuration).SetEase(ToEditorModeEase);
 			BottomBar.DOAnchorPosY(0, ModeSwitchDuration).SetEase(ToEditorModeEase);
 			LeftBar.DOAnchorPosX(0, ModeSwitchDuration).SetEase(ToEditorModeEase);

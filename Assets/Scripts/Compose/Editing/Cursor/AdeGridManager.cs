@@ -15,7 +15,7 @@ namespace Arcade.Compose
     public class CustomGrid
     {
         public string X = "-0.5>1.5/0.25";
-        public string Y = "-0.2>1/0.2;0.5";
+        public string Y = "0>1/0.2;0.5";
     }
     public struct BeatlineProperty
     {
