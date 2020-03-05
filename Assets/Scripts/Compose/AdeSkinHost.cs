@@ -857,6 +857,7 @@ namespace Arcade.Compose
 			{
 				return null;
 			}
+			//TODO: Completly remove mipmap after GPU optimize
 			Texture2D texture = new Texture2D(1, 1);
 			bool success = ImageConversion.LoadImage(texture, file, true);
 			if (success)
@@ -864,6 +865,7 @@ namespace Arcade.Compose
 				resourceList.Add(texture);
 				texture.wrapMode = TextureWrapMode.Clamp;
 				texture.name = path;
+				texture.mipMapBias=-4;
 				return texture;
 			}
 			else

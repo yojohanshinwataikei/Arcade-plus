@@ -48,18 +48,18 @@ namespace Arcade.Gameplay
 				}
 			}
 		}
-		public Color Color
+		public Color HighColor
 		{
 			get
 			{
-				return currentColor;
+				return currentHighColor;
 			}
 			set
 			{
-				if (currentColor != value)
+				if (currentHighColor != value)
 				{
-					currentColor = value;
-					bodyPropertyBlock.SetColor(colorShaderId, value);
+					currentHighColor = value;
+					bodyPropertyBlock.SetColor(highColorShaderId, value);
 					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 					Color c = ShadowColor;
 					c.a = value.a * 0.3f;
@@ -68,23 +68,46 @@ namespace Arcade.Gameplay
 				}
 			}
 		}
+
+		public Color LowColor
+		{
+			get
+			{
+				return currentLowColor;
+			}
+			set
+			{
+				if (currentLowColor != value)
+				{
+					currentLowColor = value;
+					bodyPropertyBlock.SetColor(lowColorShaderId, value);
+					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
+				}
+			}
+		}
 		public float Alpha
 		{
 			get
 			{
-				return currentColor.a;
+				return currentHighColor.a;
 			}
 			set
 			{
-				if (currentColor.a != value)
+				if (currentHighColor.a != value)
 				{
-					currentColor.a = value;
-					bodyPropertyBlock.SetColor(colorShaderId, currentColor);
+					currentHighColor.a = value;
+					bodyPropertyBlock.SetColor(highColorShaderId, currentHighColor);
 					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 					Color c = ShadowColor;
 					c.a = value * 0.3f;
 					shadowPropertyBlock.SetColor(colorShaderId, c);
 					ShadowRenderer.SetPropertyBlock(shadowPropertyBlock);
+				}
+				if (currentLowColor.a != value)
+				{
+					currentLowColor.a = value;
+					bodyPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
+					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 				}
 			}
 		}
@@ -182,10 +205,13 @@ namespace Arcade.Gameplay
 		private bool highlighted = false;
 		private int fromShaderId;
 		private int colorShaderId;
+		private int highColorShaderId;
+		private int lowColorShaderId;
 		private int highlightShaderId;
 		private int mainTexShaderId;
 		private float currentFrom = 0;
-		private Color currentColor;
+		private Color currentHighColor;
+		private Color currentLowColor;
 
 		private void Awake()
 		{
@@ -199,6 +225,8 @@ namespace Arcade.Gameplay
 			shadowPropertyBlock = new MaterialPropertyBlock();
 			fromShaderId = Shader.PropertyToID("_From");
 			colorShaderId = Shader.PropertyToID("_Color");
+			highColorShaderId = Shader.PropertyToID("_HighColor");
+			lowColorShaderId = Shader.PropertyToID("_LowColor");
 			highlightShaderId = Shader.PropertyToID("_Highlight");
 			mainTexShaderId = Shader.PropertyToID("_MainTex");
 		}
@@ -208,7 +236,7 @@ namespace Arcade.Gameplay
 			Destroy(ShadowFilter.sharedMesh);
 		}
 
-		public void BuildSegment(Vector3 fromPos, Vector3 toPos, float offset, int from, int to)
+		public void BuildSegment(Vector3 fromPos, Vector3 toPos, float offset, int from, int to, float fromHeight, float toHeight)
 		{
 			FromTiming = from;
 			ToTiming = to;
@@ -219,26 +247,34 @@ namespace Arcade.Gameplay
 
 			Vector3[] vertices = new Vector3[6];
 			Vector2[] uv = new Vector2[6];
+			Vector2[] uv2 = new Vector2[6];
 			int[] triangles = new int[] { 0, 3, 2, 0, 2, 1, 0, 5, 4, 0, 4, 1 };
 
 			vertices[0] = fromPos + new Vector3(0, offset / 2, 0);
-			uv[0] = new Vector2();
+			uv[0] = new Vector2(0, 0);
+			uv2[0] =new Vector2(fromHeight,0);
 			vertices[1] = toPos + new Vector3(0, offset / 2, 0);
 			uv[1] = new Vector2(0, 1);
+			uv2[1] =new Vector2(toHeight,0);
 			vertices[2] = toPos + new Vector3(offset, -offset / 2, 0);
 			uv[2] = new Vector2(1, 1);
+			uv2[2] =new Vector2(toHeight,0);
 			vertices[3] = fromPos + new Vector3(offset, -offset / 2, 0);
 			uv[3] = new Vector2(1, 0);
+			uv2[3] =new Vector2(fromHeight,0);
 			vertices[4] = toPos + new Vector3(-offset, -offset / 2, 0);
 			uv[4] = new Vector2(1, 1);
+			uv2[4] =new Vector2(toHeight,0);
 			vertices[5] = fromPos + new Vector3(-offset, -offset / 2, 0);
 			uv[5] = new Vector2(1, 0);
+			uv2[5] =new Vector2(fromHeight,0);
 
 			Destroy(SegmentFilter.sharedMesh);
 			SegmentFilter.sharedMesh = new Mesh()
 			{
 				vertices = vertices,
 				uv = uv,
+				uv2 = uv2,
 				triangles = triangles
 			};
 

@@ -14,11 +14,6 @@ namespace Arcade.Gameplay
 		public Material arcMaterial;
 		public Material shadowMaterial;
 		public GameObject SegmentPrefab;
-		public Color ArcRed;
-		public Color ArcBlue;
-		public Color ArcGreen;
-		public Color ArcVoid;
-		public Color ShadowColor;
 
 		public MeshCollider ArcCollider, HeadCollider;
 		public MeshFilter HeadFilter;
@@ -32,6 +27,36 @@ namespace Arcade.Gameplay
 
 		private MaterialPropertyBlock headPropertyBlock;
 
+		private Color ArcRedHigh
+		{
+			get { return ArcArcManager.Instance.ArcRedHigh; }
+		}
+		private Color ArcBlueHigh
+		{
+			get { return ArcArcManager.Instance.ArcBlueHigh; }
+		}
+		private Color ArcGreenHigh
+		{
+			get { return ArcArcManager.Instance.ArcGreenHigh; }
+		}
+		private Color ArcRedLow
+		{
+			get { return ArcArcManager.Instance.ArcRedLow; }
+		}
+		private Color ArcBlueLow
+		{
+			get { return ArcArcManager.Instance.ArcBlueLow; }
+		}
+		private Color ArcGreenLow
+		{
+			get { return ArcArcManager.Instance.ArcGreenLow; }
+		}
+		private Color ArcVoid
+		{
+			get { return ArcArcManager.Instance.ArcVoid; }
+		}
+
+
 		public ArcArc Arc
 		{
 			get
@@ -44,22 +69,42 @@ namespace Arcade.Gameplay
 				Build();
 			}
 		}
-		public Color Color
+		public Color HighColor
 		{
 			get
 			{
-				return currentColor;
+				return currentHighColor;
 			}
 			set
 			{
-				if (currentColor != value)
+				if (currentHighColor != value)
 				{
-					currentColor = value;
-					headPropertyBlock.SetColor(colorShaderId, currentColor);
+					currentHighColor = value;
+					headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
 					HeadRenderer.SetPropertyBlock(headPropertyBlock);
 					foreach (var s in segments)
 					{
-						s.Color = currentColor;
+						s.HighColor = currentHighColor;
+					}
+				}
+			}
+		}
+		public Color LowColor
+		{
+			get
+			{
+				return currentLowColor;
+			}
+			set
+			{
+				if (currentLowColor != value)
+				{
+					currentLowColor = value;
+					headPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
+					HeadRenderer.SetPropertyBlock(headPropertyBlock);
+					foreach (var s in segments)
+					{
+						s.LowColor = currentLowColor;
 					}
 				}
 			}
@@ -68,19 +113,24 @@ namespace Arcade.Gameplay
 		{
 			get
 			{
-				return currentColor.a;
+				return currentHighColor.a;
 			}
 			set
 			{
-				if (currentColor.a != value)
+				if (currentHighColor.a != value)
 				{
-					currentColor.a = value;
-					headPropertyBlock.SetColor(colorShaderId, currentColor);
+					currentHighColor.a = value;
+					headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
 					HeadRenderer.SetPropertyBlock(headPropertyBlock);
 					foreach (var s in segments)
 					{
 						s.Alpha = value;
 					}
+				}
+				if (currentLowColor.a != value)
+				{
+					currentLowColor.a = value;
+					headPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
 				}
 			}
 		}
@@ -184,11 +234,13 @@ namespace Arcade.Gameplay
 
 		public void ReloadColor()
 		{
-			float alpha=Alpha;
-			if(arc!=null){
-				Color = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlue : arc.Color == 1 ? ArcRed : ArcGreen));
+			float alpha = Alpha;
+			if (arc != null)
+			{
+				HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : ArcGreenHigh));
+				LowColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : ArcGreenLow));
 			}
-			Alpha=alpha;
+			Alpha = alpha;
 		}
 		public bool EnableEffect
 		{
@@ -244,7 +296,8 @@ namespace Arcade.Gameplay
 			headPropertyBlock = new MaterialPropertyBlock();
 			HeadRenderer.sortingLayerName = "Arc";
 			HeadRenderer.sortingOrder = 1;
-			colorShaderId = Shader.PropertyToID("_Color");
+			highColorShaderId = Shader.PropertyToID("_HighColor");
+			lowColorShaderId = Shader.PropertyToID("_LowColor");
 			highlightShaderId = Shader.PropertyToID("_Highlight");
 			mainTexShaderId = Shader.PropertyToID("_MainTex");
 		}
@@ -256,7 +309,9 @@ namespace Arcade.Gameplay
 		}
 
 		private int highlightShaderId;
-		private int colorShaderId;
+		private int highColorShaderId;
+		private int lowlightShaderId;
+		private int lowColorShaderId;
 		private int mainTexShaderId;
 		private int segmentCount = 0;
 		private bool enable;
@@ -267,7 +322,8 @@ namespace Arcade.Gameplay
 		private bool highlighted;
 		private bool effect;
 		private ArcArc arc;
-		private Color currentColor;
+		private Color currentHighColor;
+		private Color currentLowColor;
 		private List<ArcArcSegmentComponent> segments = new List<ArcArcSegmentComponent>();
 
 		private void InstantiateSegment(int quantity)
@@ -312,7 +368,7 @@ namespace Arcade.Gameplay
 			}
 			HeightIndicatorRenderer.transform.localPosition = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XStart), 0, 0);
 			HeightIndicatorRenderer.transform.localScale = new Vector3(2.34f, 100 * (ArcAlgorithm.ArcYToWorld(arc.YStart) - OffsetNormal / 2), 1);
-			HeightIndicatorRenderer.color = arc.Color == 1 ? ArcRed : arc.Color == 0 ? ArcBlue : ArcGreen;
+			HeightIndicatorRenderer.color = Color.Lerp(arc.Color == 1 ? ArcRedLow : arc.Color == 0 ? ArcBlueLow : ArcGreenLow,arc.Color == 1 ? ArcRedHigh : arc.Color == 0 ? ArcBlueHigh : ArcGreenHigh,arc.YStart);
 		}
 		public void BuildSegments()
 		{
@@ -328,26 +384,32 @@ namespace Arcade.Gameplay
 			segmentCount = (segSize == 0 ? 0 : duration / segSize) + 1;
 			InstantiateSegment(segmentCount);
 
+			float startHeight = 0;
+			float endHeight = arc.YStart;
 			Vector3 start = new Vector3();
 			Vector3 end = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XStart),
 										ArcAlgorithm.ArcYToWorld(arc.YStart));
-
 			for (int i = 0; i < segmentCount - 1; ++i)
 			{
+				startHeight = endHeight;
 				start = end;
+				endHeight = ArcAlgorithm.Y(arc.YStart, arc.YEnd, (i + 1f) * segSize / duration, arc.LineType);
 				end = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(arc.XStart, arc.XEnd, (i + 1f) * segSize / duration, arc.LineType)),
 								  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(arc.YStart, arc.YEnd, (i + 1f) * segSize / duration, arc.LineType)),
 								  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, arc.Timing + offset + segSize * (i + 1)) / 1000f);
-				segments[i].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * i, arc.Timing + segSize * (i + 1));
+				segments[i].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * i, arc.Timing + segSize * (i + 1), startHeight, endHeight);
 			}
 
+			startHeight = endHeight;
 			start = end;
+			endHeight = arc.YEnd;
 			end = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XEnd),
 							  ArcAlgorithm.ArcYToWorld(arc.YEnd),
 							  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, arc.EndTiming + offset) / 1000f);
-			segments[segmentCount - 1].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * (segmentCount - 1), arc.EndTiming);
+			segments[segmentCount - 1].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * (segmentCount - 1), arc.EndTiming, startHeight, endHeight);
 
-			Color = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlue : arc.Color == 1 ? ArcRed : ArcGreen));
+			HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : ArcGreenHigh));
+			LowColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : ArcGreenLow));
 		}
 
 		public void BuildHead()
@@ -357,22 +419,28 @@ namespace Arcade.Gameplay
 
 			Vector3[] vertices = new Vector3[4];
 			Vector2[] uv = new Vector2[4];
+			Vector2[] uv2 = new Vector2[4];
 			int[] triangles = new int[] { 0, 2, 1, 0, 3, 2, 0, 1, 2, 0, 2, 3 };
 
 			vertices[0] = pos + new Vector3(0, offset / 2, 0);
-			uv[0] = new Vector2();
+			uv[0] = new Vector2(0,0);
+			uv2[0] = new Vector2(arc.YStart,0);
 			vertices[1] = pos + new Vector3(offset, -offset / 2, 0);
 			uv[1] = new Vector2(1, 0);
+			uv2[1] = new Vector2(arc.YStart,0);
 			vertices[2] = pos + new Vector3(0, -offset / 2, offset / 2);
 			uv[2] = new Vector2(1, 1);
+			uv2[2] = new Vector2(arc.YStart,0);
 			vertices[3] = pos + new Vector3(-offset, -offset / 2, 0);
 			uv[3] = new Vector2(1, 1);
+			uv2[3] = new Vector2(arc.YStart,0);
 
 			Destroy(HeadFilter.sharedMesh);
 			HeadFilter.sharedMesh = new Mesh()
 			{
 				vertices = vertices,
 				uv = uv,
+				uv2 = uv2,
 				triangles = triangles.Take(6).ToArray()
 			};
 
@@ -462,7 +530,7 @@ namespace Arcade.Gameplay
 					s.Enable = true;
 					s.CurrentArcMaterial = null;
 					s.CurrentShadowMaterial = null;
-					s.Alpha = currentColor.a;
+					s.Alpha = currentHighColor.a;
 					if (arc.Judging || arc.IsVoid)
 					{
 						s.From = (z + s.FromPos.z) / (-s.ToPos.z + s.FromPos.z);
@@ -479,7 +547,7 @@ namespace Arcade.Gameplay
 					s.Enable = true;
 					s.CurrentArcMaterial = null;
 					s.CurrentShadowMaterial = null;
-					s.Alpha = currentColor.a * (100 - pos) / 10f;
+					s.Alpha = currentHighColor.a * (100 - pos) / 10f;
 					s.From = 0;
 				}
 				else if (pos > 100 || pos < -20)
@@ -489,7 +557,7 @@ namespace Arcade.Gameplay
 				else
 				{
 					s.Enable = true;
-					s.Alpha = currentColor.a;
+					s.Alpha = currentHighColor.a;
 					s.From = 0;
 					s.CurrentArcMaterial = arcMaterial;
 					s.CurrentShadowMaterial = shadowMaterial;
@@ -517,14 +585,18 @@ namespace Arcade.Gameplay
 			{
 				Head.localPosition = new Vector3();
 				HeadRenderer.sharedMaterial = arcMaterial;
-				Color c = currentColor;
-				c.a = currentColor.a * (100000 - arc.Position) / 100000;
-				headPropertyBlock.SetColor(colorShaderId, c);
+				Color highC = currentHighColor;
+				highC.a = currentHighColor.a * (100000 - arc.Position) / 100000;
+				headPropertyBlock.SetColor(highColorShaderId, highC);
+				Color lowC = currentLowColor;
+				lowC.a = currentLowColor.a * (100000 - arc.Position) / 100000;
+				headPropertyBlock.SetColor(lowColorShaderId, lowC);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
 			}
 			else if (arc.Position < 0)
 			{
-				headPropertyBlock.SetColor(colorShaderId, currentColor);
+				headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
+				headPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
 				if (arc.Judging || arc.IsVoid)
 				{
@@ -549,7 +621,8 @@ namespace Arcade.Gameplay
 			}
 			else
 			{
-				headPropertyBlock.SetColor(colorShaderId, currentColor);
+				headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
+				headPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
 				Head.localPosition = new Vector3();
 			}
@@ -566,8 +639,8 @@ namespace Arcade.Gameplay
 			int currentTiming = ArcGameplayManager.Instance.Timing;
 			if (pos < -90 && pos > -100)
 			{
-				Color c = currentColor;
-				c.a = currentColor.a * (pos + 100) / 10;
+				Color c = Color.Lerp(currentLowColor,currentHighColor,arc.YStart);
+				c.a = currentHighColor.a * (pos + 100) / 10;
 				EnableHeightIndicator = true;
 				HeightIndicatorRenderer.color = c;
 			}
@@ -579,7 +652,7 @@ namespace Arcade.Gameplay
 			{
 				if (arc.Judging && pos > 0) EnableHeightIndicator = false;
 				else EnableHeightIndicator = true;
-				HeightIndicatorRenderer.color = currentColor;
+				HeightIndicatorRenderer.color =  Color.Lerp(currentLowColor,currentHighColor,arc.YStart);
 			}
 		}
 		private void UpdateArcCap()

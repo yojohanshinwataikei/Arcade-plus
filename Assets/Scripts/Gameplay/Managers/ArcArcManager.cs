@@ -22,6 +22,15 @@ namespace Arcade.Gameplay
 		public Texture2D ArcTapSkin;
 		public Material ArcTapMaterial;
 		public Material ArcMaterial;
+
+		public Color ArcRedLow;
+		public Color ArcBlueLow;
+		public Color ArcGreenLow;
+		public Color ArcRedHigh;
+		public Color ArcBlueHigh;
+		public Color ArcGreenHigh;
+		public Color ArcVoid;
+		public Color ShadowColor;
 		public readonly float[] Lanes = { 6.375f, 2.125f, -2.125f, -6.375f };
 
 		[HideInInspector]
@@ -305,19 +314,18 @@ namespace Arcade.Gameplay
 
 		public void SetArcColors(Color arcRedLow, Color arcBlueLow, Color arcGreenLow, Color arcRedHigh, Color arcBlueHigh, Color arcGreenHigh,Color arcVoid)
 		{
+			ArcRedLow=arcRedLow;
+			ArcBlueLow=arcBlueLow;
+			ArcGreenLow=arcGreenLow;
+			ArcRedHigh=arcRedHigh;
+			ArcBlueHigh=arcBlueHigh;
+			ArcGreenHigh=arcGreenHigh;
+			ArcVoid=arcVoid;
 			//TODO: arc has slight diifferent color at different hight
 			ArcArcRenderer prefabRenderer = ArcNotePrefab.GetComponent<ArcArcRenderer>();
-			prefabRenderer.ArcRed=arcRedHigh;
-			prefabRenderer.ArcBlue=arcBlueHigh;
-			prefabRenderer.ArcGreen=arcGreenHigh;
-			prefabRenderer.ArcVoid=arcVoid;
 			prefabRenderer.ReloadColor();
 			foreach (ArcArc arc in Arcs)
 			{
-				arc.arcRenderer.ArcRed=arcRedHigh;
-				arc.arcRenderer.ArcBlue=arcBlueHigh;
-				arc.arcRenderer.ArcGreen=arcGreenHigh;
-				arc.arcRenderer.ArcVoid=arcVoid;
 				arc.arcRenderer.ReloadColor();
 			}
 		}

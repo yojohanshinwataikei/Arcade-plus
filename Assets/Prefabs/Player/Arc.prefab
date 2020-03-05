@@ -133,11 +133,6 @@ MonoBehaviour:
   shadowMaterial: {fileID: 2100000, guid: 82043575658889a4bafb43f4397fe61e, type: 2}
   SegmentPrefab: {fileID: 1374156918699440, guid: 65a6ec2a7d2a9b1419fa573cc455d902,
     type: 3}
-  ArcRed: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
-  ArcBlue: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}
-  ArcGreen: {r: 0.13725491, g: 1, b: 0.42352942, a: 1}
-  ArcVoid: {r: 0.5686275, g: 0.47058824, b: 0.6666667, a: 1}
-  ShadowColor: {r: 0.3529412, g: 0.3529412, b: 0.3529412, a: 0.3529412}
   ArcCollider: {fileID: 64321634845165700}
   HeadCollider: {fileID: 64226225488760392}
   HeadFilter: {fileID: 33427256565974668}
@@ -465,8 +460,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.3392157, g: 0.5392157, b: 0.79019606, a: 0.5}
-      maxColor: {r: 0.5392157, g: 0.73921573, b: 0.9901961, a: 2}
+      minColor: {r: 0.3, g: 0.1, b: 0.3, a: 0.5}
+      maxColor: {r: 0.5, g: 0.3, b: 0.5, a: 2}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -1548,7 +1543,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 0.54901963, g: 0.6392157, b: 0.8901961, a: 1}
+        key1: {r: 0.4, g: 0.2, b: 0.8, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}

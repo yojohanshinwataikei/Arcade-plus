@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using DG.Tweening;
+using Arcade.Compose.Dialog;
 
 namespace Arcade.Compose
 {
@@ -28,13 +29,13 @@ namespace Arcade.Compose
 		{
 			Left.DOAnchorPosX(-1165, Duration).SetEase(Ease.InCubic);
 			Right.DOAnchorPosX(459, Duration).SetEase(Ease.InCubic);
-			AudioSource.PlayClipAtPoint(OpenAudio, new Vector3());
+			AudioSource.PlayClipAtPoint(OpenAudio, new Vector3(),AdeSoundDialog.Instance.ChartSource.volume);
 		}
 		public void Close()
 		{
 			Left.DOAnchorPosX(0, Duration).SetEase(Ease.OutCubic);
 			Right.DOAnchorPosX(0, Duration).SetEase(Ease.OutCubic);
-			AudioSource.PlayClipAtPoint(CloseAudio, new Vector3());
+			AudioSource.PlayClipAtPoint(CloseAudio, new Vector3(),AdeSoundDialog.Instance.ChartSource.volume);
 		}
 		public IEnumerator OpenCoroutine()
 		{
