@@ -20,7 +20,7 @@ namespace Arcade.Compose.UI
 
 		private void Update()
 		{
-			if (!pointerDown) speed.value = ArcTimingManager.Instance.DropRate;
+			if (!pointerDown) speed.value = ArcTimingManager.Instance.Velocity;
 			Value.text = speed.value.ToString();
 		}
 		public void OnPointerDown(PointerEventData eventData)
@@ -33,7 +33,7 @@ namespace Arcade.Compose.UI
 		}
 		public void OnEndDrag(PointerEventData eventData)
 		{
-			ArcTimingManager.Instance.DropRate = (int)speed.value;
+			ArcTimingManager.Instance.Velocity = (int)speed.value;
 			ArcArcManager.Instance.Rebuild();
 		}
 	}

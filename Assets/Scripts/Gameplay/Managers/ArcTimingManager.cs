@@ -17,26 +17,23 @@ namespace Arcade.Gameplay
 			speedShaderId = Shader.PropertyToID("_Speed");
 		}
 
-		public int DropRate = 30;
+		public int Velocity = 30;
 		public float BaseBpm = 100;
 		public Transform BeatlineLayer;
 		public GameObject BeatlinePrefab;
+
+		// Note: This should be ordered!
 		[HideInInspector]
-		public List<ArcTiming> Timings = new List<ArcTiming>();
+		private List<ArcTiming> timings = new List<ArcTiming>();
 		public SpriteRenderer TrackRenderer;
 
 		private List<float> beatlineTimings = new List<float>();
 		private List<SpriteRenderer> beatLineInstances = new List<SpriteRenderer>();
-		private List<float> keyTimes = new List<float>();
-		private readonly float[] starts = new float[25];
-		private readonly float[] ends = new float[25];
-		private int pairCount = 0;
+		private float earliestRenderTime = 0;
+		private float latestRenderTime = 0;
 		private int speedShaderId = 0;
-
-		public bool IsStopped { get; set; }
-		public bool IsBackwarding { get; set; }
-		public bool WillBackward { get; set; }
 		public float CurrentSpeed { get; set; }
+		public List<ArcTiming> Timings { get => timings; }
 
 		private void Update()
 		{
@@ -50,17 +47,14 @@ namespace Arcade.Gameplay
 
 		public void Clean()
 		{
-			IsStopped = false;
-			IsBackwarding = false;
-			WillBackward = false;
 			CurrentSpeed = 0;
 			Timings.Clear();
 			TrackRenderer.sharedMaterial.SetFloat(speedShaderId, 0);
 			HideExceededBeatlineInstance(0);
 		}
-		public void Load(List<ArcTiming> timings)
+		public void Load(List<ArcTiming> arcTimings)
 		{
-			Timings = timings;
+			timings = arcTimings.OrderBy((timing) => timing.Timing).ToList();
 			CalculateBeatlineTimes();
 		}
 		private void HideExceededBeatlineInstance(int quantity)
@@ -84,35 +78,45 @@ namespace Arcade.Gameplay
 		{
 			beatlineTimings.Clear();
 			HideExceededBeatlineInstance(0);
-
+			if(Timings.Count==0){
+				return;
+			}
 			for (int i = 0; i < Timings.Count; ++i)
 			{
-				float nextTiming=i+1>=Timings.Count?ArcGameplayManager.Instance.Length:Timings[i + 1].Timing;
-				float segment = Timings[i].Bpm == 0 ? (nextTiming - Timings[i].Timing) : (60000 / Mathf.Abs(Timings[i].Bpm) * Timings[i].BeatsPerLine);
+				if (Timings[i].Bpm == 0 || Timings[i].BeatsPerLine == 0)
+				{
+					beatlineTimings.Add(Timings[i].Timing);
+					continue;
+				}
+				float nextTiming = i + 1 >= Timings.Count ? ArcGameplayManager.Instance.Length : Timings[i + 1].Timing;
+				float segment = (60000 / Mathf.Abs(Timings[i].Bpm) * Timings[i].BeatsPerLine);
 				if (segment == 0) continue;
 				int n = 0;
 				while (true)
 				{
-					float j = Timings[i].Timing + n++ * segment;
+					float j = Timings[i].Timing + n * segment;
 					if (j >= nextTiming)
+					{
 						break;
+					}
 					beatlineTimings.Add(j);
+					n++;
 				}
 			}
 
-			if (Timings.Count >= 1 && Timings[0].Bpm != 0 && Timings[0].BeatsPerLine != 0)
+			if (Timings[0].Bpm != 0 && Timings[0].BeatsPerLine != 0)
 			{
 				float t = 0;
-				float delta = 60000 / Mathf.Abs(Timings[0].Bpm) * Timings[0].BeatsPerLine;
+				float segment = 60000 / Mathf.Abs(Timings[0].Bpm) * Timings[0].BeatsPerLine;
 				int n = 0;
-				if (delta != 0)
+				while (true)
 				{
-					while (t >= -3000)
-					{
-						n++;
-						t = -n * delta;
-						beatlineTimings.Insert(0, t);
+					n++;
+					t = -n * segment;
+					if(t<-ArcAudioManager.Instance.AudioOffset){
+						break;
 					}
+					beatlineTimings.Insert(0, t);
 				}
 			}
 		}
@@ -121,131 +125,65 @@ namespace Arcade.Gameplay
 		{
 			return CalculatePositionByTimingAndStart(ArcGameplayManager.Instance.Timing, timing);
 		}
-		public float CalculatePositionByTimingAndStart(int startTiming, int timing)
+		public float CalculatePositionByTimingAndStart(int pivotTiming, int targetTiming)
 		{
+			if (Timings.Count == 0)
+			{
+				return 0;
+			}
 			int offset = ArcAudioManager.Instance.AudioOffset;
-			int currentTiming = startTiming > timing ? timing : startTiming;
-			int targetTiming = startTiming > timing ? startTiming : timing;
-			bool reverse = startTiming > timing;
-			float position = 0;
-			int start = 0, end = 0;
-			for (int i = 0; i < Timings.Count - 1; ++i)
+			bool reversed = pivotTiming > targetTiming;
+			int startTiming = (reversed ? targetTiming : pivotTiming) - offset;
+			int endTiming = (reversed ? pivotTiming : targetTiming) - offset;
+			int startTimingId = Timings.FindLastIndex((timing) => timing.Timing < startTiming);
+			int endTimingId = Timings.FindLastIndex((timing) => timing.Timing < endTiming);
+			if (startTimingId == -1)
 			{
-				if (currentTiming >= Timings[i].Timing + offset && currentTiming < Timings[i + 1].Timing + offset) { start = i; break; }
+				startTimingId = 0;
 			}
-			for (int i = 0; i < Timings.Count - 1; ++i)
+			if (endTimingId == -1)
 			{
-				if (targetTiming >= Timings[i].Timing + offset && targetTiming < Timings[i + 1].Timing + offset) { end = i; break; }
+				endTimingId = 0;
 			}
-			if (Timings.Count != 0)
+			float result = 0;
+			for (int i = startTimingId; i <= endTimingId; i++)
 			{
-				if (currentTiming >= Timings[Timings.Count - 1].Timing + offset) start = Timings.Count - 1;
-				if (targetTiming >= Timings[Timings.Count - 1].Timing + offset) end = Timings.Count - 1;
+				int segmentStartTiming = i == startTimingId ? startTiming : Timings[i].Timing;
+				int segmentEndTiming = i == endTimingId ? endTiming : Timings[i + 1].Timing;
+				result += (segmentEndTiming - segmentStartTiming) * Timings[i].Bpm / BaseBpm * Velocity;
 			}
-			if (start == end)
-			{
-				position += (targetTiming - currentTiming) * Timings[start].Bpm / BaseBpm * DropRate;
-			}
-			else
-			{
-				for (int i = start; i <= end; ++i)
-				{
-					if (i == start) position += (Timings[i + 1].Timing + offset - currentTiming) * Timings[i].Bpm / BaseBpm * DropRate;
-					else if (i != start && i != end) position += (Timings[i + 1].Timing - Timings[i].Timing) * Timings[i].Bpm / BaseBpm * DropRate;
-					else if (i == end) position += (targetTiming - Timings[i].Timing - offset) * Timings[i].Bpm / BaseBpm * DropRate;
-				}
-			}
-			return reverse ? -position : position;
-		}
-		public int CalculateTimingByPosition(float position, int depth = 0)
-		{
-			;
-			int start = 0;
-			int end = Timings.Count - 1;
-			int breakPos = -1;
-			float startPosition = 0;
-			float endPosition = position;
-			ArcGameplayManager gm = ArcGameplayManager.Instance;
-			int offset = ArcAudioManager.Instance.AudioOffset;
-			int currentTiming = gm.Timing;
-			int songLength = gm.Length;
-			for (int i = 0; i < Timings.Count - 1; ++i)
-			{
-				if (currentTiming >= Timings[i].Timing + offset && currentTiming < Timings[i + 1].Timing + offset) start = i;
-			}
-			if (currentTiming >= Timings[end].Timing + offset) start = end;
+			float newresult = reversed ? -result : result;
 
-			int depthCount = 0;
-			float delta = 0, endTime = 0;
-			;
-			if (start != end)
-			{
-				for (int i = start; i <= end; ++i)
-				{
-					if (i == start)
-					{
-						delta = (Timings[i + 1].Timing + offset - currentTiming) * (Timings[i].Bpm / BaseBpm) * DropRate;
-						;
-						if ((startPosition + delta <= endPosition && startPosition >= endPosition) || (startPosition + delta >= endPosition && startPosition <= endPosition)) { if (depth == depthCount) { breakPos = i; break; } else { depthCount++; } }
-						startPosition += delta;
-					}
-					else if (i != end && i != start)
-					{
-						delta = (Timings[i + 1].Timing - Timings[i].Timing) * (Timings[i].Bpm / BaseBpm) * DropRate;
-						;
-						if ((startPosition + delta <= endPosition && startPosition >= endPosition) || (startPosition + delta >= endPosition && startPosition <= endPosition)) { if (depth == depthCount) { breakPos = i; break; } else { depthCount++; } }
-						startPosition += delta;
-					}
-					else if (i == end)
-					{
-						delta = (songLength - Timings[i].Timing - offset) * (Timings[i].Bpm / BaseBpm) * DropRate;
-						;
-						if ((startPosition + delta <= endPosition && startPosition >= endPosition) || (startPosition + delta >= endPosition && startPosition <= endPosition)) { if (depth == depthCount) { breakPos = i; break; } else { depthCount++; } }
-						startPosition += delta;
-					}
-				}
-			}
-			else if (start == end)
-			{
-				delta = (endPosition - startPosition);
-				endTime = delta / ((Timings[start].Bpm / BaseBpm) * DropRate) + currentTiming;
-				int nextTiming = (start + 1 >= Timings.Count) ? songLength : Timings[start + 1].Timing+ offset;
-				;
-				if (endTime > nextTiming) return nextTiming;
-				else return (int)endTime;
-			}
-			;
-			if (breakPos != -1)
-			{
-				if (breakPos == start)
-				{
-					delta = (endPosition - startPosition);
-					if (delta == 0)
-					{
-						if (Timings[breakPos].Bpm == 0) endTime = Timings[breakPos].Timing + offset;
-						else endTime = currentTiming;
-					}
-					else endTime = delta / ((Timings[breakPos].Bpm / BaseBpm) * DropRate) + currentTiming;
-				}
-				else
-				{
-					delta = (endPosition - startPosition);
-					endTime = delta / ((Timings[breakPos].Bpm / BaseBpm) * DropRate) + Timings[breakPos].Timing + offset;
-				}
-				float nextTiming = (breakPos + 1 >= Timings.Count) ? songLength : Timings[breakPos + 1].Timing+ offset;
-				;
-				if (endTime > nextTiming)
-				{
-					endTime = nextTiming;
-				}
-			}
-			else
-			{
-				if (breakPos == -1) endTime = songLength;
-			};
-			if (endTime > songLength) return songLength;
-			else return (int)endTime;
+			return newresult;
 		}
+
+		public int CalculateTimingByPosition(float position)
+		{
+			int currentTiming = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset;
+			if (position < 0)
+			{
+				return currentTiming;
+			}
+			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing < currentTiming);
+			int allEndTime = ArcGameplayManager.Instance.Length - ArcAudioManager.Instance.AudioOffset;
+			float positionRemain = position;
+			for (int i = currentTimingId; i < Timings.Count; i++)
+			{
+				int startTiming = i == currentTimingId ? currentTiming : Timings[i].Timing;
+				int endTiming = i + 1 == Timings.Count ? allEndTime : Timings[i + 1].Timing;
+				float bpm = i == -1 ? Timings[0].Bpm : Timings[i].Bpm;
+				float delta = (endTiming - startTiming) * bpm / BaseBpm * Velocity;
+				if (delta < positionRemain)
+				{
+					positionRemain -= delta;
+					continue;
+				}
+				return Mathf.RoundToInt(Mathf.Lerp(startTiming, endTiming, positionRemain / delta)) + ArcAudioManager.Instance.AudioOffset;
+			}
+			return allEndTime + ArcAudioManager.Instance.AudioOffset;
+		}
+
+
 		public float CalculateBpmByTiming(int timing)
 		{
 			for (int i = 0; i < Timings.Count - 1; ++i)
@@ -258,71 +196,79 @@ namespace Arcade.Gameplay
 		private void UpdateChartSpeedStatus()
 		{
 			int offset = ArcAudioManager.Instance.AudioOffset;
-			int currentTiming = ArcGameplayManager.Instance.Timing;
-			IsBackwarding = false;
-			IsStopped = false;
-			WillBackward = false;
+			int currentTiming = ArcGameplayManager.Instance.Timing - offset;
 			if (Timings.Count == 0)
 			{
 				CurrentSpeed = 1;
 				return;
 			}
-			for (int i = 0; i < Timings.Count - 1; ++i)
+			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing < currentTiming);
+			if (currentTimingId == -1)
 			{
-				if (currentTiming >= Timings[i].Timing + offset && currentTiming < Timings[i + 1].Timing + offset)
-				{
-					CurrentSpeed = Timings[i].Bpm / BaseBpm;
-					if (CurrentSpeed < 0) IsBackwarding = true;
-					else if (CurrentSpeed == 0) IsStopped = true;
-					if (IsStopped)
-					{
-						int k = i;
-						while (k < Timings.Count - 1)
-						{
-							k++;
-							if (Timings[k].Bpm / BaseBpm < 0)
-							{
-								WillBackward = true;
-								break;
-							}
-							else if (Timings[k].Bpm / BaseBpm > 0)
-							{
-								WillBackward = false;
-								break;
-							}
-						}
-					}
-					else
-					{
-						WillBackward = false;
-					}
-					return;
-				}
+				currentTimingId = 0;
 			}
-			if (currentTiming >= Timings[Timings.Count - 1].Timing + offset)
-			{
-				CurrentSpeed = Timings[Timings.Count - 1].Bpm / BaseBpm;
-				if (CurrentSpeed < 0) IsBackwarding = true;
-				else if (CurrentSpeed == 0) IsStopped = true;
-			}
+			CurrentSpeed = Timings[currentTimingId].Bpm / BaseBpm;
 		}
 		private void UpdateRenderRange()
 		{
-			pairCount = 0;
-			keyTimes.Clear();
-
-			keyTimes.Add(ArcGameplayManager.Instance.Timing);
-			keyTimes.Add(ArcGameplayManager.Instance.Timing);
-
-			keyTimes.Add(CalculateTimingByPosition(0, 0));
-			keyTimes.Add(CalculateTimingByPosition(100000, 0));
-
-			for (int i = 0; i < keyTimes.Count; i += 2)
+			int nearPosition = 0;
+			int farPosition = 100000;
+			if (timings.Count == 0)
 			{
-				starts[pairCount] = keyTimes[i];
-				ends[pairCount] = keyTimes[i + 1];
-				pairCount++;
+				earliestRenderTime = float.NegativeInfinity;
+				latestRenderTime = float.PositiveInfinity;
+				return;
 			}
+			int currentTiming = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset;
+			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing < currentTiming);
+			float[] TimingPosition = new float[Timings.Count];
+			for (int i = currentTimingId; i + 1 < Timings.Count; i++)
+			{
+				int startTiming = i == currentTimingId ? currentTiming : Timings[i].Timing;
+				int endTiming = Timings[i + 1].Timing;
+				float startPosition = i == currentTimingId ? 0 : TimingPosition[i];
+				float bpm = i == -1 ? Timings[0].Bpm : Timings[i].Bpm;
+				TimingPosition[i + 1] = startPosition + (endTiming - startTiming) * bpm / BaseBpm * Velocity;
+			}
+			for (int i = currentTimingId; i >= 0; i--)
+			{
+				int startTiming = i == currentTimingId ? currentTiming : Timings[i + 1].Timing;
+				int endTiming = Timings[i].Timing;
+				float startPosition = i == currentTimingId ? 0 : TimingPosition[i + 1];
+				TimingPosition[i] = startPosition + (endTiming - startTiming) * Timings[i].Bpm / BaseBpm * Velocity;
+			}
+			earliestRenderTime = float.PositiveInfinity;
+			latestRenderTime = float.NegativeInfinity;
+			int allBeginTime = -ArcAudioManager.Instance.AudioOffset;
+			float allBeginPosition = TimingPosition[0] + (allBeginTime - Timings[0].Timing) * Timings[0].Bpm / BaseBpm * Velocity;
+			int allEndTime = ArcGameplayManager.Instance.Length - ArcAudioManager.Instance.AudioOffset;
+			float allEndPosition = TimingPosition[Timings.Count - 1] + (allEndTime - Timings[Timings.Count - 1].Timing) * Timings[Timings.Count - 1].Bpm / BaseBpm * Velocity;
+
+			for (int i = -1; i < Timings.Count; i++)
+			{
+				int startTime = i == -1 ? allBeginTime : Timings[i].Timing;
+				int finishTime = i + 1 == Timings.Count ? allEndTime : Timings[i + 1].Timing;
+				float startPosition = i == -1 ? allBeginPosition : TimingPosition[i];
+				float finishPosition = i + 1 == Timings.Count ? allEndPosition : TimingPosition[i + 1];
+				if (finishTime < startTime)
+				{
+					continue;
+				}
+				if (startPosition > farPosition && finishPosition > farPosition)
+				{
+					continue;
+				}
+				if (startPosition < nearPosition && finishPosition < nearPosition)
+				{
+					continue;
+				}
+				float nearTime = Mathf.Lerp(startTime, finishTime, Mathf.InverseLerp(startPosition, finishPosition, nearPosition));
+				float farTime = Mathf.Lerp(startTime, finishTime, Mathf.InverseLerp(startPosition, finishPosition, farPosition));
+				earliestRenderTime = Mathf.Min(earliestRenderTime, nearTime, farTime);
+				latestRenderTime = Mathf.Max(latestRenderTime, nearTime, farTime);
+			}
+			earliestRenderTime += ArcAudioManager.Instance.AudioOffset;
+			latestRenderTime += ArcAudioManager.Instance.AudioOffset;
 		}
 		private void UpdateBeatline()
 		{
@@ -348,21 +294,21 @@ namespace Arcade.Gameplay
 			TrackRenderer.sharedMaterial.SetFloat(speedShaderId, ArcGameplayManager.Instance.IsPlaying ? CurrentSpeed : 0);
 		}
 
-		public void Add(ArcTiming timing)
+		public void Add(ArcTiming newTiming)
 		{
-			Timings.Add(timing);
-			Timings.Sort((ArcTiming a, ArcTiming b) => a.Timing.CompareTo(b.Timing));
+			timings.Add(newTiming);
+			timings=Timings.OrderBy((timing)=>timing.Timing).ToList();
 		}
 		public void Remove(ArcTiming timing)
 		{
-			Timings.Remove(timing);
+			timings.Remove(timing);
 		}
 
 		public bool ShouldRender(int timing, int delay = 120)
 		{
-			for (int i = 0; i < pairCount; ++i)
+			if (timing + delay >= earliestRenderTime && timing <= latestRenderTime)
 			{
-				if (timing >= starts[i] - delay && timing <= ends[i]) return true;
+				return true;
 			}
 			return false;
 		}

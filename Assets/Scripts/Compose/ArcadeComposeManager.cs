@@ -20,7 +20,7 @@ namespace Arcade.Compose
 		public int AgreedUserAgreementVersion;
 		public long ReadWhatsNewVersion;
 		public string ScreenResolution = "1280x720";
-		public int DropRate = 30;
+		public int Velocity = 30;
 		public uint UndoBufferSize = 200;
 		public bool Auto;
 		public Arcade.Gameplay.Chart.ChartSortMode ChartSortMode;
@@ -308,7 +308,7 @@ namespace Arcade.Compose
 			}
 			finally
 			{
-				ArcTimingManager.Instance.DropRate = ArcadePreference.DropRate;
+				ArcTimingManager.Instance.Velocity = ArcadePreference.Velocity;
 				ArcGameplayManager.Instance.Auto = ArcadePreference.Auto;
 				AdeProjectManager.Instance.SaveMode.text = ArcadePreference.ChartSortMode == Gameplay.Chart.ChartSortMode.Timing ? "按时间" : "按类别";
 				AutoButton.image.color = ArcGameplayManager.Instance.Auto ? new Color(0.59f, 0.55f, 0.65f, 1f) : new Color(0.9f, 0.9f, 0.9f, 1);
@@ -342,7 +342,7 @@ namespace Arcade.Compose
 		}
 		public void SavePreferences()
 		{
-			ArcadePreference.DropRate = ArcTimingManager.Instance.DropRate;
+			ArcadePreference.Velocity = ArcTimingManager.Instance.Velocity;
 			ArcadePreference.Auto = ArcGameplayManager.Instance.Auto;
 			PlayerPrefs.SetString("ArcadeComposeManagerPreference", JsonConvert.SerializeObject(ArcadePreference));
 		}

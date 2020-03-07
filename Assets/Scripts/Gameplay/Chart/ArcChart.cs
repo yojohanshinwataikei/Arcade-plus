@@ -84,10 +84,6 @@ namespace Arcade.Gameplay.Chart
 		public void Serialize(Stream stream, ChartSortMode mode = ChartSortMode.Timing)
 		{
 			ArcaeaAffWriter writer = new ArcaeaAffWriter(stream, ArcAudioManager.Instance.AudioOffset);
-			ArcTiming[] timingBaseResult = Timings.Where((t) => t.Timing == 0).ToArray();
-			if (timingBaseResult.Length != 1) throw new ArcaeaAffFormatException("存在不止一个时间为零的 Timing 事件");
-			ArcTiming timingBase = timingBaseResult[0];
-			writer.WriteEvent(new ArcaeaAffTiming() { Timing = timingBase.Timing, Bpm = timingBase.Bpm, BeatsPerLine = timingBase.BeatsPerLine, Type = Aff.EventType.Timing });
 			List<ArcEvent> events = new List<ArcEvent>();
 			events.AddRange(Taps);
 			events.AddRange(Holds);
@@ -95,7 +91,6 @@ namespace Arcade.Gameplay.Chart
 			events.AddRange(Arcs);
 			events.AddRange(Cameras);
 			events.AddRange(Specials);
-			events.Remove(timingBase);
 			switch (mode)
 			{
 				case ChartSortMode.Timing: events.Sort((ArcEvent a, ArcEvent b) => a.Timing.CompareTo(b.Timing)); break;
@@ -367,7 +362,7 @@ namespace Arcade.Gameplay.Chart
 		private float currentAlpha;
 		private int highlightShaderId, alphaShaderId;
 		private MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
-		public List<LineRenderer> ConnectionLines = new List<LineRenderer>();
+		public Dictionary<ArcArcTap,LineRenderer> ConnectionLines = new Dictionary<ArcArcTap,LineRenderer>();
 		private BoxCollider boxCollider;
 
 		public float Alpha
@@ -382,7 +377,7 @@ namespace Arcade.Gameplay.Chart
 				{
 					propertyBlock.SetFloat(alphaShaderId, value);
 					spriteRenderer.SetPropertyBlock(propertyBlock);
-					foreach (var l in ConnectionLines) l.startColor = l.endColor = new Color(l.endColor.r, l.endColor.g, l.endColor.b, value * 0.8f);
+					foreach (var l in ConnectionLines.Values) l.startColor = l.endColor = new Color(l.endColor.r, l.endColor.g, l.endColor.b, value * 0.8f);
 					currentAlpha = value;
 				}
 			}
@@ -399,7 +394,7 @@ namespace Arcade.Gameplay.Chart
 				{
 					base.Enable = value;
 					boxCollider.enabled = value;
-					foreach (var l in ConnectionLines) l.enabled = value;
+					foreach (var l in ConnectionLines.Values) l.enabled = value;
 				}
 			}
 		}
@@ -423,7 +418,7 @@ namespace Arcade.Gameplay.Chart
 		{
 			base.Destroy();
 			boxCollider = null;
-			foreach (var l in ConnectionLines) if (l.gameObject != null) UnityEngine.Object.Destroy(l.gameObject);
+			foreach (var l in ConnectionLines.Values) if (l.gameObject != null) UnityEngine.Object.Destroy(l.gameObject);
 			ConnectionLines.Clear();
 		}
 		public override ArcEvent Clone()
@@ -462,7 +457,7 @@ namespace Arcade.Gameplay.Chart
 		}
 		public void SetupArcTapConnection()
 		{
-			foreach (var l in ConnectionLines) UnityEngine.Object.Destroy(l.gameObject);
+			foreach (var l in ConnectionLines.Values) UnityEngine.Object.Destroy(l.gameObject);
 			ConnectionLines.Clear();
 			foreach (var arc in ArcArcManager.Instance.Arcs)
 			{
@@ -796,39 +791,24 @@ namespace Arcade.Gameplay.Chart
 				l.enabled = t.Enable;
 				l.transform.localPosition = new Vector3();
 
-				var existed = t.ConnectionLines.Where((b) => b.GetPosition(1) == new Vector3(pos.x, 0, pos.y)).ToList();
-				foreach (var el in existed)
-				{
-					UnityEngine.Object.Destroy(el.gameObject);
-					t.ConnectionLines.Remove(el);
+				if(t.ConnectionLines.ContainsKey(this)){
+					UnityEngine.Object.Destroy(t.ConnectionLines[this].gameObject);
+					t.ConnectionLines.Remove(this);
 				}
 
-				t.ConnectionLines.Add(l);
+				t.ConnectionLines.Add(this,l);
 			}
 		}
 		public void RemoveArcTapConnection()
 		{
+			Debug.Log("RemoveArcTapConnection");
 			List<ArcTap> taps = ArcTapNoteManager.Instance.Taps;
 			ArcTap[] sameTimeTapNotes = taps.Where((s) => Mathf.Abs(s.Timing - Timing) <= 1).ToArray();
 			foreach (ArcTap t in sameTimeTapNotes)
 			{
-				float p = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
-				Vector3 pos = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, p, Arc.LineType)),
-											 ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, p, Arc.LineType)) - 0.5f)
-											 - new Vector3(ArcArcManager.Instance.Lanes[t.Track - 1], 0);
-				LineRenderer target = null;
-				foreach (var l in t.ConnectionLines)
-				{
-					Vector3 lp = l.GetPosition(1);
-					if (lp == new Vector3(pos.x, 0, pos.y))
-					{
-						target = l;
-					}
-				}
-				if (target != null)
-				{
-					t.ConnectionLines.Remove(target);
-					UnityEngine.Object.Destroy(target.gameObject);
+				if(t.ConnectionLines.ContainsKey(this)){
+					UnityEngine.Object.Destroy(t.ConnectionLines[this].gameObject);
+					t.ConnectionLines.Remove(this);
 				}
 			}
 		}
@@ -1066,6 +1046,10 @@ namespace Arcade.Gameplay.Chart
 		public bool IsMyself(GameObject gameObject)
 		{
 			return arcRenderer.IsMyself(gameObject);
+		}
+
+		public void ResetArcTapConnection(){
+
 		}
 
 		public int FlashCount;

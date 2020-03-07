@@ -336,15 +336,7 @@ namespace Arcade.Aff
 			{
 				throw new ArcaeaAffFormatException(lines[0], 1);
 			}
-			try
-			{
-				ParseTiming(lines[2]);
-			}
-			catch (Exception)
-			{
-				throw new ArcaeaAffFormatException(EventType.Timing, lines[2], 3);
-			}
-			for (int i = 3; i < lines.Length; ++i)
+			for (int i = 2; i < lines.Length; ++i)
 			{
 				string line = lines[i];
 				EventType type = DetermineType(line);
@@ -381,7 +373,6 @@ namespace Arcade.Aff
 					throw new ArcaeaAffFormatException(type, line, i + 1);
 				}
 			}
-			Events.Sort((ArcaeaAffEvent a, ArcaeaAffEvent b) => { return a.Timing.CompareTo(b.Timing); });
 		}
 	}
 	public class ArcaeaAffWriter : StreamWriter

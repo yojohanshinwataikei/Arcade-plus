@@ -6920,7 +6920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5cbbf2fb35706c499292d5ece2048ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DropRate: 30
+  Velocity: 30
   BaseBpm: 100
   BeatlineLayer: {fileID: 877076221}
   BeatlinePrefab: {fileID: 1588688469126100, guid: 40343f75c2a37124083d05d513bc77da,
@@ -9402,7 +9402,7 @@ MonoBehaviour:
     AgreedUserAgreementVersion: 0
     ReadWhatsNewVersion: 0
     ScreenResolution: 1280x720
-    DropRate: 0
+    Velocity: 30
     UndoBufferSize: 200
     Auto: 0
     ChartSortMode: 0
@@ -48383,7 +48383,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 79c68888c349cb841b579a17a7f5261b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 042b7bf852cc28e44b9b177f9725f70e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

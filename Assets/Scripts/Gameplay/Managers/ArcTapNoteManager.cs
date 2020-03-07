@@ -112,7 +112,7 @@ namespace Arcade.Gameplay
 		public void SetConnectionLineColor(Color color){
 			ArcArcManager.Instance.ConnectionColor = color;
 			foreach (var t in Taps)
-				foreach (var l in t.ConnectionLines)
+				foreach (var l in t.ConnectionLines.Values)
 					l.startColor = l.endColor = color;
 		}
 	}

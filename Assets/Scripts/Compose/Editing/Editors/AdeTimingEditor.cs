@@ -67,14 +67,13 @@ namespace Arcade.Compose.Editing
             inUse = 0;
 
             List<ArcTiming> timings = ArcTimingManager.Instance.Timings;
-            timings.Sort((ArcTiming a, ArcTiming b) => a.Timing.CompareTo(b.Timing));
 
             foreach (var t in timings)
             {
                 AdeTimingItem item = GetItemInstance();
                 item.TimingReference = t;
                 item.Text = GetTimingString(t);
-                item.RemoveBtn.interactable = t.Timing != 0;
+                item.RemoveBtn.interactable = timings.Count!=0;
             }
 
             CleanUnusedInstance();
