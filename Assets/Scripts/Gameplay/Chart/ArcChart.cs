@@ -375,6 +375,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (currentAlpha != value)
 				{
+					spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetFloat(alphaShaderId, value);
 					spriteRenderer.SetPropertyBlock(propertyBlock);
 					foreach (var l in ConnectionLines.Values) l.startColor = l.endColor = new Color(l.endColor.r, l.endColor.g, l.endColor.b, value * 0.8f);
@@ -408,6 +409,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
+					spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
 					spriteRenderer.SetPropertyBlock(propertyBlock);
 					selected = value;
@@ -584,6 +586,7 @@ namespace Arcade.Gameplay.Chart
 				if (currentFrom != value)
 				{
 					currentFrom = value;
+                    spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetFloat(fromShaderId, value);
                     spriteRenderer.SetPropertyBlock(propertyBlock);
 				}
@@ -600,6 +603,7 @@ namespace Arcade.Gameplay.Chart
 				if (currentTo != value)
 				{
 					currentTo = value;
+                    spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetFloat(toShaderId, value);
                     spriteRenderer.SetPropertyBlock(propertyBlock);
 				}
@@ -615,6 +619,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (currentAlpha != value)
 				{
+                    spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetFloat(alphaShaderId, value);
                     spriteRenderer.SetPropertyBlock(propertyBlock);
 					currentAlpha = value;
@@ -631,6 +636,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
+                    spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
                     spriteRenderer.SetPropertyBlock(propertyBlock);
 					selected = value;
@@ -801,7 +807,6 @@ namespace Arcade.Gameplay.Chart
 		}
 		public void RemoveArcTapConnection()
 		{
-			Debug.Log("RemoveArcTapConnection");
 			List<ArcTap> taps = ArcTapNoteManager.Instance.Taps;
 			ArcTap[] sameTimeTapNotes = taps.Where((s) => Mathf.Abs(s.Timing - Timing) <= 1).ToArray();
 			foreach (ArcTap t in sameTimeTapNotes)
@@ -839,6 +844,7 @@ namespace Arcade.Gameplay.Chart
 				if (currentAlpha != value)
 				{
 					currentAlpha = value;
+                    ModelRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetFloat(alphaShaderId, value);
                     ModelRenderer.SetPropertyBlock(propertyBlock);
 					ShadowRenderer.color = new Color(0.49f, 0.49f, 0.49f, 0.7843f * value);
@@ -870,6 +876,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
+                    ModelRenderer.GetPropertyBlock(propertyBlock);
                     propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
                     ModelRenderer.SetPropertyBlock(propertyBlock);
 					selected = value;

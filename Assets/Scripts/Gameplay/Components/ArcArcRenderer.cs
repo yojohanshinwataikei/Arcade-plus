@@ -80,6 +80,7 @@ namespace Arcade.Gameplay
 				if (currentHighColor != value)
 				{
 					currentHighColor = value;
+					HeadRenderer.GetPropertyBlock(headPropertyBlock);
 					headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
 					HeadRenderer.SetPropertyBlock(headPropertyBlock);
 					foreach (var s in segments)
@@ -100,6 +101,7 @@ namespace Arcade.Gameplay
 				if (currentLowColor != value)
 				{
 					currentLowColor = value;
+					HeadRenderer.GetPropertyBlock(headPropertyBlock);
 					headPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
 					HeadRenderer.SetPropertyBlock(headPropertyBlock);
 					foreach (var s in segments)
@@ -120,6 +122,7 @@ namespace Arcade.Gameplay
 				if (currentHighColor.a != value)
 				{
 					currentHighColor.a = value;
+					HeadRenderer.GetPropertyBlock(headPropertyBlock);
 					headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
 					HeadRenderer.SetPropertyBlock(headPropertyBlock);
 					foreach (var s in segments)
@@ -211,6 +214,7 @@ namespace Arcade.Gameplay
 				if (highlighted != value)
 				{
 					highlighted = value;
+					HeadRenderer.GetPropertyBlock(headPropertyBlock);
 					headPropertyBlock.SetTexture(mainTexShaderId, highlighted ? HighlightTexture : DefaultTexture);
 					HeadRenderer.SetPropertyBlock(headPropertyBlock);
 					foreach (var s in segments) s.Highlight = value;
@@ -221,6 +225,7 @@ namespace Arcade.Gameplay
 		{
 			if (headPropertyBlock != null)
 			{
+				HeadRenderer.GetPropertyBlock(headPropertyBlock);
 				headPropertyBlock.SetTexture(mainTexShaderId, highlighted ? HighlightTexture : DefaultTexture);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
 			}
@@ -276,6 +281,7 @@ namespace Arcade.Gameplay
 				if (selected != value)
 				{
 					int h = value ? 1 : 0;
+					HeadRenderer.GetPropertyBlock(headPropertyBlock);
 					headPropertyBlock.SetInt(highlightShaderId, h);
 					HeadRenderer.SetPropertyBlock(headPropertyBlock);
 					foreach (var s in segments) s.Selected = value;
@@ -587,14 +593,16 @@ namespace Arcade.Gameplay
 				HeadRenderer.sharedMaterial = arcMaterial;
 				Color highC = currentHighColor;
 				highC.a = currentHighColor.a * (100000 - arc.Position) / 100000;
-				headPropertyBlock.SetColor(highColorShaderId, highC);
 				Color lowC = currentLowColor;
 				lowC.a = currentLowColor.a * (100000 - arc.Position) / 100000;
+				HeadRenderer.GetPropertyBlock(headPropertyBlock);
+				headPropertyBlock.SetColor(highColorShaderId, highC);
 				headPropertyBlock.SetColor(lowColorShaderId, lowC);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
 			}
 			else if (arc.Position < 0)
 			{
+				HeadRenderer.GetPropertyBlock(headPropertyBlock);
 				headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
 				headPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
@@ -621,6 +629,7 @@ namespace Arcade.Gameplay
 			}
 			else
 			{
+				HeadRenderer.GetPropertyBlock(headPropertyBlock);
 				headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
 				headPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);

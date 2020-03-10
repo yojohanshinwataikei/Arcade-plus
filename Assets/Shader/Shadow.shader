@@ -2,8 +2,8 @@
 {
 	Properties
 	{
-		_Color ("Color", Color) = (1,1,1,1)
-		_From ("From", Float) = 0
+		[PerRendererData] _Color ("Color", Color) = (1,1,1,1)
+		[PerRendererData] _From ("From", Float) = 0
 	}
 	SubShader
 	{
@@ -30,7 +30,7 @@
 
 			struct v2f
 			{
-				float4 vertex : SV_POSITION; 
+				float4 vertex : SV_POSITION;
 				float2 uv : TEXCOORD0;
 			};
 
@@ -44,7 +44,7 @@
 				o.uv = v.uv;
 				return o;
 			}
-			
+
 			half4 frag (v2f i) : SV_Target
 			{
 			    if(i.uv.y < _From) return 0;

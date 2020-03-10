@@ -2,9 +2,9 @@
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
-		_Alpha ("Alpha", Float) = 1
-		_Highlight("Highlight", Int) = 0
+		[PerRendererData] _MainTex ("Texture", 2D) = "white" {}
+		[PerRendererData] _Alpha ("Alpha", Float) = 1
+		[PerRendererData] _Highlight("Highlight", Int) = 0
 	}
 	SubShader
 	{

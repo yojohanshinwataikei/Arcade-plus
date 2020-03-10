@@ -3,8 +3,8 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-		_Alpha ("Alpha", Float) = 1
-		_Highlight("Highlight", Int) = 0
+		[PerRendererData] _Alpha ("Alpha", Float) = 1
+		[PerRendererData] _Highlight("Highlight", Int) = 0
 	}
 	SubShader
 	{
@@ -37,7 +37,7 @@
 			float _Alpha;
 			sampler2D _MainTex;
             float4 _MainTex_ST;
-			 
+
 			half4 Highlight(half4 c)
 			{
 				fixed3 hsv = rgb2hsv(c.rgb);
@@ -52,11 +52,11 @@
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				return o;
 			}
-			
+
 			half4 frag (v2f i) : SV_Target
 			{
 				half4 c = half4(tex2D(_MainTex,i.uv).rgb, _Alpha);
-				if(_Highlight == 1) 
+				if(_Highlight == 1)
 				{
 					c = Highlight(c);
 				}

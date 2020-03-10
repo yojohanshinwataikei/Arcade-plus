@@ -2,7 +2,7 @@
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
+		[PerRendererData] _MainTex ("Texture", 2D) = "white" {}
 		_Speed ("Speed", Float) = 1
 		_Color ("Color", Color) = (1,1,1,1)
 	}

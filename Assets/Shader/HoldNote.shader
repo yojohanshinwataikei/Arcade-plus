@@ -2,11 +2,11 @@
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
-		_From ("From", Float) = 0
-		_To ("To",Float) = 1
-		_Alpha ("Alpha", Float) = 1
-		_Highlight("Highlight", Int) = 0
+		[PerRendererData] _MainTex ("Texture", 2D) = "white" {}
+		[PerRendererData] _From ("From", Float) = 0
+		[PerRendererData] _To ("To",Float) = 1
+		[PerRendererData] _Alpha ("Alpha", Float) = 1
+		[PerRendererData] _Highlight("Highlight", Int) = 0
 	}
 	SubShader
 	{

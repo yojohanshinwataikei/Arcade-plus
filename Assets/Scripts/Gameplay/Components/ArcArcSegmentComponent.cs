@@ -41,8 +41,10 @@ namespace Arcade.Gameplay
 				if (currentFrom != value)
 				{
 					currentFrom = value;
+					SegmentRenderer.GetPropertyBlock(bodyPropertyBlock);
 					bodyPropertyBlock.SetFloat(fromShaderId, value);
 					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
+					ShadowRenderer.GetPropertyBlock(shadowPropertyBlock);
 					shadowPropertyBlock.SetFloat(fromShaderId, value);
 					ShadowRenderer.SetPropertyBlock(shadowPropertyBlock);
 				}
@@ -59,10 +61,12 @@ namespace Arcade.Gameplay
 				if (currentHighColor != value)
 				{
 					currentHighColor = value;
+					SegmentRenderer.GetPropertyBlock(bodyPropertyBlock);
 					bodyPropertyBlock.SetColor(highColorShaderId, value);
 					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 					Color c = ShadowColor;
 					c.a = value.a * 0.3f;
+					ShadowRenderer.GetPropertyBlock(shadowPropertyBlock);
 					shadowPropertyBlock.SetColor(colorShaderId, c);
 					ShadowRenderer.SetPropertyBlock(shadowPropertyBlock);
 				}
@@ -80,6 +84,7 @@ namespace Arcade.Gameplay
 				if (currentLowColor != value)
 				{
 					currentLowColor = value;
+					SegmentRenderer.GetPropertyBlock(bodyPropertyBlock);
 					bodyPropertyBlock.SetColor(lowColorShaderId, value);
 					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 				}
@@ -96,16 +101,19 @@ namespace Arcade.Gameplay
 				if (currentHighColor.a != value)
 				{
 					currentHighColor.a = value;
+					SegmentRenderer.GetPropertyBlock(bodyPropertyBlock);
 					bodyPropertyBlock.SetColor(highColorShaderId, currentHighColor);
 					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 					Color c = ShadowColor;
 					c.a = value * 0.3f;
+					ShadowRenderer.GetPropertyBlock(shadowPropertyBlock);
 					shadowPropertyBlock.SetColor(colorShaderId, c);
 					ShadowRenderer.SetPropertyBlock(shadowPropertyBlock);
 				}
 				if (currentLowColor.a != value)
 				{
 					currentLowColor.a = value;
+					SegmentRenderer.GetPropertyBlock(bodyPropertyBlock);
 					bodyPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
 					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 				}
@@ -122,6 +130,7 @@ namespace Arcade.Gameplay
 				if (highlighted != value)
 				{
 					highlighted = value;
+					SegmentRenderer.GetPropertyBlock(bodyPropertyBlock);
 					bodyPropertyBlock.SetTexture(mainTexShaderId, highlighted ? HighlightTexture : DefaultTexture);
 					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 				}
@@ -132,6 +141,7 @@ namespace Arcade.Gameplay
 		{
 			if (bodyPropertyBlock != null)
 			{
+				SegmentRenderer.GetPropertyBlock(bodyPropertyBlock);
 				bodyPropertyBlock.SetTexture(mainTexShaderId, highlighted ? HighlightTexture : DefaultTexture);
 				SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 			}
@@ -146,6 +156,7 @@ namespace Arcade.Gameplay
 			{
 				if (selected != value)
 				{
+					SegmentRenderer.GetPropertyBlock(bodyPropertyBlock);
 					bodyPropertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
 					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
 					selected = value;
