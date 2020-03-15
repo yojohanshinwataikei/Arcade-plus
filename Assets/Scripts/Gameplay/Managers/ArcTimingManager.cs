@@ -135,8 +135,8 @@ namespace Arcade.Gameplay
 			bool reversed = pivotTiming > targetTiming;
 			int startTiming = (reversed ? targetTiming : pivotTiming) - offset;
 			int endTiming = (reversed ? pivotTiming : targetTiming) - offset;
-			int startTimingId = Timings.FindLastIndex((timing) => timing.Timing < startTiming);
-			int endTimingId = Timings.FindLastIndex((timing) => timing.Timing < endTiming);
+			int startTimingId = Timings.FindLastIndex((timing) => timing.Timing <= startTiming);
+			int endTimingId = Timings.FindLastIndex((timing) => timing.Timing <= endTiming);
 			if (startTimingId == -1)
 			{
 				startTimingId = 0;
@@ -164,7 +164,7 @@ namespace Arcade.Gameplay
 			{
 				return currentTiming;
 			}
-			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing < currentTiming);
+			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing <= currentTiming);
 			int allEndTime = ArcGameplayManager.Instance.Length - ArcAudioManager.Instance.AudioOffset;
 			float positionRemain = position;
 			for (int i = currentTimingId; i < Timings.Count; i++)
@@ -177,6 +177,9 @@ namespace Arcade.Gameplay
 				{
 					positionRemain -= delta;
 					continue;
+				}
+				if(delta==0){
+					return startTiming;
 				}
 				return Mathf.RoundToInt(Mathf.Lerp(startTiming, endTiming, positionRemain / delta)) + ArcAudioManager.Instance.AudioOffset;
 			}
@@ -202,7 +205,7 @@ namespace Arcade.Gameplay
 				CurrentSpeed = 1;
 				return;
 			}
-			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing < currentTiming);
+			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing <= currentTiming);
 			if (currentTimingId == -1)
 			{
 				currentTimingId = 0;
@@ -220,7 +223,7 @@ namespace Arcade.Gameplay
 				return;
 			}
 			int currentTiming = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset;
-			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing < currentTiming);
+			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing <= currentTiming);
 			float[] TimingPosition = new float[Timings.Count];
 			for (int i = currentTimingId; i + 1 < Timings.Count; i++)
 			{
