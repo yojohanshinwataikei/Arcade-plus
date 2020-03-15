@@ -97,11 +97,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (StartPos.gameObject.activeSelf)
 				{
-					StartPos.GetComponentInChildren<InputField>().text = multiple ? "-,-" : $"{(note as ArcArc).XStart.ToString("f3")},{(note as ArcArc).YStart.ToString("f3")}";
+					StartPos.GetComponentInChildren<InputField>().text = multiple ? "-,-" : $"{(note as ArcArc).XStart.ToString("f2")},{(note as ArcArc).YStart.ToString("f2")}";
 				}
 				if (EndPos.gameObject.activeSelf)
 				{
-					EndPos.GetComponentInChildren<InputField>().text = multiple ? "-,-" : $"{(note as ArcArc).XEnd.ToString("f3")},{(note as ArcArc).YEnd.ToString("f3")}";
+					EndPos.GetComponentInChildren<InputField>().text = multiple ? "-,-" : $"{(note as ArcArc).XEnd.ToString("f2")},{(note as ArcArc).YEnd.ToString("f2")}";
 				}
 				if (LineType.gameObject.activeSelf)
 				{
