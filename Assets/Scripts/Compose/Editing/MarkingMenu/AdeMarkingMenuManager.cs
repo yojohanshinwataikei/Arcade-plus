@@ -29,26 +29,33 @@ namespace Arcade.Compose
 		{
 			if (Input.GetMouseButtonDown(1))
 			{
-				Show();
+				Enter();
 			}
 			if (Input.GetMouseButtonUp(1) || (isOn && !Input.GetMouseButton(1)))
 			{
-				Hide();
+				Exit();
+			}
+			if (isOn && Input.GetMouseButton(1))
+			{
+				Check();
 			}
 		}
 
-		public void Show()
+		public void Enter()
 		{
 			Line.Enable = true;
 			Line.AddJoint();
 			ShowAt(InputExtension.scaledMousePosition, GetCurrentMenuItems());
 			isOn = true;
 		}
-		public void Hide()
+		public void Exit()
 		{
 			foreach (var item in shownItems.Peek())
 			{
-				if (item.PointerInItem) return;
+				if (item.PointerInItem)
+				{
+					item.OnConfirmed.Invoke(); break;
+				};
 			}
 
 			Line.Enable = false;
@@ -59,6 +66,22 @@ namespace Arcade.Compose
 			isOn = false;
 		}
 
+		public void Check()
+		{
+			foreach (var item in shownItems.Peek())
+			{
+				if (item.PointerHangOver)
+				{
+					if (item.HasSubMenu)
+					{
+						item.OnHangOver.Invoke();
+						item.OnConfirmed.Invoke();
+						ShowSubMenu(item.SubItems);
+						return;
+					}
+				};
+			}
+		}
 		public MarkingMenuItem[] GetCurrentMenuItems()
 		{
 			List<MarkingMenuItem> items = new List<MarkingMenuItem>();
@@ -87,7 +110,7 @@ namespace Arcade.Compose
 			MarkingMenuItem[] items = shownItems.Pop();
 			foreach (var item in items) item.Hide();
 			items = shownItems.Peek();
-			foreach (var item in items) item.gameObject.SetActive(true);
+			foreach (var item in items) item.Show();
 		}
 
 		private float GetOptimizedDegree(float degree)
@@ -129,8 +152,7 @@ namespace Arcade.Compose
 				float degree = from + degreeDelta * i + (itemCount > 4 ? 180 : 0);
 				degree = GetOptimizedDegree(degree);
 				float length = GetEllipseLength(degree, itemCount);
-				items[i].ItemCanvasGroup.DOKill(true);
-				items[i].gameObject.SetActive(true);
+				items[i].Show();
 				items[i].Position = position + new Vector2(length * Mathf.Cos(degree * Mathf.Deg2Rad), length * Mathf.Sin(degree * Mathf.Deg2Rad));
 				items[i].Degree = degree;
 			}
@@ -144,7 +166,7 @@ namespace Arcade.Compose
 			{
 				float degree = from + degreeDelta * i;
 				float length = MathfExtension.EvaluateEllipse(degree, 180, 100);
-				items[i].gameObject.SetActive(true);
+				items[i].Show();
 				items[i].Position = position + new Vector2(length * Mathf.Cos(degree * Mathf.Deg2Rad), length * Mathf.Sin(degree * Mathf.Deg2Rad));
 				items[i].Degree = degree;
 			}

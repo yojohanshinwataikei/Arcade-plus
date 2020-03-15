@@ -49,64 +49,65 @@ namespace Arcade.Compose.MarkingMenu
 			}
 		}
 
-		public bool PointerInItem { get; set; }
+		public bool PointerInItem { get; private set; }
+		public bool PointerHangOver
+		{
+			get
+			{
+				return PointerInItem && pointerInItemTiming > EnterTimeThreshold;
+			}
+		}
 		private float pointerInItemTiming;
+		private bool active = false;
 
 		private void Start()
 		{
 			Text = StartupText;
 		}
-		private void OnEnable()
-		{
+		public void Show(){
+			gameObject.SetActive(true);
+			active = true;
+			ItemCanvasGroup.DOComplete();
 			ItemCanvasGroup.DOFade(1, 0.15f);
 		}
 		public void Hide()
 		{
+			active = false;
+			PointerInItem = false;
+			pointerInItemTiming = 0;
+			ItemCanvasGroup.DOComplete();
 			ItemCanvasGroup.DOFade(0, 0.15f).OnComplete(() =>
 			{
 				Background.color = OutColor;
-				gameObject.SetActive(false);
+				if (!active)
+				{
+					gameObject.SetActive(false);
+				}
 			});
 		}
 
 		public void OnPointerEnter(PointerEventData data)
 		{
-			PointerInItem = true;
-			Background.color = InColor;
-			pointerInItemTiming = 0;
+			if(active){
+				PointerInItem = true;
+				Background.color = InColor;
+				pointerInItemTiming = 0;
+			}
 		}
 		public void OnPointerExit(PointerEventData data)
 		{
-			PointerInItem = false;
-			Background.color = OutColor;
-			pointerInItemTiming = 0;
+			if(active){
+				PointerInItem = false;
+				Background.color = OutColor;
+				pointerInItemTiming = 0;
+			}
 		}
 		private void Update()
 		{
 			if (Input.GetMouseButton(1) && PointerInItem)
 			{
 				pointerInItemTiming += Time.deltaTime;
-				if (pointerInItemTiming > EnterTimeThreshold && HasSubMenu)
-				{
-					OnHangOver.Invoke();
-					OnConfirmed.Invoke();
-					PointerInItem = false;
-					ShowSubMenu();
-					Hide();
-				}
 			}
-			if (Input.GetMouseButtonUp(1) && PointerInItem)
-			{
-				OnConfirmed.Invoke();
-				PointerInItem = false;
-				AdeMarkingMenuManager.Instance.Hide();
-			}
-		}
-
-		private void ShowSubMenu()
-		{
-			int subCount = SubItems.Length - 1;
-			AdeMarkingMenuManager.Instance.ShowSubMenu(SubItems);
 		}
 	}
 }
