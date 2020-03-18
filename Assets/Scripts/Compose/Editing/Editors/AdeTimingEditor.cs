@@ -23,11 +23,11 @@ namespace Arcade.Compose.Editing
 
         private void Start()
         {
-            ArcGameplayManager.Instance.OnChartLoad.AddListener(BuildList);
+            ArcGameplayManager.Instance.OnChartLoad.AddListener(UpdateTiming);
         }
         private void OnDestroy()
         {
-            ArcGameplayManager.Instance.OnChartLoad.RemoveListener(BuildList);
+            ArcGameplayManager.Instance.OnChartLoad.RemoveListener(UpdateTiming);
         }
 
         private int inUse = 0;
@@ -55,14 +55,14 @@ namespace Arcade.Compose.Editing
         public void Add(ArcTiming caller)
         {
             CommandManager.Instance.Add(new AddArcEventCommand(caller.Clone()));
-            BuildList();
+            UpdateTiming();
         }
         public void Delete(ArcTiming caller)
         {
             CommandManager.Instance.Add(new RemoveArcEventCommand(caller));
-            BuildList();
+            UpdateTiming();
         }
-        public void BuildList()
+        public void UpdateTiming()
         {
             inUse = 0;
 
@@ -77,6 +77,7 @@ namespace Arcade.Compose.Editing
             }
 
             CleanUnusedInstance();
+            ArcTimingManager.Instance.CalculateBeatlineTimes();
         }
 
         public void SwitchStatus()
@@ -84,7 +85,7 @@ namespace Arcade.Compose.Editing
             View.SetActive(!View.activeSelf);
             if (View.activeSelf)
             {
-                BuildList();
+                UpdateTiming();
             }
             else
             {

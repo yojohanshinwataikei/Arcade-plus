@@ -54,7 +54,10 @@ namespace Arcade.Gameplay
 		}
 		public void Load(List<ArcTiming> arcTimings)
 		{
+			// Note: We replaced the inplace sort by sort to another list and reassign
+			// just because we do not have stable inplace sort now in dot net
 			timings = arcTimings.OrderBy((timing) => timing.Timing).ToList();
+			ArcGameplayManager.Instance.Chart.Timings=timings;
 			CalculateBeatlineTimes();
 		}
 		private void HideExceededBeatlineInstance(int quantity)
@@ -301,10 +304,13 @@ namespace Arcade.Gameplay
 		{
 			timings.Add(newTiming);
 			timings=Timings.OrderBy((timing)=>timing.Timing).ToList();
+			ArcGameplayManager.Instance.Chart.Timings=timings;
+			CalculateBeatlineTimes();
 		}
 		public void Remove(ArcTiming timing)
 		{
 			timings.Remove(timing);
+			CalculateBeatlineTimes();
 		}
 
 		public bool ShouldRender(int timing, int delay = 120)
