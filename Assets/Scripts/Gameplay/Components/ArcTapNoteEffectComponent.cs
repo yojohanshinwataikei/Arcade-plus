@@ -1,11 +1,12 @@
 ﻿using System.Collections;
+using Arcade.Util.Pooling;
 using UnityEngine;
 
 namespace Arcade.Gameplay
 {
-	public class ArcTapNoteEffectComponent : MonoBehaviour
+	public class ArcTapNoteEffectComponent : MonoBehaviour,IPoolable
 	{
-		public bool Available { get; set; } = true;
+		public bool Available { get; private set; } = true;
 		public ParticleSystem Effect;
 
 		public void PlayAt(Vector2 pos)

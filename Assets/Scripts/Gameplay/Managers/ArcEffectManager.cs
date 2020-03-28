@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Arcade.Util.Pooling;
 using UnityEngine;
 
 namespace Arcade.Gameplay
@@ -13,11 +14,7 @@ namespace Arcade.Gameplay
 		}
 		private void Start()
 		{
-			for (int i = 0; i < 10; ++i)
-			{
-				ArcTapNoteEffectComponent n = Instantiate(TapNoteJudgeEffect, EffectLayer).GetComponent<ArcTapNoteEffectComponent>();
-				tapNoteEffectInstances.Add(n);
-			}
+			tapNoteEffectPool = new GameObjectPool<ArcTapNoteEffectComponent>(TapNoteJudgeEffect, EffectLayer, 10);
 		}
 
 		public GameObject TapNoteJudgeEffect;
@@ -28,15 +25,7 @@ namespace Arcade.Gameplay
 		public AudioSource Source;
 
 		private bool[] holdEffectStatus = new bool[4];
-		private List<ArcTapNoteEffectComponent> tapNoteEffectInstances = new List<ArcTapNoteEffectComponent>();
-
-		public ArcTapNoteEffectComponent GetTapNoteEffectInstance()
-		{
-			foreach (var i in tapNoteEffectInstances) if (i.Available) return i;
-			ArcTapNoteEffectComponent n = Instantiate(TapNoteJudgeEffect, EffectLayer).GetComponent<ArcTapNoteEffectComponent>();
-			tapNoteEffectInstances.Add(n);
-			return n;
-		}
+		private GameObjectPool<ArcTapNoteEffectComponent> tapNoteEffectPool;
 		public void SetHoldNoteEffect(int track, bool show)
 		{
 			if (holdEffectStatus[track - 1] != show)
@@ -56,8 +45,10 @@ namespace Arcade.Gameplay
 		}
 		public void PlayTapNoteEffectAt(Vector2 pos, bool isArc = false)
 		{
-			ArcTapNoteEffectComponent a = GetTapNoteEffectInstance();
-			a.PlayAt(pos);
+			ArcTapNoteEffectComponent a = tapNoteEffectPool.Get((effect) =>
+			{
+				effect.PlayAt(pos);
+			});
 			Source.PlayOneShot(isArc ? ArcAudio : TapAudio);
 		}
 		public void PlayTapSound()
@@ -104,7 +95,7 @@ namespace Arcade.Gameplay
 				ParticleSystem.ColorOverLifetimeModule colorOverLifetime = holdEffect.colorOverLifetime;
 				colorOverLifetime.color = overTimeColor;
 			}
-            ArcArcManager.Instance.SetParticleArcColor(startColor,overTimeColor);
+			ArcArcManager.Instance.SetParticleArcColor(startColor, overTimeColor);
 		}
 	}
 }
