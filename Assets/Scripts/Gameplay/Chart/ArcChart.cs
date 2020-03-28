@@ -85,23 +85,23 @@ namespace Arcade.Gameplay.Chart
 		{
 			ArcaeaAffWriter writer = new ArcaeaAffWriter(stream, ArcAudioManager.Instance.AudioOffset);
 			List<ArcEvent> events = new List<ArcEvent>();
+			events.AddRange(Timings);
 			events.AddRange(Taps);
 			events.AddRange(Holds);
-			events.AddRange(Timings);
 			events.AddRange(Arcs);
 			events.AddRange(Cameras);
 			events.AddRange(Specials);
 			switch (mode)
 			{
-				case ChartSortMode.Timing: events.Sort((ArcEvent a, ArcEvent b) => a.Timing.CompareTo(b.Timing)); break;
+				case ChartSortMode.Timing:
+					events = events.OrderBy(arcEvent => arcEvent.Timing)
+						.ThenBy(arcEvent => (arcEvent is ArcTiming ? 1 : arcEvent is ArcTap ? 2 : arcEvent is ArcHold ? 3 : arcEvent is ArcArc ? 4 : 5))
+						.ToList();
+					break;
 				case ChartSortMode.Type:
-					events.Sort((ArcEvent a, ArcEvent b) =>
-					{
-						int atype = (a is ArcTiming ? 1 : a is ArcTap ? 2 : a is ArcHold ? 3 : a is ArcArc ? 4 : 5);
-						int btype = (b is ArcTiming ? 1 : b is ArcTap ? 2 : b is ArcHold ? 3 : b is ArcArc ? 4 : 5);
-						int c1 = atype.CompareTo(btype);
-						return c1 == 0 ? a.Timing.CompareTo(b.Timing) : c1;
-					});
+					events = events.OrderBy(arcEvent => (arcEvent is ArcTiming ? 1 : arcEvent is ArcTap ? 2 : arcEvent is ArcHold ? 3 : arcEvent is ArcArc ? 4 : 5))
+						.ThenBy(arcEvent => arcEvent.Timing)
+						.ToList();
 					break;
 			}
 			foreach (var e in events)
@@ -139,11 +139,7 @@ namespace Arcade.Gameplay.Chart
 					};
 					if (arc.ArcTaps != null && arc.ArcTaps.Count != 0)
 					{
-						a.ArcTaps = new List<int>();
-						foreach (var arctap in arc.ArcTaps)
-						{
-							a.ArcTaps.Add(arctap.Timing);
-						}
+						a.ArcTaps = arc.ArcTaps.Select(arcTap=>arcTap.Timing).OrderBy(time=>time).ToList();
 					}
 					writer.WriteEvent(a);
 				}
@@ -313,9 +309,11 @@ namespace Arcade.Gameplay.Chart
 					enable = value;
 					if (spriteRenderer != null) spriteRenderer.enabled = value;
 					//Note: Sprite texture do not update at beginning, so as a workaround we should update them manually
-					if(enable){
-						if (spriteRenderer != null){
-							spriteRenderer.sprite=spriteRenderer.sprite;
+					if (enable)
+					{
+						if (spriteRenderer != null)
+						{
+							spriteRenderer.sprite = spriteRenderer.sprite;
 						}
 					}
 					if (meshRenderer != null) meshRenderer.enabled = value;
@@ -362,7 +360,7 @@ namespace Arcade.Gameplay.Chart
 		private float currentAlpha;
 		private int highlightShaderId, alphaShaderId;
 		private MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
-		public Dictionary<ArcArcTap,LineRenderer> ConnectionLines = new Dictionary<ArcArcTap,LineRenderer>();
+		public Dictionary<ArcArcTap, LineRenderer> ConnectionLines = new Dictionary<ArcArcTap, LineRenderer>();
 		private BoxCollider boxCollider;
 
 		public float Alpha
@@ -478,7 +476,7 @@ namespace Arcade.Gameplay.Chart
 	{
 		public int Track;
 
-        private MaterialPropertyBlock propertyBlock=new MaterialPropertyBlock();
+		private MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 
 		public void ReloadSkin()
 		{
@@ -586,9 +584,9 @@ namespace Arcade.Gameplay.Chart
 				if (currentFrom != value)
 				{
 					currentFrom = value;
-                    spriteRenderer.GetPropertyBlock(propertyBlock);
+					spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetFloat(fromShaderId, value);
-                    spriteRenderer.SetPropertyBlock(propertyBlock);
+					spriteRenderer.SetPropertyBlock(propertyBlock);
 				}
 			}
 		}
@@ -603,9 +601,9 @@ namespace Arcade.Gameplay.Chart
 				if (currentTo != value)
 				{
 					currentTo = value;
-                    spriteRenderer.GetPropertyBlock(propertyBlock);
+					spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetFloat(toShaderId, value);
-                    spriteRenderer.SetPropertyBlock(propertyBlock);
+					spriteRenderer.SetPropertyBlock(propertyBlock);
 				}
 			}
 		}
@@ -619,9 +617,9 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (currentAlpha != value)
 				{
-                    spriteRenderer.GetPropertyBlock(propertyBlock);
+					spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetFloat(alphaShaderId, value);
-                    spriteRenderer.SetPropertyBlock(propertyBlock);
+					spriteRenderer.SetPropertyBlock(propertyBlock);
 					currentAlpha = value;
 				}
 			}
@@ -636,9 +634,9 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
-                    spriteRenderer.GetPropertyBlock(propertyBlock);
+					spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
-                    spriteRenderer.SetPropertyBlock(propertyBlock);
+					spriteRenderer.SetPropertyBlock(propertyBlock);
 					selected = value;
 				}
 			}
@@ -699,7 +697,7 @@ namespace Arcade.Gameplay.Chart
 		public MeshRenderer ModelRenderer;
 		public SpriteRenderer ShadowRenderer;
 		public MeshCollider ArcTapCollider;
-        private MaterialPropertyBlock propertyBlock= new MaterialPropertyBlock();
+		private MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 
 		public override bool Enable
 		{
@@ -797,12 +795,13 @@ namespace Arcade.Gameplay.Chart
 				l.enabled = t.Enable;
 				l.transform.localPosition = new Vector3();
 
-				if(t.ConnectionLines.ContainsKey(this)){
+				if (t.ConnectionLines.ContainsKey(this))
+				{
 					UnityEngine.Object.Destroy(t.ConnectionLines[this].gameObject);
 					t.ConnectionLines.Remove(this);
 				}
 
-				t.ConnectionLines.Add(this,l);
+				t.ConnectionLines.Add(this, l);
 			}
 		}
 		public void RemoveArcTapConnection()
@@ -811,7 +810,8 @@ namespace Arcade.Gameplay.Chart
 			ArcTap[] sameTimeTapNotes = taps.Where((s) => Mathf.Abs(s.Timing - Timing) <= 1).ToArray();
 			foreach (ArcTap t in sameTimeTapNotes)
 			{
-				if(t.ConnectionLines.ContainsKey(this)){
+				if (t.ConnectionLines.ContainsKey(this))
+				{
 					UnityEngine.Object.Destroy(t.ConnectionLines[this].gameObject);
 					t.ConnectionLines.Remove(this);
 				}
@@ -844,9 +844,9 @@ namespace Arcade.Gameplay.Chart
 				if (currentAlpha != value)
 				{
 					currentAlpha = value;
-                    ModelRenderer.GetPropertyBlock(propertyBlock);
+					ModelRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetFloat(alphaShaderId, value);
-                    ModelRenderer.SetPropertyBlock(propertyBlock);
+					ModelRenderer.SetPropertyBlock(propertyBlock);
 					ShadowRenderer.color = new Color(0.49f, 0.49f, 0.49f, 0.7843f * value);
 				}
 			}
@@ -876,9 +876,9 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
-                    ModelRenderer.GetPropertyBlock(propertyBlock);
-                    propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
-                    ModelRenderer.SetPropertyBlock(propertyBlock);
+					ModelRenderer.GetPropertyBlock(propertyBlock);
+					propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
+					ModelRenderer.SetPropertyBlock(propertyBlock);
 					selected = value;
 				}
 			}
@@ -1055,7 +1055,8 @@ namespace Arcade.Gameplay.Chart
 			return arcRenderer.IsMyself(gameObject);
 		}
 
-		public void ResetArcTapConnection(){
+		public void ResetArcTapConnection()
+		{
 
 		}
 
