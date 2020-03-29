@@ -308,14 +308,6 @@ namespace Arcade.Gameplay.Chart
 				{
 					enable = value;
 					if (spriteRenderer != null) spriteRenderer.enabled = value;
-					//Note: Sprite texture do not update at beginning, so as a workaround we should update them manually
-					if (enable)
-					{
-						if (spriteRenderer != null)
-						{
-							spriteRenderer.sprite = spriteRenderer.sprite;
-						}
-					}
 					if (meshRenderer != null) meshRenderer.enabled = value;
 				}
 			}
@@ -1053,11 +1045,6 @@ namespace Arcade.Gameplay.Chart
 		public bool IsMyself(GameObject gameObject)
 		{
 			return arcRenderer.IsMyself(gameObject);
-		}
-
-		public void ResetArcTapConnection()
-		{
-
 		}
 
 		public int FlashCount;
