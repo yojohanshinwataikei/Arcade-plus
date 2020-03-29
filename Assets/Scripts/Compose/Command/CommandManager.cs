@@ -48,9 +48,8 @@ namespace Arcade.Compose.Command
 
 		public uint bufferSize=200;
 
-		//TODO: use a generic deque when dotnet library has one
-		private UnityScript.Lang.Array undo = new UnityScript.Lang.Array();
-		private UnityScript.Lang.Array redo = new UnityScript.Lang.Array();
+		private LinkedList<ICommand> undo = new LinkedList<ICommand>();
+		private LinkedList<ICommand> redo = new LinkedList<ICommand>();
 
 		private void Update()
 		{
@@ -67,27 +66,29 @@ namespace Arcade.Compose.Command
 		{
 			command.Do();
 			AdeToast.Instance.Show($"执行了 {command.Name}");
-			undo.Push(command);
+			undo.AddLast(command);
 			if(undo.Count>bufferSize){
-				undo.Shift();
+				undo.RemoveFirst();
 			}
 			redo.Clear();
 		}
 		public void Undo()
 		{
 			if (undo.Count == 0) return;
-			ICommand cmd = undo.Pop() as ICommand;
+			ICommand cmd = undo.Last.Value;
+			undo.RemoveLast();
 			cmd.Undo();
 			AdeToast.Instance.Show($"撤销了 {cmd.Name}");
-			redo.Push(cmd);
+			redo.AddLast(cmd);
 		}
 		public void Redo()
 		{
 			if (redo.Count == 0) return;
-			ICommand cmd = redo.Pop() as ICommand;
+			ICommand cmd = redo.Last.Value;
+			redo.RemoveLast();
 			cmd.Do();
 			AdeToast.Instance.Show($"重做了 {cmd.Name}");
-			undo.Push(cmd);
+			undo.AddLast(cmd);
 		}
 		public void Clear()
         {
@@ -99,10 +100,10 @@ namespace Arcade.Compose.Command
 		{
 			bufferSize=size;
 			while(undo.Count+redo.Count>bufferSize){
-				if(undo.Count>0){
-					undo.shift();
+				if(redo.Count>0){
+					redo.RemoveFirst();
 				}else{
-					redo.shift();
+					undo.RemoveFirst();
 				}
 			}
 		}
