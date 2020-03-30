@@ -124,9 +124,9 @@ namespace Arcade.Gameplay
 		{
 			if (Chart != null)
 			{
-				foreach (var t in Chart.Arcs) { foreach (var a in t.ArcTaps) { a.Judged = false; a.Judging = false; } t.Judged = false; t.Judging = false; t.AudioPlayed = false; };
+				foreach (var t in Chart.Arcs) { foreach (var a in t.ArcTaps) { a.Judged = false;  } t.Judged = false; t.Judging = false; t.AudioPlayed = false; };
 				foreach (var t in Chart.Holds) { t.Judged = false; t.Judging = false; t.AudioPlayed = false; };
-				foreach (var t in Chart.Taps) { t.Judged = false; t.Judging = false; };
+				foreach (var t in Chart.Taps) { t.Judged = false;  };
 			}
 			ArcEffectManager.Instance.ResetJudge();
 			ArcSpecialManager.Instance.ResetJudge();

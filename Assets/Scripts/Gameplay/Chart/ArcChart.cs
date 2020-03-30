@@ -227,12 +227,10 @@ namespace Arcade.Gameplay.Chart
 			}
 		}
 	}
-
 	public interface ISelectable
 	{
 		bool Selected { get; set; }
 	}
-
 	public enum ArcLineType
 	{
 		B,
@@ -255,11 +253,11 @@ namespace Arcade.Gameplay.Chart
 	public abstract class ArcEvent
 	{
 		public int Timing;
-		public abstract ArcEvent Clone();
 		public virtual void Assign(ArcEvent newValues)
 		{
 			Timing = newValues.Timing;
 		}
+		public abstract ArcEvent Clone();
 	}
 	public class ArcSpecial : ArcEvent
 	{
@@ -274,13 +272,11 @@ namespace Arcade.Gameplay.Chart
 	}
 	public abstract class ArcNote : ArcEvent, ISelectable
 	{
-		protected bool enable;
-		protected GameObject instance;
-
-		public bool Judging;
+		// This indicated if the sound effect or tap particle of the note is played
 		public bool Judged;
 		public float Position;
 
+		protected GameObject instance;
 		public virtual GameObject Instance
 		{
 			get
@@ -296,6 +292,8 @@ namespace Arcade.Gameplay.Chart
 				meshRenderer = instance.GetComponent<MeshRenderer>();
 			}
 		}
+
+		protected bool enable;
 		public virtual bool Enable
 		{
 			get
@@ -331,18 +329,23 @@ namespace Arcade.Gameplay.Chart
 	public abstract class ArcLongNote : ArcNote
 	{
 		public int EndTiming;
-
-		public bool ShouldPlayAudio;
-		public bool AudioPlayed;
-
-		public List<int> JudgeTimings = new List<int>();
-
 		public override void Assign(ArcEvent newValues)
 		{
 			base.Assign(newValues);
 			ArcLongNote n = newValues as ArcLongNote;
 			EndTiming = n.EndTiming;
 		}
+
+		// This indicate if long note particle present
+		public bool Judging;
+
+		// This two should be replaced by judged
+		public bool ShouldPlayAudio;
+		public bool AudioPlayed;
+
+		// The times where combo increase
+		public List<int> JudgeTimings = new List<int>();
+
 	}
 	public class ArcTap : ArcNote
 	{
@@ -891,6 +894,36 @@ namespace Arcade.Gameplay.Chart
 		public bool IsVoid;
 		public List<ArcArcTap> ArcTaps = new List<ArcArcTap>();
 
+		public override ArcEvent Clone()
+		{
+			ArcArc arc = new ArcArc()
+			{
+				Timing = Timing,
+				EndTiming = EndTiming,
+				XStart = XStart,
+				XEnd = XEnd,
+				LineType = LineType,
+				YStart = YStart,
+				YEnd = YEnd,
+				Color = Color,
+				IsVoid = IsVoid,
+			};
+			foreach (var arctap in ArcTaps) arc.ArcTaps.Add(arctap.Clone() as ArcArcTap);
+			return arc;
+		}
+		public override void Assign(ArcEvent newValues)
+		{
+			base.Assign(newValues);
+			ArcArc n = newValues as ArcArc;
+			XStart = n.XStart;
+			XEnd = n.XEnd;
+			LineType = n.LineType;
+			YStart = n.YStart;
+			YEnd = n.YEnd;
+			Color = n.Color;
+			IsVoid = n.IsVoid;
+		}
+
 		public override bool Enable
 		{
 			get
@@ -938,35 +971,6 @@ namespace Arcade.Gameplay.Chart
 			arcRenderer = null;
 			ArcGroup.Clear();
 			DestroyArcTaps();
-		}
-		public override ArcEvent Clone()
-		{
-			ArcArc arc = new ArcArc()
-			{
-				Timing = Timing,
-				EndTiming = EndTiming,
-				XStart = XStart,
-				XEnd = XEnd,
-				LineType = LineType,
-				YStart = YStart,
-				YEnd = YEnd,
-				Color = Color,
-				IsVoid = IsVoid,
-			};
-			foreach (var arctap in ArcTaps) arc.ArcTaps.Add(arctap.Clone() as ArcArcTap);
-			return arc;
-		}
-		public override void Assign(ArcEvent newValues)
-		{
-			base.Assign(newValues);
-			ArcArc n = newValues as ArcArc;
-			XStart = n.XStart;
-			XEnd = n.XEnd;
-			LineType = n.LineType;
-			YStart = n.YStart;
-			YEnd = n.YEnd;
-			Color = n.Color;
-			IsVoid = n.IsVoid;
 		}
 		public override void Instantiate()
 		{
