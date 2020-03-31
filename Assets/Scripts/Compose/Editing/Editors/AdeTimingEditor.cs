@@ -67,17 +67,16 @@ namespace Arcade.Compose.Editing
             inUse = 0;
 
             List<ArcTiming> timings = ArcTimingManager.Instance.Timings;
-
             foreach (var t in timings)
             {
                 AdeTimingItem item = GetItemInstance();
                 item.TimingReference = t;
                 item.Text = GetTimingString(t);
-                item.RemoveBtn.interactable = timings.Count!=0;
+                item.RemoveBtn.interactable = timings.Count>1;
             }
 
             CleanUnusedInstance();
-            ArcTimingManager.Instance.CalculateBeatlineTimes();
+            ArcTimingManager.Instance.OnTimingChange();
         }
 
         public void SwitchStatus()

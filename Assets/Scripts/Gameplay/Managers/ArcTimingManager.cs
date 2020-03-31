@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Arcade.Compose;
 using Arcade.Gameplay.Chart;
 using UnityEngine;
 
@@ -58,7 +59,7 @@ namespace Arcade.Gameplay
 			// just because we do not have stable inplace sort now in dot net
 			timings = arcTimings.OrderBy((timing) => timing.Timing).ToList();
 			ArcGameplayManager.Instance.Chart.Timings=timings;
-			CalculateBeatlineTimes();
+			OnTimingChange();
 		}
 		private void HideExceededBeatlineInstance(int quantity)
 		{
@@ -162,6 +163,10 @@ namespace Arcade.Gameplay
 
 		public int CalculateTimingByPosition(float position)
 		{
+			if (Timings.Count == 0)
+			{
+				return 0;
+			}
 			int currentTiming = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset;
 			if (position < 0)
 			{
@@ -192,11 +197,11 @@ namespace Arcade.Gameplay
 
 		public float CalculateBpmByTiming(int timing)
 		{
-			for (int i = 0; i < Timings.Count - 1; ++i)
+			if (Timings.Count == 0)
 			{
-				if (timing >= Timings[i].Timing && timing < Timings[i + 1].Timing) return Timings[i].Bpm;
+				return 0;
 			}
-			return Timings.Last().Bpm;
+			return Timings.Last(timingEvent=>timingEvent.Timing<=timing).Bpm;
 		}
 
 		private void UpdateChartSpeedStatus()
@@ -205,7 +210,7 @@ namespace Arcade.Gameplay
 			int currentTiming = ArcGameplayManager.Instance.Timing - offset;
 			if (Timings.Count == 0)
 			{
-				CurrentSpeed = 1;
+				CurrentSpeed = 0;
 				return;
 			}
 			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing <= currentTiming);
@@ -305,14 +310,17 @@ namespace Arcade.Gameplay
 			timings.Add(newTiming);
 			timings=Timings.OrderBy((timing)=>timing.Timing).ToList();
 			ArcGameplayManager.Instance.Chart.Timings=timings;
-			CalculateBeatlineTimes();
+			OnTimingChange();
 		}
 		public void Remove(ArcTiming timing)
 		{
 			timings.Remove(timing);
-			CalculateBeatlineTimes();
+			OnTimingChange();
 		}
-
+		public void OnTimingChange(){
+			CalculateBeatlineTimes();
+			AdeGridManager.Instance.ReBuildBeatline();
+		}
 		public bool ShouldRender(int timing, int delay = 120)
 		{
 			if (timing + delay >= earliestRenderTime && timing <= latestRenderTime)
