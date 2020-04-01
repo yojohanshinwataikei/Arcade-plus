@@ -4,6 +4,9 @@ using Arcade.Gameplay.Chart;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using System.Linq;
+using Arcade.Aff;
+using System;
 
 public class ArcSceneControlManager : MonoBehaviour
 {
@@ -12,39 +15,57 @@ public class ArcSceneControlManager : MonoBehaviour
     {
         Instance = this;
     }
-
-    public Text TextAreaText;
-    public CanvasGroup TextArea;
     public SpriteRenderer TrackRenderer;
     public SpriteRenderer[] DividerRenderers;
     [HideInInspector]
     public List<ArcSceneControl> SceneControls = new List<ArcSceneControl>();
-    [HideInInspector]
-    public bool dispTrack = true, dispText = false;
+    private bool trackVisible = true;
+    private const float trackAnimationTime=0.3f;
 
     public void Load(List<ArcSceneControl> sceneControls)
     {
-        sceneControls.Sort((ArcSceneControl a, ArcSceneControl b) => a.Timing.CompareTo(b.Timing));
         SceneControls = sceneControls;
+        ResetScene();
     }
     public void Clean()
     {
         SceneControls.Clear();
     }
-    public void ResetJudge()
+    public void ResetScene()
     {
-        TextArea.alpha = 0;
-        dispText = false;
         foreach (var r in DividerRenderers)
         {
             r.color = Color.white;
         }
         TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
-        dispTrack = true;
+        trackVisible = true;
     }
 
     private void Update()
     {
+        bool newTrackVisible = true;
+        foreach (ArcSceneControl sc in SceneControls.OrderBy(sc=>sc.Timing))
+        {
+            if(sc.Timing>ArcGameplayManager.Instance.Timing+ArcAudioManager.Instance.AudioOffset){
+                break;
+            }
+            switch (sc.Type){
+                case SceneControlType.TrackHide:
+                    newTrackVisible = false;
+                    break;
+                case SceneControlType.TrackShow:
+                    newTrackVisible = true;
+                    break;
+            }
+        }
+        if(newTrackVisible!=trackVisible){
+            if(newTrackVisible){
+                ShowTrack();
+            }else{
+                HideTrack();
+            }
+            trackVisible=newTrackVisible;
+        }
         // int timing = ArcGameplayManager.Instance.Timing;
         // int offset = ArcAudioManager.Instance.AudioOffset;
         // bool playText = false, playTrack = false, track = true;
@@ -116,4 +137,43 @@ public class ArcSceneControlManager : MonoBehaviour
         //     }
         // }
     }
+
+	private void HideTrack()
+	{
+        Debug.Log("HideTrack");
+        foreach (SpriteRenderer r in DividerRenderers){
+            r.DOKill();
+        };
+        TrackRenderer.sharedMaterial.DOKill();
+        if(ArcGameplayManager.Instance.IsPlaying){
+            foreach (SpriteRenderer r in DividerRenderers){
+                r.DOFade(0, trackAnimationTime).SetEase(Ease.InCubic);
+            };
+            TrackRenderer.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
+        }else{
+            foreach (SpriteRenderer r in DividerRenderers){
+                r.color = Color.clear;
+            };
+            TrackRenderer.sharedMaterial.SetColor("_Color", Color.clear);
+        }
+	}
+
+	private void ShowTrack()
+	{
+        Debug.Log("ShowTrack"); foreach (SpriteRenderer r in DividerRenderers){
+            r.DOKill();
+        };
+        TrackRenderer.sharedMaterial.DOKill();
+        if(ArcGameplayManager.Instance.IsPlaying){
+            foreach (SpriteRenderer r in DividerRenderers){
+                r.DOFade(1, trackAnimationTime).SetEase(Ease.InCubic);
+            };
+            TrackRenderer.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
+        }else{
+            foreach (SpriteRenderer r in DividerRenderers){
+                r.color = Color.white;
+            };
+            TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
+        }
+	}
 }

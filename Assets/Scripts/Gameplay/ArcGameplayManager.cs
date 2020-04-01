@@ -129,7 +129,6 @@ namespace Arcade.Gameplay
 				foreach (var t in Chart.Taps) { t.Judged = false;  };
 			}
 			ArcEffectManager.Instance.ResetJudge();
-			ArcSceneControlManager.Instance.ResetJudge();
 		}
 		public void PlayDelayed()
 		{
