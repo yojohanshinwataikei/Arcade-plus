@@ -74,7 +74,11 @@ namespace Arcade.Compose
 			foreach (var n in notes)
 			{
 				ArcEvent ne = n.Clone();
-				if (ne is ArcArcTap) commands.Add(new AddArcTapCommand((n as ArcArcTap).Arc, ne as ArcArcTap));
+				if (ne is ArcArcTap) {
+					if(!notes.Contains((n as ArcArcTap).Arc)){
+						commands.Add(new AddArcTapCommand((n as ArcArcTap).Arc, ne as ArcArcTap));
+					}
+				}
 				else if (ne is ArcArc)
 				{
 					commands.Add(new AddArcEventCommand(ne));
