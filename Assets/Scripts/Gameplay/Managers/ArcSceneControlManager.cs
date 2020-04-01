@@ -5,9 +5,9 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public class ArcSpecialManager : MonoBehaviour
+public class ArcSceneControlManager : MonoBehaviour
 {
-    public static ArcSpecialManager Instance { get; private set; }
+    public static ArcSceneControlManager Instance { get; private set; }
     private void Awake()
     {
         Instance = this;
@@ -18,22 +18,22 @@ public class ArcSpecialManager : MonoBehaviour
     public SpriteRenderer TrackRenderer;
     public SpriteRenderer[] DividerRenderers;
     [HideInInspector]
-    public List<ArcSpecial> Specials = new List<ArcSpecial>();
+    public List<ArcSceneControl> SceneControls = new List<ArcSceneControl>();
     [HideInInspector]
     public bool dispTrack = true, dispText = false;
 
-    public void Load(List<ArcSpecial> specials)
+    public void Load(List<ArcSceneControl> sceneControls)
     {
-        specials.Sort((ArcSpecial a, ArcSpecial b) => a.Timing.CompareTo(b.Timing));
-        Specials = specials;
+        sceneControls.Sort((ArcSceneControl a, ArcSceneControl b) => a.Timing.CompareTo(b.Timing));
+        SceneControls = sceneControls;
     }
     public void Clean()
     {
-        Specials.Clear();
+        SceneControls.Clear();
     }
     public void ResetJudge()
     {
-        foreach (var s in Specials) s.Played = false;
+        foreach (var s in SceneControls) s.Played = false;
         TextArea.alpha = 0;
         dispText = false;
         foreach (var r in DividerRenderers)
@@ -50,12 +50,12 @@ public class ArcSpecialManager : MonoBehaviour
         int offset = ArcAudioManager.Instance.AudioOffset;
         bool playText = false, playTrack = false, track = true;
         string text = null;
-        foreach (var s in Specials)
+        foreach (var s in SceneControls)
         {
             if (timing < s.Timing + offset) break;
             switch (s.Type)
             {
-                case Arcade.Aff.Advanced.SpecialType.TextArea:
+                case Arcade.Aff.Advanced.SceneControlType.TextArea:
                     if (s.Param1 == "in")
                     {
                         if (!s.Played)
@@ -75,7 +75,7 @@ public class ArcSpecialManager : MonoBehaviour
                         text = null;
                     }
                     break;
-                case Arcade.Aff.Advanced.SpecialType.Fade:
+                case Arcade.Aff.Advanced.SceneControlType.Fade:
                     if (s.Param1 == "in")
                     {
                         if (!s.Played)

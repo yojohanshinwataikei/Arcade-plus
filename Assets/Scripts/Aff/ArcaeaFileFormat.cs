@@ -36,8 +36,8 @@ namespace Arcade.Aff
 		Hold,
 		Arc,
 		Camera,
-		Unknown,
-		Special
+		SceneControl,
+		Unknown
 	}
 	public class ArcaeaAffEvent
 	{
@@ -78,15 +78,15 @@ namespace Arcade.Aff
 	}
 	namespace Advanced
 	{
-		public enum SpecialType
+		public enum SceneControlType
 		{
 			Unknown,
 			TextArea,
 			Fade
 		}
-		public class ArcadeAffSpecial : ArcaeaAffEvent
+		public class ArcaeaAffSceneControl : ArcaeaAffEvent
 		{
-			public SpecialType SpecialType;
+			public SceneControlType SceneControlType;
 			public string param1;
 			public string param2;
 			public string param3;
@@ -107,7 +107,7 @@ namespace Arcade.Aff
 			else if (line.StartsWith("hold")) return EventType.Hold;
 			else if (line.StartsWith("arc")) return EventType.Arc;
 			else if (line.StartsWith("camera")) return EventType.Camera;
-			else if (line.StartsWith("special")) return EventType.Special;
+			else if (line.StartsWith("special")) return EventType.SceneControl;
 			return EventType.Unknown;
 		}
 		private void ParseTiming(string line)
@@ -275,7 +275,7 @@ namespace Arcade.Aff
 				throw new ArcaeaAffFormatException("符号错误");
 			}
 		}
-		private void ParseSpecial(string line)
+		private void ParseSceneControl(string line)
 		{
 			try
 			{
@@ -283,12 +283,12 @@ namespace Arcade.Aff
 				s.Skip(8);
 				int tick = s.ReadInt(",");
 				string type = s.ReadString(",");
-				SpecialType specialType = SpecialType.Unknown;
+				SceneControlType sceneControlType = SceneControlType.Unknown;
 				string param1 = null, param2 = null, param3 = null;
 				switch (type)
 				{
 					case "text":
-						specialType = SpecialType.TextArea;
+						sceneControlType = SceneControlType.TextArea;
 						param1 = s.Peek(2);
 						if (param1 == "in")
 						{
@@ -302,18 +302,18 @@ namespace Arcade.Aff
 						}
 						break;
 					case "fade":
-						specialType = SpecialType.Fade;
+						sceneControlType = SceneControlType.Fade;
 						param1 = s.ReadString(")");
 						break;
 				}
-				Events.Add(new ArcadeAffSpecial()
+				Events.Add(new ArcaeaAffSceneControl()
 				{
 					Timing = tick,
-					Type = EventType.Special,
+					Type = EventType.SceneControl,
 					param1 = param1,
 					param2 = param2,
 					param3 = param3,
-					SpecialType = specialType
+					SceneControlType = sceneControlType
 				});
 			}
 			catch (ArcaeaAffFormatException Ex)
@@ -359,8 +359,8 @@ namespace Arcade.Aff
 						case EventType.Camera:
 							ParseCamera(line);
 							break;
-						case EventType.Special:
-							ParseSpecial(line);
+						case EventType.SceneControl:
+							ParseSceneControl(line);
 							break;
 					}
 				}
@@ -419,16 +419,16 @@ namespace Arcade.Aff
 					ArcaeaAffCamera cam = affEvent as ArcaeaAffCamera;
 					WriteLine($"camera({cam.Timing},{cam.Move.x.ToString("f2")},{cam.Move.y.ToString("f2")},{cam.Move.z.ToString("f2")},{cam.Rotate.x.ToString("f2")},{cam.Rotate.y.ToString("f2")},{cam.Rotate.z.ToString("f2")},{cam.CameraType},{cam.Duration});");
 					break;
-				case EventType.Special:
-					ArcadeAffSpecial spe = affEvent as ArcadeAffSpecial;
+				case EventType.SceneControl:
+					ArcaeaAffSceneControl spe = affEvent as ArcaeaAffSceneControl;
 					string type = "error";
-					switch (spe.SpecialType)
+					switch (spe.SceneControlType)
 					{
-						case SpecialType.Fade:
+						case SceneControlType.Fade:
 							type = "fade";
 							WriteLine($"special({spe.Timing},{type},{spe.param1 ?? "null"});");
 							break;
-						case SpecialType.TextArea:
+						case SceneControlType.TextArea:
 							type = "text";
 							if (spe.param1 == "in")
 								WriteLine($"special({spe.Timing},{type},{spe.param1 ?? "null"},{(spe.param2 == null ? "null" : spe.param2.Replace("\n", "<br>"))});");

@@ -102,7 +102,7 @@ namespace Arcade.Gameplay
 			ArcHoldNoteManager.Instance.Load(chart.Holds);
 			ArcArcManager.Instance.Load(chart.Arcs);
 			ArcCameraManager.Instance.Load(chart.Cameras);
-			ArcSpecialManager.Instance.Load(chart.Specials);
+			ArcSceneControlManager.Instance.Load(chart.SceneControl);
 
 			OnChartLoad.Invoke();
 			return true;
@@ -115,7 +115,7 @@ namespace Arcade.Gameplay
 			ArcHoldNoteManager.Instance.Clean();
 			ArcArcManager.Instance.Clean();
 			ArcCameraManager.Instance.Clean();
-			ArcSpecialManager.Instance.Clean();
+			ArcSceneControlManager.Instance.Clean();
 			Chart = null;
 			Length = 0;
 		}
@@ -129,7 +129,7 @@ namespace Arcade.Gameplay
 				foreach (var t in Chart.Taps) { t.Judged = false;  };
 			}
 			ArcEffectManager.Instance.ResetJudge();
-			ArcSpecialManager.Instance.ResetJudge();
+			ArcSceneControlManager.Instance.ResetJudge();
 		}
 		public void PlayDelayed()
 		{

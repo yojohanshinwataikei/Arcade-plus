@@ -21,7 +21,7 @@ namespace Arcade.Gameplay.Chart
 		public List<ArcTiming> Timings = new List<ArcTiming>();
 		public List<ArcArc> Arcs = new List<ArcArc>();
 		public List<ArcCamera> Cameras = new List<ArcCamera>();
-		public List<ArcSpecial> Specials = new List<ArcSpecial>();
+		public List<ArcSceneControl> SceneControl = new List<ArcSceneControl>();
 		public int LastEventTiming = 0;
 		public ArcaeaAffReader Raw;
 
@@ -73,9 +73,9 @@ namespace Arcade.Gameplay.Chart
 						var camera = e as ArcaeaAffCamera;
 						Cameras.Add(new ArcCamera() { Timing = camera.Timing, Move = camera.Move, Rotate = camera.Rotate, CameraType = ToCameraType(camera.CameraType), Duration = camera.Duration });
 						break;
-					case Aff.EventType.Special:
-						var special = e as ArcadeAffSpecial;
-						Specials.Add(new ArcSpecial { Timing = special.Timing, Type = special.SpecialType, Param1 = special.param1, Param2 = special.param2, Param3 = special.param3 });
+					case Aff.EventType.SceneControl:
+						var sceneControl = e as ArcaeaAffSceneControl;
+						SceneControl.Add(new ArcSceneControl { Timing = sceneControl.Timing, Type = sceneControl.SceneControlType, Param1 = sceneControl.param1, Param2 = sceneControl.param2, Param3 = sceneControl.param3 });
 						break;
 				}
 			}
@@ -90,7 +90,7 @@ namespace Arcade.Gameplay.Chart
 			events.AddRange(Holds);
 			events.AddRange(Arcs);
 			events.AddRange(Cameras);
-			events.AddRange(Specials);
+			events.AddRange(SceneControl);
 			switch (mode)
 			{
 				case ChartSortMode.Timing:
@@ -156,14 +156,14 @@ namespace Arcade.Gameplay.Chart
 						Type = Aff.EventType.Camera
 					});
 				}
-				else if (e is ArcSpecial)
+				else if (e is ArcSceneControl)
 				{
-					var spe = e as ArcSpecial;
-					writer.WriteEvent(new ArcadeAffSpecial
+					var spe = e as ArcSceneControl;
+					writer.WriteEvent(new ArcaeaAffSceneControl
 					{
 						Timing = spe.Timing,
-						Type = Aff.EventType.Special,
-						SpecialType = spe.Type,
+						Type = Aff.EventType.SceneControl,
+						SceneControlType = spe.Type,
 						param1 = spe.Param1,
 						param2 = spe.Param2,
 						param3 = spe.Param3
@@ -259,9 +259,9 @@ namespace Arcade.Gameplay.Chart
 		}
 		public abstract ArcEvent Clone();
 	}
-	public class ArcSpecial : ArcEvent
+	public class ArcSceneControl : ArcEvent
 	{
-		public SpecialType Type;
+		public SceneControlType Type;
 		public string Param1, Param2, Param3;
 		public bool Played;
 
