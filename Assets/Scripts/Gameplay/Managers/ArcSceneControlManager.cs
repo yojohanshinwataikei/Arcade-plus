@@ -15,6 +15,7 @@ public class ArcSceneControlManager : MonoBehaviour
     {
         Instance = this;
     }
+    public Image BackgroundDarkenLayer;
     public SpriteRenderer TrackRenderer;
     public SpriteRenderer[] DividerRenderers;
     [HideInInspector]
@@ -145,16 +146,19 @@ public class ArcSceneControlManager : MonoBehaviour
             r.DOKill();
         };
         TrackRenderer.sharedMaterial.DOKill();
+        BackgroundDarkenLayer.DOKill();
         if(ArcGameplayManager.Instance.IsPlaying){
             foreach (SpriteRenderer r in DividerRenderers){
                 r.DOFade(0, trackAnimationTime).SetEase(Ease.InCubic);
             };
             TrackRenderer.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
+            BackgroundDarkenLayer.DOColor(Color.black,trackAnimationTime).SetEase(Ease.InCubic);
         }else{
             foreach (SpriteRenderer r in DividerRenderers){
                 r.color = Color.clear;
             };
             TrackRenderer.sharedMaterial.SetColor("_Color", Color.clear);
+            BackgroundDarkenLayer.color=Color.black;
         }
 	}
 
@@ -169,11 +173,13 @@ public class ArcSceneControlManager : MonoBehaviour
                 r.DOFade(1, trackAnimationTime).SetEase(Ease.InCubic);
             };
             TrackRenderer.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
+            BackgroundDarkenLayer.DOColor(Color.clear,trackAnimationTime).SetEase(Ease.OutCubic);
         }else{
             foreach (SpriteRenderer r in DividerRenderers){
                 r.color = Color.white;
             };
             TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
+            BackgroundDarkenLayer.color=Color.clear;
         }
 	}
 }
