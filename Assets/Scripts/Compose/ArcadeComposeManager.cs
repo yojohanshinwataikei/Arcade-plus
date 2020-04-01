@@ -181,6 +181,7 @@ namespace Arcade.Compose
 				needResetResolutionInNextFrames -= 1;
 				LayoutRebuilder.ForceRebuildLayoutImmediate(EditorCanvas);
 				GameplayCamera.rect = IsEditorMode ? EditorModeGameplayCameraRect : new Rect(0, 0, 1, 1);
+				ArcCameraManager.Instance.ResetCamera();
 			}
 		}
 		private void OnEnable()
