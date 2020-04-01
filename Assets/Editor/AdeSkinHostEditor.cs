@@ -56,6 +56,7 @@ public class AdeSkinHostEditor : Editor
 		GUILayout.Label($"  TapSound:{data.TapSound.label}");
 		GUILayout.Label($"  ArcSound:{data.ArcSound.label}");
 		GUILayout.Label($"  TutorialBanner:{data.TutorialBanner.label}");
+		GUILayout.Label($"  BackgroundDarken:{data.BackgroundDarken.label}");
 		GUILayout.Label($"  SkyInputLabel:{data.SkyInputLabel.label}");
 		GUILayout.Label($"  SkyInputLine:{data.SkyInputLine.label}");
 		GUILayout.Label($"  SkyInputLabel:{data.SkyInputLabel.label}");

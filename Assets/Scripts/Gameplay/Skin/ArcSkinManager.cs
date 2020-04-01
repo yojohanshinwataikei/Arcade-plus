@@ -13,6 +13,7 @@ namespace Arcade.Gameplay
 
 		[Header("Background")]
 		public Image Background;
+		public Image BackgroundDarken;
 
 		[Header("Combo")]
 		public Color[] ComboTextColors = new Color[3];
@@ -114,6 +115,7 @@ namespace Arcade.Gameplay
 			ArcEffectManager.Instance.ArcAudio = skinData.ArcSound.value;
 
 			TutorialBanner.sprite = skinData.TutorialBanner.value;
+			BackgroundDarken.sprite = skinData.BackgroundDarken.value;
 
 			SkyInputLabel.sprite=skinData.SkyInputLabel.value;
 			SkyInputLine.sprite=skinData.SkyInputLine.value;

@@ -2978,6 +2978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb3fdfe1903185d448625975afd6cb6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BackgroundDarkenLayer: {fileID: 1217107841}
   TrackRenderer: {fileID: 2097887582}
   DividerRenderers:
   - {fileID: 2026685931}
@@ -44428,6 +44429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Background: {fileID: 138506816}
+  BackgroundDarken: {fileID: 1217107841}
   ComboTextColors:
   - {r: 0.47058824, g: 0.23529412, b: 0.47058824, a: 1}
   - {r: 0.5882353, g: 0.39215687, b: 0.6862745, a: 1}
@@ -44543,6 +44545,7 @@ MonoBehaviour:
     TapSound: {fileID: 8300000, guid: fdffe2ec68c4c204d84ad3dee4b69fd0, type: 3}
     ArcSound: {fileID: 8300000, guid: bdece328b6ce4a1408ee82a4eefbe5b4, type: 3}
     TutorialBanner: {fileID: 21300000, guid: 22a9f1bbbcf5ee5479eae99d702f70e6, type: 3}
+    BackgroundDarken: {fileID: 21300000, guid: 0750720cefb3adc41a8ee70c08791616, type: 3}
     SkyInputLabel: {fileID: 21300000, guid: 47f754b012342474dac2820bcf2b6516, type: 3}
     SkyInputLine: {fileID: 21300000, guid: acc370aca07126d4ebd0ac853492383f, type: 3}
     TrackLaneDivider: {fileID: 21300000, guid: 4138c4e49a563ba4d86a3a950f1d6aef, type: 3}

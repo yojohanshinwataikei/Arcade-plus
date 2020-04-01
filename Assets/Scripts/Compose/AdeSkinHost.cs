@@ -50,6 +50,7 @@ namespace Arcade.Compose
 			public AudioClip TapSound;
 			public AudioClip ArcSound;
 			public Sprite TutorialBanner;
+			public Sprite BackgroundDarken;
 			public Sprite SkyInputLabel;
 			public Sprite SkyInputLine;
 			public Sprite TrackLaneDivider;
@@ -126,6 +127,7 @@ namespace Arcade.Compose
 			public Labelled<AudioClip> TapSound;
 			public Labelled<AudioClip> ArcSound;
 			public Labelled<Sprite> TutorialBanner;
+			public Labelled<Sprite> BackgroundDarken;
 			public Labelled<Sprite> SkyInputLabel;
 			public Labelled<Sprite> SkyInputLine;
 			public Labelled<Sprite> TrackLaneDivider;
@@ -437,6 +439,10 @@ namespace Arcade.Compose
 			}, rawDefaultData.ArcSound);
 
 			skinData.TutorialBanner = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Tutorial.png"), (path) =>
+			{
+				return LoadNormalSprite(path, externalSkinDataObjects);
+			}, rawDefaultData.TutorialBanner);
+			skinData.BackgroundDarken = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "BackgroundDarken.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.TutorialBanner);
