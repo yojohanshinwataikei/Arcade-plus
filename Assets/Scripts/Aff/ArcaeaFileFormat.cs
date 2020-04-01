@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using Arcade.Aff.Advanced;
+using Arcade.Aff;
 
 namespace Arcade.Aff
 {
@@ -76,21 +76,17 @@ namespace Arcade.Aff
 		public string CameraType;
 		public int Duration;
 	}
-	namespace Advanced
+	public enum SceneControlType
 	{
-		public enum SceneControlType
-		{
-			Unknown,
-			TextArea,
-			Fade
-		}
-		public class ArcaeaAffSceneControl : ArcaeaAffEvent
-		{
-			public SceneControlType SceneControlType;
-			public string param1;
-			public string param2;
-			public string param3;
-		}
+		TrackHide,
+		TrackShow,
+		Unknown,
+		TextArea,
+		Fade
+	}
+	public class ArcaeaAffSceneControl : ArcaeaAffEvent
+	{
+		public SceneControlType SceneControlType;
 	}
 	public class ArcaeaAffReader
 	{
@@ -107,7 +103,7 @@ namespace Arcade.Aff
 			else if (line.StartsWith("hold")) return EventType.Hold;
 			else if (line.StartsWith("arc")) return EventType.Arc;
 			else if (line.StartsWith("camera")) return EventType.Camera;
-			else if (line.StartsWith("special")) return EventType.SceneControl;
+			else if (line.StartsWith("scenecontrol")) return EventType.SceneControl;
 			return EventType.Unknown;
 		}
 		private void ParseTiming(string line)
@@ -280,39 +276,23 @@ namespace Arcade.Aff
 			try
 			{
 				StringParser s = new StringParser(line);
-				s.Skip(8);
+				s.Skip(13);
 				int tick = s.ReadInt(",");
-				string type = s.ReadString(",");
+				string type = s.ReadString(")");
 				SceneControlType sceneControlType = SceneControlType.Unknown;
-				string param1 = null, param2 = null, param3 = null;
 				switch (type)
 				{
-					case "text":
-						sceneControlType = SceneControlType.TextArea;
-						param1 = s.Peek(2);
-						if (param1 == "in")
-						{
-							param1 = s.ReadString(",");
-							param2 = s.ReadString(")");
-							param2 = param2.Replace("<br>", "\n");
-						}
-						else
-						{
-							param1 = s.ReadString(")");
-						}
+					case "trackhide":
+						sceneControlType = SceneControlType.TrackHide;
 						break;
-					case "fade":
-						sceneControlType = SceneControlType.Fade;
-						param1 = s.ReadString(")");
+					case "trackshow":
+						sceneControlType = SceneControlType.TrackShow;
 						break;
 				}
 				Events.Add(new ArcaeaAffSceneControl()
 				{
 					Timing = tick,
 					Type = EventType.SceneControl,
-					param1 = param1,
-					param2 = param2,
-					param3 = param3,
 					SceneControlType = sceneControlType
 				});
 			}
@@ -424,16 +404,13 @@ namespace Arcade.Aff
 					string type = "error";
 					switch (spe.SceneControlType)
 					{
-						case SceneControlType.Fade:
-							type = "fade";
-							WriteLine($"special({spe.Timing},{type},{spe.param1 ?? "null"});");
+						case SceneControlType.TrackHide:
+							type="trackhide";
+							WriteLine($"scenecontrol({spe.Timing},{type});");
 							break;
-						case SceneControlType.TextArea:
-							type = "text";
-							if (spe.param1 == "in")
-								WriteLine($"special({spe.Timing},{type},{spe.param1 ?? "null"},{(spe.param2 == null ? "null" : spe.param2.Replace("\n", "<br>"))});");
-							else
-								WriteLine($"special({spe.Timing},{type},{spe.param1 ?? "null"});");
+						case SceneControlType.TrackShow:
+							type="trackshow";
+							WriteLine($"scenecontrol({spe.Timing},{type});");
 							break;
 					}
 					break;

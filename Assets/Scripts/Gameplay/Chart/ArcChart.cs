@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Arcade.Aff;
-using Arcade.Aff.Advanced;
 using UnityEngine;
 
 namespace Arcade.Gameplay.Chart
@@ -75,7 +74,7 @@ namespace Arcade.Gameplay.Chart
 						break;
 					case Aff.EventType.SceneControl:
 						var sceneControl = e as ArcaeaAffSceneControl;
-						SceneControl.Add(new ArcSceneControl { Timing = sceneControl.Timing, Type = sceneControl.SceneControlType, Param1 = sceneControl.param1, Param2 = sceneControl.param2, Param3 = sceneControl.param3 });
+						SceneControl.Add(new ArcSceneControl { Timing = sceneControl.Timing, Type = sceneControl.SceneControlType });
 						break;
 				}
 			}
@@ -163,10 +162,7 @@ namespace Arcade.Gameplay.Chart
 					{
 						Timing = spe.Timing,
 						Type = Aff.EventType.SceneControl,
-						SceneControlType = spe.Type,
-						param1 = spe.Param1,
-						param2 = spe.Param2,
-						param3 = spe.Param3
+						SceneControlType = spe.Type
 					});
 				}
 			}
@@ -262,8 +258,6 @@ namespace Arcade.Gameplay.Chart
 	public class ArcSceneControl : ArcEvent
 	{
 		public SceneControlType Type;
-		public string Param1, Param2, Param3;
-		public bool Played;
 
 		public override ArcEvent Clone()
 		{

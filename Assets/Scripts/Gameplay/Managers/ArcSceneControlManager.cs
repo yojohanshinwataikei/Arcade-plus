@@ -33,7 +33,6 @@ public class ArcSceneControlManager : MonoBehaviour
     }
     public void ResetJudge()
     {
-        foreach (var s in SceneControls) s.Played = false;
         TextArea.alpha = 0;
         dispText = false;
         foreach (var r in DividerRenderers)
@@ -46,75 +45,75 @@ public class ArcSceneControlManager : MonoBehaviour
 
     private void Update()
     {
-        int timing = ArcGameplayManager.Instance.Timing;
-        int offset = ArcAudioManager.Instance.AudioOffset;
-        bool playText = false, playTrack = false, track = true;
-        string text = null;
-        foreach (var s in SceneControls)
-        {
-            if (timing < s.Timing + offset) break;
-            switch (s.Type)
-            {
-                case Arcade.Aff.Advanced.SceneControlType.TextArea:
-                    if (s.Param1 == "in")
-                    {
-                        if (!s.Played)
-                        {
-                            s.Played = true;
-                            playText = true;
-                        }
-                        text = s.Param2;
-                    }
-                    else if (s.Param1 == "out")
-                    {
-                        if (!s.Played)
-                        {
-                            s.Played = true;
-                            playText = true;
-                        }
-                        text = null;
-                    }
-                    break;
-                case Arcade.Aff.Advanced.SceneControlType.Fade:
-                    if (s.Param1 == "in")
-                    {
-                        if (!s.Played)
-                        {
-                            s.Played = true;
-                            playTrack = true;
-                        }
-                        track = true;
-                    }
-                    else if (s.Param1 == "out")
-                    {
-                        if (!s.Played)
-                        {
-                            s.Played = true;
-                            playTrack = true;
-                        }
-                        track = false;
-                    }
-                    break;
-            }
-        }
-        if (dispTrack != track)
-        {
-            dispTrack = track;
-            if (playTrack)
-            {
-                foreach (SpriteRenderer r in DividerRenderers) r.DOFade(track ? 1 : 0, 0.5f);
-                TrackRenderer.sharedMaterial.DOColor(track ? Color.white : Color.clear, "_Color", 0.5f);
-            }
-        }
-        if (text != null) TextAreaText.text = text;
-        bool dText = text != null;
-        if (dispText != dText)
-        {
-            dispText = dText;
-            if (playText)
-            {
-                TextArea.DOFade(dText ? 1 : 0, 0.5f);
-            }
-        }
+        // int timing = ArcGameplayManager.Instance.Timing;
+        // int offset = ArcAudioManager.Instance.AudioOffset;
+        // bool playText = false, playTrack = false, track = true;
+        // string text = null;
+        // foreach (var s in SceneControls)
+        // {
+        //     if (timing < s.Timing + offset) break;
+        //     switch (s.Type)
+        //     {
+        //         case Arcade.Aff.SceneControlType.TextArea:
+        //             if (s.Param1 == "in")
+        //             {
+        //                 if (!s.Played)
+        //                 {
+        //                     s.Played = true;
+        //                     playText = true;
+        //                 }
+        //                 text = s.Param2;
+        //             }
+        //             else if (s.Param1 == "out")
+        //             {
+        //                 if (!s.Played)
+        //                 {
+        //                     s.Played = true;
+        //                     playText = true;
+        //                 }
+        //                 text = null;
+        //             }
+        //             break;
+        //         case Arcade.Aff.SceneControlType.Fade:
+        //             if (s.Param1 == "in")
+        //             {
+        //                 if (!s.Played)
+        //                 {
+        //                     s.Played = true;
+        //                     playTrack = true;
+        //                 }
+        //                 track = true;
+        //             }
+        //             else if (s.Param1 == "out")
+        //             {
+        //                 if (!s.Played)
+        //                 {
+        //                     s.Played = true;
+        //                     playTrack = true;
+        //                 }
+        //                 track = false;
+        //             }
+        //             break;
+        //     }
+        // }
+        // if (dispTrack != track)
+        // {
+        //     dispTrack = track;
+        //     if (playTrack)
+        //     {
+        //         foreach (SpriteRenderer r in DividerRenderers) r.DOFade(track ? 1 : 0, 0.5f);
+        //         TrackRenderer.sharedMaterial.DOColor(track ? Color.white : Color.clear, "_Color", 0.5f);
+        //     }
+        // }
+        // if (text != null) TextAreaText.text = text;
+        // bool dText = text != null;
+        // if (dispText != dText)
+        // {
+        //     dispText = dText;
+        //     if (playText)
+        //     {
+        //         TextArea.DOFade(dText ? 1 : 0, 0.5f);
+        //     }
+        // }
     }
 }
