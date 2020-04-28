@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [ExecuteAlways]
 public class AdeAutoResizeScrollViewContent : MonoBehaviour
@@ -10,3 +10,4 @@ public class AdeAutoResizeScrollViewContent : MonoBehaviour
 	}
 
 }
+

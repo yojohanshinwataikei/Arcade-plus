@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Arcade.Compose.Cursor.Builder
 {
@@ -48,3 +48,4 @@ namespace Arcade.Compose.Cursor.Builder
         }
     }
 }
+

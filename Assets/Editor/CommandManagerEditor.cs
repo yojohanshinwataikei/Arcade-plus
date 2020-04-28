@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using Arcade.Compose.Command;
 
@@ -14,3 +14,4 @@ public class CommandManagerEditor : Editor
         EditorGUILayout.EndHorizontal();
     }
 }
+

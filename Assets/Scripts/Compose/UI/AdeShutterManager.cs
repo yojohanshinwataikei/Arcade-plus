@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using Arcade.Compose.Dialog;

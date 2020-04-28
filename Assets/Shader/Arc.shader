@@ -1,4 +1,4 @@
-﻿Shader "Arcade/Arc"
+Shader "Arcade/Arc"
 {
 	Properties
 	{
@@ -87,3 +87,4 @@
 		}
 	}
 }
+

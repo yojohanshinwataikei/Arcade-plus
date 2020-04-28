@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using Arcade.Gameplay.Chart;
 using Arcade.Compose.MarkingMenu;

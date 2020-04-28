@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Arcade.Compose.Command;
 using Arcade.Compose.MarkingMenu;

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Util.UnityExtension;
 using DG.Tweening;

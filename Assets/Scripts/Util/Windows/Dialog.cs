@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Arcade.Util.Windows.Internal;
 using System.Runtime.InteropServices;

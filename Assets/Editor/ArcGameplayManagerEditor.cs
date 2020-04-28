@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using Arcade.Gameplay;
 
@@ -49,3 +49,4 @@ public class ArcGameplayManagerEditor : Editor
 		Repaint();
 	}
 }
+

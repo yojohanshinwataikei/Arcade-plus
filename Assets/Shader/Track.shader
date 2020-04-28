@@ -1,4 +1,4 @@
-﻿Shader "Arcade/Track"
+Shader "Arcade/Track"
 {
 	Properties
 	{
@@ -57,3 +57,4 @@
 		}
 	}
 }
+

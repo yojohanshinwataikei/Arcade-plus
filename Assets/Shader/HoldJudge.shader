@@ -1,4 +1,4 @@
-﻿Shader "Arcade/HoldJudge"
+Shader "Arcade/HoldJudge"
 {
 	Properties
 	{
@@ -55,3 +55,4 @@
 		}
 	}
 }
+

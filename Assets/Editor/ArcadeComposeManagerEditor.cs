@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using Arcade.Compose;
 
@@ -22,3 +22,4 @@ public class ArcadeComposeManagerEditor : Editor
 		GUILayout.EndHorizontal();
 	}
 }
+

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 using Arcade.Compose;
 
@@ -13,3 +13,4 @@ public class AdeToastEditor : Editor
         if (GUILayout.Button("Send")) AdeToast.Instance.Show(text);
     }
 }
+

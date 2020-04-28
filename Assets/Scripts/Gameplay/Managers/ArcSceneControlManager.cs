@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
 using UnityEngine;
@@ -113,3 +113,4 @@ public class ArcSceneControlManager : MonoBehaviour
         }
 	}
 }
+

@@ -1,4 +1,4 @@
-﻿Shader "Arcade/TapNote"
+Shader "Arcade/TapNote"
 {
 	Properties
 	{
@@ -67,3 +67,4 @@
 		}
 	}
 }
+

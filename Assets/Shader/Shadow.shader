@@ -1,4 +1,4 @@
-﻿Shader "Arcade/Shadow"
+Shader "Arcade/Shadow"
 {
 	Properties
 	{
@@ -56,3 +56,4 @@
 		}
 	}
 }
+

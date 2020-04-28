@@ -1,4 +1,4 @@
-﻿public class StringParser
+public class StringParser
 {
 	private int pos;
 	private string str;
@@ -50,3 +50,4 @@
 		return str.Substring(pos, count);
 	}
 }
+

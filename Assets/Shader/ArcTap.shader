@@ -1,4 +1,4 @@
-﻿Shader "Arcade/ArcTap"
+Shader "Arcade/ArcTap"
 {
 	Properties
 	{
@@ -66,3 +66,4 @@
 		}
 	}
 }
+

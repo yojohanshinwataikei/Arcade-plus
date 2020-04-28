@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Arcade.Gameplay.Chart;
 
 namespace Arcade.Gameplay

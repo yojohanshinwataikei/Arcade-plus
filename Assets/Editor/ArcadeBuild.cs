@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using UnityEditor;
 using Arcade.Compose;
@@ -46,3 +46,4 @@ public class ArcadeBuild
 		FileUtil.CopyFileOrDirectory("Background","Build/x64/Background");
 	}
 }
+

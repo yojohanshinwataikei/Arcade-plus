@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using Arcade.Util.Pooling;
 using UnityEngine;
 

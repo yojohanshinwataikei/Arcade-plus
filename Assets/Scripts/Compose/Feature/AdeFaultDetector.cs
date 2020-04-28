@@ -241,3 +241,4 @@ public class AdeFaultDetector : MonoBehaviour
 		Arcade.Util.Windows.Dialog.OpenExplorer(path);
     }
 }
+

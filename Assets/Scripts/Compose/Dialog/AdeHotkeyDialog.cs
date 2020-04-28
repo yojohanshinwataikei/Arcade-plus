@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class AdeHotkeyDialog : MonoBehaviour
@@ -16,3 +16,4 @@ public class AdeHotkeyDialog : MonoBehaviour
         inputField.text = inputField.text.ToLower();
     }
 }
+

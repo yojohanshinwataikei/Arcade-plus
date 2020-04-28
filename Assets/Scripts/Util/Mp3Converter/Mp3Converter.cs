@@ -1,4 +1,4 @@
-﻿using NAudio.Wave;
+using NAudio.Wave;
 
 namespace Arcade.Util.Mp3Converter
 {
@@ -12,3 +12,4 @@ namespace Arcade.Util.Mp3Converter
 		}
 	}
 }
+

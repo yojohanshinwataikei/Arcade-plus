@@ -1,4 +1,4 @@
-﻿using Arcade.Gameplay.Chart;
+using Arcade.Gameplay.Chart;
 using Arcade.Gameplay;
 using Arcade.Compose.Editing;
 

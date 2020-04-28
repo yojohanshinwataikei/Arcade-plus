@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 // Note: this class is used to resize the outer scroll view of the content in it
@@ -62,3 +62,4 @@ public class AdeAutoResizeScrollView : MonoBehaviour, ILayoutElement
 		LayoutRebuilder.MarkLayoutForRebuild(rectTransform);
 	}
 }
+

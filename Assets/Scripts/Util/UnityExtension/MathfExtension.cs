@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Arcade.Util.UnityExtension
 {
@@ -12,3 +12,4 @@ namespace Arcade.Util.UnityExtension
 		}
 	}
 }
+

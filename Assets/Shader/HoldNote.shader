@@ -1,4 +1,4 @@
-﻿Shader "Arcade/HoldNote"
+Shader "Arcade/HoldNote"
 {
 	Properties
 	{
@@ -70,3 +70,4 @@
 		}
 	}
 }
+

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using Arcade.Gameplay.Chart;
 using Arcade.Compose;
@@ -67,3 +67,4 @@ public class AdeMirror : MonoBehaviour, IMarkingMenuItemProvider
 		CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "镜像"));
 	}
 }
+

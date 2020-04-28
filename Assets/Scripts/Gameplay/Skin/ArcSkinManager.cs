@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Util.UnityExtension;
 using Arcade.Compose;
@@ -162,3 +162,4 @@ namespace Arcade.Gameplay
 		}
 	}
 }
+

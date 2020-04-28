@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Arcade.Gameplay.Chart;
 using UnityEngine.Events;
 using Arcade.Gameplay.Events;
@@ -176,3 +176,4 @@ namespace Arcade.Gameplay
 		}
 	}
 }
+

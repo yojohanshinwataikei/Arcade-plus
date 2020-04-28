@@ -1,4 +1,4 @@
-﻿namespace Arcade.Compose.Command
+namespace Arcade.Compose.Command
 {
 	public interface ICommand
     {
