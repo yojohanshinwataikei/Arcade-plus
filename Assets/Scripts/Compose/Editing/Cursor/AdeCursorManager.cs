@@ -310,34 +310,6 @@ namespace Arcade.Compose
 						DeselectAllNotes();
 					}
 				}
-
-				/*RaycastHit hit;
-                bool result = Physics.Raycast(ray, out hit, 120, 1 << 9);
-                if (result)
-                {
-                    ArcNote note = ArcGameplayManager.Instance.FindNoteByInstance(hit.transform.gameObject);
-                    if (note is ArcArc && hit.point.z > 0) return;
-                    if (note != null)
-                    {
-                        if (!Input.GetKey(KeyCode.LeftControl))
-                        {
-                            DeselectAllNotes();
-                            SelectNote(note);
-                        }
-                        else
-                        {
-                            if (SelectedNotes.Contains(note)) DeselectNote(note);
-                            else SelectNote(note);
-                        }
-                    }
-                }
-                else
-                {
-                    if (!Input.GetKey(KeyCode.LeftControl) && IsHorizontalHit)
-                    {
-                        DeselectAllNotes();
-                    }
-                }*/
 			}
 		}
 		private void DeleteListener()
