@@ -75,9 +75,10 @@ namespace Arcade.Compose
 			{
 				ArcEvent ne = n.Clone();
 				if (ne is ArcArcTap) {
-					if(!notes.Contains((n as ArcArcTap).Arc)){
-						commands.Add(new AddArcTapCommand((n as ArcArcTap).Arc, ne as ArcArcTap));
+					if(notes.Contains((n as ArcArcTap).Arc)){
+						continue;
 					}
+					commands.Add(new AddArcTapCommand((n as ArcArcTap).Arc, ne as ArcArcTap));
 				}
 				else if (ne is ArcArc)
 				{
