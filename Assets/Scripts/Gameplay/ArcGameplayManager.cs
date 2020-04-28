@@ -76,7 +76,8 @@ namespace Arcade.Gameplay
 			lastDspTime = AudioSettings.dspTime;
 			if (IsPlaying)
 			{
-				timing += Time.deltaTime;
+				float playBackSpeed=ArcAudioManager.Instance.PlayBackSpeed;
+				timing += Time.deltaTime*playBackSpeed;
 				float t = ArcAudioManager.Instance.Timing;
 				float delta = timing - t;
 				if (Mathf.Abs(delta) > 0.016f) timing = t;
