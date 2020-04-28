@@ -334,6 +334,17 @@ namespace Arcade.Compose
 			else if (index < 0) index = deltas.Count - 1;
 			return beatlineTimings[index].Timing;
 		}
+		public float AttachTiming(float t)
+		{
+			if (beatlineTimings.Count == 0) return t;
+			List<float> deltas = new List<float>();
+			for (int i = 0; i < beatlineTimings.Count; ++i)
+			{
+				deltas.Add(Mathf.Abs(beatlineTimings[i].Timing - t));
+			}
+			int index = deltas.IndexOf(deltas.Min());
+			return beatlineTimings[index].Timing;
+		}
 
 		public void ReBuildBeatline()
 		{
