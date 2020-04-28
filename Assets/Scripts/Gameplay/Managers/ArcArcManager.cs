@@ -145,7 +145,7 @@ namespace Arcade.Gameplay
 			{
 				RenderArcTaps(t);
 				int duration = t.EndTiming - t.Timing;
-				if (!timingManager.ShouldRender(t.Timing + offset, duration + (t.IsVoid ? 50 : 120)) || t.Judged)
+				if (!timingManager.ShouldTryRender(t.Timing + offset, duration + (t.IsVoid ? 50 : 120)) || t.Judged)
 				{
 					t.Enable = false;
 					continue;
@@ -206,7 +206,7 @@ namespace Arcade.Gameplay
 
 			foreach (ArcArcTap t in arc.ArcTaps)
 			{
-				if (!timingManager.ShouldRender(t.Timing + offset, 50) || t.Judged)
+				if (!timingManager.ShouldTryRender(t.Timing + offset, 50) || t.Judged)
 				{
 					t.Enable = false;
 					continue;

@@ -58,7 +58,7 @@ namespace Arcade.Gameplay
 			// Note: We replaced the inplace sort by sort to another list and reassign
 			// just because we do not have stable inplace sort now in dot net
 			timings = arcTimings.OrderBy((timing) => timing.Timing).ToList();
-			ArcGameplayManager.Instance.Chart.Timings=timings;
+			ArcGameplayManager.Instance.Chart.Timings = timings;
 			OnTimingChange();
 		}
 		private void HideExceededBeatlineInstance(int quantity)
@@ -82,7 +82,8 @@ namespace Arcade.Gameplay
 		{
 			beatlineTimings.Clear();
 			HideExceededBeatlineInstance(0);
-			if(Timings.Count==0){
+			if (Timings.Count == 0)
+			{
 				return;
 			}
 			for (int i = 0; i < Timings.Count; ++i)
@@ -117,7 +118,8 @@ namespace Arcade.Gameplay
 				{
 					n++;
 					t = -n * segment;
-					if(t<-ArcAudioManager.Instance.AudioOffset){
+					if (t < -ArcAudioManager.Instance.AudioOffset)
+					{
 						break;
 					}
 					beatlineTimings.Insert(0, t);
@@ -186,7 +188,8 @@ namespace Arcade.Gameplay
 					positionRemain -= delta;
 					continue;
 				}
-				if(delta==0){
+				if (delta == 0)
+				{
 					return startTiming;
 				}
 				return Mathf.RoundToInt(Mathf.Lerp(startTiming, endTiming, positionRemain / delta)) + ArcAudioManager.Instance.AudioOffset;
@@ -201,7 +204,7 @@ namespace Arcade.Gameplay
 			{
 				return 0;
 			}
-			return Timings.Last(timingEvent=>timingEvent.Timing<=timing).Bpm;
+			return Timings.Last(timingEvent => timingEvent.Timing <= timing).Bpm;
 		}
 
 		private void UpdateChartSpeedStatus()
@@ -287,13 +290,18 @@ namespace Arcade.Gameplay
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			foreach (float t in beatlineTimings)
 			{
-				if (!ShouldRender((int)(t + offset), 0))
+				if (!ShouldTryRender((int)(t + offset), 0))
+				{
+					continue;
+				}
+				float pos = CalculatePositionByTiming((int)(t + offset));
+				if (pos > 100000 || pos < -10000)
 				{
 					continue;
 				}
 				SpriteRenderer s = GetBeatlineInstance(index);
 				s.enabled = true;
-				float z = CalculatePositionByTiming((int)(t + offset)) / 1000f;
+				float z = pos / 1000f;
 				s.transform.localPosition = new Vector3(0, 0, -z);
 				s.transform.localScale = new Vector3(1700, 20 + z);
 				index++;
@@ -308,8 +316,8 @@ namespace Arcade.Gameplay
 		public void Add(ArcTiming newTiming)
 		{
 			timings.Add(newTiming);
-			timings=Timings.OrderBy((timing)=>timing.Timing).ToList();
-			ArcGameplayManager.Instance.Chart.Timings=timings;
+			timings = Timings.OrderBy((timing) => timing.Timing).ToList();
+			ArcGameplayManager.Instance.Chart.Timings = timings;
 			OnTimingChange();
 		}
 		public void Remove(ArcTiming timing)
@@ -317,11 +325,14 @@ namespace Arcade.Gameplay
 			timings.Remove(timing);
 			OnTimingChange();
 		}
-		public void OnTimingChange(){
+		public void OnTimingChange()
+		{
 			CalculateBeatlineTimes();
 			AdeGridManager.Instance.ReBuildBeatline();
 		}
-		public bool ShouldRender(int timing, int delay = 120)
+		// Note: this is a function used to optimize rendering by avoid not needed position calculation
+		// Invoker should manually check position again after this check passed
+		public bool ShouldTryRender(int timing, int delay = 120)
 		{
 			if (timing + delay >= earliestRenderTime && timing <= latestRenderTime)
 			{

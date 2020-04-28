@@ -233,13 +233,18 @@ namespace Arcade.Compose
 				int offset = ArcAudioManager.Instance.AudioOffset;
 				foreach (var t in beatlineTimings)
 				{
-					if (!ArcTimingManager.Instance.ShouldRender(((int)t.Timing + offset), 0))
+					if (!ArcTimingManager.Instance.ShouldTryRender(((int)t.Timing + offset), 0))
 					{
 						continue;
 					}
+					float pos = ArcTimingManager.Instance.CalculatePositionByTiming(((int)t.Timing + offset));
+					if (pos > 100000 || pos < -10000)
+					{
+						continue;
+					}
+					float z = pos / 1000f;
 					LineRenderer l = GetBeatlineInstance();
 					l.enabled = true;
-					float z = ArcTimingManager.Instance.CalculatePositionByTiming(((int)t.Timing + offset)) / 1000f;
 					l.DrawLine(new Vector3(-8.5f, -z), new Vector3(8.5f, -z));
 					l.endColor = l.startColor = BeatlineColors[t.Importance];
 					l.endWidth = l.startWidth = 0.2f - 0.035f * t.Importance;

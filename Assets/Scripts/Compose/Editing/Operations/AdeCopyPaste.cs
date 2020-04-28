@@ -137,7 +137,7 @@ namespace Arcade.Compose
 
 			foreach (var t in ArcTapNoteManager.Instance.Taps)
 			{
-				if (ArcTimingManager.Instance.ShouldRender(t.Timing + offset))
+				if (ArcTimingManager.Instance.ShouldTryRender(t.Timing + offset))
 				{
 					t.SetupArcTapConnection();
 				}

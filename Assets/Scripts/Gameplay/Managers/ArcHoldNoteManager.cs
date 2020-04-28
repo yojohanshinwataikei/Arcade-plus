@@ -61,7 +61,7 @@ namespace Arcade.Gameplay
 			foreach (var t in Holds)
 			{
 				int duration = t.EndTiming - t.Timing;
-				if (!timing.ShouldRender(t.Timing + offset, duration + 120) || t.Judged)
+				if (!timing.ShouldTryRender(t.Timing + offset, duration + 120) || t.Judged)
 				{
 					t.Enable = false;
 					continue;
