@@ -86,7 +86,7 @@ namespace Arcade.Compose.Editing
 				{
 					mode = value;
 				}
-				if (mode == 0)
+				if (mode == ClickToCreateMode.Idle)
 				{
 					AdeCursorManager.Instance.EnableArcTapCursor = false;
 					AdeCursorManager.Instance.EnableVerticalPanel = false;

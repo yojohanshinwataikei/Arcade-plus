@@ -65,6 +65,7 @@ namespace Arcade.Compose
 		public void CopySelectedNotes()
 		{
 			Copy(AdeCursorManager.Instance.SelectedNotes.ToArray());
+			AdeCursorManager.Instance.DeselectAllNotes();
 		}
 		public void Copy(ArcNote[] notes)
 		{
@@ -100,7 +101,7 @@ namespace Arcade.Compose
 			if (!AdeCursorManager.Instance.IsHorizontalHit) return;
 			Vector3 pos = AdeCursorManager.Instance.AttachedHorizontalPoint;
 			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000) - ArcAudioManager.Instance.AudioOffset;
-			bool canEnd = true;
+			bool hasIllegalArcTap = true;
 			int beginTiming = notes.Min((n) => n.Timing);
 
 			foreach (var n in notes)
@@ -117,7 +118,7 @@ namespace Arcade.Compose
 					case ArcArcTap note:
 						if (note.Arc.Timing > timing + dif || note.Arc.EndTiming < timing + dif)
 						{
-							canEnd = false;
+							hasIllegalArcTap = false;
 						}
 						note.RemoveArcTapConnection();
 						note.Timing = timing + dif;
@@ -146,10 +147,10 @@ namespace Arcade.Compose
 
 			if (Input.GetMouseButtonDown(0))
 			{
-				if (canEnd) Paste();
+				if (hasIllegalArcTap) Paste();
 				else
 				{
-					AdeToast.Instance.Show("复制列表内存在非法时间的 Note, 无法复制");
+					AdeToast.Instance.Show("粘贴的 Arctap 中有一部分超出了所在 Arc 的时间范围，无法粘贴");
 				}
 			}
 		}
@@ -162,6 +163,11 @@ namespace Arcade.Compose
 		{
 			EndOfFrame.Instance.Listeners.AddListener(() =>
 			{
+				if(Input.GetKey(KeyCode.LeftControl)){
+					foreach(var note in notes){
+						AdeCursorManager.Instance.SelectNote(note);
+					}
+				}
 				enable = false;
 				notes = null;
 				AdeCursorManager.Instance.Mode = cursorMode;
