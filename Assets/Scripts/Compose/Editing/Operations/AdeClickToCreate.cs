@@ -37,14 +37,12 @@ namespace Arcade.Compose.Editing
 				if (value && !ArcGameplayManager.Instance.IsLoaded)
 				{
 					AdeToast.Instance.Show("请先加载谱面");
-					value = false;
 				}
 				if (enable != value)
 				{
 					AdeCursorManager.Instance.Mode = value ? CursorMode.Horizontal : CursorMode.Idle;
 					if (!value)
 					{
-						if (selectedArc != null && selectedArc.Instance != null) selectedArc.Selected = false;
 						selectedArc = null;
 					}
 					Mode = ClickToCreateMode.Idle;
@@ -218,7 +216,6 @@ namespace Arcade.Compose.Editing
 					{
 						if (selectedArc != null)
 						{
-							if (selectedArc.Instance != null) selectedArc.Selected = false;
 							selectedArc = null;
 							Mode = ClickToCreateMode.Idle;
 						}
@@ -250,7 +247,6 @@ namespace Arcade.Compose.Editing
 				AdePositionSelector.Instance.EndModify();
 				AdeTimingSelector.Instance.EndModify();
 				CommandManager.Instance.Add(new RemoveArcEventCommand(pendingNote));
-				if (selectedArc != null && selectedArc.Instance != null) selectedArc.Selected = false;
 				selectedArc = null;
 			}
 		}
@@ -264,16 +260,16 @@ namespace Arcade.Compose.Editing
 		}
 		public void SetClickToCreateMode(int mode)
 		{
-			if (mode == 4 && selectedArc == null)
+			ClickToCreateMode newMode = (ClickToCreateMode)mode;
+			if (newMode == ClickToCreateMode.ArcTap && selectedArc == null)
 			{
 				AdeToast.Instance.Show("请选中一条 Arc");
 				Mode = ClickToCreateMode.Idle;
 				return;
 			}
-			Mode = (ClickToCreateMode)mode;
-			if (mode != 4)
+			Mode = newMode;
+			if (newMode != ClickToCreateMode.ArcTap)
 			{
-				if (selectedArc != null && selectedArc.Instance != null) selectedArc.Selected = false;
 				selectedArc = null;
 			}
 			skipNextClick = false;
@@ -323,11 +319,9 @@ namespace Arcade.Compose.Editing
 				{
 					if (selectedArc != null)
 					{
-						if (selectedArc.Instance != null) selectedArc.Selected = false;
 						skipNextClick = true;
 					}
 					selectedArc = note as ArcArc;
-					selectedArc.Selected = true;
 				}
 				else
 				{
@@ -342,13 +336,7 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnNoteDeselectAll()
 		{
-			if (Mode == ClickToCreateMode.ArcTap)
-			{
-				if (selectedArc != null && selectedArc.Instance != null)
-				{
-					selectedArc.Selected = true;
-				}
-			}
+			return;
 		}
 	}
 }
