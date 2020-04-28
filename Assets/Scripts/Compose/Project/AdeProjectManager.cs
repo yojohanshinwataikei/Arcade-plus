@@ -61,6 +61,9 @@ namespace Arcade.Compose
 		public Color EnableColor, DisableColor;
 		public Image FileWatchEnableImage;
 
+		public CanvasGroup TutorialCanvasGroup;
+		public Text TutorialText;
+
 		private FileSystemWatcher watcher = new FileSystemWatcher();
 		private bool shouldReload = false;
 
@@ -362,6 +365,22 @@ namespace Arcade.Compose
 			yield return LoadCoverCoroutine();
 			yield return LoadMusicCoroutine();
 			yield return LoadChartCoroutine(CurrentProject.LastWorkingDifficulty, false);
+
+			if(CurrentProject == null){
+				TutorialCanvasGroup.alpha=1;
+				TutorialText.text="无法加载工程元信息，请删除谱面文件夹下的 Arcade 文件夹后重新打开谱面文件夹";
+			}else if(CurrentProject == null){
+				TutorialCanvasGroup.alpha=1;
+				TutorialText.text="无法加载工程文件夹，请确保打开的文件夹存在后重新打开谱面文件夹";
+			}else if(CurrentProject.AudioClip == null){
+				TutorialCanvasGroup.alpha=1;
+				TutorialText.text="无法加载音频文件，请确认音频文件存在且格式正确后重新打开谱面文件夹";
+			}else if(!ArcGameplayManager.Instance.IsLoaded){
+				TutorialCanvasGroup.alpha=1;
+				TutorialText.text="无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹";
+			}else{
+				TutorialCanvasGroup.alpha=0;
+			}
 
 			yield return AdeShutterManager.Instance.OpenCoroutine();
 		}
