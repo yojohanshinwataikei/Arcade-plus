@@ -59,7 +59,9 @@ public class AdeMirror : MonoBehaviour, IMarkingMenuItemProvider
 					ArcArc newarc = arc.Clone() as ArcArc;
 					newarc.XStart = 1 - newarc.XStart;
 					newarc.XEnd = 1 - newarc.XEnd;
-					newarc.Color = 1 - newarc.Color;
+					if(newarc.Color<2){
+						newarc.Color = 1 - newarc.Color;
+					}
 					commands.Add(new EditArcEventCommand(arc, newarc));
 					break;
 			}
