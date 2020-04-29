@@ -203,9 +203,11 @@ namespace Arcade.Compose.Editing
 			switch (Mode)
 			{
 				case ClickToCreateMode.Tap:
+					CommandManager.Instance.Add(new AddArcEventCommand(note));
+					break;
 				case ClickToCreateMode.Hold:
 				case ClickToCreateMode.Arc:
-					CommandManager.Instance.Add(new AddArcEventCommand(note));
+					CommandManager.Instance.Prepare(new AddArcEventCommand(note));
 					break;
 				case ClickToCreateMode.ArcTap:
 					if (canAddArcTap)
@@ -246,7 +248,7 @@ namespace Arcade.Compose.Editing
 				postHoldCoroutine = postArcCoroutine = null;
 				AdePositionSelector.Instance.EndModify();
 				AdeTimingSelector.Instance.EndModify();
-				CommandManager.Instance.Add(new RemoveArcEventCommand(pendingNote));
+				CommandManager.Instance.Cancel();
 				selectedArc = null;
 			}
 		}
@@ -289,6 +291,7 @@ namespace Arcade.Compose.Editing
 		{
 			AdeTimingSelector.Instance.ModifyNote(note, (a) => { note.EndTiming = a; });
 			while (AdeTimingSelector.Instance.Enable) yield return null;
+			CommandManager.Instance.Commit();
 			pendingNote = null;
 			postHoldCoroutine = null;
 		}
@@ -307,6 +310,7 @@ namespace Arcade.Compose.Editing
 			while (AdeTimingSelector.Instance.Enable) yield return null;
 			AdePositionSelector.Instance.ModifyNote(arc, (a) => { arc.XEnd = a.x; arc.YEnd = a.y; arc.Rebuild(); });
 			while (AdePositionSelector.Instance.Enable) yield return null;
+			CommandManager.Instance.Commit();
 			pendingNote = null;
 			postArcCoroutine = null;
 		}

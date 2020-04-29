@@ -21872,6 +21872,8 @@ MonoBehaviour:
   EnableColor: {r: 0.5707547, g: 1, b: 0.6677098, a: 1}
   DisableColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
   FileWatchEnableImage: {fileID: 882634197}
+  TutorialCanvasGroup: {fileID: 994086312}
+  TutorialText: {fileID: 1006388398}
 --- !u!1 &906961131
 GameObject:
   m_ObjectHideFlags: 0
@@ -24879,7 +24881,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 994086308}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -25602,7 +25604,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u70B9\u51FB\u63A5\u89E6\u5224\u5B9A\u7EBF\u7684\u5730\u9762\u97F3\u7B26"
+  m_Text: "\u6B22\u8FCE\u4F7F\u7528 Arcade-plus\uFF0C\u8BF7\u70B9\u51FB\u53F3\u4E0A\u89D2\u6B4C\u66F2\u5C01\u9762\u6253\u5F00\u8C31\u9762\u6587\u4EF6\u5939"
 --- !u!222 &1006388399
 CanvasRenderer:
   m_ObjectHideFlags: 0
