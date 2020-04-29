@@ -90,7 +90,7 @@ namespace Arcade.Compose
 				else commands.Add(new AddArcEventCommand(ne));
 				newNotes.Add(ne as ArcNote);
 			}
-			CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "复制"));
+			CommandManager.Instance.Prepare(new BatchCommand(commands.ToArray(), "复制"));
 			this.notes = newNotes.ToArray();
 			enable = true;
 			cursorMode = AdeCursorManager.Instance.Mode;
@@ -156,22 +156,27 @@ namespace Arcade.Compose
 		}
 		public void CancelPaste()
 		{
-			CommandManager.Instance.Undo();
-			Paste();
+			CommandManager.Instance.Cancel();
+			Cleanup();
 		}
 		private void Paste()
 		{
+			CommandManager.Instance.Commit();
+			if(Input.GetKey(KeyCode.LeftControl)){
+				foreach(var note in notes){
+					AdeCursorManager.Instance.SelectNote(note);
+				}
+			}
+			Cleanup();
+		}
+		private void Cleanup(){
 			EndOfFrame.Instance.Listeners.AddListener(() =>
 			{
-				if(Input.GetKey(KeyCode.LeftControl)){
-					foreach(var note in notes){
-						AdeCursorManager.Instance.SelectNote(note);
-					}
-				}
 				enable = false;
 				notes = null;
 				AdeCursorManager.Instance.Mode = cursorMode;
 			});
+
 		}
 	}
 }
