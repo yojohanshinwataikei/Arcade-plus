@@ -249,6 +249,7 @@ namespace Arcade.Compose
 		public class BackgroundDataSpec
 		{
 			public string name;
+			public string file;
 			public string side;
 			public string theme;
 		}
@@ -600,7 +601,8 @@ namespace Arcade.Compose
 				Debug.LogWarning($"BackgroundDataSpec with a duplicated name will be ignored. spec:\n{JsonConvert.SerializeObject(spec)}");
 				return;
 			}
-			string path = Path.Combine(SkinFolderPath, "Playfield", "Background", spec.name + ".jpg");
+			string file = spec.file ?? spec.name;
+			string path = Path.Combine(SkinFolderPath, "Playfield", "Background", file + ".jpg");
 			Sprite background = LoadNormalSprite(path, externalSkinDataObjects);
 			if (background == null)
 			{
@@ -854,8 +856,9 @@ namespace Arcade.Compose
 		}
 		private Texture2D LoadTexture2D(string path, List<UnityEngine.Object> resourceList)
 		{
-			Texture2D texture=Loader.LoadTexture2D(path);
-			if(texture!=null){
+			Texture2D texture = Loader.LoadTexture2D(path);
+			if (texture != null)
+			{
 				resourceList.Add(texture);
 			}
 			return texture;
@@ -904,8 +907,9 @@ namespace Arcade.Compose
 
 		private AudioClip LoadWavAudioClip(string path, List<UnityEngine.Object> resourceList)
 		{
-			AudioClip clip=Loader.LoadWavOrMp3AudioFile(path);
-			if(clip!=null){
+			AudioClip clip = Loader.LoadWavOrMp3AudioFile(path);
+			if (clip != null)
+			{
 				resourceList.Add(clip);
 			}
 			return clip;
