@@ -16,6 +16,7 @@ using Arcade.Compose.Command;
 using NVorbis;
 using NAudio.Wave;
 using static Arcade.Compose.AdeSkinHost;
+using Arcade.Util.Loader;
 
 namespace Arcade.Compose
 {
@@ -387,65 +388,15 @@ namespace Arcade.Compose
 				};
 			foreach (string audioPath in files)
 			{
-				if (!File.Exists(audioPath))
+				AudioClip clip = Loader.LoadAudioFile(audioPath);
+				if (clip != null)
 				{
-					continue;
-				}
-				float[] audioData = null;
-				int channels = 0;
-				int sampleRate = 0;
-				//TODO: Extract this and loading code in skinhost to util
-				//try ogg first
-				try
-				{
-					using (VorbisReader reader = new VorbisReader(audioPath))
-					{
-						if (reader.TotalSamples > 0x7FFFFFFFL)
-						{
-							throw new Exception("Too long!");
-						}
-						float[] data = new float[reader.TotalSamples];
-						reader.ReadSamples(data, 0, (int)reader.TotalSamples);
-						channels = reader.Channels;
-						sampleRate = reader.SampleRate;
-						audioData = data;
-					}
-				}
-				catch
-				{
-					//try mp3+wav from naudio
-					try
-					{
-						using (AudioFileReader reader = new AudioFileReader(audioPath))
-						{
-							//Note: to be simple, we do not load large file with samples count larger than int limit
-							//This will be enough for most file, especially the sound effects in the skin folder
-							if (reader.Length > 0x7FFFFFFFL)
-							{
-								throw new Exception("Too long!");
-							}
-							float[] data = new float[reader.Length];
-							reader.Read(data, 0, (int)reader.Length);
-							channels = reader.WaveFormat.Channels;
-							sampleRate = reader.WaveFormat.SampleRate;
-							audioData = data;
-						}
-					}
-					catch
-					{
-					}
-				}
-				if (audioData != null)
-				{
-					AudioDataHost dataHost = new AudioDataHost(audioData);
-					AudioClip clip = AudioClip.Create(audioPath, audioData.Length, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
 					AudioClip = clip;
 					AdeTimingSlider.Instance.Enable = true;
 					AdeTimingSlider.Instance.Length = (int)(AudioClip.length * 1000);
 					return;
 				}
 			}
-
 			AdeSingleDialog.Instance.Show(
 				"没有找到音乐或音乐格式不正确",
 				"谱面加载失败");

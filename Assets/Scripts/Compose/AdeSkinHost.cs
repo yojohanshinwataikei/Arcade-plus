@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
+using Arcade.Util.Loader;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -922,71 +923,12 @@ namespace Arcade.Compose
 			return sprite;
 		}
 
-		public class AudioDataHost
-		{
-			public float[] audioData;
-			public int position = 0;
-			public AudioDataHost(float[] audioData)
-			{
-				this.audioData = audioData;
-			}
-			public void PCMReaderCallback(float[] buffer)
-			{
-				if (position <= audioData.Length)
-				{
-					if (position + buffer.Length <= audioData.Length)
-					{
-						Array.Copy(audioData, position, buffer, 0, buffer.Length);
-					}
-					else
-					{
-						Array.Copy(audioData, position, buffer, 0, audioData.Length - position);
-					}
-				}
-				position += buffer.Length;
-			}
-			public void PCMSetPositionCallback(int newPosition)
-			{
-				position = newPosition;
-			}
-		}
 		private AudioClip LoadWavAudioClip(string path, List<UnityEngine.Object> resourceList)
 		{
-			float[] audioData = null;
-			int channels = 0;
-			int sampleRate = 0;
-			try
-			{
-				using (AudioFileReader reader = new AudioFileReader(path))
-				{
-					//Note: to be simple, we do not load large file with samples count larger than int limit
-					//This will be enough for most file, especially the sound effects in the skin folder
-					if (reader.Length > 0x7FFFFFFFL)
-					{
-						return null;
-					}
-					float[] data = new float[reader.Length];
-					reader.Read(data, 0, (int)reader.Length);
-					channels = reader.WaveFormat.Channels;
-					sampleRate = reader.WaveFormat.SampleRate;
-					audioData = data;
-				}
+			AudioClip clip=Loader.LoadWavOrMp3AudioFile(path);
+			if(clip!=null){
+				resourceList.Add(clip);
 			}
-			catch
-			{
-				return null;
-			}
-			if (audioData == null)
-			{
-				return null;
-			}
-			//Note: if the audio do not start with 0, Unity will play the audio as a loop but stop at a wrong position,
-			// so a popping sound effect appear at the end of that clip
-			// As a workaround we should turn on the stream of the AudioClip so that the wrong stop point bug do not occur
-			AudioDataHost dataHost = new AudioDataHost(audioData);
-			AudioClip clip = AudioClip.Create(path, audioData.Length, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
-			resourceList.Add(clip);
-			// clip.SetData(audioData,0);
 			return clip;
 		}
 		#endregion
