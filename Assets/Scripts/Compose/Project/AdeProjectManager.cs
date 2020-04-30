@@ -17,30 +17,21 @@ using Arcade.Compose.Command;
 namespace Arcade.Compose
 {
 	[Serializable]
-	public class AdeChartDifficulty
+	public class AdeChartDifficultyMetadata
 	{
 		public string Rating;
-		public string ChartPath;
-		public string Designer;
 	}
 	[Serializable]
-	public class ArcadeProject
+	public class ArcadeProjectMetadata
 	{
 		public string Title;
 		public string Artist;
 		public float BaseBpm;
-		public string AudioPath;
-		public AdeChartDifficulty[] Difficulties = new AdeChartDifficulty[3];
+		public AdeChartDifficultyMetadata[] Difficulties = new AdeChartDifficultyMetadata[3];
 
 		public int LastWorkingDifficulty = 2;
 		public int LastWorkingTiming;
 
-		[JsonIgnore]
-		public AudioClip AudioClip;
-		[JsonIgnore]
-		public Texture2D Cover;
-		[JsonIgnore]
-		public Sprite CoverSprite;
 	}
 
 	public class AdeProjectManager : MonoBehaviour
@@ -48,7 +39,7 @@ namespace Arcade.Compose
 		public static AdeProjectManager Instance { get; private set; }
 
 		public string CurrentProjectFolder { get; set; }
-		public ArcadeProject CurrentProject { get; set; }
+		public ArcadeProjectMetadata CurrentProject { get; set; }
 		public int CurrentDifficulty { get; set; } = 2;
 
 		public Sprite DefaultCover;
@@ -64,14 +55,39 @@ namespace Arcade.Compose
 		public CanvasGroup TutorialCanvasGroup;
 		public Text TutorialText;
 
+		private AudioClip AudioClip;
+		private Texture2D Cover;
+		private Sprite CoverSprite;
 		private FileSystemWatcher watcher = new FileSystemWatcher();
 		private bool shouldReload = false;
 
-		public string ProjectFilePath
+		public string ProjectArcadeFolder
 		{
 			get
 			{
-				return $"{CurrentProjectFolder}/Arcade/Project.arcade";
+				return Path.Combine(CurrentProjectFolder, "Arcade");
+			}
+		}
+
+		public string ProjectMetadataFilePath
+		{
+			get
+			{
+				return Path.Combine(ProjectArcadeFolder, "Project.arcade");
+			}
+		}
+		public string ProjectAutosaveFolder
+		{
+			get
+			{
+				return Path.Combine(ProjectArcadeFolder, "Autosave");
+			}
+		}
+		public string ProjectBackupFolder
+		{
+			get
+			{
+				return Path.Combine(ProjectArcadeFolder, "Backup");
 			}
 		}
 
@@ -106,32 +122,37 @@ namespace Arcade.Compose
 
 		private void InitializeProject(string folder)
 		{
-			ArcadeProject p = new ArcadeProject();
-			File.WriteAllText(ProjectFilePath, JsonConvert.SerializeObject(p));
+			ArcadeProjectMetadata p = new ArcadeProjectMetadata();
+			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(p));
 		}
 		private void CreateDirectories(string folder)
 		{
-			string[] directories = new string[] { $"{folder}/Arcade", $"{folder}/Arcade/Autosave", $"{folder}/Arcade/Converting", $"{folder}/Arcade/Backup" };
+			string[] directories = new string[] {
+					ProjectArcadeFolder,
+					ProjectAutosaveFolder,
+				 	Path.Combine(ProjectArcadeFolder,"Converting"),
+				 	ProjectBackupFolder,
+				};
 			foreach (var s in directories) if (!Directory.Exists(s)) Directory.CreateDirectory(s);
 		}
 
 		public void CleanProject()
 		{
 			if (CurrentProject == null) return;
-			if (CurrentProject.AudioClip != null)
+			if (AudioClip != null)
 			{
-				Destroy(CurrentProject.AudioClip);
-				CurrentProject.AudioClip = null;
+				Destroy(AudioClip);
+				AudioClip = null;
 			}
-			if (CurrentProject.Cover != null)
+			if (Cover != null)
 			{
-				Destroy(CurrentProject.Cover);
-				CurrentProject.Cover = null;
+				Destroy(Cover);
+				Cover = null;
 			}
-			if (CurrentProject.CoverSprite != null)
+			if (CoverSprite != null)
 			{
-				Destroy(CurrentProject.CoverSprite);
-				CurrentProject.CoverSprite = null;
+				Destroy(CoverSprite);
+				CoverSprite = null;
 			}
 			foreach (Image i in DifficultyImages) i.color = new Color(1f, 1f, 1f, 0.6f);
 			CoverImage.sprite = DefaultCover;
@@ -161,15 +182,15 @@ namespace Arcade.Compose
 				CleanProject();
 				CreateDirectories(folder);
 				CurrentProjectFolder = folder;
-				if (!File.Exists(ProjectFilePath)) InitializeProject(folder);
+				if (!File.Exists(ProjectMetadataFilePath)) InitializeProject(folder);
 				try
 				{
-					CurrentProject = JsonConvert.DeserializeObject<ArcadeProject>(File.ReadAllText(ProjectFilePath));
+					CurrentProject = JsonConvert.DeserializeObject<ArcadeProjectMetadata>(File.ReadAllText(ProjectMetadataFilePath));
 				}
 				catch (Exception Ex)
 				{
 					AdeSingleDialog.Instance.Show(Ex.Message, "读取错误");
-					CurrentProject = new ArcadeProject();
+					CurrentProject = new ArcadeProjectMetadata();
 				}
 
 				StartCoroutine(LoadingCoroutine());
@@ -187,9 +208,9 @@ namespace Arcade.Compose
 			if (ArcGameplayManager.Instance.Chart == null) return;
 			CurrentProject.LastWorkingDifficulty = CurrentDifficulty;
 			CurrentProject.LastWorkingTiming = ArcGameplayManager.Instance.Timing;
-			File.WriteAllText(ProjectFilePath, JsonConvert.SerializeObject(CurrentProject));
-			string path = CurrentProjectFolder + $"/{CurrentDifficulty}.aff";
-			string backupPath = CurrentProjectFolder + $"/Arcade/Backup/{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss")}.aff";
+			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProject));
+			string path = Path.Combine(CurrentProjectFolder, $"{CurrentDifficulty}.aff");
+			string backupPath = Path.Combine(ProjectBackupFolder, $"{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss")}.aff");
 			File.Copy(path, backupPath);
 			FileStream fs = new FileStream(path, FileMode.Create);
 			try
@@ -211,7 +232,7 @@ namespace Arcade.Compose
 				yield return new WaitForSeconds(30f);
 				if (CurrentProject == null || CurrentProjectFolder == null) continue;
 				if (ArcGameplayManager.Instance.Chart == null) continue;
-				string backupPath = CurrentProjectFolder + $"/Arcade/Autosave/{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss")}.aff";
+				string backupPath = Path.Combine(ProjectAutosaveFolder, $"{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss")}.aff");
 				FileStream fs = new FileStream(backupPath, FileMode.Create);
 				try
 				{
@@ -227,14 +248,15 @@ namespace Arcade.Compose
 
 		private IEnumerator LoadChartCoroutine(int index, bool shutter)
 		{
-			if (CurrentProject == null || CurrentProjectFolder == null || CurrentProject.AudioClip == null)
+			if (CurrentProject == null || CurrentProjectFolder == null || AudioClip == null)
 			{
 				yield break;
 			}
 
-			if (!File.Exists($"{CurrentProjectFolder}/{index}.aff"))
+			string chartPath = Path.Combine(CurrentProjectFolder, $"{index}.aff");
+			if (!File.Exists(chartPath))
 			{
-				File.WriteAllText($"{CurrentProjectFolder}/{index}.aff", "AudioOffset:0\n-\ntiming(0,100.00,4.00);");
+				File.WriteAllText(chartPath, "AudioOffset:0\n-\ntiming(0,100.00,4.00);");
 			}
 
 			if (shutter) yield return AdeShutterManager.Instance.CloseCoroutine();
@@ -245,7 +267,7 @@ namespace Arcade.Compose
 			Aff.ArcaeaAffReader reader = null;
 			try
 			{
-				reader = new Aff.ArcaeaAffReader($"{CurrentProjectFolder}/{index}.aff");
+				reader = new Aff.ArcaeaAffReader(chartPath);
 			}
 			catch (Aff.ArcaeaAffFormatException Ex)
 			{
@@ -262,7 +284,7 @@ namespace Arcade.Compose
 				if (shutter) yield return AdeShutterManager.Instance.OpenCoroutine();
 				yield break;
 			}
-			ArcGameplayManager.Instance.Load(new Gameplay.Chart.ArcChart(reader), CurrentProject.AudioClip);
+			ArcGameplayManager.Instance.Load(new Gameplay.Chart.ArcChart(reader), AudioClip);
 			CurrentDifficulty = index;
 
 			Diff.text = CurrentProject.Difficulties[CurrentDifficulty] == null ? "" : CurrentProject.Difficulties[CurrentDifficulty].Rating;
@@ -285,12 +307,13 @@ namespace Arcade.Compose
 		}
 		private IEnumerator LoadCoverCoroutine()
 		{
-			if (!File.Exists($"{CurrentProjectFolder}/base.jpg"))
+			string coverPath = Path.Combine(CurrentProjectFolder,"base.jpg");
+			if (!File.Exists(coverPath))
 			{
 				CoverImage.sprite = DefaultCover;
 				yield break;
 			}
-			string path = $"{CurrentProjectFolder}/base.jpg";
+			string path = coverPath;
 			using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(Uri.EscapeUriString("file:///" + path.Replace("\\", "/"))))
 			{
 				yield return req.SendWebRequest();
@@ -299,14 +322,14 @@ namespace Arcade.Compose
 					CoverImage.sprite = DefaultCover;
 					yield break;
 				}
-				CurrentProject.Cover = DownloadHandlerTexture.GetContent(req);
-				CurrentProject.CoverSprite = Sprite.Create(CurrentProject.Cover, new Rect(0, 0, CurrentProject.Cover.width, CurrentProject.Cover.height), new Vector2(0.5f, 0.5f));
-				CoverImage.sprite = CurrentProject.CoverSprite;
+				Cover = DownloadHandlerTexture.GetContent(req);
+				CoverSprite = Sprite.Create(Cover, new Rect(0, 0, Cover.width, Cover.height), new Vector2(0.5f, 0.5f));
+				CoverImage.sprite = CoverSprite;
 			}
 		}
 		private IEnumerator LoadMusicCoroutine()
 		{
-			string[] searchPaths = new string[] { $"{CurrentProjectFolder}/Arcade/Converting/base.wav", $"{CurrentProjectFolder}/base.wav", $"{CurrentProjectFolder}/base.ogg" };
+			string[] searchPaths = new string[] { Path.Combine(ProjectArcadeFolder,"Converting","base.wav"), Path.Combine(CurrentProjectFolder,"base.wav"), Path.Combine(CurrentProjectFolder,"base.ogg") };
 			string path = null;
 			foreach (var s in searchPaths)
 			{
@@ -314,13 +337,13 @@ namespace Arcade.Compose
 			}
 			if (path == null)
 			{
-				if (File.Exists($"{CurrentProjectFolder}/base.mp3"))
+				if (File.Exists(Path.Combine(CurrentProjectFolder,"base.mp3")))
 				{
-					Task converting = Task.Run(() => Mp3Converter.Mp3ToWav($"{CurrentProjectFolder}/base.mp3", $"{CurrentProjectFolder}/Arcade/Converting/base.wav"));
+					Task converting = Task.Run(() => Mp3Converter.Mp3ToWav(Path.Combine(CurrentProjectFolder,"base.mp3"), Path.Combine(ProjectArcadeFolder,"Converting","base.wav")));
 					while (!converting.IsCompleted) yield return null;
 					if (converting.Status == TaskStatus.RanToCompletion)
 					{
-						path = $"{CurrentProjectFolder}/Arcade/Converting/base.wav";
+						path = Path.Combine(ProjectArcadeFolder,"Converting","base.wav");
 					}
 				}
 			}
@@ -338,9 +361,9 @@ namespace Arcade.Compose
 				{
 					yield break;
 				}
-				CurrentProject.AudioClip = DownloadHandlerAudioClip.GetContent(req);
+				AudioClip = DownloadHandlerAudioClip.GetContent(req);
 				AdeTimingSlider.Instance.Enable = true;
-				AdeTimingSlider.Instance.Length = (int)(CurrentProject.AudioClip.length * 1000);
+				AdeTimingSlider.Instance.Length = (int)(AudioClip.length * 1000);
 			}
 		}
 		private IEnumerator LoadingCoroutine()
@@ -366,20 +389,29 @@ namespace Arcade.Compose
 			yield return LoadMusicCoroutine();
 			yield return LoadChartCoroutine(CurrentProject.LastWorkingDifficulty, false);
 
-			if(CurrentProject == null){
-				TutorialCanvasGroup.alpha=1;
-				TutorialText.text="无法加载工程元信息，请删除谱面文件夹下的 Arcade 文件夹后重新打开谱面文件夹";
-			}else if(CurrentProject == null){
-				TutorialCanvasGroup.alpha=1;
-				TutorialText.text="无法加载工程文件夹，请确保打开的文件夹存在后重新打开谱面文件夹";
-			}else if(CurrentProject.AudioClip == null){
-				TutorialCanvasGroup.alpha=1;
-				TutorialText.text="无法加载音频文件，请确认音频文件存在且格式正确后重新打开谱面文件夹";
-			}else if(!ArcGameplayManager.Instance.IsLoaded){
-				TutorialCanvasGroup.alpha=1;
-				TutorialText.text="无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹";
-			}else{
-				TutorialCanvasGroup.alpha=0;
+			if (CurrentProject == null)
+			{
+				TutorialCanvasGroup.alpha = 1;
+				TutorialText.text = "无法加载工程元信息，请删除谱面文件夹下的 Arcade 文件夹后重新打开谱面文件夹";
+			}
+			else if (CurrentProject == null)
+			{
+				TutorialCanvasGroup.alpha = 1;
+				TutorialText.text = "无法加载工程文件夹，请确保打开的文件夹存在后重新打开谱面文件夹";
+			}
+			else if (AudioClip == null)
+			{
+				TutorialCanvasGroup.alpha = 1;
+				TutorialText.text = "无法加载音频文件，请确认音频文件存在且格式正确后重新打开谱面文件夹";
+			}
+			else if (!ArcGameplayManager.Instance.IsLoaded)
+			{
+				TutorialCanvasGroup.alpha = 1;
+				TutorialText.text = "无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹";
+			}
+			else
+			{
+				TutorialCanvasGroup.alpha = 0;
 			}
 
 			yield return AdeShutterManager.Instance.OpenCoroutine();
@@ -389,11 +421,13 @@ namespace Arcade.Compose
 			StartCoroutine(LoadChartCoroutine(index, true));
 		}
 
-		public void SetDefaultCover(Sprite cover){
-			if(CoverImage.sprite==DefaultCover){
-				CoverImage.sprite=cover;
+		public void SetDefaultCover(Sprite cover)
+		{
+			if (CoverImage.sprite == DefaultCover)
+			{
+				CoverImage.sprite = cover;
 			}
-			DefaultCover=cover;
+			DefaultCover = cover;
 		}
 
 		public void OnComposerEdited()
@@ -411,7 +445,7 @@ namespace Arcade.Compose
 			if (CurrentProject == null) return;
 			if (CurrentDifficulty < 0 || CurrentDifficulty > 2) return;
 			if (CurrentProject.Difficulties[CurrentDifficulty] == null)
-				CurrentProject.Difficulties[CurrentDifficulty] = new AdeChartDifficulty();
+				CurrentProject.Difficulties[CurrentDifficulty] = new AdeChartDifficultyMetadata();
 			CurrentProject.Difficulties[CurrentDifficulty].Rating = Diff.text;
 		}
 		public void OnBaseBpmEdited()
@@ -423,7 +457,7 @@ namespace Arcade.Compose
 				if (value <= 0) value = 100;
 				if (CurrentProject != null) CurrentProject.BaseBpm = value;
 				ArcTimingManager.Instance.BaseBpm = value;
-				File.WriteAllText(ProjectFilePath, JsonConvert.SerializeObject(CurrentProject));
+				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProject));
 				ArcArcManager.Instance.Rebuild();
 				BaseBpm.text = value.ToString();
 			}
