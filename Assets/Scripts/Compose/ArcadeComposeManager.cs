@@ -217,7 +217,7 @@ namespace Arcade.Compose
 
 		public void Play()
 		{
-			if (AdeProjectManager.Instance.CurrentProject == null || !ArcGameplayManager.Instance.IsLoaded)
+			if (AdeProjectManager.Instance.CurrentProjectMetadata == null || !ArcGameplayManager.Instance.IsLoaded)
 			{
 				AdeToast.Instance.Show("请先加载谱面");
 				return;

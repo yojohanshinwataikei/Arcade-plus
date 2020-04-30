@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using Arcade.Util.Loader;
-using NAudio.Wave;
 using Newtonsoft.Json;
 using UnityEngine;
 

@@ -1,21 +1,15 @@
 using System;
 using System.Collections;
 using System.IO;
-using System.Threading.Tasks;
 using Arcade.Compose.Dialog;
 using Arcade.Compose.Feature;
 using Arcade.Compose.UI;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
 using Newtonsoft.Json;
-using Arcade.Util.Mp3Converter;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 using Arcade.Compose.Command;
-using NVorbis;
-using NAudio.Wave;
-using static Arcade.Compose.AdeSkinHost;
 using Arcade.Util.Loader;
 
 namespace Arcade.Compose
@@ -43,7 +37,7 @@ namespace Arcade.Compose
 		public static AdeProjectManager Instance { get; private set; }
 
 		public string CurrentProjectFolder { get; set; }
-		public ArcadeProjectMetadata CurrentProject { get; set; }
+		public ArcadeProjectMetadata CurrentProjectMetadata { get; set; }
 		public int CurrentDifficulty { get; set; } = 2;
 
 		public Sprite DefaultCover;
@@ -105,8 +99,7 @@ namespace Arcade.Compose
 		{
 			watcher.NotifyFilter = NotifyFilters.LastWrite;
 			watcher.Changed += OnWatcherChanged;
-
-			watcher.EnableRaisingEvents = true;
+			watcher.EnableRaisingEvents = false;
 			StartCoroutine(AutosaveCoroutine());
 		}
 		private void Update()
@@ -131,7 +124,6 @@ namespace Arcade.Compose
 			string[] directories = new string[] {
 					ProjectArcadeFolder,
 					ProjectAutosaveFolder,
-				 	Path.Combine(ProjectArcadeFolder,"Converting"),
 				 	ProjectBackupFolder,
 				};
 			foreach (var s in directories) if (!Directory.Exists(s)) Directory.CreateDirectory(s);
@@ -139,7 +131,7 @@ namespace Arcade.Compose
 
 		public void CleanProject()
 		{
-			if (CurrentProject == null) return;
+			if (CurrentProjectMetadata == null) return;
 			if (AudioClip != null)
 			{
 				Destroy(AudioClip);
@@ -169,8 +161,6 @@ namespace Arcade.Compose
 			AudioOffset.interactable = false;
 			watcher.EnableRaisingEvents = false;
 			FileWatchEnableImage.color = DisableColor;
-
-
 			ArcGameplayManager.Instance.Clean();
 		}
 		public void OpenProject()
@@ -189,17 +179,17 @@ namespace Arcade.Compose
 			catch (Exception Ex)
 			{
 				AdeSingleDialog.Instance.Show(Ex.Message, "读取错误");
-				CurrentProject = null;
+				CurrentProjectMetadata = null;
 				CurrentProjectFolder = null;
 			}
 		}
 		public void SaveProject()
 		{
-			if (CurrentProject == null || CurrentProjectFolder == null) return;
+			if (CurrentProjectMetadata == null || CurrentProjectFolder == null) return;
 			if (ArcGameplayManager.Instance.Chart == null) return;
-			CurrentProject.LastWorkingDifficulty = CurrentDifficulty;
-			CurrentProject.LastWorkingTiming = ArcGameplayManager.Instance.Timing;
-			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProject));
+			CurrentProjectMetadata.LastWorkingDifficulty = CurrentDifficulty;
+			CurrentProjectMetadata.LastWorkingTiming = ArcGameplayManager.Instance.Timing;
+			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 			string path = Path.Combine(CurrentProjectFolder, $"{CurrentDifficulty}.aff");
 			string backupPath = Path.Combine(ProjectBackupFolder, $"{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss")}.aff");
 			File.Copy(path, backupPath);
@@ -221,7 +211,7 @@ namespace Arcade.Compose
 			while (true)
 			{
 				yield return new WaitForSeconds(30f);
-				if (CurrentProject == null || CurrentProjectFolder == null) continue;
+				if (CurrentProjectMetadata == null || CurrentProjectFolder == null) continue;
 				if (ArcGameplayManager.Instance.Chart == null) continue;
 				string backupPath = Path.Combine(ProjectAutosaveFolder, $"{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss")}.aff");
 				FileStream fs = new FileStream(backupPath, FileMode.Create);
@@ -241,44 +231,18 @@ namespace Arcade.Compose
 		{
 			yield return AdeShutterManager.Instance.CloseCoroutine();
 			LoadChart(difficulty);
-			loadingCoroutine = null;
+			if (!ArcGameplayManager.Instance.IsLoaded)
+			{
+				SetTutorialMessage("无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹");
+			}
 			yield return AdeShutterManager.Instance.OpenCoroutine();
+			loadingCoroutine = null;
 		}
 
 		private IEnumerator LoadProjectCoroutine(string folder)
 		{
 			yield return AdeShutterManager.Instance.CloseCoroutine();
 			LoadProject(folder);
-
-			// yield return LoadCoverCoroutine();
-			// yield return LoadMusicCoroutine();
-			// yield return LoadChartSubCoroutine(CurrentProject.LastWorkingDifficulty, false);
-
-			if (CurrentProject == null)
-			{
-				TutorialCanvasGroup.alpha = 1;
-				TutorialText.text = "无法加载工程元信息，请删除谱面文件夹下的 Arcade 文件夹后重新打开谱面文件夹";
-			}
-			else if (CurrentProject == null)
-			{
-				TutorialCanvasGroup.alpha = 1;
-				TutorialText.text = "无法加载工程文件夹，请确保打开的文件夹存在后重新打开谱面文件夹";
-			}
-			else if (AudioClip == null)
-			{
-				TutorialCanvasGroup.alpha = 1;
-				TutorialText.text = "无法加载音频文件，请确认音频文件存在且格式正确后重新打开谱面文件夹";
-			}
-			else if (!ArcGameplayManager.Instance.IsLoaded)
-			{
-				TutorialCanvasGroup.alpha = 1;
-				TutorialText.text = "无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹";
-			}
-			else
-			{
-				TutorialCanvasGroup.alpha = 0;
-			}
-
 			yield return AdeShutterManager.Instance.OpenCoroutine();
 			loadingCoroutine = null;
 		}
@@ -307,38 +271,53 @@ namespace Arcade.Compose
 			FileWatchEnableImage.color = DisableColor;
 			CurrentProjectFolder = folder;
 			CreateArcadeDirectories(folder);
-			LoadMetadata();
+			try
+			{
+				LoadMetadata();
+			}
+			catch
+			{
+				SetTutorialMessage("无法加载工程元信息，请删除谱面文件夹下的 Arcade 文件夹后重新打开谱面文件夹");
+				return;
+			}
 			LoadCover();
 			LoadAudio();
-			LoadChart(CurrentProject.LastWorkingDifficulty);
+			if (AudioClip == null)
+			{
+				SetTutorialMessage("无法加载音频文件，请确认音频文件存在且格式正确后重新打开谱面文件夹");
+				return;
+			}
+			LoadChart(CurrentProjectMetadata.LastWorkingDifficulty);
+			if (!ArcGameplayManager.Instance.IsLoaded)
+			{
+				SetTutorialMessage("无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹");
+				return;
+			}
+			SetTutorialMessage(null);
 		}
 
 		private void LoadMetadata()
 		{
-			if (!File.Exists(ProjectMetadataFilePath))
-			{
-				ArcadeProjectMetadata p = new ArcadeProjectMetadata();
-				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(p));
-			};
 			try
 			{
-				CurrentProject = JsonConvert.DeserializeObject<ArcadeProjectMetadata>(File.ReadAllText(ProjectMetadataFilePath));
+				CurrentProjectMetadata = JsonConvert.DeserializeObject<ArcadeProjectMetadata>(File.ReadAllText(ProjectMetadataFilePath));
 			}
 			catch (Exception Ex)
 			{
-				AdeSingleDialog.Instance.Show(Ex.Message, "读取错误");
-				CurrentProject = new ArcadeProjectMetadata();
+				AdeSingleDialog.Instance.Show(Ex.Message, "元信息读取错误");
+				CurrentProjectMetadata = new ArcadeProjectMetadata();
+				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 			}
 
-			Name.text = CurrentProject.Title;
-			Composer.text = CurrentProject.Artist;
+			Name.text = CurrentProjectMetadata.Title;
+			Composer.text = CurrentProjectMetadata.Artist;
 			Diff.text = "";
 			Name.interactable = true;
 			Composer.interactable = true;
 			Diff.interactable = true;
 			OpenLabel.color = new Color(0, 0, 0, 0);
 
-			ArcTimingManager.Instance.BaseBpm = CurrentProject.BaseBpm == 0 ? 100 : CurrentProject.BaseBpm;
+			ArcTimingManager.Instance.BaseBpm = CurrentProjectMetadata.BaseBpm == 0 ? 100 : CurrentProjectMetadata.BaseBpm;
 			BaseBpm.interactable = true;
 			BaseBpm.text = ArcTimingManager.Instance.BaseBpm.ToString();
 		}
@@ -346,9 +325,9 @@ namespace Arcade.Compose
 		private void LoadCover()
 		{
 			string coverPath = Path.Combine(CurrentProjectFolder, "base.jpg");
-			//TODO: Extract this and loading code in skinhost to util
-			Texture2D texture=Loader.LoadTexture2D(coverPath);
-			if(texture==null){
+			Texture2D texture = Loader.LoadTexture2D(coverPath);
+			if (texture == null)
+			{
 
 				CoverImage.sprite = DefaultCover;
 				return;
@@ -377,14 +356,11 @@ namespace Arcade.Compose
 					return;
 				}
 			}
-			AdeSingleDialog.Instance.Show(
-				"没有找到音乐或音乐格式不正确",
-				"谱面加载失败");
 		}
 
 		private void LoadChart(int difficulty)
 		{
-			if (CurrentProject == null || CurrentProjectFolder == null || AudioClip == null)
+			if (CurrentProjectMetadata == null || CurrentProjectFolder == null || AudioClip == null)
 			{
 				return;
 			}
@@ -418,7 +394,7 @@ namespace Arcade.Compose
 			ArcGameplayManager.Instance.Load(new Gameplay.Chart.ArcChart(reader), AudioClip);
 			CurrentDifficulty = difficulty;
 
-			Diff.text = CurrentProject.Difficulties[CurrentDifficulty] == null ? "" : CurrentProject.Difficulties[CurrentDifficulty].Rating;
+			Diff.text = CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null ? "" : CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating;
 			foreach (Image i in DifficultyImages) i.color = new Color(1f, 1f, 1f, 0.6f);
 			DifficultyImages[difficulty].color = new Color(1, 1, 1, 1);
 
@@ -427,26 +403,35 @@ namespace Arcade.Compose
 
 			watcher.Path = CurrentProjectFolder;
 			watcher.Filter = $"{difficulty}.aff";
-			ArcGameplayManager.Instance.Timing = CurrentProject.LastWorkingTiming;
+			ArcGameplayManager.Instance.Timing = CurrentProjectMetadata.LastWorkingTiming;
+		}
+
+		private void SetTutorialMessage(string message){
+			if(message==null){
+				TutorialCanvasGroup.alpha=0;
+				return;
+			}
+			TutorialCanvasGroup.alpha=1;
+			TutorialText.text=message;
 		}
 
 		public void OnComposerEdited()
 		{
-			if (CurrentProject == null) return;
-			CurrentProject.Artist = Composer.text;
+			if (CurrentProjectMetadata == null) return;
+			CurrentProjectMetadata.Artist = Composer.text;
 		}
 		public void OnNameEdited()
 		{
-			if (CurrentProject == null) return;
-			CurrentProject.Title = Name.text;
+			if (CurrentProjectMetadata == null) return;
+			CurrentProjectMetadata.Title = Name.text;
 		}
 		public void OnDiffEdited()
 		{
-			if (CurrentProject == null) return;
+			if (CurrentProjectMetadata == null) return;
 			if (CurrentDifficulty < 0 || CurrentDifficulty > 2) return;
-			if (CurrentProject.Difficulties[CurrentDifficulty] == null)
-				CurrentProject.Difficulties[CurrentDifficulty] = new AdeChartDifficultyMetadata();
-			CurrentProject.Difficulties[CurrentDifficulty].Rating = Diff.text;
+			if (CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null)
+				CurrentProjectMetadata.Difficulties[CurrentDifficulty] = new AdeChartDifficultyMetadata();
+			CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating = Diff.text;
 		}
 		public void OnBaseBpmEdited()
 		{
@@ -455,9 +440,9 @@ namespace Arcade.Compose
 			if (result)
 			{
 				if (value <= 0) value = 100;
-				if (CurrentProject != null) CurrentProject.BaseBpm = value;
+				if (CurrentProjectMetadata != null) CurrentProjectMetadata.BaseBpm = value;
 				ArcTimingManager.Instance.BaseBpm = value;
-				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProject));
+				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 				ArcArcManager.Instance.Rebuild();
 				BaseBpm.text = value.ToString();
 			}
@@ -474,7 +459,7 @@ namespace Arcade.Compose
 		}
 		public void OnFileWatchClicked()
 		{
-			if (CurrentProject != null && CurrentDifficulty != -1)
+			if (CurrentProjectMetadata != null && CurrentDifficulty != -1)
 			{
 				watcher.EnableRaisingEvents = !watcher.EnableRaisingEvents;
 				FileWatchEnableImage.color = watcher.EnableRaisingEvents ? EnableColor : DisableColor;
@@ -510,7 +495,7 @@ namespace Arcade.Compose
 		}
 		public void OnOpenFolder()
 		{
-			if (CurrentProject == null || string.IsNullOrWhiteSpace(CurrentProjectFolder)) return;
+			if (CurrentProjectMetadata == null || string.IsNullOrWhiteSpace(CurrentProjectFolder)) return;
 			Util.Windows.Dialog.OpenExplorer(CurrentProjectFolder);
 		}
 

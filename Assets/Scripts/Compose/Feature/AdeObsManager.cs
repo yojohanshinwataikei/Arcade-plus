@@ -33,7 +33,7 @@ namespace Arcade.Compose.Feature
 				AdeSingleDialog.Instance.Show("无法连接到OBS Studio\n请确认其已加载obs-websocket插件\n端口为4444，没有启用密码\n并启动了OBS Studio", "无法使用快速录制功能", "重试", Connect);
 				return;
 			}
-			if (AdeProjectManager.Instance.CurrentProject == null)
+			if (AdeProjectManager.Instance.CurrentProjectMetadata == null)
 			{
 				AdeSingleDialog.Instance.Show("未加载谱面", "错误");
 				return;
