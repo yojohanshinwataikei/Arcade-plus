@@ -1,5 +1,6 @@
 
 using System;
+using System.IO;
 using NAudio.Wave;
 using NVorbis;
 using UnityEngine;
@@ -14,11 +15,11 @@ namespace Arcade.Util.Loader
 			public float[] audioData;
 			public int position = 0;
 
-			public int channels =2;
-			public AudioDataHost(float[] audioData,int channels)
+			public int channels = 2;
+			public AudioDataHost(float[] audioData, int channels)
 			{
 				this.audioData = audioData;
-				this.channels=channels;
+				this.channels = channels;
 			}
 			public void PCMReaderCallback(float[] buffer)
 			{
@@ -37,7 +38,7 @@ namespace Arcade.Util.Loader
 			}
 			public void PCMSetPositionCallback(int newPosition)
 			{
-				position = newPosition*channels;
+				position = newPosition * channels;
 			}
 		}
 		// This is used to load audio files that supported by NAudio like wav/mp3
@@ -45,18 +46,19 @@ namespace Arcade.Util.Loader
 		{
 			float[] audioData = null;
 			int channels = 0;
-			int sampleRate = 0; try
+			int sampleRate = 0;
+			try
 			{
 				using (AudioFileReader reader = new AudioFileReader(path))
 				{
 					//Note: to be simple, we do not load large file with samples count larger than int limit
 					//This will be enough for most file, especially the sound effects in the skin folder
-					if (reader.Length > 0x7FFFFFFFL*sizeof(float))
+					if (reader.Length > 0x7FFFFFFFL * sizeof(float))
 					{
 						return null;
 					}
-					float[] data = new float[reader.Length/sizeof(float)];
-					reader.Read(data, 0, (int)(reader.Length/sizeof(float)));
+					float[] data = new float[reader.Length / sizeof(float)];
+					reader.Read(data, 0, (int)(reader.Length / sizeof(float)));
 					channels = reader.WaveFormat.Channels;
 					sampleRate = reader.WaveFormat.SampleRate;
 					audioData = data;
@@ -70,8 +72,8 @@ namespace Arcade.Util.Loader
 			{
 				return null;
 			}
-			AudioDataHost dataHost = new AudioDataHost(audioData,channels);
-			AudioClip clip = AudioClip.Create(path, audioData.Length/channels, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
+			AudioDataHost dataHost = new AudioDataHost(audioData, channels);
+			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
 			return clip;
 		}
 		// This is used to load audio files that supported by NVorbis like ogg
@@ -84,12 +86,12 @@ namespace Arcade.Util.Loader
 				using (VorbisReader reader = new VorbisReader(path))
 				{
 					//Note: Same here
-					if (reader.TotalSamples*reader.Channels > 0x7FFFFFFFL)
+					if (reader.TotalSamples * reader.Channels > 0x7FFFFFFFL)
 					{
 						return null;
 					}
-					float[] data = new float[reader.TotalSamples*reader.Channels];
-					reader.ReadSamples(data, 0, (int)(reader.TotalSamples*reader.Channels));
+					float[] data = new float[reader.TotalSamples * reader.Channels];
+					reader.ReadSamples(data, 0, (int)(reader.TotalSamples * reader.Channels));
 					channels = reader.Channels;
 					sampleRate = reader.SampleRate;
 					audioData = data;
@@ -103,8 +105,8 @@ namespace Arcade.Util.Loader
 			{
 				return null;
 			}
-			AudioDataHost dataHost = new AudioDataHost(audioData,channels);
-			AudioClip clip = AudioClip.Create(path, audioData.Length/channels, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
+			AudioDataHost dataHost = new AudioDataHost(audioData, channels);
+			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
 			return clip;
 		}
 		// This try both nvorbis and naudio
@@ -122,6 +124,33 @@ namespace Arcade.Util.Loader
 				return clip;
 			}
 			return clip;
+		}
+
+		public static Texture2D LoadTexture2D(string path){
+			byte[] file;
+			try
+			{
+				file = File.ReadAllBytes(path);
+			}
+			catch
+			{
+				return null;
+			}
+			//TODO: Completly remove mipmap after GPU optimize
+			Texture2D texture = new Texture2D(1, 1);
+			bool success = ImageConversion.LoadImage(texture, file, true);
+			if (success)
+			{
+				texture.wrapMode = TextureWrapMode.Clamp;
+				texture.name = path;
+				texture.mipMapBias=-4;
+				return texture;
+			}
+			else
+			{
+				UnityEngine.Object.Destroy(texture);
+				return null;
+			}
 		}
 	}
 }

@@ -855,31 +855,11 @@ namespace Arcade.Compose
 		}
 		private Texture2D LoadTexture2D(string path, List<UnityEngine.Object> resourceList)
 		{
-			byte[] file;
-			try
-			{
-				file = File.ReadAllBytes(path);
-			}
-			catch
-			{
-				return null;
-			}
-			//TODO: Completly remove mipmap after GPU optimize
-			Texture2D texture = new Texture2D(1, 1);
-			bool success = ImageConversion.LoadImage(texture, file, true);
-			if (success)
-			{
+			Texture2D texture=Loader.LoadTexture2D(path);
+			if(texture!=null){
 				resourceList.Add(texture);
-				texture.wrapMode = TextureWrapMode.Clamp;
-				texture.name = path;
-				texture.mipMapBias=-4;
-				return texture;
 			}
-			else
-			{
-				Destroy(texture);
-				return null;
-			}
+			return texture;
 		}
 
 		private Sprite LoadNormalSprite(string path, List<UnityEngine.Object> resourceList)

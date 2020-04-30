@@ -347,32 +347,12 @@ namespace Arcade.Compose
 		{
 			string coverPath = Path.Combine(CurrentProjectFolder, "base.jpg");
 			//TODO: Extract this and loading code in skinhost to util
-			if (!File.Exists(coverPath))
-			{
+			Texture2D texture=Loader.LoadTexture2D(coverPath);
+			if(texture==null){
+
 				CoverImage.sprite = DefaultCover;
 				return;
 			}
-			byte[] file;
-			try
-			{
-				file = File.ReadAllBytes(coverPath);
-			}
-			catch
-			{
-				CoverImage.sprite = DefaultCover;
-				return;
-			}
-			Texture2D texture = new Texture2D(1, 1);
-			bool success = ImageConversion.LoadImage(texture, file, true);
-			if (!success)
-			{
-				Destroy(texture);
-				CoverImage.sprite = DefaultCover;
-				return;
-			}
-			texture.wrapMode = TextureWrapMode.Clamp;
-			texture.name = coverPath;
-			texture.mipMapBias = -4;
 			Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 			sprite.name = coverPath;
 			Cover = texture;
