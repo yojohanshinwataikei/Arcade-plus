@@ -48,6 +48,7 @@ namespace Arcade.Gameplay
 		{
 			Arcs = arcs;
 			foreach (var t in Arcs) t.Instantiate();
+			foreach (var t in Arcs) t.Rebuild();
 			CalculateArcRelationship();
 		}
 

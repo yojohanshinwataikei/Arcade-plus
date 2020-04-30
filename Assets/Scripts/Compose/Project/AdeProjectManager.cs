@@ -13,6 +13,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using Arcade.Compose.Command;
+using NVorbis;
+using NAudio.Wave;
+using static Arcade.Compose.AdeSkinHost;
 
 namespace Arcade.Compose
 {
@@ -58,6 +61,8 @@ namespace Arcade.Compose
 		private AudioClip AudioClip;
 		private Texture2D Cover;
 		private Sprite CoverSprite;
+
+		private Coroutine loadingCoroutine;
 		private FileSystemWatcher watcher = new FileSystemWatcher();
 		private bool shouldReload = false;
 
@@ -120,12 +125,7 @@ namespace Arcade.Compose
 			}
 		}
 
-		private void InitializeProject(string folder)
-		{
-			ArcadeProjectMetadata p = new ArcadeProjectMetadata();
-			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(p));
-		}
-		private void CreateDirectories(string folder)
+		private void CreateArcadeDirectories(string folder)
 		{
 			string[] directories = new string[] {
 					ProjectArcadeFolder,
@@ -174,26 +174,16 @@ namespace Arcade.Compose
 		}
 		public void OpenProject()
 		{
+			if (loadingCoroutine != null)
+			{
+				return;
+			}
 			try
 			{
 				string folder = Util.Windows.Dialog.OpenFolderDialog(
 					"选择您的 Arcaea 自制谱文件夹 (包含 0/1/2.aff, base.mp3/ogg/wav, base.jpg)");
 				if (folder == null) return;
-				CleanProject();
-				CreateDirectories(folder);
-				CurrentProjectFolder = folder;
-				if (!File.Exists(ProjectMetadataFilePath)) InitializeProject(folder);
-				try
-				{
-					CurrentProject = JsonConvert.DeserializeObject<ArcadeProjectMetadata>(File.ReadAllText(ProjectMetadataFilePath));
-				}
-				catch (Exception Ex)
-				{
-					AdeSingleDialog.Instance.Show(Ex.Message, "读取错误");
-					CurrentProject = new ArcadeProjectMetadata();
-				}
-
-				StartCoroutine(LoadingCoroutine());
+				loadingCoroutine = StartCoroutine(LoadProjectCoroutine(folder));
 			}
 			catch (Exception Ex)
 			{
@@ -246,148 +236,22 @@ namespace Arcade.Compose
 			}
 		}
 
-		private IEnumerator LoadChartCoroutine(int index, bool shutter)
-		{
-			if (CurrentProject == null || CurrentProjectFolder == null || AudioClip == null)
-			{
-				yield break;
-			}
-
-			string chartPath = Path.Combine(CurrentProjectFolder, $"{index}.aff");
-			if (!File.Exists(chartPath))
-			{
-				File.WriteAllText(chartPath, "AudioOffset:0\n-\ntiming(0,100.00,4.00);");
-			}
-
-			if (shutter) yield return AdeShutterManager.Instance.CloseCoroutine();
-			ArcadeComposeManager.Instance.Pause();
-			AdeObsManager.Instance.ForceClose();
-			CommandManager.Instance.Clear();
-
-			Aff.ArcaeaAffReader reader = null;
-			try
-			{
-				reader = new Aff.ArcaeaAffReader(chartPath);
-			}
-			catch (Aff.ArcaeaAffFormatException Ex)
-			{
-				AdeSingleDialog.Instance.Show(Ex.Message, "谱面格式错误");
-				reader = null;
-			}
-			catch (Exception Ex)
-			{
-				AdeSingleDialog.Instance.Show(Ex.Message, "谱面读取错误");
-				reader = null;
-			}
-			if (reader == null)
-			{
-				if (shutter) yield return AdeShutterManager.Instance.OpenCoroutine();
-				yield break;
-			}
-			ArcGameplayManager.Instance.Load(new Gameplay.Chart.ArcChart(reader), AudioClip);
-			CurrentDifficulty = index;
-
-			Diff.text = CurrentProject.Difficulties[CurrentDifficulty] == null ? "" : CurrentProject.Difficulties[CurrentDifficulty].Rating;
-			foreach (Image i in DifficultyImages) i.color = new Color(1f, 1f, 1f, 0.6f);
-			DifficultyImages[index].color = new Color(1, 1, 1, 1);
-
-			AudioOffset.interactable = true;
-			AudioOffset.text = ArcAudioManager.Instance.AudioOffset.ToString();
-
-			watcher.Path = CurrentProjectFolder;
-			watcher.Filter = $"{index}.aff";
-
-			yield return null;
-
-			ArcArcManager.Instance.Rebuild();
-
-			ArcGameplayManager.Instance.Timing = CurrentProject.LastWorkingTiming;
-
-			if (shutter) yield return AdeShutterManager.Instance.OpenCoroutine();
-		}
-		private IEnumerator LoadCoverCoroutine()
-		{
-			string coverPath = Path.Combine(CurrentProjectFolder,"base.jpg");
-			if (!File.Exists(coverPath))
-			{
-				CoverImage.sprite = DefaultCover;
-				yield break;
-			}
-			string path = coverPath;
-			using (UnityWebRequest req = UnityWebRequestTexture.GetTexture(Uri.EscapeUriString("file:///" + path.Replace("\\", "/"))))
-			{
-				yield return req.SendWebRequest();
-				if (!string.IsNullOrWhiteSpace(req.error))
-				{
-					CoverImage.sprite = DefaultCover;
-					yield break;
-				}
-				Cover = DownloadHandlerTexture.GetContent(req);
-				CoverSprite = Sprite.Create(Cover, new Rect(0, 0, Cover.width, Cover.height), new Vector2(0.5f, 0.5f));
-				CoverImage.sprite = CoverSprite;
-			}
-		}
-		private IEnumerator LoadMusicCoroutine()
-		{
-			string[] searchPaths = new string[] { Path.Combine(ProjectArcadeFolder,"Converting","base.wav"), Path.Combine(CurrentProjectFolder,"base.wav"), Path.Combine(CurrentProjectFolder,"base.ogg") };
-			string path = null;
-			foreach (var s in searchPaths)
-			{
-				if (File.Exists(s)) path = s;
-			}
-			if (path == null)
-			{
-				if (File.Exists(Path.Combine(CurrentProjectFolder,"base.mp3")))
-				{
-					Task converting = Task.Run(() => Mp3Converter.Mp3ToWav(Path.Combine(CurrentProjectFolder,"base.mp3"), Path.Combine(ProjectArcadeFolder,"Converting","base.wav")));
-					while (!converting.IsCompleted) yield return null;
-					if (converting.Status == TaskStatus.RanToCompletion)
-					{
-						path = Path.Combine(ProjectArcadeFolder,"Converting","base.wav");
-					}
-				}
-			}
-			if (path == null)
-			{
-				AdeSingleDialog.Instance.Show(
-				   "没有找到音乐或音乐格式不正确",
-					"谱面格式错误");
-				yield break;
-			}
-			using (UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(Uri.EscapeUriString("file:///" + path.Replace("\\", "/")), path.EndsWith("wav") ? AudioType.WAV : AudioType.OGGVORBIS))
-			{
-				yield return req.SendWebRequest();
-				if (!string.IsNullOrWhiteSpace(req.error))
-				{
-					yield break;
-				}
-				AudioClip = DownloadHandlerAudioClip.GetContent(req);
-				AdeTimingSlider.Instance.Enable = true;
-				AdeTimingSlider.Instance.Length = (int)(AudioClip.length * 1000);
-			}
-		}
-		private IEnumerator LoadingCoroutine()
+		private IEnumerator LoadChartCoroutine(int difficulty)
 		{
 			yield return AdeShutterManager.Instance.CloseCoroutine();
+			LoadChart(difficulty);
+			loadingCoroutine = null;
+			yield return AdeShutterManager.Instance.OpenCoroutine();
+		}
 
-			Name.text = CurrentProject.Title;
-			Composer.text = CurrentProject.Artist;
-			Diff.text = "";
-			Name.interactable = true;
-			Composer.interactable = true;
-			Diff.interactable = true;
-			OpenLabel.color = new Color(0, 0, 0, 0);
+		private IEnumerator LoadProjectCoroutine(string folder)
+		{
+			yield return AdeShutterManager.Instance.CloseCoroutine();
+			LoadProject(folder);
 
-			ArcTimingManager.Instance.BaseBpm = CurrentProject.BaseBpm == 0 ? 100 : CurrentProject.BaseBpm;
-			BaseBpm.interactable = true;
-			BaseBpm.text = ArcTimingManager.Instance.BaseBpm.ToString();
-
-			watcher.EnableRaisingEvents = false;
-			FileWatchEnableImage.color = DisableColor;
-
-			yield return LoadCoverCoroutine();
-			yield return LoadMusicCoroutine();
-			yield return LoadChartCoroutine(CurrentProject.LastWorkingDifficulty, false);
+			// yield return LoadCoverCoroutine();
+			// yield return LoadMusicCoroutine();
+			// yield return LoadChartSubCoroutine(CurrentProject.LastWorkingDifficulty, false);
 
 			if (CurrentProject == null)
 			{
@@ -415,10 +279,15 @@ namespace Arcade.Compose
 			}
 
 			yield return AdeShutterManager.Instance.OpenCoroutine();
+			loadingCoroutine = null;
 		}
 		public void ReloadChart(int index)
 		{
-			StartCoroutine(LoadChartCoroutine(index, true));
+			if (loadingCoroutine != null)
+			{
+				return;
+			}
+			loadingCoroutine = StartCoroutine(LoadChartCoroutine(index));
 		}
 
 		public void SetDefaultCover(Sprite cover)
@@ -428,6 +297,206 @@ namespace Arcade.Compose
 				CoverImage.sprite = cover;
 			}
 			DefaultCover = cover;
+		}
+
+		private void LoadProject(string folder)
+		{
+			CleanProject();
+			watcher.EnableRaisingEvents = false;
+			FileWatchEnableImage.color = DisableColor;
+			CurrentProjectFolder = folder;
+			CreateArcadeDirectories(folder);
+			LoadMetadata();
+			LoadCover();
+			LoadAudio();
+			LoadChart(CurrentProject.LastWorkingDifficulty);
+		}
+
+		private void LoadMetadata()
+		{
+			if (!File.Exists(ProjectMetadataFilePath))
+			{
+				ArcadeProjectMetadata p = new ArcadeProjectMetadata();
+				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(p));
+			};
+			try
+			{
+				CurrentProject = JsonConvert.DeserializeObject<ArcadeProjectMetadata>(File.ReadAllText(ProjectMetadataFilePath));
+			}
+			catch (Exception Ex)
+			{
+				AdeSingleDialog.Instance.Show(Ex.Message, "读取错误");
+				CurrentProject = new ArcadeProjectMetadata();
+			}
+
+			Name.text = CurrentProject.Title;
+			Composer.text = CurrentProject.Artist;
+			Diff.text = "";
+			Name.interactable = true;
+			Composer.interactable = true;
+			Diff.interactable = true;
+			OpenLabel.color = new Color(0, 0, 0, 0);
+
+			ArcTimingManager.Instance.BaseBpm = CurrentProject.BaseBpm == 0 ? 100 : CurrentProject.BaseBpm;
+			BaseBpm.interactable = true;
+			BaseBpm.text = ArcTimingManager.Instance.BaseBpm.ToString();
+		}
+
+		private void LoadCover()
+		{
+			string coverPath = Path.Combine(CurrentProjectFolder, "base.jpg");
+			//TODO: Extract this and loading code in skinhost to util
+			if (!File.Exists(coverPath))
+			{
+				CoverImage.sprite = DefaultCover;
+				return;
+			}
+			byte[] file;
+			try
+			{
+				file = File.ReadAllBytes(coverPath);
+			}
+			catch
+			{
+				CoverImage.sprite = DefaultCover;
+				return;
+			}
+			Texture2D texture = new Texture2D(1, 1);
+			bool success = ImageConversion.LoadImage(texture, file, true);
+			if (!success)
+			{
+				Destroy(texture);
+				CoverImage.sprite = DefaultCover;
+				return;
+			}
+			texture.wrapMode = TextureWrapMode.Clamp;
+			texture.name = coverPath;
+			texture.mipMapBias = -4;
+			Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+			sprite.name = coverPath;
+			Cover = texture;
+			CoverSprite = sprite;
+			CoverImage.sprite = CoverSprite;
+		}
+		private void LoadAudio()
+		{
+			string[] files = new string[]{
+				Path.Combine(CurrentProjectFolder, "base.ogg"),
+				Path.Combine(CurrentProjectFolder, "base.mp3"),
+				Path.Combine(CurrentProjectFolder, "base.wav"),
+				};
+			foreach (string audioPath in files)
+			{
+				if (!File.Exists(audioPath))
+				{
+					continue;
+				}
+				float[] audioData = null;
+				int channels = 0;
+				int sampleRate = 0;
+				//TODO: Extract this and loading code in skinhost to util
+				//try ogg first
+				try
+				{
+					using (VorbisReader reader = new VorbisReader(audioPath))
+					{
+						if (reader.TotalSamples > 0x7FFFFFFFL)
+						{
+							throw new Exception("Too long!");
+						}
+						float[] data = new float[reader.TotalSamples];
+						reader.ReadSamples(data, 0, (int)reader.TotalSamples);
+						channels = reader.Channels;
+						sampleRate = reader.SampleRate;
+						audioData = data;
+					}
+				}
+				catch
+				{
+					//try mp3+wav from naudio
+					try
+					{
+						using (AudioFileReader reader = new AudioFileReader(audioPath))
+						{
+							//Note: to be simple, we do not load large file with samples count larger than int limit
+							//This will be enough for most file, especially the sound effects in the skin folder
+							if (reader.Length > 0x7FFFFFFFL)
+							{
+								throw new Exception("Too long!");
+							}
+							float[] data = new float[reader.Length];
+							reader.Read(data, 0, (int)reader.Length);
+							channels = reader.WaveFormat.Channels;
+							sampleRate = reader.WaveFormat.SampleRate;
+							audioData = data;
+						}
+					}
+					catch
+					{
+					}
+				}
+				if (audioData != null)
+				{
+					AudioDataHost dataHost = new AudioDataHost(audioData);
+					AudioClip clip = AudioClip.Create(audioPath, audioData.Length, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
+					AudioClip = clip;
+					AdeTimingSlider.Instance.Enable = true;
+					AdeTimingSlider.Instance.Length = (int)(AudioClip.length * 1000);
+					return;
+				}
+			}
+
+			AdeSingleDialog.Instance.Show(
+				"没有找到音乐或音乐格式不正确",
+				"谱面加载失败");
+		}
+
+		private void LoadChart(int difficulty)
+		{
+			if (CurrentProject == null || CurrentProjectFolder == null || AudioClip == null)
+			{
+				return;
+			}
+			string chartPath = Path.Combine(CurrentProjectFolder, $"{difficulty}.aff");
+			if (!File.Exists(chartPath))
+			{
+				File.WriteAllText(chartPath, "AudioOffset:0\n-\ntiming(0,100.00,4.00);");
+			}
+			ArcadeComposeManager.Instance.Pause();
+			AdeObsManager.Instance.ForceClose();
+			CommandManager.Instance.Clear();
+			Aff.ArcaeaAffReader reader = null;
+			try
+			{
+				reader = new Aff.ArcaeaAffReader(chartPath);
+			}
+			catch (Aff.ArcaeaAffFormatException Ex)
+			{
+				AdeSingleDialog.Instance.Show(Ex.Message, "谱面格式错误");
+				reader = null;
+			}
+			catch (Exception Ex)
+			{
+				AdeSingleDialog.Instance.Show(Ex.Message, "谱面读取错误");
+				reader = null;
+			}
+			if (reader == null)
+			{
+				return;
+			}
+			ArcGameplayManager.Instance.Load(new Gameplay.Chart.ArcChart(reader), AudioClip);
+			CurrentDifficulty = difficulty;
+
+			Diff.text = CurrentProject.Difficulties[CurrentDifficulty] == null ? "" : CurrentProject.Difficulties[CurrentDifficulty].Rating;
+			foreach (Image i in DifficultyImages) i.color = new Color(1f, 1f, 1f, 0.6f);
+			DifficultyImages[difficulty].color = new Color(1, 1, 1, 1);
+
+			AudioOffset.interactable = true;
+			AudioOffset.text = ArcAudioManager.Instance.AudioOffset.ToString();
+
+			watcher.Path = CurrentProjectFolder;
+			watcher.Filter = $"{difficulty}.aff";
+			ArcGameplayManager.Instance.Timing = CurrentProject.LastWorkingTiming;
 		}
 
 		public void OnComposerEdited()

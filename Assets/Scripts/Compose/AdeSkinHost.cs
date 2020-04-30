@@ -922,7 +922,7 @@ namespace Arcade.Compose
 			return sprite;
 		}
 
-		private class AudioDataHost
+		public class AudioDataHost
 		{
 			public float[] audioData;
 			public int position = 0;
