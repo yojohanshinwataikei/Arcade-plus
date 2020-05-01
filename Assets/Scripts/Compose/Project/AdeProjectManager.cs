@@ -275,8 +275,9 @@ namespace Arcade.Compose
 			{
 				LoadMetadata();
 			}
-			catch
+			catch (Exception Ex)
 			{
+				AdeSingleDialog.Instance.Show(Ex.Message, "元信息读取错误");
 				SetTutorialMessage("无法加载工程元信息，请删除谱面文件夹下的 Arcade 文件夹后重新打开谱面文件夹");
 				return;
 			}
@@ -302,9 +303,8 @@ namespace Arcade.Compose
 			{
 				CurrentProjectMetadata = JsonConvert.DeserializeObject<ArcadeProjectMetadata>(File.ReadAllText(ProjectMetadataFilePath));
 			}
-			catch (Exception Ex)
+			catch
 			{
-				AdeSingleDialog.Instance.Show(Ex.Message, "元信息读取错误");
 				CurrentProjectMetadata = new ArcadeProjectMetadata();
 				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 			}
@@ -406,13 +406,15 @@ namespace Arcade.Compose
 			ArcGameplayManager.Instance.Timing = CurrentProjectMetadata.LastWorkingTiming;
 		}
 
-		private void SetTutorialMessage(string message){
-			if(message==null){
-				TutorialCanvasGroup.alpha=0;
+		private void SetTutorialMessage(string message)
+		{
+			if (message == null)
+			{
+				TutorialCanvasGroup.alpha = 0;
 				return;
 			}
-			TutorialCanvasGroup.alpha=1;
-			TutorialText.text=message;
+			TutorialCanvasGroup.alpha = 1;
+			TutorialText.text = message;
 		}
 
 		public void OnComposerEdited()
