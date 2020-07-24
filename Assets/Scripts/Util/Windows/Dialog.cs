@@ -294,14 +294,17 @@ namespace Arcade.Util.Windows
         }
         public static void OpenExplorer(string SelectPath)
         {
-            // UnityEngine.Debug.Log(SelectPath);
+            UnityEngine.Debug.Log(SelectPath);
             if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer) {
                 Process.Start(SelectPath?.Replace("/", "\\"));
             } else {
                 Process p = new Process ();
                 p.StartInfo.FileName = "open";
-                p.StartInfo.Arguments = SelectPath;
+                p.StartInfo.Arguments = "\"" + SelectPath + "\"";
+                p.StartInfo.UseShellExecute = false;
                 p.Start();
+                p.WaitForExit();
+                p.Close();
             }
         }
     }
