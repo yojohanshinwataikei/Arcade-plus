@@ -4,6 +4,7 @@ using Arcade.Util.Windows.Internal;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -293,7 +294,15 @@ namespace Arcade.Util.Windows
         }
         public static void OpenExplorer(string SelectPath)
         {
-            Process.Start(SelectPath?.Replace("/", "\\"));
+            // UnityEngine.Debug.Log(SelectPath);
+            if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer) {
+                Process.Start(SelectPath?.Replace("/", "\\"));
+            } else {
+                Process p = new Process ();
+                p.StartInfo.FileName = "open";
+                p.StartInfo.Arguments = SelectPath;
+                p.Start();
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
 using Newtonsoft.Json;
 using UnityEngine;
+using SimpleFileBrowser;
 using UnityEngine.UI;
 using Arcade.Compose.Command;
 using Arcade.Util.Loader;
@@ -171,8 +172,14 @@ namespace Arcade.Compose
 			}
 			try
 			{
-				string folder = Util.Windows.Dialog.OpenFolderDialog(
+				string folder = null;
+				if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer) {
+					folder = Util.Windows.Dialog.OpenFolderDialog(
 					"选择您的 Arcaea 自制谱文件夹 (包含 0/1/2.aff, base.mp3/ogg/wav, base.jpg)");
+				} else {
+					// folder = EditorUtility.OpenFolderPanel("选择您的 Arcaea 自制谱文件夹 (包含 0/1/2.aff, base.mp3/ogg/wav, base.jpg)", "", "");
+					StartCoroutine( ShowLoadDialogCoroutine() );
+				}
 				if (folder == null) return;
 				loadingCoroutine = StartCoroutine(LoadProjectCoroutine(folder));
 			}
@@ -504,6 +511,31 @@ namespace Arcade.Compose
 		public void OnApplicationQuit()
 		{
 			SaveProject();
+		}
+
+		IEnumerator ShowLoadDialogCoroutine()
+		{
+			// Show a load file dialog and wait for a response from user
+			// Load file/folder: file, Allow multiple selection: true
+			// Initial path: default (Documents), Title: "Load File", submit button text: "Load"
+			yield return FileBrowser.WaitForLoadDialog( true, false, null, "选择您的 Arcaea 自制谱文件夹 (包含 0/1/2.aff, base.mp3/ogg/wav, base.jpg)", "确定" );
+
+			// Dialog is closed
+			// Print whether the user has selected some files/folders or cancelled the operation (FileBrowser.Success)
+			// Debug.Log( FileBrowser.Success );
+
+			if( FileBrowser.Success )
+			{
+				// Print paths of the selected files (FileBrowser.Result) (null, if FileBrowser.Success is false)
+				// for( int i = 0; i < FileBrowser.Result.Length; i++ )
+				// 	Debug.Log( FileBrowser.Result[i] );
+				string selectedPath = FileBrowser.Result[0];
+				loadingCoroutine = StartCoroutine(LoadProjectCoroutine(selectedPath));
+
+				// Read the bytes of the first file via FileBrowserHelpers
+				// Contrary to File.ReadAllBytes, this function works on Android 10+, as well
+				// byte[] bytes = FileBrowserHelpers.ReadBytesFromFile( FileBrowser.Result[0] );
+			}
 		}
 
 	}

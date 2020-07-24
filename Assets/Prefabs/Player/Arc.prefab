@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 1689115309
   m_SortingLayer: 3
   m_SortingOrder: 3
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: ee54072f1cd93974a876622462c06781, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_Size: {x: 2.56, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1218715667678282
@@ -142,8 +142,8 @@ MonoBehaviour:
   ArcCap: {fileID: 4526610910507252}
   ArcCapRenderer: {fileID: 212918271361012646}
   JudgeEffect: {fileID: 198969654626073176}
-  DefaultTexture: {fileID: 0}
-  HighlightTexture: {fileID: 0}
+  DefaultTexture: {fileID: 2800000, guid: a6dd552366b4f4a4badebc71a3e03084, type: 3}
+  HighlightTexture: {fileID: 2800000, guid: a4bde67ec3c007d428041dfad16f0c29, type: 3}
 --- !u!64 &64321634845165700
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -228,7 +228,7 @@ SpriteRenderer:
   m_SortingLayerID: 1689115309
   m_SortingLayer: 3
   m_SortingOrder: 5
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 22766dc81e5f2ae40909da5b4fa9db92, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -236,7 +236,7 @@ SpriteRenderer:
   m_Size: {x: 0.51, y: 0.01}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &1946391394944924
