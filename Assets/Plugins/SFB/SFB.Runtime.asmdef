@@ -1,9 +1,6 @@
 {
-    "name": "Arcade",
-    "references": [
-        "Demigiant.DOTween",
-        "SFB.Runtime"
-    ],
+    "name": "SFB.Runtime",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
