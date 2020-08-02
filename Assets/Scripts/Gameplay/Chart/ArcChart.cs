@@ -1089,7 +1089,7 @@ namespace Arcade.Gameplay.Chart
 				Percent = 1;
 				return;
 			}
-			else if (Timing < this.Timing)
+			else if (Timing <= this.Timing)
 			{
 				Percent = 0;
 				return;

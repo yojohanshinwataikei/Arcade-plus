@@ -125,18 +125,24 @@ namespace Arcade.Gameplay
 				position += new Vector3(-c.Move.x, c.Move.y, c.Move.z) * c.Percent / 100;
 				rotation += new Vector3(-c.Rotate.y, -c.Rotate.x, c.Rotate.z) * c.Percent;
 			}
-
 			GameplayCamera.transform.localPosition = position;
 			GameplayCamera.transform.localRotation = Quaternion.Euler(0, 0, rotation.z) * Quaternion.Euler(rotation.x, rotation.y, 0);
 		}
 		private void UpdateCameraTilt()
 		{
-			if (!IsReset) return;
+			if (!IsReset) {
+				CurrentTilt = 0;
+				return;
+			}
 			float currentArcPos = ArcGameplayManager.Instance.Auto ? -ArcArcManager.Instance.ArcJudgePos : 0;
 			float pos = Mathf.Clamp(currentArcPos / 4.25f, -1, 1) * 0.05f;
 			float delta = pos - CurrentTilt;
-			float speed = ArcGameplayManager.Instance.IsPlaying ? (currentArcPos == 0 ? 0.02f : 0.04f) : 0;
-			CurrentTilt = CurrentTilt + speed * delta;
+			if(ArcGameplayManager.Instance.IsPlaying){
+				float speed = 0.1f;
+				CurrentTilt = CurrentTilt + speed * delta;
+			}else{
+				CurrentTilt = pos;
+			}
 			GameplayCamera.transform.LookAt(new Vector3(0, -5.5f, -20), new Vector3(CurrentTilt, 1 - CurrentTilt, 0));
 		}
 	}
