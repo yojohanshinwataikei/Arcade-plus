@@ -238,7 +238,7 @@ public class AdeFaultDetector : MonoBehaviour
 
         sw.Close();
         Status.text = $"检查完成，共 {count} 个错误";
-		Arcade.Util.Windows.Dialog.OpenExplorer(path);
+		Arcade.Util.Shell.FileBrowser.OpenExplorer(path);
     }
 }
 

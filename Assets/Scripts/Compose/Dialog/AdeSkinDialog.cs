@@ -101,7 +101,7 @@ namespace Arcade.Compose.Dialog
 					return;
 				}
 			}
-			Util.Windows.Dialog.OpenExplorer(AdeSkinHost.Instance.ExternalBackgroundFolderPath);
+			Util.Shell.FileBrowser.OpenExplorer(AdeSkinHost.Instance.ExternalBackgroundFolderPath);
 		}
 
 		private void LoadSkinOptions()

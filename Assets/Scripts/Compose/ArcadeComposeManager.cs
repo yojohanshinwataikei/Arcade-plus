@@ -395,7 +395,7 @@ namespace Arcade.Compose
 		}
 		public void OpenLogFile()
 		{
-			Util.Windows.Dialog.OpenExplorer(Application.consoleLogPath);
+			Util.Shell.FileBrowser.OpenExplorer(Application.consoleLogPath);
 		}
 	}
 }
