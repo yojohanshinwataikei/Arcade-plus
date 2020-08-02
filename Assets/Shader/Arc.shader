@@ -56,7 +56,7 @@ Shader "Arcade/Arc"
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.color = v.color;
-				o.uv2 = v.uv2;
+				o.uv2 = clamp(v.uv2,0,1);
 				return o;
 			}
 

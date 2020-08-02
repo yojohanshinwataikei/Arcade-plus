@@ -41,6 +41,22 @@ public class ArcadeBuild
 				 target = BuildTarget.StandaloneWindows64,
 				 options = BuildOptions.None,
 			 }).summary.result.ToString());
+		UnityEngine.Debug.Log(BuildPipeline.BuildPlayer(
+			 new BuildPlayerOptions()
+			 {
+				 locationPathName = "Build/mac/Arcade-plus.app",
+				 scenes = new string[] { "Assets/_Scenes/ArcEditor.unity" },
+				 target = BuildTarget.StandaloneOSX,
+				 options = BuildOptions.None,
+			 }).summary.result.ToString());
+		UnityEngine.Debug.Log(BuildPipeline.BuildPlayer(
+			 new BuildPlayerOptions()
+			 {
+				 locationPathName = "Build/linux/Arcade-plus",
+				 scenes = new string[] { "Assets/_Scenes/ArcEditor.unity" },
+				 target = BuildTarget.StandaloneLinux64,
+				 options = BuildOptions.None,
+			 }).summary.result.ToString());
 		// TODO: Find a way to use the System.IO.Compression.ZipFile without breaking things
 		FileUtil.CopyFileOrDirectory("Skin","Build/x64/Skin");
 		FileUtil.CopyFileOrDirectory("Background","Build/x64/Background");
