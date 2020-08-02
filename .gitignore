@@ -66,3 +66,7 @@ crashlytics-build.properties
 # these folder is used when testting or debugging the project
 /Background
 /Skin
+
+### macOS ###
+# General
+.DS_Store

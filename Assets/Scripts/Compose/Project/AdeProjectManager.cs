@@ -11,6 +11,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Compose.Command;
 using Arcade.Util.Loader;
+using SFB;
+using UnityEngine.Networking;
 
 namespace Arcade.Compose
 {
@@ -171,8 +173,23 @@ namespace Arcade.Compose
 			}
 			try
 			{
-				string folder = Util.Windows.Dialog.OpenFolderDialog(
+				string folder = null;
+				if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer) {
+					folder = Util.Windows.Dialog.OpenFolderDialog(
 					"选择您的 Arcaea 自制谱文件夹 (包含 0/1/2.aff, base.mp3/ogg/wav, base.jpg)");
+				} else {
+					string[] strs = StandaloneFileBrowser.OpenFolderPanel("选择您的 Arcaea 自制谱文件夹 (包含 0/1/2.aff, base.mp3/ogg/wav, base.jpg)", "%HOMEDRIVE/Desktop%", false);
+					if (strs.Length > 0 && strs[0] != "")
+					{
+						Debug.Log(strs[0]);
+						folder = strs[0].Replace("file://", "");
+						folder = UnityWebRequest.UnEscapeURL(folder);
+					}
+					else
+					{
+						Debug.Log("用户取消选择");
+					}
+				}
 				if (folder == null) return;
 				loadingCoroutine = StartCoroutine(LoadProjectCoroutine(folder));
 			}
@@ -505,6 +522,7 @@ namespace Arcade.Compose
 		{
 			SaveProject();
 		}
+
 
 	}
 }
