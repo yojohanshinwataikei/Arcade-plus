@@ -58154,6 +58154,8 @@ MonoBehaviour:
   Source: {fileID: 1758250567}
   PitchShiftMixerGroup: {fileID: 6206758153734580362, guid: c277eb9bffe7a6645b84fd6008d17a53,
     type: 2}
+  DoublePitchShiftMixerGroup: {fileID: 4355305432360197303, guid: c277eb9bffe7a6645b84fd6008d17a53,
+    type: 2}
   PlayBackSpeedButtonText: {fileID: 2104102232}
 --- !u!1 &1776676349
 GameObject:

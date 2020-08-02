@@ -14,6 +14,7 @@ namespace Arcade.Gameplay
 
 		public AudioSource Source;
 		public AudioMixerGroup PitchShiftMixerGroup;
+		public AudioMixerGroup DoublePitchShiftMixerGroup;
 		public Text PlayBackSpeedButtonText;
 
 		public float Timing
@@ -53,9 +54,13 @@ namespace Arcade.Gameplay
 				Source.pitch=value;
 				if(value==1){
 					Source.outputAudioMixerGroup=null;
-				}else{
+				}else if(value>=0.5f){
 					Source.outputAudioMixerGroup=PitchShiftMixerGroup;
 					PitchShiftMixerGroup.audioMixer.SetFloat("pitchShift",1f/value);
+				}else{
+					Source.outputAudioMixerGroup=DoublePitchShiftMixerGroup;
+					PitchShiftMixerGroup.audioMixer.SetFloat("pitchShift",2f);
+					PitchShiftMixerGroup.audioMixer.SetFloat("pitchShift2",0.5f/value);
 				}
 				playBackSpeed=value;
 			}
