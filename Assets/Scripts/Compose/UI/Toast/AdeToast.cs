@@ -25,7 +25,7 @@ namespace Arcade.Compose
 			Content.text = text;
 			ToastRect.DOPivotY(1, Duration).OnComplete(() =>
 			{
-				ToastRect.DOPivotY(0, Duration).SetDelay(Stay * height / 30);
+				ToastRect.DOPivotY(0, Duration).SetDelay(Stay * height / 60);
 			});
 		}
 	}
