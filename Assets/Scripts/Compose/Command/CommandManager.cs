@@ -68,7 +68,7 @@ namespace Arcade.Compose.Command
 				throw new Exception("有正在进行的命令，暂时不能执行新命令");
 			}
 			command.Do();
-			AdeToast.Instance.Show($"执行了 {command.Name}");
+			Debug.Log($"Add: {command.Name}");
 			undo.AddLast(command);
 			if (undo.Count > bufferSize)
 			{
@@ -86,7 +86,7 @@ namespace Arcade.Compose.Command
 			ICommand cmd = undo.Last.Value;
 			undo.RemoveLast();
 			cmd.Undo();
-			AdeToast.Instance.Show($"撤销了 {cmd.Name}");
+			Debug.Log($"Undo: {cmd.Name}");
 			redo.AddLast(cmd);
 		}
 		public void Redo()
@@ -99,7 +99,7 @@ namespace Arcade.Compose.Command
 			ICommand cmd = redo.Last.Value;
 			redo.RemoveLast();
 			cmd.Do();
-			AdeToast.Instance.Show($"重做了 {cmd.Name}");
+			Debug.Log($"Redo: {cmd.Name}");
 			undo.AddLast(cmd);
 		}
 		public void Clear()
@@ -134,7 +134,7 @@ namespace Arcade.Compose.Command
 		public void Commit()
 		{
 			if(preparing!=null){
-				AdeToast.Instance.Show($"执行了 {preparing.Name}");
+				Debug.Log($"Add: {preparing.Name}");
 				undo.AddLast(preparing);
 				if (undo.Count > bufferSize)
 				{

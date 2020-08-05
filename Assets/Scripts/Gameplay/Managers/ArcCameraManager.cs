@@ -134,10 +134,10 @@ namespace Arcade.Gameplay
 				CurrentTilt = 0;
 				return;
 			}
-			float currentArcPos = ArcGameplayManager.Instance.Auto ? -ArcArcManager.Instance.ArcJudgePos : 0;
+			float currentArcPos = ArcGameplayManager.Instance.Auto && ArcGameplayManager.Instance.IsPlaying ? -ArcArcManager.Instance.ArcJudgePos : 0;
 			float pos = Mathf.Clamp(currentArcPos / 4.25f, -1, 1) * 0.05f;
 			float delta = pos - CurrentTilt;
-			if(ArcGameplayManager.Instance.IsPlaying){
+			if(Mathf.Abs(delta)>=0.001f){
 				float speed = 0.1f;
 				CurrentTilt = CurrentTilt + speed * delta;
 			}else{
