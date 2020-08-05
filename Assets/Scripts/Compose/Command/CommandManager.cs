@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityScript.Lang;
 
 namespace Arcade.Compose.Command
 {

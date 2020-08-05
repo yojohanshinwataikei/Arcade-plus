@@ -56,7 +56,7 @@ Shader "Arcade/Arc"
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.color = v.color;
-				o.uv2 = clamp(v.uv2,0,1);
+				o.uv2 = v.uv2;
 				return o;
 			}
 
@@ -75,7 +75,7 @@ Shader "Arcade/Arc"
 			{
 			    if(i.uv.y < _From || i.uv.y > _To) return 0;
 				float4 c = tex2D(_MainTex,i.uv) ;
-				float4 inColor = lerp(_LowColor,_HighColor,i.uv2.x);
+				float4 inColor = lerp(_LowColor,_HighColor,clamp(i.uv2.x,0,1));
 				if(_Highlight == 1)
 				{
 					inColor = Highlight(inColor);
