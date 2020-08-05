@@ -71540,7 +71540,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u9009\u62E9\u6240\u5728\u7684 Arc"
+  m_Text: "\u9009\u4E2D\u6240\u5728\u7684 Arc"
 --- !u!222 &2076976080
 CanvasRenderer:
   m_ObjectHideFlags: 0
