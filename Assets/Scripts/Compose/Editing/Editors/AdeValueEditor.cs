@@ -13,16 +13,8 @@ namespace Arcade.Compose.Editing
 		public static AdeValueEditor Instance { get; private set; }
 
 		public RectTransform Panel;
-		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, LineType, Color, IsVoid;
+		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, LineType, Color, IsVoid, SelectParent;
 
-		private void OnPlay()
-		{
-
-		}
-		private void OnPause()
-		{
-
-		}
 		public void OnNoteSelect(ArcNote note)
 		{
 			MakeupFields();
@@ -43,14 +35,10 @@ namespace Arcade.Compose.Editing
 		private void Start()
 		{
 			AdeCursorManager.Instance.NoteEventListeners.Add(this);
-			ArcadeComposeManager.Instance.OnPlay.AddListener(OnPlay);
-			ArcadeComposeManager.Instance.OnPause.AddListener(OnPause);
 		}
 		private void OnDestroy()
 		{
 			AdeCursorManager.Instance.NoteEventListeners.Remove(this);
-			ArcadeComposeManager.Instance.OnPlay.RemoveListener(OnPlay);
-			ArcadeComposeManager.Instance.OnPause.RemoveListener(OnPause);
 		}
 
 		private bool canEdit = false;
@@ -66,6 +54,12 @@ namespace Arcade.Compose.Editing
 			}
 			else
 			{
+				SelectParent.gameObject.SetActive(false);
+				if (count == 1) {
+					if (selected[0] is ArcArcTap) {
+						SelectParent.gameObject.SetActive(true);
+					}
+				}
 				Timing.gameObject.SetActive(true);
 				Track.gameObject.SetActive(true);
 				EndTiming.gameObject.SetActive(true);
@@ -343,6 +337,17 @@ namespace Arcade.Compose.Editing
 			{
 				AdeToast.Instance.Show("赋值时出现错误");
 				Debug.LogException(Ex);
+			}
+		}
+
+		public void OnSelectParent() {
+			List<ArcNote> selectedNotes = AdeCursorManager.Instance.SelectedNotes;
+			if (selectedNotes.Count == 1){
+				if(selectedNotes[0] is ArcArcTap){
+					ArcArc arc=(selectedNotes[0] as ArcArcTap).Arc;
+					AdeCursorManager.Instance.DeselectAllNotes();
+					AdeCursorManager.Instance.SelectNote(arc);
+				}
 			}
 		}
 	}
