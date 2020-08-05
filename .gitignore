@@ -61,8 +61,11 @@ crashlytics-build.properties
 # above comes from https://github.com/github/gitignore/blob/master/Unity.gitignore
 
 *.zip
+*.ps1
 
+.antlr
 .vscode
+
 # these folder is used when testting or debugging the project
 /Background
 /Skin
