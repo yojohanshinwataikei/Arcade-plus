@@ -60,7 +60,7 @@ public partial class ArcaeaFileFormatLexer : Lexer {
 	}
 
 	private static readonly string[] _LiteralNames = {
-		null, null, "'('", "')'", "'['", "']'", "'{'", "'}'", "','", "':'"
+		null, null, "'('", "')'", "'['", "']'", "'{'", "'}'", "','", "';'"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, "Whitespace", "LParen", "RParen", "LBrack", "RBrack", "LBrace", 
@@ -148,7 +148,7 @@ public partial class ArcaeaFileFormatLexer : Lexer {
 		'\x33', '\x34', '\a', '}', '\x2', '\x2', '\x34', '\xE', '\x3', '\x2', 
 		'\x2', '\x2', '\x35', '\x36', '\a', '\x7F', '\x2', '\x2', '\x36', '\x10', 
 		'\x3', '\x2', '\x2', '\x2', '\x37', '\x38', '\a', '.', '\x2', '\x2', '\x38', 
-		'\x12', '\x3', '\x2', '\x2', '\x2', '\x39', ':', '\a', '<', '\x2', '\x2', 
+		'\x12', '\x3', '\x2', '\x2', '\x2', '\x39', ':', '\a', '=', '\x2', '\x2', 
 		':', '\x14', '\x3', '\x2', '\x2', '\x2', ';', '<', '\t', '\x3', '\x2', 
 		'\x2', '<', '\x16', '\x3', '\x2', '\x2', '\x2', '=', '?', '\x5', '\x15', 
 		'\v', '\x2', '>', '=', '\x3', '\x2', '\x2', '\x2', '?', '@', '\x3', '\x2', 

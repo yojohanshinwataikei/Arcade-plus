@@ -118,6 +118,18 @@ public partial class ArcaeaFileFormatBaseListener : IArcaeaFileFormatListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitBody([NotNull] ArcaeaFileFormatParser.BodyContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ArcaeaFileFormatParser.file"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterFile([NotNull] ArcaeaFileFormatParser.FileContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ArcaeaFileFormatParser.file"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitFile([NotNull] ArcaeaFileFormatParser.FileContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>

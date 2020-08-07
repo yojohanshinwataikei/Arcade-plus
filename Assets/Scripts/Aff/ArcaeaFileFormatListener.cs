@@ -100,4 +100,14 @@ public interface IArcaeaFileFormatListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitBody([NotNull] ArcaeaFileFormatParser.BodyContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ArcaeaFileFormatParser.file"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFile([NotNull] ArcaeaFileFormatParser.FileContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ArcaeaFileFormatParser.file"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFile([NotNull] ArcaeaFileFormatParser.FileContext context);
 }

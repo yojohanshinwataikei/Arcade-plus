@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using Arcade.Aff;
 
 namespace Arcade.Aff
 {
@@ -94,6 +93,7 @@ namespace Arcade.Aff
 		public List<ArcaeaAffEvent> Events = new List<ArcaeaAffEvent>();
 		public ArcaeaAffReader(string path)
 		{
+			ArcaeaFileFormat.ParseFromPath(path);
 			Parse(path);
 		}
 		private EventType DetermineType(string line)

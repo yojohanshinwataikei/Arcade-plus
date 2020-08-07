@@ -9,7 +9,7 @@ RBrack: ']';
 LBrace: '{';
 RBrace: '}';
 Comma: ',';
-Semicolon: ':';
+Semicolon: ';';
 
 fragment ALPHABET: [a-zA-Z];
 Word: ALPHABET+;
@@ -23,9 +23,10 @@ Int: NEGATIVE? (ZERO | DIGITSTART DIGIT*);
 Float: Int DOT DIGIT+;
 
 value: Word | Int | Float;
-values: LParen (value (Comma value)+)? RParen;
+values: LParen (value (Comma value)*)? RParen;
 event: Word? values subevents? segment?;
 item: event Semicolon;
-subevents : LBrack (event (Comma event)+)? RBrack;
+subevents : LBrack (event (Comma event)*)? RBrack;
 segment: LBrace body RBrace;
 body: item*;
+file: body EOF;
