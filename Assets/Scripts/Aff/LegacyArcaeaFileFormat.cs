@@ -93,7 +93,12 @@ namespace Arcade.Aff
 		public List<ArcaeaAffEvent> Events = new List<ArcaeaAffEvent>();
 		public ArcaeaAffReader(string path)
 		{
-			ArcaeaFileFormat.ParseFromPath(path);
+			try{
+				ArcaeaFileFormat.ParseFromPath(path);
+			}catch(Exception e){
+				Debug.LogException(e);
+			}
+
 			Parse(path);
 		}
 		private EventType DetermineType(string line)

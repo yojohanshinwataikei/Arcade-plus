@@ -198,27 +198,27 @@ namespace Arcade.Gameplay.Chart
 				default: return "s";
 			}
 		}
-		public static CameraType ToCameraType(string type)
+		public static CameraEaseType ToCameraType(string type)
 		{
 			switch (type)
 			{
-				case "l": return CameraType.L;
-				case "reset": return CameraType.Reset;
-				case "qi": return CameraType.Qi;
-				case "qo": return CameraType.Qo;
-				case "s": return CameraType.S;
-				default: return CameraType.Reset;
+				case "l": return CameraEaseType.L;
+				case "reset": return CameraEaseType.Reset;
+				case "qi": return CameraEaseType.Qi;
+				case "qo": return CameraEaseType.Qo;
+				case "s": return CameraEaseType.S;
+				default: return CameraEaseType.Reset;
 			}
 		}
-		public static string ToCameraTypeString(CameraType type)
+		public static string ToCameraTypeString(CameraEaseType type)
 		{
 			switch (type)
 			{
-				case CameraType.L: return "l";
-				case CameraType.Reset: return "reset";
-				case CameraType.Qi: return "qi";
-				case CameraType.Qo: return "qo";
-				case CameraType.S: return "s";
+				case CameraEaseType.L: return "l";
+				case CameraEaseType.Reset: return "reset";
+				case CameraEaseType.Qi: return "qi";
+				case CameraEaseType.Qo: return "qo";
+				case CameraEaseType.S: return "s";
 				default: return "reset";
 			}
 		}
@@ -238,7 +238,7 @@ namespace Arcade.Gameplay.Chart
 		SoSi,
 		SoSo
 	}
-	public enum CameraType
+	public enum CameraEaseType
 	{
 		L,
 		Qi,
@@ -1055,7 +1055,7 @@ namespace Arcade.Gameplay.Chart
 	public class ArcCamera : ArcEvent
 	{
 		public Vector3 Move, Rotate;
-		public CameraType CameraType;
+		public CameraEaseType CameraType;
 		public int Duration;
 
 		public float Percent;
@@ -1097,13 +1097,13 @@ namespace Arcade.Gameplay.Chart
 			Percent = Mathf.Clamp((1f * Timing - this.Timing) / Duration, 0, 1);
 			switch (CameraType)
 			{
-				case CameraType.Qi:
+				case CameraEaseType.Qi:
 					Percent = ArcAlgorithm.Qi(Percent);
 					break;
-				case CameraType.Qo:
+				case CameraEaseType.Qo:
 					Percent = ArcAlgorithm.Qo(Percent);
 					break;
-				case CameraType.S:
+				case CameraEaseType.S:
 					Percent = ArcAlgorithm.S(0, 1, Percent);
 					break;
 			}

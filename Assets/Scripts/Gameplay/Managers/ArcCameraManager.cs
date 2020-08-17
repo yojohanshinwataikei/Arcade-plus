@@ -102,7 +102,7 @@ namespace Arcade.Gameplay
 				ArcCamera c = Cameras[i];
 				if (c.Timing > currentTiming) break;
 				c.Update(currentTiming);
-				if (c.CameraType == Chart.CameraType.Reset)
+				if (c.CameraType == Chart.CameraEaseType.Reset)
 				{
 					for (int r = 0; r < i; ++r)
 					{
@@ -116,7 +116,7 @@ namespace Arcade.Gameplay
 			foreach (var c in Cameras)
 			{
 				if (c.Timing > currentTiming) break;
-				IsReset = c.CameraType == Chart.CameraType.Reset;
+				IsReset = c.CameraType == Chart.CameraEaseType.Reset;
 				if (IsReset)
 				{
 					position = ResetPosition;

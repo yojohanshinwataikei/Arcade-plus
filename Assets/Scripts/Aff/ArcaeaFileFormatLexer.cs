@@ -19,6 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
+namespace Arcade.Aff {
 using System;
 using System.IO;
 using System.Text;
@@ -182,3 +183,4 @@ public partial class ArcaeaFileFormatLexer : Lexer {
 
 
 }
+} // namespace Arcade.Aff
