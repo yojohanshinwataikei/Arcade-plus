@@ -22,11 +22,9 @@ namespace Arcade.Gameplay.Chart
 		public List<ArcCamera> Cameras = new List<ArcCamera>();
 		public List<ArcSceneControl> SceneControl = new List<ArcSceneControl>();
 		public int LastEventTiming = 0;
-		public ArcaeaAffReader Raw;
 
 		public ArcChart(ArcaeaAffReader reader)
 		{
-			Raw = reader;
 			AudioOffset = reader.AudioOffset;
 			foreach (ArcaeaAffEvent e in reader.Events)
 			{
@@ -80,6 +78,30 @@ namespace Arcade.Gameplay.Chart
 			}
 			if (reader.Events.Count != 0) LastEventTiming = reader.Events.Last().Timing;
 		}
+
+		public ArcChart(RawAffChart raw){
+			AudioOffset = raw.AudioOffset;
+			foreach (var item in raw.items){
+				addRawItem(item);
+			}
+		}
+
+		void addRawItem(IRawAffItem item){
+			if(item is RawAffTiming){
+				Timings.Add(new ArcTiming(item as RawAffTiming));
+			}else if(item is RawAffTap){
+				Taps.Add(new ArcTap(item as RawAffTap));
+			}else if(item is RawAffHold){
+				Holds.Add(new ArcHold(item as RawAffHold));
+			}else if(item is RawAffArc){
+				Arcs.Add(new ArcArc(item as RawAffArc));
+			}else if(item is RawAffCamera){
+				Cameras.Add(new ArcCamera(item as RawAffCamera));
+			}else if(item is RawAffSceneControl){
+				SceneControl.Add(new ArcSceneControl(item as RawAffSceneControl));
+			}
+		}
+
 		public void Serialize(Stream stream, ChartSortMode mode = ChartSortMode.Timing)
 		{
 			ArcaeaAffWriter writer = new ArcaeaAffWriter(stream, ArcAudioManager.Instance.AudioOffset);
@@ -257,7 +279,20 @@ namespace Arcade.Gameplay.Chart
 	}
 	public class ArcSceneControl : ArcEvent
 	{
-		public SceneControlType Type;
+
+		public ArcSceneControl()
+		{
+		}
+		public ArcSceneControl(RawAffSceneControl rawAffSceneControl)
+		{
+			Timing=rawAffSceneControl.Timing;
+			if(rawAffSceneControl.Type=="trackhide"&&rawAffSceneControl.Params.Count==0){
+				Type=SceneControlType.TrackHide;
+			}else if(rawAffSceneControl.Type=="trackshow"&&rawAffSceneControl.Params.Count==0){
+				Type=SceneControlType.TrackShow;
+			}
+		}
+		public SceneControlType Type=SceneControlType.Unknown;
 
 		public override ArcEvent Clone()
 		{
@@ -351,6 +386,15 @@ namespace Arcade.Gameplay.Chart
 		private MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 		public Dictionary<ArcArcTap, LineRenderer> ConnectionLines = new Dictionary<ArcArcTap, LineRenderer>();
 		private BoxCollider boxCollider;
+
+		public ArcTap()
+		{
+		}
+		public ArcTap(RawAffTap rawAffTap)
+		{
+			Timing=rawAffTap.Timing;
+			Track=rawAffTap.Track;
+		}
 
 		public float Alpha
 		{
@@ -654,11 +698,32 @@ namespace Arcade.Gameplay.Chart
 		private int fromShaderId = 0, toShaderId = 0, alphaShaderId = 0, highlightShaderId = 0;
 		private float currentFrom = 0, currentTo = 1, currentAlpha = 1;
 		private Sprite defaultSprite, highlightSprite;
+
+		public ArcHold()
+		{
+		}
+		public ArcHold(RawAffHold rawAffHold)
+		{
+			Timing=rawAffHold.Timing;
+			EndTiming=rawAffHold.EndTiming;
+			Track=rawAffHold.Track;
+		}
 	}
 	public class ArcTiming : ArcEvent
 	{
 		public float Bpm;
 		public float BeatsPerLine;
+
+		public ArcTiming()
+		{
+		}
+
+		public ArcTiming(RawAffTiming rawAffTiming)
+		{
+			Timing=rawAffTiming.Timing;
+			Bpm=rawAffTiming.Bpm;
+			BeatsPerLine=rawAffTiming.BeatsPerLine;
+		}
 
 		public override ArcEvent Clone()
 		{
@@ -876,6 +941,14 @@ namespace Arcade.Gameplay.Chart
 		private bool selected;
 		private float currentAlpha = 1f;
 		private int alphaShaderId = 0, highlightShaderId = 0;
+
+		public ArcArcTap()
+		{
+		}
+		public ArcArcTap(RawAffArctap arctap)
+		{
+			Timing=arctap.Timing;
+		}
 	}
 	public class ArcArc : ArcLongNote
 	{
@@ -1051,6 +1124,29 @@ namespace Arcade.Gameplay.Chart
 		public bool RenderHead;
 		public List<ArcArc> ArcGroup;
 		public ArcArcRenderer arcRenderer;
+
+		public ArcArc()
+		{
+		}
+		public ArcArc(RawAffArc rawAffArc)
+		{
+			Timing=rawAffArc.Timing;
+			EndTiming=rawAffArc.EndTiming;
+			XStart=rawAffArc.XStart;
+			XEnd=rawAffArc.XEnd;
+			LineType=rawAffArc.LineType;
+			YStart=rawAffArc.YStart;
+			YEnd=rawAffArc.YEnd;
+			Color=rawAffArc.Color;
+			IsVoid=rawAffArc.IsVoid;
+			if(rawAffArc.ArcTaps.Count>0){
+				IsVoid=true;
+				foreach (var arctap in rawAffArc.ArcTaps)
+				{
+					ArcTaps.Add(new ArcArcTap(arctap));
+				}
+			}
+		}
 	}
 	public class ArcCamera : ArcEvent
 	{
@@ -1059,6 +1155,19 @@ namespace Arcade.Gameplay.Chart
 		public int Duration;
 
 		public float Percent;
+
+		public ArcCamera()
+		{
+		}
+
+		public ArcCamera(RawAffCamera rawAffCamera)
+		{
+			Timing=rawAffCamera.Timing;
+			Move=new Vector3(rawAffCamera.MoveX,rawAffCamera.MoveY,rawAffCamera.MoveZ);
+			Rotate=new Vector3(rawAffCamera.RotateX,rawAffCamera.RotateY,rawAffCamera.RotateZ);
+			CameraType=rawAffCamera.CameraType;
+			Duration=rawAffCamera.Duration;
+		}
 
 		public override ArcEvent Clone()
 		{

@@ -58,7 +58,7 @@ namespace Arcade.Aff
 		public float RotateY;
 		public float RotateZ;
 		public CameraEaseType CameraType;
-		public float Duration;
+		public int Duration;
 	}
 	public class RawAffSceneControl:IRawAffItem{
 		public int Timing;
@@ -71,7 +71,7 @@ namespace Arcade.Aff
 	public class RawAffChart
 	{
 		public int AudioOffset = 0;
-		public List<IRawAffItem> item =new List<IRawAffItem>();
+		public List<IRawAffItem> items =new List<IRawAffItem>();
 		public List<string> warning = new List<string>();
 		public List<string> error = new List<string>();
 	}
@@ -156,7 +156,7 @@ namespace Arcade.Aff
 			{
 				Debug.LogError(error);
 			}
-			Debug.Log($"[item]count: {chart.item.Count}");
+			Debug.Log($"[item]count: {chart.items.Count}");
 			return chart;
 		}
 	}
@@ -236,7 +236,7 @@ namespace Arcade.Aff
 				IRawAffEvent @event=item.@event().value;
 				if(@event!=null){
 					if(@event is IRawAffItem){
-						chart.item.Add(@event as IRawAffItem);
+						chart.items.Add(@event as IRawAffItem);
 					}else{
 						chart.warning.Add($"第 {item.@event().Start.Line + lineOffset} 行第 {item.@event().Start.Column + 1} 列，不可作为物件使用的事件：{item.@event().GetText()}");
 					}

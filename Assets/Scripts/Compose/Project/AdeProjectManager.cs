@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using Arcade.Compose.Dialog;
 using Arcade.Compose.Feature;
 using Arcade.Compose.UI;
@@ -371,26 +372,45 @@ namespace Arcade.Compose
 			ArcadeComposeManager.Instance.Pause();
 			AdeObsManager.Instance.ForceClose();
 			CommandManager.Instance.Clear();
-			Aff.ArcaeaAffReader reader = null;
-			try
-			{
-				reader = new Aff.ArcaeaAffReader(chartPath);
-			}
-			catch (Aff.ArcaeaAffFormatException Ex)
-			{
-				AdeSingleDialog.Instance.Show(Ex.Message, "谱面格式错误");
-				reader = null;
-			}
-			catch (Exception Ex)
+			Aff.RawAffChart raw=null;
+			try{
+				raw=Aff.ArcaeaFileFormat.ParseFromPath(chartPath);
+			}catch (Exception Ex)
 			{
 				AdeSingleDialog.Instance.Show(Ex.Message, "谱面读取错误");
-				reader = null;
 			}
-			if (reader == null)
-			{
-				return;
+			Gameplay.Chart.ArcChart chart=null;
+			if(raw!=null){
+				if(raw.error.Count>0){
+					AdeSingleDialog.Instance.Show($"格式问题：\n{string.Join("\n",raw.error.Select(s=>$"- {s}"))}", "谱面解析失败");
+				}else{
+					if(raw.warning.Count>0){
+						AdeSingleDialog.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并试图通过删除有问题的语句来进行修复\n谱面在存在的问题：\n{string.Join("\n",raw.warning.Select(s=>$"- {s}"))}", "谱面解析出现问题");
+					}
+					chart=new Gameplay.Chart.ArcChart(raw);
+				}
 			}
-			ArcGameplayManager.Instance.Load(new Gameplay.Chart.ArcChart(reader), AudioClip);
+			ArcGameplayManager.Instance.Load(chart, AudioClip);
+			// Aff.ArcaeaAffReader reader = null;
+			// try
+			// {
+			// 	reader = new Aff.ArcaeaAffReader(chartPath);
+			// }
+			// catch (Aff.ArcaeaAffFormatException Ex)
+			// {
+			// 	AdeSingleDialog.Instance.Show(Ex.Message, "谱面格式错误");
+			// 	reader = null;
+			// }
+			// catch (Exception Ex)
+			// {
+			// 	AdeSingleDialog.Instance.Show(Ex.Message, "谱面读取错误");
+			// 	reader = null;
+			// }
+			// if (reader == null)
+			// {
+			// 	return;
+			// }
+			// ArcGameplayManager.Instance.Load(new Gameplay.Chart.ArcChart(reader), AudioClip);
 			CurrentDifficulty = difficulty;
 
 			Diff.text = CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null ? "" : CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating;
