@@ -21,7 +21,7 @@ public class ArcGameplayManagerEditor : Editor
 		affPath = EditorGUILayout.TextField("Aff", affPath);
 		if (GUILayout.Button("Load"))
 		{
-			ArcGameplayManager.Instance.Load(new Arcade.Gameplay.Chart.ArcChart(new Arcade.Aff.ArcaeaAffReader(affPath)), clip);
+			ArcGameplayManager.Instance.Load(new Arcade.Gameplay.Chart.ArcChart(Arcade.Aff.ArcaeaFileFormat.ParseFromPath(affPath)), clip);
 		}
 		GUILayout.BeginHorizontal();
 		if (GUILayout.Button("Play"))

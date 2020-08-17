@@ -75,6 +75,9 @@ namespace Arcade.Aff
 		public List<string> warning = new List<string>();
 		public List<string> error = new List<string>();
 	}
+	public interface IIntoRawItem{
+		IRawAffItem IntoRawItem();
+	}
 
 	public static class ArcaeaFileFormat
 	{
@@ -158,6 +161,57 @@ namespace Arcade.Aff
 			}
 			Debug.Log($"[item]count: {chart.items.Count}");
 			return chart;
+		}
+
+		public static void DumpToStream(Stream stream,RawAffChart chart){
+			TextWriter writer=new StreamWriter(stream);
+			writer.WriteLine($"AudioOffset:{chart.AudioOffset}");
+			writer.WriteLine($"-");
+			foreach (var item in chart.items){
+				writeItem(writer,item);
+			}
+			writer.Close();
+		}
+		static void writeItem(TextWriter writer,IRawAffItem item){
+			if(item is RawAffTiming){
+				var timing=item as RawAffTiming;
+				writer.WriteLine($"timing({timing.Timing},{timing.Bpm.ToString("f2")},{timing.BeatsPerLine.ToString("f2")});");
+			}else if(item is RawAffTap){
+				var tap=item as RawAffTap;
+				writer.WriteLine($"({tap.Timing},{tap.Track});");
+			}else if(item is RawAffHold){
+				var hold=item as RawAffHold;
+				writer.WriteLine($"hold({hold.Timing},{hold.EndTiming},{hold.Track});");
+			}else if(item is RawAffArc){
+				var arc=item as RawAffArc;
+				if(arc.ArcTaps.Count>0){
+					arc.IsVoid=true;
+				}
+				writer.WriteLine($"arc({arc.Timing},{arc.EndTiming},{arc.XStart.ToString("f2")},{arc.XEnd.ToString("f2")}"+
+					$",{ArcChart.ToLineTypeString(arc.LineType)},{arc.YStart.ToString("f2")},{arc.YEnd.ToString("f2")},{arc.Color},none,{arc.IsVoid.ToString().ToLower()})"+
+					(arc.ArcTaps.Count>0?$"[{string.Join(",",arc.ArcTaps.Select(e=>$"arctap({e.Timing})"))}]":"")+
+					";");
+			}else if(item is RawAffCamera){
+				var cam=item as RawAffCamera;
+				writer.WriteLine($"camera({cam.Timing},{cam.MoveX.ToString("f2")},{cam.MoveY.ToString("f2")},{cam.MoveZ.ToString("f2")},"+
+					$"{cam.RotateX.ToString("f2")},{cam.RotateY.ToString("f2")},{cam.RotateZ.ToString("f2")},{ArcChart.ToCameraTypeString(cam.CameraType)},{cam.Duration});");
+			}else if(item is RawAffSceneControl){
+				var scenecontrol=item as RawAffSceneControl;
+				List<string> values=new List<string>();
+				values.Add(scenecontrol.Timing.ToString());
+				values.Add(scenecontrol.Type);
+				foreach (var @param in scenecontrol.Params)
+				{
+					if(@param is RawAffInt){
+						values.Add((@param as RawAffInt).data.ToString());
+					}else if(@param is RawAffFloat){
+						values.Add((@param as RawAffFloat).data.ToString("f2"));
+					}else if(@param is RawAffWord){
+						values.Add((@param as RawAffWord).data);
+					}
+				}
+				writer.WriteLine($"scenecontrol({string.Join(",",values)});");
+			}
 		}
 	}
 
