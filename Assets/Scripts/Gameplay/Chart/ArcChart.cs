@@ -23,62 +23,6 @@ namespace Arcade.Gameplay.Chart
 		public List<ArcSceneControl> SceneControl = new List<ArcSceneControl>();
 		public int LastEventTiming = 0;
 
-		public ArcChart(ArcaeaAffReader reader)
-		{
-			AudioOffset = reader.AudioOffset;
-			foreach (ArcaeaAffEvent e in reader.Events)
-			{
-				switch (e.Type)
-				{
-					case Aff.EventType.Timing:
-						var timing = e as ArcaeaAffTiming;
-						Timings.Add(new ArcTiming() { Timing = timing.Timing, BeatsPerLine = timing.BeatsPerLine, Bpm = timing.Bpm });
-						break;
-					case Aff.EventType.Tap:
-						var tap = e as ArcaeaAffTap;
-						Taps.Add(new ArcTap() { Timing = tap.Timing, Track = tap.Track });
-						break;
-					case Aff.EventType.Hold:
-						var hold = e as ArcaeaAffHold;
-						Holds.Add(new ArcHold() { EndTiming = hold.EndTiming, Timing = hold.Timing, Track = hold.Track });
-						break;
-					case Aff.EventType.Arc:
-						var arc = e as ArcaeaAffArc;
-						ArcArc arcArc = new ArcArc()
-						{
-							Color = arc.Color,
-							EndTiming = arc.EndTiming,
-							IsVoid = arc.IsVoid,
-							LineType = ToArcLineType(arc.LineType),
-							Timing = arc.Timing,
-							XEnd = arc.XEnd,
-							XStart = arc.XStart,
-							YEnd = arc.YEnd,
-							YStart = arc.YStart
-						};
-						if (arc.ArcTaps != null)
-						{
-							arcArc.IsVoid = true;
-							foreach (int t in arc.ArcTaps)
-							{
-								arcArc.ArcTaps.Add(new ArcArcTap() { Timing = t });
-							}
-						}
-						Arcs.Add(arcArc);
-						break;
-					case Aff.EventType.Camera:
-						var camera = e as ArcaeaAffCamera;
-						Cameras.Add(new ArcCamera() { Timing = camera.Timing, Move = camera.Move, Rotate = camera.Rotate, CameraType = ToCameraType(camera.CameraType), Duration = camera.Duration });
-						break;
-					case Aff.EventType.SceneControl:
-						var sceneControl = e as ArcaeaAffSceneControl;
-						SceneControl.Add(new ArcSceneControl { Timing = sceneControl.Timing, Type = sceneControl.SceneControlType });
-						break;
-				}
-			}
-			if (reader.Events.Count != 0) LastEventTiming = reader.Events.Last().Timing;
-		}
-
 		public ArcChart(RawAffChart raw){
 			AudioOffset = raw.AudioOffset;
 			foreach (var item in raw.items){
@@ -211,6 +155,12 @@ namespace Arcade.Gameplay.Chart
 		Qo,
 		Reset,
 		S
+	}
+	public enum SceneControlType
+	{
+		TrackHide,
+		TrackShow,
+		Unknown,
 	}
 	public abstract class ArcEvent
 	{

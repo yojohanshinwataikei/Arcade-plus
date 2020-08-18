@@ -109,7 +109,6 @@ namespace Arcade.Aff
 					}
 					string key = line.Substring(0, pos);
 					string value = line.Substring(pos + 1);
-					Debug.Log($"[metadata]'{key}':'{value}'");
 					if (key == "AudioOffset")
 					{
 						if (AudioOffsetSet)
@@ -159,7 +158,6 @@ namespace Arcade.Aff
 			{
 				Debug.LogError(error);
 			}
-			Debug.Log($"[item]count: {chart.items.Count}");
 			return chart;
 		}
 
