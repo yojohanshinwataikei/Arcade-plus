@@ -27,14 +27,14 @@ namespace Arcade.Compose
 		// We need to remove playing sound effects when we are swaping skin
 		public void Open()
 		{
-			Left.DOAnchorPosX(-1165, Duration).SetEase(Ease.InCubic);
-			Right.DOAnchorPosX(459, Duration).SetEase(Ease.InCubic);
+			Left.DOPivotX(1, Duration).SetEase(Ease.InCubic);
+			Right.DOPivotX(0, Duration).SetEase(Ease.InCubic);
 			AudioSource.PlayClipAtPoint(OpenAudio, new Vector3(),AdeSoundDialog.Instance.ChartSource.volume);
 		}
 		public void Close()
 		{
-			Left.DOAnchorPosX(0, Duration).SetEase(Ease.OutCubic);
-			Right.DOAnchorPosX(0, Duration).SetEase(Ease.OutCubic);
+			Left.DOPivotX(0, Duration).SetEase(Ease.OutCubic);
+			Right.DOPivotX(1, Duration).SetEase(Ease.OutCubic);
 			AudioSource.PlayClipAtPoint(CloseAudio, new Vector3(),AdeSoundDialog.Instance.ChartSource.volume);
 		}
 		public IEnumerator OpenCoroutine()
