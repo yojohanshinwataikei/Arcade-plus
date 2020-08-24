@@ -26,7 +26,7 @@ namespace Arcade.Compose
 		public string Title;
 		public string Artist;
 		public float BaseBpm;
-		public AdeChartDifficultyMetadata[] Difficulties = new AdeChartDifficultyMetadata[3];
+		public AdeChartDifficultyMetadata[] Difficulties = new AdeChartDifficultyMetadata[4];
 
 		public int LastWorkingDifficulty = 2;
 		public int LastWorkingTiming;
@@ -308,6 +308,11 @@ namespace Arcade.Compose
 				CurrentProjectMetadata = new ArcadeProjectMetadata();
 				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 			}
+			if(CurrentProjectMetadata.Difficulties.Length<4){
+				var Difficulties=new AdeChartDifficultyMetadata[4];
+				CurrentProjectMetadata.Difficulties.CopyTo(Difficulties,0);
+				CurrentProjectMetadata.Difficulties=Difficulties;
+			}
 
 			Name.text = CurrentProjectMetadata.Title;
 			Composer.text = CurrentProjectMetadata.Artist;
@@ -449,7 +454,7 @@ namespace Arcade.Compose
 		public void OnDiffEdited()
 		{
 			if (CurrentProjectMetadata == null) return;
-			if (CurrentDifficulty < 0 || CurrentDifficulty > 2) return;
+			if (CurrentDifficulty < 0 || CurrentDifficulty > 3) return;
 			if (CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null)
 				CurrentProjectMetadata.Difficulties[CurrentDifficulty] = new AdeChartDifficultyMetadata();
 			CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating = Diff.text;

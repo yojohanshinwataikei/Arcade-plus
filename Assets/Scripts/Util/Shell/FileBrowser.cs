@@ -26,7 +26,6 @@ namespace Arcade.Util.Shell
 		}
 		public static void OpenExplorer(string SelectPath)
 		{
-			UnityEngine.Debug.Log(SelectPath);
 			if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
 			{
 				System.Diagnostics.Process.Start(SelectPath?.Replace("/", "\\"));

@@ -28,6 +28,7 @@ namespace Arcade.Compose
 			public Sprite DifficultyPast;
 			public Sprite DifficultyPresent;
 			public Sprite DifficultyFuture;
+			public Sprite DifficultyBeyond;
 			public Sprite Pause;
 			public Sprite PausePressed;
 			public Sprite Play;
@@ -105,6 +106,7 @@ namespace Arcade.Compose
 			public Labelled<Sprite> DifficultyPast;
 			public Labelled<Sprite> DifficultyPresent;
 			public Labelled<Sprite> DifficultyFuture;
+			public Labelled<Sprite> DifficultyBeyond;
 			public Labelled<Sprite> Pause;
 			public Labelled<Sprite> PausePressed;
 			public Labelled<Sprite> Play;
@@ -347,6 +349,10 @@ namespace Arcade.Compose
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.DifficultyFuture);
+			skinData.DifficultyBeyond = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Beyond.png"), (path) =>
+			{
+				return LoadNormalSprite(path, externalSkinDataObjects);
+			}, rawDefaultData.DifficultyBeyond);
 
 			skinData.Pause = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "PlayPause", "Pause.png"), (path) =>
 			{

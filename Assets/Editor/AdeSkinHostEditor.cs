@@ -34,6 +34,7 @@ public class AdeSkinHostEditor : Editor
 		GUILayout.Label($"  DifficultyPast:{data.DifficultyPast.label}");
 		GUILayout.Label($"  DifficultyPresent:{data.DifficultyPresent.label}");
 		GUILayout.Label($"  DifficultyFuture:{data.DifficultyFuture.label}");
+		GUILayout.Label($"  DifficultyBeyond:{data.DifficultyBeyond.label}");
 		GUILayout.Label($"  Pause:{data.Pause.label}");
 		GUILayout.Label($"  PausePressed:{data.PausePressed.label}");
 		GUILayout.Label($"  Play:{data.Play.label}");
