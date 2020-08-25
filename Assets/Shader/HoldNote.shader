@@ -59,7 +59,8 @@ Shader "Arcade/HoldNote"
 			half4 frag (v2f i) : SV_Target
 			{
 			    if(i.uv.y > _To || i.uv.y < _From) return 0;
-				half4 c = half4(tex2D(_MainTex,i.uv).rgb, _Alpha);
+				float v = 1.-(i.uv.y-_To)/(_From-_To);
+				half4 c = half4(tex2D(_MainTex,float2(i.uv.x,v)).rgb, _Alpha);
 				if(_Highlight == 1)
 				{
 					c = Highlight(c);
