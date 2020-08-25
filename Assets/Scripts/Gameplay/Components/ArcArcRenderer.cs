@@ -374,7 +374,7 @@ namespace Arcade.Gameplay
 			}
 			HeightIndicatorRenderer.transform.localPosition = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XStart), 0, 0);
 			HeightIndicatorRenderer.transform.localScale = new Vector3(2.34f, 100 * (ArcAlgorithm.ArcYToWorld(arc.YStart) - OffsetNormal / 2), 1);
-			HeightIndicatorRenderer.color = Color.Lerp(arc.Color == 1 ? ArcRedLow : arc.Color == 0 ? ArcBlueLow : ArcGreenLow,arc.Color == 1 ? ArcRedHigh : arc.Color == 0 ? ArcBlueHigh : ArcGreenHigh,arc.YStart);
+			HeightIndicatorRenderer.color = Color.Lerp(arc.Color == 1 ? ArcRedLow : arc.Color == 0 ? ArcBlueLow : ArcGreenLow, arc.Color == 1 ? ArcRedHigh : arc.Color == 0 ? ArcBlueHigh : ArcGreenHigh, arc.YStart);
 		}
 		public void BuildSegments()
 		{
@@ -429,17 +429,17 @@ namespace Arcade.Gameplay
 			int[] triangles = new int[] { 0, 2, 1, 0, 3, 2, 0, 1, 2, 0, 2, 3 };
 
 			vertices[0] = pos + new Vector3(0, offset / 2, 0);
-			uv[0] = new Vector2(0,0);
-			uv2[0] = new Vector2(arc.YStart,0);
+			uv[0] = new Vector2(0, 0);
+			uv2[0] = new Vector2(arc.YStart, 0);
 			vertices[1] = pos + new Vector3(offset, -offset / 2, 0);
 			uv[1] = new Vector2(1, 0);
-			uv2[1] = new Vector2(arc.YStart,0);
+			uv2[1] = new Vector2(arc.YStart, 0);
 			vertices[2] = pos + new Vector3(0, -offset / 2, offset / 2);
 			uv[2] = new Vector2(1, 1);
-			uv2[2] = new Vector2(arc.YStart,0);
+			uv2[2] = new Vector2(arc.YStart, 0);
 			vertices[3] = pos + new Vector3(-offset, -offset / 2, 0);
 			uv[3] = new Vector2(1, 1);
-			uv2[3] = new Vector2(arc.YStart,0);
+			uv2[3] = new Vector2(arc.YStart, 0);
 
 			Destroy(HeadFilter.sharedMesh);
 			HeadFilter.sharedMesh = new Mesh()
@@ -518,7 +518,7 @@ namespace Arcade.Gameplay
 
 			foreach (ArcArcSegmentComponent s in segments)
 			{
-				if (-s.ToPos.z < z)
+				if (s.ToTiming + offset < currentTiming)
 				{
 					if (arc.Judging || arc.IsVoid)
 					{
@@ -531,7 +531,7 @@ namespace Arcade.Gameplay
 						continue;
 					}
 				}
-				if (-s.FromPos.z < z && -s.ToPos.z >= z)
+				if (s.FromTiming + offset < currentTiming && s.ToTiming + offset >= currentTiming)
 				{
 					s.Enable = true;
 					s.CurrentArcMaterial = null;
@@ -548,6 +548,7 @@ namespace Arcade.Gameplay
 					continue;
 				}
 				float pos = -(z + s.FromPos.z);
+				float endPos = -(z + s.ToPos.z);
 				if (pos > 90 && pos < 100)
 				{
 					s.Enable = true;
@@ -556,7 +557,7 @@ namespace Arcade.Gameplay
 					s.Alpha = currentHighColor.a * (100 - pos) / 10f;
 					s.From = 0;
 				}
-				else if (pos > 100 || pos < -20)
+				else if (pos > 100 || endPos < -20)
 				{
 					s.Enable = false;
 				}
@@ -600,7 +601,7 @@ namespace Arcade.Gameplay
 				headPropertyBlock.SetColor(lowColorShaderId, lowC);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
 			}
-			else if (arc.Position < 0)
+			else if (arc.Timing + offset < currentTiming)
 			{
 				HeadRenderer.GetPropertyBlock(headPropertyBlock);
 				headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
@@ -648,7 +649,7 @@ namespace Arcade.Gameplay
 			int currentTiming = ArcGameplayManager.Instance.Timing;
 			if (pos < -90 && pos > -100)
 			{
-				Color c = Color.Lerp(currentLowColor,currentHighColor,arc.YStart);
+				Color c = Color.Lerp(currentLowColor, currentHighColor, arc.YStart);
 				c.a = currentHighColor.a * (pos + 100) / 10;
 				EnableHeightIndicator = true;
 				HeightIndicatorRenderer.color = c;
@@ -661,7 +662,7 @@ namespace Arcade.Gameplay
 			{
 				if (arc.Judging && pos > 0) EnableHeightIndicator = false;
 				else EnableHeightIndicator = true;
-				HeightIndicatorRenderer.color =  Color.Lerp(currentLowColor,currentHighColor,arc.YStart);
+				HeightIndicatorRenderer.color = Color.Lerp(currentLowColor, currentHighColor, arc.YStart);
 			}
 		}
 		private void UpdateArcCap()
@@ -692,7 +693,7 @@ namespace Arcade.Gameplay
 					EnableArcCap = false;
 				}
 			}
-			else if (arc.Position < 0 && arc.EndPosition > 0)
+			else if (arc.Timing + offset < currentTiming && arc.EndTiming + offset > currentTiming)
 			{
 				EnableArcCap = true;
 				ArcCapRenderer.color = new Color(1, 1, 1, arc.IsVoid ? 0.5f : 1f);

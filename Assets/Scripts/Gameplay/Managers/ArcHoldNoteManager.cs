@@ -91,7 +91,7 @@ namespace Arcade.Gameplay
 				else
 				{
 					t.From = 0;
-					alpha = pos < 0 ? 0.5f : 1;
+					alpha = t.Timing + offset < ArcGameplayManager.Instance.Timing ? 0.5f : 1;
 					t.Highlight = false;
 				}
 				t.Alpha = alpha * 0.8627451f;
@@ -131,7 +131,7 @@ namespace Arcade.Gameplay
 		}
 		public void SetHoldNoteSkin(Sprite normal, Sprite highlight)
 		{
-			HoldNoteMatrial.mainTexture=normal.texture;
+			HoldNoteMatrial.mainTexture = normal.texture;
 			HoldNotePrefab.GetComponent<SpriteRenderer>().sprite = normal;
 			DefaultSprite = normal;
 			HighlightSprite = highlight;

@@ -280,7 +280,7 @@ namespace Arcade.Compose
 				foreach (var h in hits)
 				{
 					ArcNote t = ArcGameplayManager.Instance.FindNoteByInstance(h.transform.gameObject);
-					if (t is ArcArc && h.point.z > 0)
+					if (t is ArcArc && h.point.z > 0 && t.Timing + ArcAudioManager.Instance.AudioOffset < ArcGameplayManager.Instance.Timing)
 					{
 						continue;
 					}
