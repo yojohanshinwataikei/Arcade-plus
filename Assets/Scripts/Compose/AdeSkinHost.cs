@@ -627,9 +627,11 @@ namespace Arcade.Compose
 				data.side = Side.Conflict;
 			}
 			data.theme = null;
-			if (skinData.ThemeDatas.ContainsKey(spec.theme))
-			{
-				data.theme = spec.theme;
+			if(spec.theme!=null){
+				if (skinData.ThemeDatas.ContainsKey(spec.theme))
+				{
+					data.theme = spec.theme;
+				}
 			}
 			skinData.BackgroundDatas.Add(spec.name, data);
 			if (skinData.DefaultBackground == null)
