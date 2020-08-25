@@ -20,6 +20,7 @@ namespace Arcade.Compose
 		public int AgreedUserAgreementVersion;
 		public long ReadWhatsNewVersion;
 		public string ScreenResolution = "1280x720";
+		public int TargetFrameRate = -1;
 		public int Velocity = 30;
 		public uint UndoBufferSize = 200;
 		public bool Auto;
@@ -105,6 +106,7 @@ namespace Arcade.Compose
 		public Text Version;
 
 		public Dropdown ResolutionDropdown;
+		public Dropdown TargetFramerateDropdown;
 		public InputField UndoBufferSizeInput;
 
 		public TextAsset ChangeLog;
@@ -130,6 +132,17 @@ namespace Arcade.Compose
 			{
 				SetResolution(ResolutionDropdown.options[value].text);
 				ArcadePreference.ScreenResolution = ResolutionDropdown.options[value].text;
+				SavePreferences();
+			});
+			TargetFramerateDropdown.onValueChanged.AddListener((int value) =>
+			{
+				int fps;
+				if (!int.TryParse(TargetFramerateDropdown.options[value].text, out fps))
+				{
+					fps = -1;
+				}
+				SetTargetFramerate(fps);
+				ArcadePreference.TargetFrameRate = fps;
 				SavePreferences();
 			});
 			UndoBufferSizeInput.onEndEdit.AddListener(SetUndoBufferSize);
@@ -215,6 +228,11 @@ namespace Arcade.Compose
 			Screen.SetResolution(width, height, false);
 			needResetResolutionInNextFrames = resolutionResetCheckPeriod;
 		}
+		public void SetTargetFramerate(int fps)
+		{
+			Application.targetFrameRate = fps;
+			Debug.Log($"[fps]{fps}");
+		}
 
 		public void Play()
 		{
@@ -231,7 +249,7 @@ namespace Arcade.Compose
 			TopBar.DOAnchorPosY(TopBar.sizeDelta.y, ModeSwitchDuration).SetEase(ToPlayerModeEase);
 			BottomBar.DOAnchorPosY(-BottomBar.sizeDelta.y, ModeSwitchDuration).SetEase(ToPlayerModeEase);
 			LeftBar.DOAnchorPosX(-LeftBar.sizeDelta.x, ModeSwitchDuration).SetEase(ToPlayerModeEase);
-			RightBar.DOAnchorPosX(RightBar.sizeDelta.x, ModeSwitchDuration).SetEase(ToPlayerModeEase).OnComplete(() => {switchingMode = false; });
+			RightBar.DOAnchorPosX(RightBar.sizeDelta.x, ModeSwitchDuration).SetEase(ToPlayerModeEase).OnComplete(() => { switchingMode = false; });
 			GameplayCamera.DORect(new Rect(0, 0, 1, 1), ModeSwitchDuration).SetEase(ToPlayerModeEase);
 
 			PauseButtonImage.sprite = PausePause;
@@ -310,11 +328,13 @@ namespace Arcade.Compose
 			}
 			finally
 			{
-				if(ArcadePreference.Velocity<30){
-					ArcadePreference.Velocity=30;
+				if (ArcadePreference.Velocity < 30)
+				{
+					ArcadePreference.Velocity = 30;
 				}
-				if(ArcadePreference.Velocity>195){
-					ArcadePreference.Velocity=195;
+				if (ArcadePreference.Velocity > 195)
+				{
+					ArcadePreference.Velocity = 195;
 				}
 				ArcTimingManager.Instance.Velocity = ArcadePreference.Velocity;
 				ArcGameplayManager.Instance.Auto = ArcadePreference.Auto;
@@ -346,6 +366,21 @@ namespace Arcade.Compose
 					ArcadePreference.ScreenResolution = ResolutionDropdown.options[ResolutionDropdown.value].text;
 				}
 				SetResolution(ArcadePreference.ScreenResolution);
+				bool targetFramerateHit = false;
+				for (int i = 0; i < TargetFramerateDropdown.options.Count; i++)
+				{
+					Dropdown.OptionData options = TargetFramerateDropdown.options[i];
+					if (options.text == ArcadePreference.TargetFrameRate.ToString())
+					{
+						TargetFramerateDropdown.SetValueWithoutNotify(i);
+						targetFramerateHit = true;
+					}
+				}
+				if (!targetFramerateHit)
+				{
+					ArcadePreference.TargetFrameRate = -1;
+				}
+				SetTargetFramerate(ArcadePreference.TargetFrameRate);
 			}
 		}
 		public void SavePreferences()

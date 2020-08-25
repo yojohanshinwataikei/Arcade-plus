@@ -71,7 +71,6 @@ public class ArcSceneControlManager : MonoBehaviour
 
 	private void HideTrack()
 	{
-        Debug.Log("HideTrack");
         foreach (SpriteRenderer r in DividerRenderers){
             r.DOKill();
         };
@@ -94,7 +93,7 @@ public class ArcSceneControlManager : MonoBehaviour
 
 	private void ShowTrack()
 	{
-        Debug.Log("ShowTrack"); foreach (SpriteRenderer r in DividerRenderers){
+        foreach (SpriteRenderer r in DividerRenderers){
             r.DOKill();
         };
         TrackRenderer.sharedMaterial.DOKill();
