@@ -134,6 +134,7 @@ namespace Arcade.Compose
 			});
 			UndoBufferSizeInput.onEndEdit.AddListener(SetUndoBufferSize);
 			LoadPreferences();
+			SavePreferences();
 			Pause();
 		}
 		private void Update()
@@ -309,6 +310,12 @@ namespace Arcade.Compose
 			}
 			finally
 			{
+				if(ArcadePreference.Velocity<30){
+					ArcadePreference.Velocity=30;
+				}
+				if(ArcadePreference.Velocity>195){
+					ArcadePreference.Velocity=195;
+				}
 				ArcTimingManager.Instance.Velocity = ArcadePreference.Velocity;
 				ArcGameplayManager.Instance.Auto = ArcadePreference.Auto;
 				AdeProjectManager.Instance.SaveMode.text = ArcadePreference.ChartSortMode == Gameplay.Chart.ChartSortMode.Timing ? "按时间" : "按类别";

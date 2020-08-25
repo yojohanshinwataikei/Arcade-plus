@@ -2,39 +2,33 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Arcade.Gameplay;
+
 namespace Arcade.Compose.UI
 {
 	[RequireComponent(typeof(Slider))]
-	public class AdeSpeedSlider : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IEndDragHandler
+	public class AdeSpeedSlider : MonoBehaviour, IPointerUpHandler
 	{
 		public static AdeSpeedSlider Instance { get; private set; }
 		private void Awake()
 		{
 			Instance = this;
 			speed = GetComponent<Slider>();
+			speed.onValueChanged.AddListener((value)=>{
+				Value.text = (speed.value/10).ToString("f1");
+			});
 		}
 
 		public Text Value;
 		private Slider speed;
-		private bool pointerDown;
 
-		private void Update()
+		public void UpdateVelocity(int value)
 		{
-			if (!pointerDown) speed.value = ArcTimingManager.Instance.Velocity;
-			Value.text = speed.value.ToString();
-		}
-		public void OnPointerDown(PointerEventData eventData)
-		{
-			pointerDown = true;
+			speed.SetValueWithoutNotify(ArcTimingManager.Instance.Velocity/3);
+			Value.text = ((float)(speed.value)/10).ToString("f1");
 		}
 		public void OnPointerUp(PointerEventData eventData)
 		{
-			pointerDown = false;
-		}
-		public void OnEndDrag(PointerEventData eventData)
-		{
-			ArcTimingManager.Instance.Velocity = (int)speed.value;
-			ArcArcManager.Instance.Rebuild();
+			ArcTimingManager.Instance.Velocity = (int)speed.value*3;
 		}
 	}
 }

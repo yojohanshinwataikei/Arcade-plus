@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Arcade.Compose;
+using Arcade.Compose.UI;
 using Arcade.Gameplay.Chart;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace Arcade.Gameplay
 			speedShaderId = Shader.PropertyToID("_Speed");
 		}
 
-		public int Velocity = 30;
+		private int velocity = 30;
 		public float BaseBpm = 100;
 		public Transform BeatlineLayer;
 		public GameObject BeatlinePrefab;
@@ -35,6 +36,14 @@ namespace Arcade.Gameplay
 		private int speedShaderId = 0;
 		public float CurrentSpeed { get; set; }
 		public List<ArcTiming> Timings { get => timings; }
+		public int Velocity
+		{
+			get => velocity; set{
+				velocity = value;
+				ArcArcManager.Instance.Rebuild();
+				AdeSpeedSlider.Instance.UpdateVelocity(value);
+			}
+		}
 
 		private void Update()
 		{

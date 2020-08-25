@@ -7211,7 +7211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5cbbf2fb35706c499292d5ece2048ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Velocity: 30
   BaseBpm: 100
   BeatlineLayer: {fileID: 877076221}
   BeatlinePrefab: {fileID: 1588688469126100, guid: 40343f75c2a37124083d05d513bc77da,
@@ -24438,7 +24437,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 10
+  m_Text: 1.0
 --- !u!222 &969496116
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -24462,7 +24461,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 48
+  m_PreferredWidth: 40
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -26905,7 +26904,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1868934355}
   m_Direction: 0
   m_MinValue: 10
-  m_MaxValue: 200
+  m_MaxValue: 65
   m_WholeNumbers: 1
   m_Value: 10
   m_OnValueChanged:
