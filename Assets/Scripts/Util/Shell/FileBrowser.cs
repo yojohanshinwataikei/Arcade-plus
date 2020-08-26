@@ -7,7 +7,7 @@ namespace Arcade.Util.Shell
 {
 	public class FileBrowser
 	{
-		public static string OpenFolderDialog(string Title = null, string InitPath = null)
+		public static string OpenFolderDialog(string Title = "", string InitPath = "")
 		{
 			string[] strs = StandaloneFileBrowser.OpenFolderPanel(Title, InitPath, false);
 			if (strs.Length > 0 && strs[0] != "")
