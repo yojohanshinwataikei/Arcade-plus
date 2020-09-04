@@ -15,6 +15,7 @@ namespace Arcade.Gameplay.Chart
 	public class ArcChart
 	{
 		public int AudioOffset;
+		public Dictionary<string, string> AdditionalMetadata = new Dictionary<string, string>();
 		public List<ArcTap> Taps = new List<ArcTap>();
 		public List<ArcHold> Holds = new List<ArcHold>();
 		public List<ArcTiming> Timings = new List<ArcTiming>();
@@ -25,6 +26,7 @@ namespace Arcade.Gameplay.Chart
 
 		public ArcChart(RawAffChart raw){
 			AudioOffset = raw.AudioOffset;
+			AdditionalMetadata=raw.additionalMetadata;
 			foreach (var item in raw.items){
 				addRawItem(item);
 			}
@@ -70,6 +72,7 @@ namespace Arcade.Gameplay.Chart
 			}
 			RawAffChart raw=new RawAffChart();
 			raw.AudioOffset=ArcAudioManager.Instance.AudioOffset;
+			raw.additionalMetadata=AdditionalMetadata;
 			foreach (var e in events)
 			{
 				if(e is IIntoRawItem){
