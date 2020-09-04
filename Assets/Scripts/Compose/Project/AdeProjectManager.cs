@@ -382,6 +382,7 @@ namespace Arcade.Compose
 				raw=Aff.ArcaeaFileFormat.ParseFromPath(chartPath);
 			}catch (Exception Ex)
 			{
+				Debug.LogWarning(Ex);
 				AdeSingleDialog.Instance.Show(Ex.Message, "谱面读取错误");
 			}
 			Gameplay.Chart.ArcChart chart=null;

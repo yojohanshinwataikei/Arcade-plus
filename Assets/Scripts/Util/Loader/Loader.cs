@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using NAudio.Wave;
 using NVorbis;
+using NLayer;
 using UnityEngine;
 
 namespace Arcade.Util.Loader
@@ -41,7 +42,42 @@ namespace Arcade.Util.Loader
 				position = newPosition * channels;
 			}
 		}
-		// This is used to load audio files that supported by NAudio like wav/mp3
+		// This is used to load audio files that supported by NLayer like mp3
+		public static AudioClip LoadMp3AudioFile(string path)
+		{
+			float[] audioData = null;
+			int channels = 0;
+			int sampleRate = 0;
+			try
+			{
+				using (MpegFile file = new MpegFile(path))
+				{
+					//Note: to be simple, we do not load large file with samples count larger than int limit
+					//This will be enough for most file, especially the sound effects in the skin folder
+					if (file.Length > 0x7FFFFFFFL * sizeof(float))
+					{
+						return null;
+					}
+					float[] data = new float[file.Length / sizeof(float)];
+					file.ReadSamples(data, 0, (int)(file.Length / sizeof(float)));
+					channels = file.Channels;
+					sampleRate = file.SampleRate;
+					audioData = data;
+				}
+			}
+			catch
+			{
+				return null;
+			}
+			if (audioData == null)
+			{
+				return null;
+			}
+			AudioDataHost dataHost = new AudioDataHost(audioData, channels);
+			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
+			return clip;
+		}
+		// This is used to load audio files that supported by NAudio like wav/mp3(on windows)
 		public static AudioClip LoadWavOrMp3AudioFile(string path)
 		{
 			float[] audioData = null;
@@ -109,11 +145,16 @@ namespace Arcade.Util.Loader
 			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
 			return clip;
 		}
-		// This try both nvorbis and naudio
+		// This try all decoders used in arcade
 		public static AudioClip LoadAudioFile(string path)
 		{
 			AudioClip clip = null;
 			clip = LoadOggAudioFile(path);
+			if (clip != null)
+			{
+				return clip;
+			}
+			clip = LoadMp3AudioFile(path);
 			if (clip != null)
 			{
 				return clip;

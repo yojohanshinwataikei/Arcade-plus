@@ -281,7 +281,7 @@ namespace Arcade.Aff
 	class AffTypeChecker : ArcaeaFileFormatBaseListener
 	{
 		private RawAffChart chart;
-		private List<IRawAffItem> nonNestableItems;
+		private List<IRawAffItem> nonNestableItems=new List<IRawAffItem>();
 		private int lineOffset;
 
 		public AffTypeChecker(RawAffChart chart, int lineOffset = 0)
