@@ -26,24 +26,25 @@ namespace Arcade.Aff
 	}
 	public interface IRawAffEvent { }
 	public interface IRawAffItem : IRawAffEvent { }
-	public class RawAffTap : IRawAffItem
+	public interface IRawAffNestableItem : IRawAffItem { }
+	public class RawAffTap : IRawAffNestableItem
 	{
 		public int Timing;
 		public int Track;
 	}
-	public class RawAffHold : IRawAffItem
+	public class RawAffHold : IRawAffNestableItem
 	{
 		public int Timing;
 		public int EndTiming;
 		public int Track;
 	}
-	public class RawAffTiming : IRawAffItem
+	public class RawAffTiming : IRawAffNestableItem
 	{
 		public int Timing;
 		public float Bpm;
 		public float BeatsPerLine;
 	}
-	public class RawAffArc : IRawAffItem
+	public class RawAffArc : IRawAffNestableItem
 	{
 		public int Timing;
 		public int EndTiming;
@@ -67,6 +68,10 @@ namespace Arcade.Aff
 		public float RotateZ;
 		public CameraEaseType CameraType;
 		public int Duration;
+	}
+	public class RawAffTimingGroup : IRawAffItem
+	{
+		public List<IRawAffNestableItem> items;
 	}
 	public class RawAffSceneControl : IRawAffItem
 	{
@@ -143,10 +148,13 @@ namespace Arcade.Aff
 					}
 					else
 					{
-						if(chart.additionalMetadata.ContainsKey(key)){
+						if (chart.additionalMetadata.ContainsKey(key))
+						{
 							chart.warning.Add($"第 {metadataLinesCount} 行：{key}被重复设置为{value}，此行会被忽略");
-						}else{
-							chart.additionalMetadata.Add(key,value);
+						}
+						else
+						{
+							chart.additionalMetadata.Add(key, value);
 						}
 					}
 				}
@@ -182,7 +190,8 @@ namespace Arcade.Aff
 		{
 			TextWriter writer = new StreamWriter(stream);
 			writer.WriteLine($"AudioOffset:{chart.AudioOffset}");
-			foreach(var entry in chart.additionalMetadata){
+			foreach (var entry in chart.additionalMetadata)
+			{
 				writer.WriteLine($"{entry.Key}:{entry.Value}");
 			}
 			writer.WriteLine($"-");
@@ -272,6 +281,7 @@ namespace Arcade.Aff
 	class AffTypeChecker : ArcaeaFileFormatBaseListener
 	{
 		private RawAffChart chart;
+		private List<IRawAffItem> nonNestableItems;
 		private int lineOffset;
 
 		public AffTypeChecker(RawAffChart chart, int lineOffset = 0)
@@ -344,6 +354,10 @@ namespace Arcade.Aff
 				{
 					GenSceneControl(context);
 				}
+				else if (tag == "timinggroup")
+				{
+					GenTimingGroup(context);
+				}
 				else
 				{
 					chart.warning.Add($"第 {context.Start.Line + lineOffset} 行第 {context.Start.Column + 1} 列，不支持的事件类型：{context.Word().GetText()}");
@@ -368,6 +382,7 @@ namespace Arcade.Aff
 					}
 				}
 			}
+			chart.items.AddRange(nonNestableItems);
 		}
 
 		void GenTap(ArcaeaFileFormatParser.EventContext context)
@@ -618,6 +633,27 @@ namespace Arcade.Aff
 				Type = type.data,
 				Params = @params,
 			};
+		}
+		void GenTimingGroup(ArcaeaFileFormatParser.EventContext context)
+		{
+			RejectSubevents(context, "timinggroup");
+			EnsureValuesCount(context, "timinggroup", 0);
+			List<IRawAffNestableItem> items = new List<IRawAffNestableItem>();
+			foreach (var item in context.segment().body().item())
+			{
+				IRawAffEvent @event=item.@event().value;
+				if(!(@event is IRawAffItem)){
+					chart.warning.Add($"第 {item.@event().Start.Line + lineOffset} 行第 {item.@event().Start.Column + 1} 列，不可作为物件使用的事件：{item.@event().GetText()}");
+					continue;
+				}
+				IRawAffItem rawItem=@event as IRawAffItem;
+				if(!(rawItem is IRawAffNestableItem)){
+					chart.warning.Add($"第 {item.Start.Line + lineOffset} 行第 {item.Start.Column + 1} 列，不可在 timinggroup 中嵌套使用的物件：{item.@event().GetText()}");
+					nonNestableItems.Add(rawItem);
+					continue;
+				}
+				items.Add(rawItem as IRawAffNestableItem);
+			}
 		}
 
 		void RejectSubevents(ArcaeaFileFormatParser.EventContext context, string type)
