@@ -180,9 +180,11 @@ namespace Arcade.Gameplay.Chart
 		public ArcSceneControl(RawAffSceneControl rawAffSceneControl)
 		{
 			Timing=rawAffSceneControl.Timing;
-			if(rawAffSceneControl.Type=="trackhide"&&rawAffSceneControl.Params.Count==0){
+			RawType=rawAffSceneControl.Type;
+			RawParams=rawAffSceneControl.Params;
+			if(RawType=="trackhide"&&RawParams.Count==0){
 				Type=SceneControlType.TrackHide;
-			}else if(rawAffSceneControl.Type=="trackshow"&&rawAffSceneControl.Params.Count==0){
+			}else if(RawType=="trackshow"&&RawParams.Count==0){
 				Type=SceneControlType.TrackShow;
 			}
 		}
@@ -196,10 +198,15 @@ namespace Arcade.Gameplay.Chart
 				item.Type="trackhide";
 			}else if(Type==SceneControlType.TrackShow){
 				item.Type="trackshow";
+			}else{
+				item.Type=RawType;
+				item.Params=RawParams;
 			}
 			return item;
 		}
 		public SceneControlType Type=SceneControlType.Unknown;
+		public string RawType;
+		public List<IRawAffValue> RawParams;
 
 		public override ArcEvent Clone()
 		{
