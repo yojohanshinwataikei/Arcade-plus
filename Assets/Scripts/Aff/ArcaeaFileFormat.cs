@@ -201,22 +201,22 @@ namespace Arcade.Aff
 			}
 			writer.Close();
 		}
-		static void writeItem(TextWriter writer, IRawAffItem item)
+		static void writeItem(TextWriter writer, IRawAffItem item, string intent = "")
 		{
 			if (item is RawAffTiming)
 			{
 				var timing = item as RawAffTiming;
-				writer.WriteLine($"timing({timing.Timing},{timing.Bpm.ToString("f2")},{timing.BeatsPerLine.ToString("f2")});");
+				writer.WriteLine($"{intent}timing({timing.Timing},{timing.Bpm.ToString("f2")},{timing.BeatsPerLine.ToString("f2")});");
 			}
 			else if (item is RawAffTap)
 			{
 				var tap = item as RawAffTap;
-				writer.WriteLine($"({tap.Timing},{tap.Track});");
+				writer.WriteLine($"{intent}({tap.Timing},{tap.Track});");
 			}
 			else if (item is RawAffHold)
 			{
 				var hold = item as RawAffHold;
-				writer.WriteLine($"hold({hold.Timing},{hold.EndTiming},{hold.Track});");
+				writer.WriteLine($"{intent}hold({hold.Timing},{hold.EndTiming},{hold.Track});");
 			}
 			else if (item is RawAffArc)
 			{
@@ -225,7 +225,7 @@ namespace Arcade.Aff
 				{
 					arc.IsVoid = true;
 				}
-				writer.WriteLine($"arc({arc.Timing},{arc.EndTiming},{arc.XStart.ToString("f2")},{arc.XEnd.ToString("f2")}" +
+				writer.WriteLine($"{intent}arc({arc.Timing},{arc.EndTiming},{arc.XStart.ToString("f2")},{arc.XEnd.ToString("f2")}" +
 					$",{ArcChart.ToLineTypeString(arc.LineType)},{arc.YStart.ToString("f2")},{arc.YEnd.ToString("f2")},{arc.Color},none,{arc.IsVoid.ToString().ToLower()})" +
 					(arc.ArcTaps.Count > 0 ? $"[{string.Join(",", arc.ArcTaps.Select(e => $"arctap({e.Timing})"))}]" : "") +
 					";");
@@ -233,7 +233,7 @@ namespace Arcade.Aff
 			else if (item is RawAffCamera)
 			{
 				var cam = item as RawAffCamera;
-				writer.WriteLine($"camera({cam.Timing},{cam.MoveX.ToString("f2")},{cam.MoveY.ToString("f2")},{cam.MoveZ.ToString("f2")}," +
+				writer.WriteLine($"{intent}camera({cam.Timing},{cam.MoveX.ToString("f2")},{cam.MoveY.ToString("f2")},{cam.MoveZ.ToString("f2")}," +
 					$"{cam.RotateX.ToString("f2")},{cam.RotateY.ToString("f2")},{cam.RotateZ.ToString("f2")},{ArcChart.ToCameraTypeString(cam.CameraType)},{cam.Duration});");
 			}
 			else if (item is RawAffSceneControl)
@@ -257,7 +257,17 @@ namespace Arcade.Aff
 						values.Add((@param as RawAffWord).data);
 					}
 				}
-				writer.WriteLine($"scenecontrol({string.Join(",", values)});");
+				writer.WriteLine($"{intent}scenecontrol({string.Join(",", values)});");
+			}
+			else if (item is RawAffTimingGroup)
+			{
+				var timinggroup = item as RawAffTimingGroup;
+				writer.WriteLine($"{intent}timinggroup(){{");
+				foreach (var nestedItem in timinggroup.items)
+				{
+					writeItem(writer, nestedItem, intent + "  ");
+				}
+				writer.WriteLine($"{intent}}};");
 			}
 		}
 	}
@@ -281,7 +291,7 @@ namespace Arcade.Aff
 	class AffTypeChecker : ArcaeaFileFormatBaseListener
 	{
 		private RawAffChart chart;
-		private List<IRawAffItem> nonNestableItems=new List<IRawAffItem>();
+		private List<IRawAffItem> nonNestableItems = new List<IRawAffItem>();
 		private int lineOffset;
 
 		public AffTypeChecker(RawAffChart chart, int lineOffset = 0)
@@ -641,21 +651,24 @@ namespace Arcade.Aff
 			List<IRawAffNestableItem> items = new List<IRawAffNestableItem>();
 			foreach (var item in context.segment().body().item())
 			{
-				IRawAffEvent @event=item.@event().value;
-				if(!(@event is IRawAffItem)){
+				IRawAffEvent @event = item.@event().value;
+				if (!(@event is IRawAffItem))
+				{
 					chart.warning.Add($"第 {item.@event().Start.Line + lineOffset} 行第 {item.@event().Start.Column + 1} 列，不可作为物件使用的事件：{item.@event().GetText()}");
 					continue;
 				}
-				IRawAffItem rawItem=@event as IRawAffItem;
-				if(!(rawItem is IRawAffNestableItem)){
+				IRawAffItem rawItem = @event as IRawAffItem;
+				if (!(rawItem is IRawAffNestableItem))
+				{
 					chart.warning.Add($"第 {item.Start.Line + lineOffset} 行第 {item.Start.Column + 1} 列，不可在 timinggroup 中嵌套使用的物件：{item.@event().GetText()}");
 					nonNestableItems.Add(rawItem);
 					continue;
 				}
 				items.Add(rawItem as IRawAffNestableItem);
 			}
-			context.value=new RawAffTimingGroup(){
-				items=items
+			context.value = new RawAffTimingGroup()
+			{
+				items = items
 			};
 		}
 

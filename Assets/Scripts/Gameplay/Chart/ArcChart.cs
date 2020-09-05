@@ -22,41 +22,62 @@ namespace Arcade.Gameplay.Chart
 		public List<ArcArc> Arcs = new List<ArcArc>();
 		public List<ArcCamera> Cameras = new List<ArcCamera>();
 		public List<ArcSceneControl> SceneControl = new List<ArcSceneControl>();
-		public List<ArcTimingGroup> TimingGroup = new List<ArcTimingGroup>();
+		public List<ArcTimingGroup> TimingGroups = new List<ArcTimingGroup>();
 		public int LastEventTiming = 0;
 
-		public ArcChart(RawAffChart raw){
+		public ArcChart(RawAffChart raw)
+		{
 			AudioOffset = raw.AudioOffset;
-			AdditionalMetadata=raw.additionalMetadata;
-			foreach (var item in raw.items){
-				addRawItem(item,null);
+			AdditionalMetadata = raw.additionalMetadata;
+			foreach (var item in raw.items)
+			{
+				addRawItem(item, null);
 			}
 		}
 
-		void addRawItem(IRawAffItem item,ArcTimingGroup timingGroup){
-			if(item is RawAffTiming){
-				if(timingGroup==null){
+		void addRawItem(IRawAffItem item, ArcTimingGroup timingGroup)
+		{
+			if (item is RawAffTiming)
+			{
+				if (timingGroup == null)
+				{
 					Timings.Add(new ArcTiming(item as RawAffTiming));
-				}else{
+				}
+				else
+				{
 					timingGroup.Timings.Add(new ArcTiming(item as RawAffTiming));
 				}
-			}else if(item is RawAffTap){
-				Taps.Add(new ArcTap(item as RawAffTap));
-			}else if(item is RawAffHold){
-				Holds.Add(new ArcHold(item as RawAffHold));
-			}else if(item is RawAffArc){
-				Arcs.Add(new ArcArc(item as RawAffArc));
-			}else if(item is RawAffCamera){
+			}
+			else if (item is RawAffTap)
+			{
+				Taps.Add(new ArcTap(item as RawAffTap, timingGroup));
+			}
+			else if (item is RawAffHold)
+			{
+				Holds.Add(new ArcHold(item as RawAffHold, timingGroup));
+			}
+			else if (item is RawAffArc)
+			{
+				Arcs.Add(new ArcArc(item as RawAffArc, timingGroup));
+			}
+			else if (item is RawAffCamera)
+			{
 				Cameras.Add(new ArcCamera(item as RawAffCamera));
-			}else if(item is RawAffSceneControl){
+			}
+			else if (item is RawAffSceneControl)
+			{
 				SceneControl.Add(new ArcSceneControl(item as RawAffSceneControl));
-			}else if(item is RawAffTimingGroup){
-				ArcTimingGroup arcTimingGroup=new ArcTimingGroup(){
-					Id=TimingGroup.Count+1
+			}
+			else if (item is RawAffTimingGroup)
+			{
+				ArcTimingGroup arcTimingGroup = new ArcTimingGroup()
+				{
+					Id = TimingGroups.Count + 1
 				};
-				TimingGroup.Add(arcTimingGroup);
-				foreach(var nestedItem in (item as RawAffTimingGroup).items){
-					addRawItem(nestedItem,arcTimingGroup);
+				TimingGroups.Add(arcTimingGroup);
+				foreach (var nestedItem in (item as RawAffTimingGroup).items)
+				{
+					addRawItem(nestedItem, arcTimingGroup);
 				}
 			}
 		}
@@ -65,35 +86,88 @@ namespace Arcade.Gameplay.Chart
 		{
 			List<ArcEvent> events = new List<ArcEvent>();
 			events.AddRange(Timings);
+			events.AddRange(Cameras);
+			events.AddRange(SceneControl);
 			events.AddRange(Taps);
 			events.AddRange(Holds);
 			events.AddRange(Arcs);
-			events.AddRange(Cameras);
-			events.AddRange(SceneControl);
+
+			List<ArcEvent> mainEvents = new List<ArcEvent>();
+			Dictionary<ArcTimingGroup, List<ArcEvent>> timingGroupEvents = new Dictionary<ArcTimingGroup, List<ArcEvent>>();
+			foreach (var timingGroup in TimingGroups)
+			{
+				timingGroupEvents.Add(timingGroup, new List<ArcEvent>());
+				timingGroupEvents[timingGroup].AddRange(timingGroup.Timings);
+			}
+
+			foreach (var arcEvent in events)
+			{
+				if (arcEvent is IHasTimingGroup)
+				{
+					ArcTimingGroup timingGroup = (arcEvent as IHasTimingGroup).TimingGroup;
+					if (timingGroup != null)
+					{
+						timingGroupEvents[timingGroup].Add(arcEvent);
+						continue;
+					}
+				}
+				mainEvents.Add(arcEvent);
+			}
+
+			mainEvents = SortedEvent(mainEvents, mode);
+			foreach (var timingGroup in TimingGroups)
+			{
+				timingGroupEvents[timingGroup] = SortedEvent(timingGroupEvents[timingGroup], mode);
+			}
+
+			RawAffChart raw = new RawAffChart();
+			raw.AudioOffset = ArcAudioManager.Instance.AudioOffset;
+			raw.additionalMetadata = AdditionalMetadata;
+			foreach (var e in mainEvents)
+			{
+				if (e is IIntoRawItem)
+				{
+					var rawItem = (e as IIntoRawItem).IntoRawItem();
+					raw.items.Add(rawItem);
+				}
+			}
+			foreach (var timingGroup in TimingGroups)
+			{
+				var timingGroupItem = new RawAffTimingGroup()
+				{
+					items = new List<IRawAffNestableItem>()
+				};
+				foreach (var e in timingGroupEvents[timingGroup])
+				{
+					if (e is IIntoRawItem)
+					{
+						var rawItem = (e as IIntoRawItem).IntoRawItem() as IRawAffNestableItem;
+						timingGroupItem.items.Add(rawItem);
+					}
+
+				}
+				Debug.Log($"[tgsave]item-num:{timingGroupItem.items.Count}");
+				raw.items.Add(timingGroupItem);
+			}
+			ArcaeaFileFormat.DumpToStream(stream, raw);
+		}
+
+		static List<ArcEvent> SortedEvent(List<ArcEvent> events, ChartSortMode mode)
+		{
 			switch (mode)
 			{
 				case ChartSortMode.Timing:
-					events = events.OrderBy(arcEvent => arcEvent.Timing)
-						.ThenBy(arcEvent => (arcEvent is ArcTiming ? 1 : arcEvent is ArcTap ? 2 : arcEvent is ArcHold ? 3 : arcEvent is ArcArc ? 4 : 5))
+					return events.OrderBy(arcEvent => arcEvent.Timing)
+						.ThenBy(arcEvent => (arcEvent is ArcTiming ? 1 : arcEvent is ArcTap ? 2 : arcEvent is ArcHold ? 3 : arcEvent is ArcArc ? 4 : arcEvent is ArcCamera ? 5 : arcEvent is ArcSceneControl ? 6 : 7))
 						.ToList();
-					break;
 				case ChartSortMode.Type:
-					events = events.OrderBy(arcEvent => (arcEvent is ArcTiming ? 1 : arcEvent is ArcTap ? 2 : arcEvent is ArcHold ? 3 : arcEvent is ArcArc ? 4 : 5))
+					return events.OrderBy(arcEvent => (arcEvent is ArcTiming ? 1 : arcEvent is ArcTap ? 2 : arcEvent is ArcHold ? 3 : arcEvent is ArcArc ? 4 : arcEvent is ArcCamera ? 5 : arcEvent is ArcSceneControl ? 6 : 7))
 						.ThenBy(arcEvent => arcEvent.Timing)
 						.ToList();
-					break;
 			}
-			RawAffChart raw=new RawAffChart();
-			raw.AudioOffset=ArcAudioManager.Instance.AudioOffset;
-			raw.additionalMetadata=AdditionalMetadata;
-			foreach (var e in events)
-			{
-				if(e is IIntoRawItem){
-					raw.items.Add((e as IIntoRawItem).IntoRawItem());
-				}
-			}
-			ArcaeaFileFormat.DumpToStream(stream,raw);
+			return events;
 		}
+
 		public static ArcLineType ToArcLineType(string type)
 		{
 			switch (type)
@@ -153,6 +227,14 @@ namespace Arcade.Gameplay.Chart
 	{
 		bool Selected { get; set; }
 	}
+	public interface IHasTimingGroup
+	{
+		ArcTimingGroup TimingGroup { get; }
+	}
+	public interface ISetableTimingGroup
+	{
+		ArcTimingGroup TimingGroup { set; }
+	}
 	public enum ArcLineType
 	{
 		B,
@@ -187,7 +269,7 @@ namespace Arcade.Gameplay.Chart
 		}
 		public abstract ArcEvent Clone();
 	}
-	public class ArcSceneControl : ArcEvent,IIntoRawItem
+	public class ArcSceneControl : ArcEvent, IIntoRawItem
 	{
 
 		public ArcSceneControl()
@@ -195,32 +277,42 @@ namespace Arcade.Gameplay.Chart
 		}
 		public ArcSceneControl(RawAffSceneControl rawAffSceneControl)
 		{
-			Timing=rawAffSceneControl.Timing;
-			RawType=rawAffSceneControl.Type;
-			RawParams=rawAffSceneControl.Params;
-			if(RawType=="trackhide"&&RawParams.Count==0){
-				Type=SceneControlType.TrackHide;
-			}else if(RawType=="trackshow"&&RawParams.Count==0){
-				Type=SceneControlType.TrackShow;
+			Timing = rawAffSceneControl.Timing;
+			RawType = rawAffSceneControl.Type;
+			RawParams = rawAffSceneControl.Params;
+			if (RawType == "trackhide" && RawParams.Count == 0)
+			{
+				Type = SceneControlType.TrackHide;
+			}
+			else if (RawType == "trackshow" && RawParams.Count == 0)
+			{
+				Type = SceneControlType.TrackShow;
 			}
 		}
-		public IRawAffItem IntoRawItem(){
-			var item=new RawAffSceneControl(){
-				Timing=Timing,
-				Type="unknown",
-				Params=new List<IRawAffValue>(),
+		public IRawAffItem IntoRawItem()
+		{
+			var item = new RawAffSceneControl()
+			{
+				Timing = Timing,
+				Type = "unknown",
+				Params = new List<IRawAffValue>(),
 			};
-			if(Type==SceneControlType.TrackHide){
-				item.Type="trackhide";
-			}else if(Type==SceneControlType.TrackShow){
-				item.Type="trackshow";
-			}else{
-				item.Type=RawType;
-				item.Params=RawParams;
+			if (Type == SceneControlType.TrackHide)
+			{
+				item.Type = "trackhide";
+			}
+			else if (Type == SceneControlType.TrackShow)
+			{
+				item.Type = "trackshow";
+			}
+			else
+			{
+				item.Type = RawType;
+				item.Params = RawParams;
 			}
 			return item;
 		}
-		public SceneControlType Type=SceneControlType.Unknown;
+		public SceneControlType Type = SceneControlType.Unknown;
 		public string RawType;
 		public List<IRawAffValue> RawParams;
 
@@ -306,9 +398,10 @@ namespace Arcade.Gameplay.Chart
 		public List<int> JudgeTimings = new List<int>();
 
 	}
-	public class ArcTap : ArcNote,IIntoRawItem
+	public class ArcTap : ArcNote, IIntoRawItem, IHasTimingGroup, ISetableTimingGroup
 	{
 		public int Track;
+		public ArcTimingGroup TimingGroup { get; set; }
 
 		private bool selected;
 		private float currentAlpha;
@@ -320,17 +413,19 @@ namespace Arcade.Gameplay.Chart
 		public ArcTap()
 		{
 		}
-		public ArcTap(RawAffTap rawAffTap)
+		public ArcTap(RawAffTap rawAffTap, ArcTimingGroup timingGroup)
 		{
-			Timing=rawAffTap.Timing;
-			Track=rawAffTap.Track;
+			Timing = rawAffTap.Timing;
+			Track = rawAffTap.Track;
+			TimingGroup = timingGroup;
 		}
 
 		public IRawAffItem IntoRawItem()
 		{
-			return new RawAffTap(){
-				Timing=Timing,
-				Track=Track,
+			return new RawAffTap()
+			{
+				Timing = Timing,
+				Track = Track,
 			};
 		}
 
@@ -443,9 +538,10 @@ namespace Arcade.Gameplay.Chart
 			}
 		}
 	}
-	public class ArcHold : ArcLongNote,IIntoRawItem
+	public class ArcHold : ArcLongNote, IIntoRawItem, IHasTimingGroup, ISetableTimingGroup
 	{
 		public int Track;
+		public ArcTimingGroup TimingGroup { get; set; }
 
 		private MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 
@@ -640,21 +736,24 @@ namespace Arcade.Gameplay.Chart
 		public ArcHold()
 		{
 		}
-		public ArcHold(RawAffHold rawAffHold)
+		public ArcHold(RawAffHold rawAffHold, ArcTimingGroup timingGroup)
 		{
-			Timing=rawAffHold.Timing;
-			EndTiming=rawAffHold.EndTiming;
-			Track=rawAffHold.Track;
+			Timing = rawAffHold.Timing;
+			EndTiming = rawAffHold.EndTiming;
+			Track = rawAffHold.Track;
+			TimingGroup = timingGroup;
 		}
-		public IRawAffItem IntoRawItem(){
-			return new RawAffHold(){
-				Timing=Timing,
-				EndTiming=EndTiming,
-				Track=Track,
+		public IRawAffItem IntoRawItem()
+		{
+			return new RawAffHold()
+			{
+				Timing = Timing,
+				EndTiming = EndTiming,
+				Track = Track,
 			};
 		}
 	}
-	public class ArcTiming : ArcEvent,IIntoRawItem
+	public class ArcTiming : ArcEvent, IIntoRawItem
 	{
 		public float Bpm;
 		public float BeatsPerLine;
@@ -665,15 +764,17 @@ namespace Arcade.Gameplay.Chart
 
 		public ArcTiming(RawAffTiming rawAffTiming)
 		{
-			Timing=rawAffTiming.Timing;
-			Bpm=rawAffTiming.Bpm;
-			BeatsPerLine=rawAffTiming.BeatsPerLine;
+			Timing = rawAffTiming.Timing;
+			Bpm = rawAffTiming.Bpm;
+			BeatsPerLine = rawAffTiming.BeatsPerLine;
 		}
-		public IRawAffItem IntoRawItem(){
-			return new RawAffTiming(){
-				Timing=Timing,
-				Bpm=Bpm,
-				BeatsPerLine=BeatsPerLine,
+		public IRawAffItem IntoRawItem()
+		{
+			return new RawAffTiming()
+			{
+				Timing = Timing,
+				Bpm = Bpm,
+				BeatsPerLine = BeatsPerLine,
 			};
 		}
 
@@ -694,9 +795,10 @@ namespace Arcade.Gameplay.Chart
 			BeatsPerLine = n.BeatsPerLine;
 		}
 	}
-	public class ArcArcTap : ArcNote
+	public class ArcArcTap : ArcNote, IHasTimingGroup
 	{
 		public ArcArc Arc;
+		public ArcTimingGroup TimingGroup { get => Arc.TimingGroup; }
 
 		public Transform Model;
 		public Transform Shadow;
@@ -899,11 +1001,13 @@ namespace Arcade.Gameplay.Chart
 		}
 		public ArcArcTap(RawAffArctap arctap)
 		{
-			Timing=arctap.Timing;
+			Timing = arctap.Timing;
 		}
 	}
-	public class ArcArc : ArcLongNote,IIntoRawItem
+	public class ArcArc : ArcLongNote, IIntoRawItem, IHasTimingGroup, ISetableTimingGroup
 	{
+
+		public ArcTimingGroup TimingGroup { get; set; }
 		public float XStart;
 		public float XEnd;
 		public ArcLineType LineType;
@@ -1080,42 +1184,46 @@ namespace Arcade.Gameplay.Chart
 		public ArcArc()
 		{
 		}
-		public ArcArc(RawAffArc rawAffArc)
+		public ArcArc(RawAffArc rawAffArc, ArcTimingGroup timingGroup)
 		{
-			Timing=rawAffArc.Timing;
-			EndTiming=rawAffArc.EndTiming;
-			XStart=rawAffArc.XStart;
-			XEnd=rawAffArc.XEnd;
-			LineType=rawAffArc.LineType;
-			YStart=rawAffArc.YStart;
-			YEnd=rawAffArc.YEnd;
-			Color=rawAffArc.Color;
-			IsVoid=rawAffArc.IsVoid;
-			if(rawAffArc.ArcTaps.Count>0){
-				IsVoid=true;
+			Timing = rawAffArc.Timing;
+			EndTiming = rawAffArc.EndTiming;
+			XStart = rawAffArc.XStart;
+			XEnd = rawAffArc.XEnd;
+			LineType = rawAffArc.LineType;
+			YStart = rawAffArc.YStart;
+			YEnd = rawAffArc.YEnd;
+			Color = rawAffArc.Color;
+			IsVoid = rawAffArc.IsVoid;
+			if (rawAffArc.ArcTaps.Count > 0)
+			{
+				IsVoid = true;
 				foreach (var arctap in rawAffArc.ArcTaps)
 				{
 					ArcTaps.Add(new ArcArcTap(arctap));
 				}
 			}
+			TimingGroup = timingGroup;
 		}
-		public IRawAffItem IntoRawItem(){
-			return new RawAffArc(){
-				Timing=Timing,
-				EndTiming=EndTiming,
-				XStart=XStart,
-				XEnd=XEnd,
-				LineType=LineType,
-				YStart=YStart,
-				YEnd=YEnd,
-				Color=Color,
-				IsVoid=IsVoid,
-				ArcTaps=ArcTaps.Select((arctap)=>new RawAffArctap(){Timing=arctap.Timing,}).ToList(),
+		public IRawAffItem IntoRawItem()
+		{
+			return new RawAffArc()
+			{
+				Timing = Timing,
+				EndTiming = EndTiming,
+				XStart = XStart,
+				XEnd = XEnd,
+				LineType = LineType,
+				YStart = YStart,
+				YEnd = YEnd,
+				Color = Color,
+				IsVoid = IsVoid,
+				ArcTaps = ArcTaps.Select((arctap) => new RawAffArctap() { Timing = arctap.Timing, }).ToList(),
 			};
 		}
 
 	}
-	public class ArcCamera : ArcEvent,IIntoRawItem
+	public class ArcCamera : ArcEvent, IIntoRawItem
 	{
 		public Vector3 Move, Rotate;
 		public CameraEaseType CameraType;
@@ -1129,23 +1237,25 @@ namespace Arcade.Gameplay.Chart
 
 		public ArcCamera(RawAffCamera rawAffCamera)
 		{
-			Timing=rawAffCamera.Timing;
-			Move=new Vector3(rawAffCamera.MoveX,rawAffCamera.MoveY,rawAffCamera.MoveZ);
-			Rotate=new Vector3(rawAffCamera.RotateX,rawAffCamera.RotateY,rawAffCamera.RotateZ);
-			CameraType=rawAffCamera.CameraType;
-			Duration=rawAffCamera.Duration;
+			Timing = rawAffCamera.Timing;
+			Move = new Vector3(rawAffCamera.MoveX, rawAffCamera.MoveY, rawAffCamera.MoveZ);
+			Rotate = new Vector3(rawAffCamera.RotateX, rawAffCamera.RotateY, rawAffCamera.RotateZ);
+			CameraType = rawAffCamera.CameraType;
+			Duration = rawAffCamera.Duration;
 		}
-		public IRawAffItem IntoRawItem(){
-			return new RawAffCamera(){
-				Timing=Timing,
-				MoveX=Move.x,
-				MoveY=Move.y,
-				MoveZ=Move.z,
-				RotateX=Rotate.x,
-				RotateY=Rotate.y,
-				RotateZ=Rotate.z,
-				CameraType=CameraType,
-				Duration=Duration,
+		public IRawAffItem IntoRawItem()
+		{
+			return new RawAffCamera()
+			{
+				Timing = Timing,
+				MoveX = Move.x,
+				MoveY = Move.y,
+				MoveZ = Move.z,
+				RotateX = Rotate.x,
+				RotateY = Rotate.y,
+				RotateZ = Rotate.z,
+				CameraType = CameraType,
+				Duration = Duration,
 			};
 		}
 
@@ -1199,8 +1309,9 @@ namespace Arcade.Gameplay.Chart
 		}
 	}
 
-	public class ArcTimingGroup{
+	public class ArcTimingGroup
+	{
 		public int Id;
-		public List<ArcTiming> Timings=new List<ArcTiming>();
+		public List<ArcTiming> Timings = new List<ArcTiming>();
 	}
 }
