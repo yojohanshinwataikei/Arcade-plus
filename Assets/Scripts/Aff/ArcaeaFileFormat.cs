@@ -654,6 +654,9 @@ namespace Arcade.Aff
 				}
 				items.Add(rawItem as IRawAffNestableItem);
 			}
+			context.value=new RawAffTimingGroup(){
+				items=items
+			};
 		}
 
 		void RejectSubevents(ArcaeaFileFormatParser.EventContext context, string type)

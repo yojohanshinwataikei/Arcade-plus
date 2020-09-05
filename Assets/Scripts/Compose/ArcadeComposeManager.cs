@@ -231,7 +231,6 @@ namespace Arcade.Compose
 		public void SetTargetFramerate(int fps)
 		{
 			Application.targetFrameRate = fps;
-			Debug.Log($"[fps]{fps}");
 		}
 
 		public void Play()
