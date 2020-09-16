@@ -124,12 +124,12 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 
 	public int GetSnapedTiming(int timing)
 	{
-		int newTiming = Mathf.RoundToInt(AdeGridManager.Instance.AttachTiming(timing));
+		int newTiming = Mathf.FloorToInt(AdeGridManager.Instance.AttachTiming(timing));
 		return newTiming;
 	}
 	public int GetNextSnapedTiming(int timing)
 	{
-		int newTiming = Mathf.RoundToInt(AdeGridManager.Instance.AttachScroll(timing, 1));
+		int newTiming = Mathf.FloorToInt(AdeGridManager.Instance.AttachScroll(timing, 1));
 		return newTiming;
 	}
 }

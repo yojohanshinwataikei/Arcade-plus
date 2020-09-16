@@ -146,7 +146,6 @@ namespace Arcade.Gameplay.Chart
 					}
 
 				}
-				Debug.Log($"[tgsave]item-num:{timingGroupItem.items.Count}");
 				raw.items.Add(timingGroupItem);
 			}
 			ArcaeaFileFormat.DumpToStream(stream, raw);
