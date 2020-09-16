@@ -60,12 +60,12 @@ namespace Arcade.Gameplay
 
 			foreach (var t in Taps)
 			{
-				if (!timing.ShouldTryRender(t.Timing + offset) || t.Judged)
+				if (!timing.ShouldTryRender(t.Timing + offset, t.TimingGroup) || t.Judged)
 				{
 					t.Enable = false;
 					continue;
 				}
-				t.Position = timing.CalculatePositionByTiming(t.Timing + offset);
+				t.Position = timing.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup);
 				if (t.Position > 100000 || t.Position < -10000)
 				{
 					t.Enable = false;
@@ -105,11 +105,12 @@ namespace Arcade.Gameplay
 			//Note: I have no idea why spriterenderer do not update when I set the sprite,
 			// as a workaround, we set the texture
 			// I do not know if this bug disappear in the build
-			ShaderdMaterial.mainTexture=sprite.texture;
+			ShaderdMaterial.mainTexture = sprite.texture;
 			TapNotePrefab.GetComponent<SpriteRenderer>().sprite = sprite;
 			foreach (var t in Taps) t.spriteRenderer.sprite = sprite;
 		}
-		public void SetConnectionLineColor(Color color){
+		public void SetConnectionLineColor(Color color)
+		{
 			ArcArcManager.Instance.ConnectionColor = color;
 			foreach (var t in Taps)
 				foreach (var l in t.ConnectionLines.Values)

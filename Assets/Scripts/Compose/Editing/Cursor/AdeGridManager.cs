@@ -8,6 +8,7 @@ using Arcade.Util.UnityExtension;
 using System.Linq;
 using Arcade.Compose.MarkingMenu;
 using Newtonsoft.Json;
+using Arcade.Compose.Editing;
 
 namespace Arcade.Compose
 {
@@ -227,17 +228,19 @@ namespace Arcade.Compose
 
 		private void UpdateBeatline()
 		{
+
+			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
 			beatlineInUse = 0;
 			if (EnableBeatline)
 			{
 				int offset = ArcAudioManager.Instance.AudioOffset;
 				foreach (var t in beatlineTimings)
 				{
-					if (!ArcTimingManager.Instance.ShouldTryRender(((int)t.Timing + offset), 0))
+					if (!ArcTimingManager.Instance.ShouldTryRender(((int)t.Timing + offset), timingGroup, 0))
 					{
 						continue;
 					}
-					float pos = ArcTimingManager.Instance.CalculatePositionByTiming(((int)t.Timing + offset));
+					float pos = ArcTimingManager.Instance.CalculatePositionByTiming(((int)t.Timing + offset), timingGroup);
 					if (pos > 100000 || pos < -10000)
 					{
 						continue;

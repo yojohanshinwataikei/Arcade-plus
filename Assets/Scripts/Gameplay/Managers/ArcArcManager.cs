@@ -146,13 +146,13 @@ namespace Arcade.Gameplay
 			{
 				RenderArcTaps(t);
 				int duration = t.EndTiming - t.Timing;
-				if (!timingManager.ShouldTryRender(t.Timing + offset, duration + (t.IsVoid ? 50 : 120)) || t.Judged)
+				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup, duration + (t.IsVoid ? 50 : 120)) || t.Judged)
 				{
 					t.Enable = false;
 					continue;
 				}
-				t.Position = timingManager.CalculatePositionByTiming(t.Timing + offset);
-				t.EndPosition = timingManager.CalculatePositionByTiming(t.EndTiming + offset);
+				t.Position = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup);
+				t.EndPosition = timingManager.CalculatePositionByTiming(t.EndTiming + offset, t.TimingGroup);
 				if (t.Position > 100000 || t.EndPosition < -20000)
 				{
 					t.Enable = false;
@@ -207,7 +207,7 @@ namespace Arcade.Gameplay
 
 			foreach (ArcArcTap t in arc.ArcTaps)
 			{
-				if (!timingManager.ShouldTryRender(t.Timing + offset, 50) || t.Judged)
+				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup, 50) || t.Judged)
 				{
 					t.Enable = false;
 					continue;
@@ -217,7 +217,7 @@ namespace Arcade.Gameplay
 					t.Enable = false;
 					continue;
 				}
-				float pos = timingManager.CalculatePositionByTiming(t.Timing + offset) / 1000f;
+				float pos = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup) / 1000f;
 				if (pos > -10 && pos <= 90)
 				{
 					t.Alpha = 1;
@@ -313,15 +313,15 @@ namespace Arcade.Gameplay
 			}
 		}
 
-		public void SetArcColors(Color arcRedLow, Color arcBlueLow, Color arcGreenLow, Color arcRedHigh, Color arcBlueHigh, Color arcGreenHigh,Color arcVoid)
+		public void SetArcColors(Color arcRedLow, Color arcBlueLow, Color arcGreenLow, Color arcRedHigh, Color arcBlueHigh, Color arcGreenHigh, Color arcVoid)
 		{
-			ArcRedLow=arcRedLow;
-			ArcBlueLow=arcBlueLow;
-			ArcGreenLow=arcGreenLow;
-			ArcRedHigh=arcRedHigh;
-			ArcBlueHigh=arcBlueHigh;
-			ArcGreenHigh=arcGreenHigh;
-			ArcVoid=arcVoid;
+			ArcRedLow = arcRedLow;
+			ArcBlueLow = arcBlueLow;
+			ArcGreenLow = arcGreenLow;
+			ArcRedHigh = arcRedHigh;
+			ArcBlueHigh = arcBlueHigh;
+			ArcGreenHigh = arcGreenHigh;
+			ArcVoid = arcVoid;
 			//TODO: arc has slight diifferent color at different hight
 			ArcArcRenderer prefabRenderer = ArcNotePrefab.GetComponent<ArcArcRenderer>();
 			prefabRenderer.ReloadColor();
@@ -333,7 +333,7 @@ namespace Arcade.Gameplay
 
 		public void SetArcBodySkin(Texture2D normal, Texture2D highlight)
 		{
-			ArcMaterial.mainTexture=normal;
+			ArcMaterial.mainTexture = normal;
 			ArcArcRenderer prefabRenderer = ArcNotePrefab.GetComponent<ArcArcRenderer>();
 			prefabRenderer.HighlightTexture = highlight;
 			prefabRenderer.DefaultTexture = normal;
@@ -366,7 +366,8 @@ namespace Arcade.Gameplay
 			}
 		}
 
-		public void SetArcTapSkin(Texture2D texture){
+		public void SetArcTapSkin(Texture2D texture)
+		{
 			ArcTapSkin = texture;
 			ArcTapMaterial.mainTexture = texture;
 		}

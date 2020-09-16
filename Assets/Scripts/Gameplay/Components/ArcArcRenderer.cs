@@ -402,7 +402,7 @@ namespace Arcade.Gameplay
 				endHeight = ArcAlgorithm.Y(arc.YStart, arc.YEnd, (i + 1f) * segSize / duration, arc.LineType);
 				end = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(arc.XStart, arc.XEnd, (i + 1f) * segSize / duration, arc.LineType)),
 								  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(arc.YStart, arc.YEnd, (i + 1f) * segSize / duration, arc.LineType)),
-								  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, arc.Timing + offset + segSize * (i + 1)) / 1000f);
+								  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, arc.Timing + offset + segSize * (i + 1), arc.TimingGroup) / 1000f);
 				segments[i].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * i, arc.Timing + segSize * (i + 1), startHeight, endHeight);
 			}
 
@@ -411,7 +411,7 @@ namespace Arcade.Gameplay
 			endHeight = arc.YEnd;
 			end = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XEnd),
 							  ArcAlgorithm.ArcYToWorld(arc.YEnd),
-							  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, arc.EndTiming + offset) / 1000f);
+							  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, arc.EndTiming + offset, arc.TimingGroup) / 1000f);
 			segments[segmentCount - 1].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * (segmentCount - 1), arc.EndTiming, startHeight, endHeight);
 
 			HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : ArcGreenHigh));

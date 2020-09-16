@@ -76,8 +76,8 @@ namespace Arcade.Gameplay
 			lastDspTime = AudioSettings.dspTime;
 			if (IsPlaying)
 			{
-				float playBackSpeed=ArcAudioManager.Instance.PlayBackSpeed;
-				timing += Time.deltaTime*playBackSpeed;
+				float playBackSpeed = ArcAudioManager.Instance.PlayBackSpeed;
+				timing += Time.deltaTime * playBackSpeed;
 				float t = ArcAudioManager.Instance.Timing;
 				float delta = timing - t;
 				if (Mathf.Abs(delta) > 0.016f) timing = t;
@@ -98,7 +98,7 @@ namespace Arcade.Gameplay
 
 			ArcCameraManager.Instance.ResetCamera();
 			ArcAudioManager.Instance.Load(audio, chart.AudioOffset);
-			ArcTimingManager.Instance.Load(chart.Timings);
+			ArcTimingManager.Instance.Load(chart.Timings, chart.TimingGroups);
 			ArcTapNoteManager.Instance.Load(chart.Taps);
 			ArcHoldNoteManager.Instance.Load(chart.Holds);
 			ArcArcManager.Instance.Load(chart.Arcs);
@@ -125,9 +125,9 @@ namespace Arcade.Gameplay
 		{
 			if (Chart != null)
 			{
-				foreach (var t in Chart.Arcs) { foreach (var a in t.ArcTaps) { a.Judged = false;  } t.Judged = false; t.Judging = false; t.AudioPlayed = false; };
+				foreach (var t in Chart.Arcs) { foreach (var a in t.ArcTaps) { a.Judged = false; } t.Judged = false; t.Judging = false; t.AudioPlayed = false; };
 				foreach (var t in Chart.Holds) { t.Judged = false; t.Judging = false; t.AudioPlayed = false; };
-				foreach (var t in Chart.Taps) { t.Judged = false;  };
+				foreach (var t in Chart.Taps) { t.Judged = false; };
 			}
 			ArcEffectManager.Instance.ResetJudge();
 		}

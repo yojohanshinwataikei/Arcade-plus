@@ -149,6 +149,7 @@ namespace Arcade.Compose.Editing
 
 		private void UpdateArcTapCursor()
 		{
+			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
 			if (selectedArc != null && selectedArc.Instance == null)
 			{
 				selectedArc = null;
@@ -162,7 +163,7 @@ namespace Arcade.Compose.Editing
 				return;
 			}
 			Vector3 pos = AdeCursorManager.Instance.AttachedHorizontalPoint;
-			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000) - ArcAudioManager.Instance.AudioOffset;
+			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			canAddArcTap = selectedArc.Timing <= timing && selectedArc.EndTiming >= timing;
 			AdeCursorManager.Instance.EnableArcTapCursor = canAddArcTap;
 			AdeCursorManager.Instance.EnableVerticalPanel = canAddArcTap;
@@ -175,6 +176,7 @@ namespace Arcade.Compose.Editing
 		}
 		private void AddNoteHandler()
 		{
+			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
 			if (!AdeCursorManager.Instance.IsHorizontalHit) return;
 			if (skipNextClick)
 			{
@@ -182,7 +184,7 @@ namespace Arcade.Compose.Editing
 				return;
 			}
 			Vector3 pos = AdeCursorManager.Instance.AttachedHorizontalPoint;
-			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000) - ArcAudioManager.Instance.AudioOffset;
+			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			ArcNote note = null;
 			switch (Mode)
 			{

@@ -6,6 +6,7 @@ using Arcade.Gameplay;
 using Arcade.Compose.Command;
 using System.Linq;
 using UnityEngine.EventSystems;
+using Arcade.Compose.Editing;
 
 namespace Arcade.Compose
 {
@@ -75,8 +76,10 @@ namespace Arcade.Compose
 			foreach (var n in notes)
 			{
 				ArcEvent ne = n.Clone();
-				if (ne is ArcArcTap) {
-					if(notes.Contains((n as ArcArcTap).Arc)){
+				if (ne is ArcArcTap)
+				{
+					if (notes.Contains((n as ArcArcTap).Arc))
+					{
 						continue;
 					}
 					commands.Add(new AddArcTapCommand((n as ArcArcTap).Arc, ne as ArcArcTap));
@@ -100,7 +103,8 @@ namespace Arcade.Compose
 		{
 			if (!AdeCursorManager.Instance.IsHorizontalHit) return;
 			Vector3 pos = AdeCursorManager.Instance.AttachedHorizontalPoint;
-			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000) - ArcAudioManager.Instance.AudioOffset;
+			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
+			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			bool hasIllegalArcTap = true;
 			int beginTiming = notes.Min((n) => n.Timing);
 
@@ -139,7 +143,7 @@ namespace Arcade.Compose
 
 			foreach (var t in ArcTapNoteManager.Instance.Taps)
 			{
-				if (ArcTimingManager.Instance.ShouldTryRender(t.Timing + offset))
+				if (ArcTimingManager.Instance.ShouldTryRender(t.Timing + offset, timingGroup))
 				{
 					t.SetupArcTapConnection();
 				}
@@ -162,14 +166,17 @@ namespace Arcade.Compose
 		private void Paste()
 		{
 			CommandManager.Instance.Commit();
-			if(Input.GetKey(KeyCode.LeftControl)){
-				foreach(var note in notes){
+			if (Input.GetKey(KeyCode.LeftControl))
+			{
+				foreach (var note in notes)
+				{
 					AdeCursorManager.Instance.SelectNote(note);
 				}
 			}
 			Cleanup();
 		}
-		private void Cleanup(){
+		private void Cleanup()
+		{
 			EndOfFrame.Instance.Listeners.AddListener(() =>
 			{
 				enable = false;

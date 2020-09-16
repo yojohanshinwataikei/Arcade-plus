@@ -197,7 +197,8 @@ namespace Arcade.Compose
 			{
 				if (!ArcGameplayManager.Instance.IsLoaded) return 0;
 				Vector3 pos = AttachedHorizontalPoint;
-				return ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000) - ArcAudioManager.Instance.AudioOffset;
+				var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
+				return ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			}
 		}
 
