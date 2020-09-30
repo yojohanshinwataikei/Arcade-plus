@@ -491,7 +491,8 @@ namespace Arcade.Gameplay.Chart
 			return new ArcTap()
 			{
 				Timing = Timing,
-				Track = Track
+				Track = Track,
+				TimingGroup = TimingGroup
 			};
 		}
 		public override void Assign(ArcEvent newValues)
@@ -499,6 +500,7 @@ namespace Arcade.Gameplay.Chart
 			base.Assign(newValues);
 			ArcTap n = newValues as ArcTap;
 			Track = n.Track;
+			TimingGroup = n.TimingGroup;
 		}
 		public override GameObject Instance
 		{
@@ -584,7 +586,8 @@ namespace Arcade.Gameplay.Chart
 			{
 				Timing = Timing,
 				EndTiming = EndTiming,
-				Track = Track
+				Track = Track,
+				TimingGroup = TimingGroup,
 			};
 		}
 		public override void Assign(ArcEvent newValues)
@@ -592,6 +595,7 @@ namespace Arcade.Gameplay.Chart
 			base.Assign(newValues);
 			ArcHold n = newValues as ArcHold;
 			Track = n.Track;
+			TimingGroup = n.TimingGroup;
 			CalculateJudgeTimings();
 		}
 		public override void Instantiate()
@@ -857,7 +861,7 @@ namespace Arcade.Gameplay.Chart
 		{
 			return new ArcArcTap()
 			{
-				Timing = Timing
+				Timing = Timing,
 			};
 		}
 		public override void Assign(ArcEvent newValues)
@@ -1029,6 +1033,7 @@ namespace Arcade.Gameplay.Chart
 				YEnd = YEnd,
 				Color = Color,
 				IsVoid = IsVoid,
+				TimingGroup = TimingGroup,
 			};
 			foreach (var arctap in ArcTaps) arc.ArcTaps.Add(arctap.Clone() as ArcArcTap);
 			return arc;
@@ -1044,6 +1049,7 @@ namespace Arcade.Gameplay.Chart
 			YEnd = n.YEnd;
 			Color = n.Color;
 			IsVoid = n.IsVoid;
+			TimingGroup = n.TimingGroup;
 		}
 
 		public override bool Enable
