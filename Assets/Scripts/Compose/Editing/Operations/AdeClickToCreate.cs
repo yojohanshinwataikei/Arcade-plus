@@ -189,13 +189,13 @@ namespace Arcade.Compose.Editing
 			switch (Mode)
 			{
 				case ClickToCreateMode.Tap:
-					note = new ArcTap() { Timing = timing, Track = PositionToTrack(pos.x) };
+					note = new ArcTap() { Timing = timing, Track = PositionToTrack(pos.x), TimingGroup = timingGroup };
 					break;
 				case ClickToCreateMode.Hold:
-					note = new ArcHold() { Timing = timing, Track = PositionToTrack(pos.x), EndTiming = timing };
+					note = new ArcHold() { Timing = timing, Track = PositionToTrack(pos.x), EndTiming = timing, TimingGroup = timingGroup };
 					break;
 				case ClickToCreateMode.Arc:
-					note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, IsVoid = currentArcIsVoid, LineType = currentArcType };
+					note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, IsVoid = currentArcIsVoid, LineType = currentArcType, TimingGroup = timingGroup };
 					break;
 				case ClickToCreateMode.ArcTap:
 					note = new ArcArcTap() { Timing = timing };
