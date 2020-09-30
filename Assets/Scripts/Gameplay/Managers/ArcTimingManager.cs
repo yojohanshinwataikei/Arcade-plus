@@ -83,7 +83,7 @@ namespace Arcade.Gameplay
 			{
 				timingGroup.Timings = timingGroup.Timings.OrderBy((timing) => timing.Timing).ToList();
 			}
-			OnTimingChange();
+			OnTimingChange(null);
 		}
 
 		public List<ArcTiming> GetTiming(ArcTimingGroup timingGroup)
@@ -375,23 +375,24 @@ namespace Arcade.Gameplay
 			var Timings = GetTiming(timingGroup);
 			Timings.Add(newTiming);
 			ReOrderTimingGroup(timingGroup);
-			OnTimingChange();
+			OnTimingChange(timingGroup);
 		}
 		public void Remove(ArcTiming timing, ArcTimingGroup timingGroup)
 		{
 			GetTiming(timingGroup).Remove(timing);
-			OnTimingChange();
+			OnTimingChange(timingGroup);
 		}
 		public void UpdateTimingGroup(ArcTimingGroup timingGroup)
 		{
 			ReOrderTimingGroup(timingGroup);
-			OnTimingChange();
+			OnTimingChange(timingGroup);
 		}
-		public void OnTimingChange()
+		public void OnTimingChange(ArcTimingGroup timingGroup)
 		{
-			CalculateBeatlineTimes();
-			AdeGridManager.Instance.ReBuildBeatline();
-			AdeTimingEditor.Instance.ForceUpdate();
+			if(timingGroup ==null){
+				CalculateBeatlineTimes();
+			}
+			AdeTimingEditor.Instance.ForceUpdate(timingGroup);
 		}
 		// Note: this is a function used to optimize rendering by avoid not needed position calculation
 		// Invoker should manually check position again after this check passed
