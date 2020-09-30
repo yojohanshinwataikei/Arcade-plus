@@ -94,5 +94,10 @@ namespace Arcade.Compose.Editing
 				CleanUnusedInstance();
 			}
 		}
+
+		public void Display(){
+			View.SetActive(true);
+			UpdateTiming();
+		}
 	}
 }

@@ -45,6 +45,7 @@ namespace Arcade.Compose
 		public Image CoverImage;
 		public Image[] DifficultyImages;
 		public InputField Name, Composer, Diff, BaseBpm, AudioOffset;
+		public Button CurrentTimingGroup;
 		public Text OpenLabel;
 		public Text SaveMode;
 
@@ -160,6 +161,7 @@ namespace Arcade.Compose
 			OpenLabel.color = new Color(1, 1, 1, 1);
 			BaseBpm.interactable = false;
 			AudioOffset.interactable = false;
+			CurrentTimingGroup.interactable = false;
 			watcher.EnableRaisingEvents = false;
 			FileWatchEnableImage.color = DisableColor;
 			ArcGameplayManager.Instance.Clean();
@@ -252,6 +254,10 @@ namespace Arcade.Compose
 			{
 				return;
 			}
+			if (CurrentProjectMetadata == null)
+			{
+				return;
+			}
 			loadingCoroutine = StartCoroutine(LoadChartCoroutine(index));
 		}
 
@@ -308,10 +314,11 @@ namespace Arcade.Compose
 				CurrentProjectMetadata = new ArcadeProjectMetadata();
 				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 			}
-			if(CurrentProjectMetadata.Difficulties.Length<4){
-				var Difficulties=new AdeChartDifficultyMetadata[4];
-				CurrentProjectMetadata.Difficulties.CopyTo(Difficulties,0);
-				CurrentProjectMetadata.Difficulties=Difficulties;
+			if (CurrentProjectMetadata.Difficulties.Length < 4)
+			{
+				var Difficulties = new AdeChartDifficultyMetadata[4];
+				CurrentProjectMetadata.Difficulties.CopyTo(Difficulties, 0);
+				CurrentProjectMetadata.Difficulties = Difficulties;
 			}
 
 			Name.text = CurrentProjectMetadata.Title;
@@ -377,46 +384,33 @@ namespace Arcade.Compose
 			ArcadeComposeManager.Instance.Pause();
 			AdeObsManager.Instance.ForceClose();
 			CommandManager.Instance.Clear();
-			Aff.RawAffChart raw=null;
-			try{
-				raw=Aff.ArcaeaFileFormat.ParseFromPath(chartPath);
-			}catch (Exception Ex)
+			Aff.RawAffChart raw = null;
+			try
+			{
+				raw = Aff.ArcaeaFileFormat.ParseFromPath(chartPath);
+			}
+			catch (Exception Ex)
 			{
 				Debug.LogWarning(Ex);
 				AdeSingleDialog.Instance.Show(Ex.Message, "谱面读取错误");
 			}
-			Gameplay.Chart.ArcChart chart=null;
-			if(raw!=null){
-				if(raw.error.Count>0){
-					AdeSingleDialog.Instance.Show($"格式问题：\n{string.Join("\n",raw.error.Select(s=>$"- {s}"))}", "谱面解析失败");
-				}else{
-					if(raw.warning.Count>0){
-						AdeSingleDialog.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并试图通过删除有问题的语句来进行修复\n谱面在存在的问题：\n{string.Join("\n",raw.warning.Select(s=>$"- {s}"))}", "谱面解析出现问题");
+			Gameplay.Chart.ArcChart chart = null;
+			if (raw != null)
+			{
+				if (raw.error.Count > 0)
+				{
+					AdeSingleDialog.Instance.Show($"格式问题：\n{string.Join("\n", raw.error.Select(s => $"- {s}"))}", "谱面解析失败");
+				}
+				else
+				{
+					if (raw.warning.Count > 0)
+					{
+						AdeSingleDialog.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并试图通过删除有问题的语句来进行修复\n谱面在存在的问题：\n{string.Join("\n", raw.warning.Select(s => $"- {s}"))}", "谱面解析出现问题");
 					}
-					chart=new Gameplay.Chart.ArcChart(raw);
+					chart = new Gameplay.Chart.ArcChart(raw);
 				}
 			}
 			ArcGameplayManager.Instance.Load(chart, AudioClip);
-			// Aff.ArcaeaAffReader reader = null;
-			// try
-			// {
-			// 	reader = new Aff.ArcaeaAffReader(chartPath);
-			// }
-			// catch (Aff.ArcaeaAffFormatException Ex)
-			// {
-			// 	AdeSingleDialog.Instance.Show(Ex.Message, "谱面格式错误");
-			// 	reader = null;
-			// }
-			// catch (Exception Ex)
-			// {
-			// 	AdeSingleDialog.Instance.Show(Ex.Message, "谱面读取错误");
-			// 	reader = null;
-			// }
-			// if (reader == null)
-			// {
-			// 	return;
-			// }
-			// ArcGameplayManager.Instance.Load(new Gameplay.Chart.ArcChart(reader), AudioClip);
 			CurrentDifficulty = difficulty;
 
 			Diff.text = CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null ? "" : CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating;
@@ -424,6 +418,7 @@ namespace Arcade.Compose
 			DifficultyImages[difficulty].color = new Color(1, 1, 1, 1);
 
 			AudioOffset.interactable = true;
+			CurrentTimingGroup.interactable = true;
 			AudioOffset.text = ArcAudioManager.Instance.AudioOffset.ToString();
 
 			watcher.Path = CurrentProjectFolder;
@@ -530,7 +525,5 @@ namespace Arcade.Compose
 		{
 			SaveProject();
 		}
-
-
 	}
 }
