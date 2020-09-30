@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Arcade.Gameplay.Chart;
 using System.Linq;
 using Arcade.Gameplay;
 using Arcade.Compose.Command;
+using System;
 
 namespace Arcade.Compose.Editing
 {
@@ -14,13 +16,19 @@ namespace Arcade.Compose.Editing
 		public GameObject View;
 		public GameObject TimingPrefab;
 		public RectTransform TimingContent;
+		public Dropdown CurrentTimingGroupDropdown;
+		public Text CurrentTimingGroupText;
 
-		public ArcTimingGroup currentTimingGroup = null;
+		public ArcTimingGroup currentTimingGroup { get; private set; } = null;
 
 		private List<AdeTimingItem> timingInstances = new List<AdeTimingItem>();
 		private void Awake()
 		{
 			Instance = this;
+			CurrentTimingGroupDropdown.onValueChanged.AddListener((value) =>
+			{
+				SetCurrentTimingGroup(value == 0 ? null : ArcTimingManager.Instance.timingGroups[value - 1]);
+			});
 		}
 
 		private void Start()
@@ -68,7 +76,19 @@ namespace Arcade.Compose.Editing
 		{
 			inUse = 0;
 
-			List<ArcTiming> timings = ArcTimingManager.Instance.Timings;
+			List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
+			options.Add(new Dropdown.OptionData { text = "默认" });
+			foreach (var tg in ArcTimingManager.Instance.timingGroups)
+			{
+				options.Add(new Dropdown.OptionData { text = tg.Id.ToString() });
+			}
+			CurrentTimingGroupDropdown.options = options;
+
+			CurrentTimingGroupDropdown.SetValueWithoutNotify(currentTimingGroup?.Id ?? 0);
+
+			CurrentTimingGroupDropdown.interactable = ArcGameplayManager.Instance.Chart != null;
+
+			List<ArcTiming> timings = ArcTimingManager.Instance.GetTiming(currentTimingGroup);
 			foreach (var t in timings)
 			{
 				AdeTimingItem item = GetItemInstance();
@@ -79,6 +99,24 @@ namespace Arcade.Compose.Editing
 
 			CleanUnusedInstance();
 			ArcTimingManager.Instance.OnTimingChange();
+		}
+
+		public void SetCurrentTimingGroup(ArcTimingGroup arcTimingGroup)
+		{
+			currentTimingGroup = arcTimingGroup;
+			if (View.activeSelf)
+			{
+				UpdateTiming();
+			}
+			if (currentTimingGroup == null)
+			{
+				CurrentTimingGroupText.text = "默认";
+			}
+			else
+			{
+				CurrentTimingGroupText.text = currentTimingGroup.Id.ToString();
+			}
+			AdeGridManager.Instance.ReBuildBeatline();
 		}
 
 		public void SwitchStatus()
@@ -95,7 +133,8 @@ namespace Arcade.Compose.Editing
 			}
 		}
 
-		public void Display(){
+		public void Display()
+		{
 			View.SetActive(true);
 			UpdateTiming();
 		}

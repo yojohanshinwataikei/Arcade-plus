@@ -168,7 +168,7 @@ namespace Arcade.Compose
 		{
 			beatlineTimings.Clear();
 			HideExceededBeatlineInstance();
-			var Timings = ArcTimingManager.Instance.Timings;
+			var Timings = ArcTimingManager.Instance.GetTiming(AdeTimingEditor.Instance.currentTimingGroup);
 
 			for (int i = 0; i < Timings.Count; ++i)
 			{

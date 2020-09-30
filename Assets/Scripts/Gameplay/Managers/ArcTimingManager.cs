@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Arcade.Compose;
+using Arcade.Compose.Editing;
 using Arcade.Compose.UI;
 using Arcade.Gameplay.Chart;
 using UnityEngine;
@@ -66,6 +67,8 @@ namespace Arcade.Gameplay
 		{
 			CurrentSpeed = 0;
 			Timings.Clear();
+			timingGroups.Clear();
+			AdeTimingEditor.Instance.SetCurrentTimingGroup(null);
 			TrackRenderer.sharedMaterial.SetFloat(speedShaderId, 0);
 			HideExceededBeatlineInstance(0);
 		}
