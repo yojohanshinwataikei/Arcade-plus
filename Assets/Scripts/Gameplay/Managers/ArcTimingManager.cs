@@ -366,7 +366,7 @@ namespace Arcade.Gameplay
 		public void ReOrderTimingGroup(ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
-			timings = Timings.OrderBy((timing) => timing.Timing).ToList();
+			var timings = Timings.OrderBy((timing) => timing.Timing).ToList();
 			Timings.Clear();
 			Timings.AddRange(timings);
 		}
@@ -380,6 +380,11 @@ namespace Arcade.Gameplay
 		public void Remove(ArcTiming timing, ArcTimingGroup timingGroup)
 		{
 			GetTiming(timingGroup).Remove(timing);
+			OnTimingChange();
+		}
+		public void UpdateTimingGroup(ArcTimingGroup timingGroup)
+		{
+			ReOrderTimingGroup(timingGroup);
 			OnTimingChange();
 		}
 		public void OnTimingChange()

@@ -85,7 +85,6 @@ namespace Arcade.Compose.Editing
 			CurrentTimingGroupDropdown.SetValueWithoutNotify(currentTimingGroup?.Id ?? 0);
 
 			CurrentTimingGroupDropdown.interactable = ArcGameplayManager.Instance.Chart != null;
-
 			List<ArcTiming> timings = ArcTimingManager.Instance.GetTiming(currentTimingGroup);
 			foreach (var t in timings)
 			{
@@ -194,6 +193,36 @@ namespace Arcade.Compose.Editing
 		public void Undo()
 		{
 			ArcTimingManager.Instance.Add(timing, timingGroup);
+		}
+	}
+	public class EditTimingEvent : ICommand
+	{
+		private readonly ArcTimingGroup timingGroup;
+		private readonly ArcTiming timing;
+		private readonly ArcTiming oldValues, newValues;
+		public EditTimingEvent(ArcTimingGroup timingGroup, ArcTiming timing, ArcTiming newValues)
+		{
+			this.timingGroup = timingGroup;
+			this.timing = timing;
+			this.oldValues = timing.Clone() as ArcTiming;
+			this.newValues = newValues;
+		}
+		public string Name
+		{
+			get
+			{
+				return "修改 Timing";
+			}
+		}
+		public void Do()
+		{
+			timing.Assign(newValues);
+			ArcTimingManager.Instance.UpdateTimingGroup(timingGroup);
+		}
+		public void Undo()
+		{
+			timing.Assign(oldValues);
+			ArcTimingManager.Instance.UpdateTimingGroup(timingGroup);
 		}
 	}
 }

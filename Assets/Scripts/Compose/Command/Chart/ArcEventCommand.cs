@@ -127,7 +127,6 @@ namespace Arcade.Compose.Command
 			(note as ArcArc)?.Rebuild();
 			(note as ArcTap)?.SetupArcTapConnection();
 			if (note is ArcArc) ArcArcManager.Instance.CalculateArcRelationship();
-			if (note is ArcTiming) AdeTimingEditor.Instance.UpdateTiming();
 		}
 		public void Undo()
 		{
@@ -137,7 +136,6 @@ namespace Arcade.Compose.Command
 			(note as ArcArc)?.Rebuild();
 			(note as ArcTap)?.SetupArcTapConnection();
 			if (note is ArcArc) ArcArcManager.Instance.CalculateArcRelationship();
-			if (note is ArcTiming) AdeTimingEditor.Instance.UpdateTiming();
 		}
 	}
 
