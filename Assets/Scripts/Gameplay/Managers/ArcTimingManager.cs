@@ -363,22 +363,30 @@ namespace Arcade.Gameplay
 			TrackRenderer.sharedMaterial.SetFloat(speedShaderId, ArcGameplayManager.Instance.IsPlaying ? CurrentSpeed : 0);
 		}
 
-		public void Add(ArcTiming newTiming)
+		public void ReOrderTimingGroup(ArcTimingGroup timingGroup)
 		{
-			timings.Add(newTiming);
+			var Timings = GetTiming(timingGroup);
 			timings = Timings.OrderBy((timing) => timing.Timing).ToList();
-			ArcGameplayManager.Instance.Chart.Timings = timings;
+			Timings.Clear();
+			Timings.AddRange(timings);
+		}
+		public void Add(ArcTiming newTiming, ArcTimingGroup timingGroup)
+		{
+			var Timings = GetTiming(timingGroup);
+			Timings.Add(newTiming);
+			ReOrderTimingGroup(timingGroup);
 			OnTimingChange();
 		}
-		public void Remove(ArcTiming timing)
+		public void Remove(ArcTiming timing, ArcTimingGroup timingGroup)
 		{
-			timings.Remove(timing);
+			GetTiming(timingGroup).Remove(timing);
 			OnTimingChange();
 		}
 		public void OnTimingChange()
 		{
 			CalculateBeatlineTimes();
 			AdeGridManager.Instance.ReBuildBeatline();
+			AdeTimingEditor.Instance.ForceUpdate();
 		}
 		// Note: this is a function used to optimize rendering by avoid not needed position calculation
 		// Invoker should manually check position again after this check passed

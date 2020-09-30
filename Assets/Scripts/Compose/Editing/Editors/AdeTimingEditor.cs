@@ -64,13 +64,11 @@ namespace Arcade.Compose.Editing
 
 		public void Add(ArcTiming caller)
 		{
-			CommandManager.Instance.Add(new AddArcEventCommand(caller.Clone()));
-			UpdateTiming();
+			CommandManager.Instance.Add(new AddTimingEvent(currentTimingGroup, caller.Clone() as ArcTiming));
 		}
 		public void Delete(ArcTiming caller)
 		{
-			CommandManager.Instance.Add(new RemoveArcEventCommand(caller));
-			UpdateTiming();
+			CommandManager.Instance.Add(new RemoveTimingEvent(currentTimingGroup, caller));
 		}
 		public void UpdateTiming()
 		{
@@ -98,7 +96,6 @@ namespace Arcade.Compose.Editing
 			}
 
 			CleanUnusedInstance();
-			ArcTimingManager.Instance.OnTimingChange();
 		}
 
 		public void SetCurrentTimingGroup(ArcTimingGroup arcTimingGroup)
@@ -137,6 +134,66 @@ namespace Arcade.Compose.Editing
 		{
 			View.SetActive(true);
 			UpdateTiming();
+		}
+
+		public void ForceUpdate()
+		{
+			if (View.activeSelf)
+			{
+				UpdateTiming();
+			}
+		}
+	}
+
+	public class AddTimingEvent : ICommand
+	{
+		private readonly ArcTimingGroup timingGroup;
+		private readonly ArcTiming timing;
+		public AddTimingEvent(ArcTimingGroup timingGroup, ArcTiming timing)
+		{
+			this.timingGroup = timingGroup;
+			this.timing = timing;
+		}
+		public string Name
+		{
+			get
+			{
+				return "添加 Timing";
+			}
+		}
+		public void Do()
+		{
+			ArcTimingManager.Instance.Add(timing, timingGroup);
+		}
+		public void Undo()
+		{
+			ArcTimingManager.Instance.Remove(timing, timingGroup);
+		}
+	}
+
+	public class RemoveTimingEvent : ICommand
+	{
+		private readonly ArcTimingGroup timingGroup;
+		private readonly ArcTiming timing;
+		public RemoveTimingEvent(ArcTimingGroup timingGroup, ArcTiming timing)
+		{
+			this.timingGroup = timingGroup;
+			this.timing = timing;
+		}
+		public string Name
+		{
+			get
+			{
+				return "删除 Timing";
+			}
+		}
+		public void Do()
+		{
+			ArcTimingManager.Instance.Remove(timing, timingGroup);
+		}
+		public void Undo()
+		{
+			ArcTimingManager.Instance.Add(timing, timingGroup);
 		}
 	}
 }
