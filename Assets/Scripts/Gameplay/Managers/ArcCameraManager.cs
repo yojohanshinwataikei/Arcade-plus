@@ -38,7 +38,7 @@ namespace Arcade.Gameplay
 		{
 			get
 			{
-				return Mathf.Abs((1f * GameplayCamera.pixelWidth / GameplayCamera.pixelHeight) - (16f / 9f)) < 0.1f;
+				return (1f * GameplayCamera.pixelWidth / GameplayCamera.pixelHeight) - (16f / 9f) > -1f / 9f;
 			}
 		}
 
@@ -130,17 +130,21 @@ namespace Arcade.Gameplay
 		}
 		private void UpdateCameraTilt()
 		{
-			if (!IsReset) {
+			if (!IsReset)
+			{
 				CurrentTilt = 0;
 				return;
 			}
 			float currentArcPos = ArcGameplayManager.Instance.Auto && ArcGameplayManager.Instance.IsPlaying ? -ArcArcManager.Instance.ArcJudgePos : 0;
 			float pos = Mathf.Clamp(currentArcPos / 4.25f, -1, 1) * 0.05f;
 			float delta = pos - CurrentTilt;
-			if(Mathf.Abs(delta)>=0.001f){
+			if (Mathf.Abs(delta) >= 0.001f)
+			{
 				float speed = 0.1f;
 				CurrentTilt = CurrentTilt + speed * delta;
-			}else{
+			}
+			else
+			{
 				CurrentTilt = pos;
 			}
 			GameplayCamera.transform.LookAt(new Vector3(0, -5.5f, -20), new Vector3(CurrentTilt, 1 - CurrentTilt, 0));

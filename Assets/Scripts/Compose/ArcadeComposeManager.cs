@@ -115,10 +115,6 @@ namespace Arcade.Compose
 		private bool switchingMode = false;
 		private int playShotTiming = 0;
 
-		// Note: Resolution change apply in next frame, so this hack update camera rect in next frames
-		private const int resolutionResetCheckPeriod = 3;
-		private int needResetResolutionInNextFrames = resolutionResetCheckPeriod;
-
 		private void Awake()
 		{
 			Instance = this;
@@ -190,13 +186,6 @@ namespace Arcade.Compose
 				AdeToast.Instance.Show("热键：在此处暂停（不返回) 设置不正确\n已改回默认值");
 				PlayerPrefs.SetString("HotKeyNoReturn", "q");
 			}
-			if ((!switchingMode) && needResetResolutionInNextFrames > 0)
-			{
-				needResetResolutionInNextFrames -= 1;
-				LayoutRebuilder.ForceRebuildLayoutImmediate(EditorCanvas);
-				GameplayCamera.rect = IsEditorMode ? EditorModeGameplayCameraRect : new Rect(0, 0, 1, 1);
-				ArcCameraManager.Instance.ResetCamera();
-			}
 		}
 		private void OnEnable()
 		{
@@ -226,7 +215,6 @@ namespace Arcade.Compose
 			int width = int.Parse(dimensions[0]);
 			int height = int.Parse(dimensions[1]);
 			Screen.SetResolution(width, height, false);
-			needResetResolutionInNextFrames = resolutionResetCheckPeriod;
 		}
 		public void SetTargetFramerate(int fps)
 		{
@@ -437,6 +425,20 @@ namespace Arcade.Compose
 		public void OpenLogFile()
 		{
 			Util.Shell.FileBrowser.OpenExplorer(Application.consoleLogPath);
+		}
+
+		public void UpdateResolution()
+		{
+			if (GameplayCamera)
+			{
+				TopBar.DOComplete();
+				BottomBar.DOComplete();
+				LeftBar.DOComplete();
+				RightBar.DOComplete();
+				GameplayCamera.DOComplete();
+				GameplayCamera.rect = IsEditorMode ? EditorModeGameplayCameraRect : new Rect(0, 0, 1, 1);
+				ArcCameraManager.Instance.ResetCamera();
+			}
 		}
 	}
 }
