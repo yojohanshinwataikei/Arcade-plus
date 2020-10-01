@@ -182,10 +182,35 @@ namespace Arcade.Compose
 					// Unlike timing line, we plus one here to avoid the 1ms time error
 					if (j + 1 >= nextTiming)
 						break;
-					AddBeatlineTiming(j, (primaryCount % BeatlineDensity == 0 ? 0 : (primaryCount % (BeatlineDensity / 2) == 0 ? 1 : (primaryCount % (BeatlineDensity / 4) == 0 ? 2 : 3))));
+					AddBeatlineTiming(j, CalculateImportance(primaryCount, BeatlineDensity));
 					primaryCount++;
 				}
 			}
+		}
+		private int CalculateImportance(int primaryCount, float BeatlineDensity)
+		{
+
+			if (Mathf.Approximately(primaryCount % BeatlineDensity, 0))
+			{
+				return 0;
+			}
+			if (Mathf.Approximately(primaryCount % (BeatlineDensity / 2), 0))
+			{
+				return 1;
+			}
+			if (Mathf.Approximately(primaryCount % (BeatlineDensity / 4), 0))
+			{
+				return 2;
+			}
+			if (Mathf.Approximately(primaryCount % (BeatlineDensity / 6), 0))
+			{
+				return 3;
+			}
+			if (Mathf.Approximately(primaryCount % (BeatlineDensity / 8), 0))
+			{
+				return 4;
+			}
+			return 5;
 		}
 
 		private void ParseVerticals()
@@ -250,7 +275,7 @@ namespace Arcade.Compose
 					l.enabled = true;
 					l.DrawLine(new Vector3(-8.5f, -z), new Vector3(8.5f, -z));
 					l.endColor = l.startColor = BeatlineColors[t.Importance];
-					l.endWidth = l.startWidth = 0.2f - 0.035f * t.Importance;
+					l.endWidth = l.startWidth = 0.2f - 0.021f * t.Importance;
 				}
 			}
 			HideExceededBeatlineInstance();
