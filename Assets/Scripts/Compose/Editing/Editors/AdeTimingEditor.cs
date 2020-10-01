@@ -135,7 +135,7 @@ namespace Arcade.Compose.Editing
 			UpdateTiming();
 		}
 
-		public void ForceUpdate(ArcTimingGroup timingGroup)
+		public void ForceUpdateTimingGroup(ArcTimingGroup timingGroup)
 		{
 			if (timingGroup == currentTimingGroup)
 			{
@@ -145,6 +145,15 @@ namespace Arcade.Compose.Editing
 				}
 				AdeGridManager.Instance.ReBuildBeatline();
 			}
+		}
+
+		public void ForceUpdateAll()
+		{
+			if (View.activeSelf)
+			{
+				UpdateTiming();
+			}
+			AdeValueEditor.Instance.UpdateTimingGroupOptions();
 		}
 	}
 

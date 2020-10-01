@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Gameplay.Chart;
 using Arcade.Compose.Command;
+using Arcade.Gameplay;
 
 namespace Arcade.Compose.Editing
 {
@@ -13,7 +14,7 @@ namespace Arcade.Compose.Editing
 		public static AdeValueEditor Instance { get; private set; }
 
 		public RectTransform Panel;
-		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, LineType, Color, IsVoid, SelectParent;
+		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, LineType, Color, IsVoid, SelectParent, TimingGroup;
 
 		public void OnNoteSelect(ArcNote note)
 		{
@@ -41,10 +42,8 @@ namespace Arcade.Compose.Editing
 			AdeCursorManager.Instance.NoteEventListeners.Remove(this);
 		}
 
-		private bool canEdit = false;
 		private void MakeupFields()
 		{
-			canEdit = false;
 			List<ArcNote> selected = AdeCursorManager.Instance.SelectedNotes;
 			int count = selected.Count;
 			if (count == 0)
@@ -55,8 +54,10 @@ namespace Arcade.Compose.Editing
 			else
 			{
 				SelectParent.gameObject.SetActive(false);
-				if (count == 1) {
-					if (selected[0] is ArcArcTap) {
+				if (count == 1)
+				{
+					if (selected[0] is ArcArcTap)
+					{
 						SelectParent.gameObject.SetActive(true);
 					}
 				}
@@ -68,6 +69,7 @@ namespace Arcade.Compose.Editing
 				LineType.gameObject.SetActive(true);
 				Color.gameObject.SetActive(true);
 				IsVoid.gameObject.SetActive(true);
+				TimingGroup.gameObject.SetActive(true);
 				foreach (var s in selected)
 				{
 					if (Track.gameObject.activeSelf) Track.gameObject.SetActive(s is ArcTap || s is ArcHold);
@@ -77,46 +79,49 @@ namespace Arcade.Compose.Editing
 					if (LineType.gameObject.activeSelf) LineType.gameObject.SetActive(s is ArcArc);
 					if (Color.gameObject.activeSelf) Color.gameObject.SetActive(s is ArcArc);
 					if (IsVoid.gameObject.activeSelf) IsVoid.gameObject.SetActive(s is ArcArc);
+					if (TimingGroup.gameObject.activeSelf) TimingGroup.gameObject.SetActive(s is ISetableTimingGroup);
 				}
 				bool multiple = count != 1;
 				ArcNote note = selected[0];
-				Timing.GetComponentInChildren<InputField>().text = multiple ? "-" : note.Timing.ToString();
+				Timing.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-" : note.Timing.ToString());
 				if (Track.gameObject.activeSelf)
 				{
-					Track.GetComponentInChildren<InputField>().text = multiple ? "-" : (note is ArcTap ? (note as ArcTap).Track.ToString() : (note as ArcHold).Track.ToString());
+					Track.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-" : (note is ArcTap ? (note as ArcTap).Track.ToString() : (note as ArcHold).Track.ToString()));
 				}
 				if (EndTiming.gameObject.activeSelf)
 				{
-					EndTiming.GetComponentInChildren<InputField>().text = multiple ? "-" : (note as ArcLongNote).EndTiming.ToString();
+					EndTiming.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-" : (note as ArcLongNote).EndTiming.ToString());
 				}
 				if (StartPos.gameObject.activeSelf)
 				{
-					StartPos.GetComponentInChildren<InputField>().text = multiple ? "-,-" : $"{(note as ArcArc).XStart.ToString("f2")},{(note as ArcArc).YStart.ToString("f2")}";
+					StartPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-,-" : $"{(note as ArcArc).XStart.ToString("f2")},{(note as ArcArc).YStart.ToString("f2")}");
 				}
 				if (EndPos.gameObject.activeSelf)
 				{
-					EndPos.GetComponentInChildren<InputField>().text = multiple ? "-,-" : $"{(note as ArcArc).XEnd.ToString("f2")},{(note as ArcArc).YEnd.ToString("f2")}";
+					EndPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-,-" : $"{(note as ArcArc).XEnd.ToString("f2")},{(note as ArcArc).YEnd.ToString("f2")}");
 				}
 				if (LineType.gameObject.activeSelf)
 				{
-					LineType.GetComponentInChildren<Dropdown>().value = multiple ? 0 : (int)(note as ArcArc).LineType;
+					LineType.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : (int)(note as ArcArc).LineType);
 				}
 				if (Color.gameObject.activeSelf)
 				{
-					Color.GetComponentInChildren<Dropdown>().value = multiple ? 0 : (note as ArcArc).Color;
+					Color.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : (note as ArcArc).Color);
 				}
 				if (IsVoid.gameObject.activeSelf)
 				{
-					IsVoid.GetComponentInChildren<Toggle>().isOn = multiple ? false : (note as ArcArc).IsVoid;
+					IsVoid.GetComponentInChildren<Toggle>().SetIsOnWithoutNotify(multiple ? false : (note as ArcArc).IsVoid);
+				}
+				if (TimingGroup.gameObject.activeSelf)
+				{
+					TimingGroup.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : ((note as IHasTimingGroup).TimingGroup?.Id ?? 0));
 				}
 				Panel.gameObject.SetActive(true);
 			}
-			canEdit = true;
 		}
 
 		public void OnTiming(InputField inputField)
 		{
-			if (!canEdit) return;
 			try
 			{
 				string t = inputField.text;
@@ -145,7 +150,6 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnTrack(InputField inputField)
 		{
-			if (!canEdit) return;
 			try
 			{
 				string t = inputField.text;
@@ -185,22 +189,24 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnEndTiming(InputField inputField)
 		{
-			if (!canEdit) return;
 			try
 			{
 				string t = inputField.text;
 				int endTiming = int.Parse(t);
-				List<EditArcEventCommand> commands=new List<EditArcEventCommand>();
+				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
 				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcLongNote;
 					ne.EndTiming = endTiming;
 					commands.Add(new EditArcEventCommand(n, ne));
 				}
-				if(commands.Count==1){
+				if (commands.Count == 1)
+				{
 					CommandManager.Instance.Add(commands[0]);
-				}else if(commands.Count>1){
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(),"批量修改 Note"));
+				}
+				else if (commands.Count > 1)
+				{
+					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -211,14 +217,13 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnStartPos(InputField inputField)
 		{
-			if (!canEdit) return;
 			try
 			{
 				string t = inputField.text;
 				string[] ts = t.Split(',');
 				float x = float.Parse(ts[0]);
 				float y = float.Parse(ts[1]);
-				List<EditArcEventCommand> commands=new List<EditArcEventCommand>();
+				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
 				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
@@ -226,10 +231,13 @@ namespace Arcade.Compose.Editing
 					ne.YStart = y;
 					commands.Add(new EditArcEventCommand(n, ne));
 				}
-				if(commands.Count==1){
+				if (commands.Count == 1)
+				{
 					CommandManager.Instance.Add(commands[0]);
-				}else if(commands.Count>1){
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(),"批量修改 Note"));
+				}
+				else if (commands.Count > 1)
+				{
+					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -240,14 +248,13 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnEndPos(InputField inputField)
 		{
-			if (!canEdit) return;
 			try
 			{
 				string t = inputField.text;
 				string[] ts = t.Split(',');
 				float x = float.Parse(ts[0]);
 				float y = float.Parse(ts[1]);
-				List<EditArcEventCommand> commands=new List<EditArcEventCommand>();
+				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
 				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
@@ -255,10 +262,13 @@ namespace Arcade.Compose.Editing
 					ne.YEnd = y;
 					commands.Add(new EditArcEventCommand(n, ne));
 				}
-				if(commands.Count==1){
+				if (commands.Count == 1)
+				{
 					CommandManager.Instance.Add(commands[0]);
-				}else if(commands.Count>1){
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(),"批量修改 Note"));
+				}
+				else if (commands.Count > 1)
+				{
+					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -269,20 +279,22 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnLineType(Dropdown dropdown)
 		{
-			if (!canEdit) return;
 			try
 			{
-				List<EditArcEventCommand> commands=new List<EditArcEventCommand>();
+				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
 				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
 					ne.LineType = (ArcLineType)dropdown.value;
 					commands.Add(new EditArcEventCommand(n, ne));
 				}
-				if(commands.Count==1){
+				if (commands.Count == 1)
+				{
 					CommandManager.Instance.Add(commands[0]);
-				}else if(commands.Count>1){
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(),"批量修改 Note"));
+				}
+				else if (commands.Count > 1)
+				{
+					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -293,20 +305,22 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnColor(Dropdown dropdown)
 		{
-			if (!canEdit) return;
 			try
 			{
-				List<EditArcEventCommand> commands=new List<EditArcEventCommand>();
+				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
 				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
 					ne.Color = dropdown.value;
 					commands.Add(new EditArcEventCommand(n, ne));
 				}
-				if(commands.Count==1){
+				if (commands.Count == 1)
+				{
 					CommandManager.Instance.Add(commands[0]);
-				}else if(commands.Count>1){
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(),"批量修改 Note"));
+				}
+				else if (commands.Count > 1)
+				{
+					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -317,20 +331,22 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnIsVoid(Toggle toggle)
 		{
-			if (!canEdit) return;
 			try
 			{
-				List<EditArcEventCommand> commands=new List<EditArcEventCommand>();
+				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
 				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
 					ne.IsVoid = toggle.isOn;
 					commands.Add(new EditArcEventCommand(n, ne));
 				}
-				if(commands.Count==1){
+				if (commands.Count == 1)
+				{
 					CommandManager.Instance.Add(commands[0]);
-				}else if(commands.Count>1){
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(),"批量修改 Note"));
+				}
+				else if (commands.Count > 1)
+				{
+					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -340,14 +356,63 @@ namespace Arcade.Compose.Editing
 			}
 		}
 
-		public void OnSelectParent() {
+		public void OnTimingGroup(Dropdown dropdown)
+		{
+			try
+			{
+				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
+				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				{
+					var ne = n.Clone() as ISetableTimingGroup;
+					ne.TimingGroup = dropdown.value == 0 ? null : ArcTimingManager.Instance.timingGroups[dropdown.value - 1];
+					commands.Add(new EditArcEventCommand(n, ne as ArcEvent));
+				}
+				if (commands.Count == 1)
+				{
+					CommandManager.Instance.Add(commands[0]);
+				}
+				else if (commands.Count > 1)
+				{
+					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+				}
+			}
+			catch (Exception Ex)
+			{
+				AdeToast.Instance.Show("赋值时出现错误");
+				Debug.LogException(Ex);
+			}
+		}
+
+		public void OnSelectParent()
+		{
 			List<ArcNote> selectedNotes = AdeCursorManager.Instance.SelectedNotes;
-			if (selectedNotes.Count == 1){
-				if(selectedNotes[0] is ArcArcTap){
-					ArcArc arc=(selectedNotes[0] as ArcArcTap).Arc;
+			if (selectedNotes.Count == 1)
+			{
+				if (selectedNotes[0] is ArcArcTap)
+				{
+					ArcArc arc = (selectedNotes[0] as ArcArcTap).Arc;
 					AdeCursorManager.Instance.DeselectAllNotes();
 					AdeCursorManager.Instance.SelectNote(arc);
 				}
+			}
+		}
+
+		public void UpdateTimingGroupOptions()
+		{
+			List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
+			options.Add(new Dropdown.OptionData { text = "默认" });
+			foreach (var tg in ArcTimingManager.Instance.timingGroups)
+			{
+				options.Add(new Dropdown.OptionData { text = tg.Id.ToString() });
+			}
+			TimingGroup.GetComponentInChildren<Dropdown>().options = options;
+			List<ArcNote> selected = AdeCursorManager.Instance.SelectedNotes;
+			int count = selected.Count;
+			if (TimingGroup.gameObject.activeSelf && count > 0)
+			{
+				bool multiple = count != 1;
+				ArcNote note = selected[0];
+				TimingGroup.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : ((note as IHasTimingGroup).TimingGroup?.Id ?? 0));
 			}
 		}
 	}

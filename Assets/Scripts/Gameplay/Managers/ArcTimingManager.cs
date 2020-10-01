@@ -83,6 +83,7 @@ namespace Arcade.Gameplay
 			{
 				timingGroup.Timings = timingGroup.Timings.OrderBy((timing) => timing.Timing).ToList();
 			}
+			OnTimingGroupChange();
 			OnTimingChange(null);
 		}
 
@@ -392,7 +393,11 @@ namespace Arcade.Gameplay
 			if(timingGroup ==null){
 				CalculateBeatlineTimes();
 			}
-			AdeTimingEditor.Instance.ForceUpdate(timingGroup);
+			AdeTimingEditor.Instance.ForceUpdateTimingGroup(timingGroup);
+		}
+		public void OnTimingGroupChange()
+		{
+			AdeTimingEditor.Instance.ForceUpdateAll();
 		}
 		// Note: this is a function used to optimize rendering by avoid not needed position calculation
 		// Invoker should manually check position again after this check passed
