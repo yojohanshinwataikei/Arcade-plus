@@ -20,6 +20,7 @@ namespace Arcade.Compose
 		public int AgreedUserAgreementVersion;
 		public long ReadWhatsNewVersion;
 		public string ScreenResolution = "1280x720";
+		public bool Fullscreen = false;
 		public int TargetFrameRate = -1;
 		public int Velocity = 30;
 		public uint UndoBufferSize = 200;
@@ -106,6 +107,7 @@ namespace Arcade.Compose
 		public Text Version;
 
 		public Dropdown ResolutionDropdown;
+		public Toggle FullscreenToggle;
 		public Dropdown TargetFramerateDropdown;
 		public InputField UndoBufferSizeInput;
 
@@ -126,8 +128,15 @@ namespace Arcade.Compose
 			ArcGameplayManager.Instance.OnMusicFinished.AddListener(Pause);
 			ResolutionDropdown.onValueChanged.AddListener((int value) =>
 			{
-				SetResolution(ResolutionDropdown.options[value].text);
 				ArcadePreference.ScreenResolution = ResolutionDropdown.options[value].text;
+				SetResolution(ArcadePreference.ScreenResolution,ArcadePreference.Fullscreen);
+				SavePreferences();
+			});
+			FullscreenToggle.onValueChanged.AddListener((bool value) =>
+			{
+				ArcadePreference.Fullscreen = value;
+				ResolutionDropdown.interactable = !value;
+				SetResolution(ArcadePreference.ScreenResolution,ArcadePreference.Fullscreen);
 				SavePreferences();
 			});
 			TargetFramerateDropdown.onValueChanged.AddListener((int value) =>
@@ -208,13 +217,19 @@ namespace Arcade.Compose
 			}
 		}
 
-		public void SetResolution(string resolution)
+		public void SetResolution(string resolution, bool fullscreen)
 		{
+			if (fullscreen)
+			{
+				Debug.Log($"[fullscreen]{Screen.currentResolution.width}x{Screen.currentResolution.height}");
+				Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
+				return;
+			}
 			// here we do not check format of string
 			string[] dimensions = resolution.Split('x');
 			int width = int.Parse(dimensions[0]);
 			int height = int.Parse(dimensions[1]);
-			Screen.SetResolution(width, height, false);
+			Screen.SetResolution(width, height, FullScreenMode.Windowed);
 		}
 		public void SetTargetFramerate(int fps)
 		{
@@ -352,7 +367,10 @@ namespace Arcade.Compose
 				{
 					ArcadePreference.ScreenResolution = ResolutionDropdown.options[ResolutionDropdown.value].text;
 				}
-				SetResolution(ArcadePreference.ScreenResolution);
+				ResolutionDropdown.interactable = !ArcadePreference.Fullscreen;
+				FullscreenToggle.SetIsOnWithoutNotify(ArcadePreference.Fullscreen);
+				Screen.fullScreen = ArcadePreference.Fullscreen;
+				SetResolution(ArcadePreference.ScreenResolution, ArcadePreference.Fullscreen);
 				bool targetFramerateHit = false;
 				for (int i = 0; i < TargetFramerateDropdown.options.Count; i++)
 				{
