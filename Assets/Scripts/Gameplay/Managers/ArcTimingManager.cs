@@ -371,14 +371,14 @@ namespace Arcade.Gameplay
 			Timings.Clear();
 			Timings.AddRange(timings);
 		}
-		public void Add(ArcTiming newTiming, ArcTimingGroup timingGroup)
+		public void AddTiming(ArcTiming newTiming, ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
 			Timings.Add(newTiming);
 			ReOrderTimingGroup(timingGroup);
 			OnTimingChange(timingGroup);
 		}
-		public void Remove(ArcTiming timing, ArcTimingGroup timingGroup)
+		public void RemoveTiming(ArcTiming timing, ArcTimingGroup timingGroup)
 		{
 			GetTiming(timingGroup).Remove(timing);
 			OnTimingChange(timingGroup);
@@ -390,10 +390,37 @@ namespace Arcade.Gameplay
 		}
 		public void OnTimingChange(ArcTimingGroup timingGroup)
 		{
-			if(timingGroup ==null){
+			if (timingGroup == null)
+			{
 				CalculateBeatlineTimes();
 			}
 			AdeTimingEditor.Instance.ForceUpdateTimingGroup(timingGroup);
+		}
+		public void AddTimingGroup(ArcTimingGroup timingGroup)
+		{
+			if (timingGroup.Id > timingGroups.Count + 1)
+			{
+				timingGroup.Id = timingGroups.Count + 1;
+			}
+			if (timingGroup.Id < 1)
+			{
+				timingGroup.Id = 1;
+			}
+			int pos=timingGroup.Id-1;
+			timingGroups.Insert(pos,timingGroup);
+			for(int i=pos+1;i<timingGroups.Count;i++){
+				timingGroups[i].Id=i+1;
+			}
+			OnTimingGroupChange();
+		}
+		public void RemoveTimingGroup(ArcTimingGroup timingGroup)
+		{
+			int pos=timingGroup.Id-1;
+			timingGroups.Remove(timingGroup);
+			for(int i=pos;i<timingGroups.Count;i++){
+				timingGroups[i].Id=i+1;
+			}
+			OnTimingGroupChange();
 		}
 		public void OnTimingGroupChange()
 		{

@@ -18,6 +18,7 @@ namespace Arcade.Compose.Editing
 		public RectTransform TimingContent;
 		public Dropdown CurrentTimingGroupDropdown;
 		public Text CurrentTimingGroupText;
+		public Button AddTimingGroupButton, RemoveTimingGroupButton;
 
 		public ArcTimingGroup currentTimingGroup { get; private set; } = null;
 
@@ -62,14 +63,33 @@ namespace Arcade.Compose.Editing
 			return $"{timing.Timing},{timing.Bpm.ToString("f2")},{timing.BeatsPerLine.ToString("f2")}";
 		}
 
-		public void Add(ArcTiming caller)
+		public void AddTiming(ArcTiming caller)
 		{
 			CommandManager.Instance.Add(new AddTimingEvent(currentTimingGroup, caller.Clone() as ArcTiming));
 		}
-		public void Delete(ArcTiming caller)
+		public void RemoveTiming(ArcTiming caller)
 		{
 			CommandManager.Instance.Add(new RemoveTimingEvent(currentTimingGroup, caller));
 		}
+		public void AddTimingGroup()
+		{
+			ArcTimingGroup timingGroup = new ArcTimingGroup
+			{
+				Id = ArcTimingManager.Instance.timingGroups.Count + 1,
+				Timings = ArcTimingManager.Instance.GetTiming(currentTimingGroup).Select((timing) => timing.Clone() as ArcTiming).ToList(),
+			};
+			CommandManager.Instance.Add(new AddTimingGroup(timingGroup));
+			SetCurrentTimingGroup(timingGroup);
+		}
+		public void RemoveTimingGroup()
+		{
+			if (currentTimingGroup == null)
+			{
+				return;
+			}
+			CommandManager.Instance.Add(new RemoveTimingGroup(currentTimingGroup));
+		}
+
 		public void UpdateTiming()
 		{
 			inUse = 0;
@@ -84,7 +104,18 @@ namespace Arcade.Compose.Editing
 
 			CurrentTimingGroupDropdown.SetValueWithoutNotify(currentTimingGroup?.Id ?? 0);
 
-			CurrentTimingGroupDropdown.interactable = ArcGameplayManager.Instance.Chart != null;
+			if (ArcGameplayManager.Instance.Chart == null)
+			{
+				CurrentTimingGroupDropdown.interactable = false;
+				AddTimingGroupButton.interactable = false;
+				RemoveTimingGroupButton.interactable = false;
+			}
+			else
+			{
+				CurrentTimingGroupDropdown.interactable = true;
+				AddTimingGroupButton.interactable = true;
+				RemoveTimingGroupButton.interactable = currentTimingGroup != null;
+			}
 			List<ArcTiming> timings = ArcTimingManager.Instance.GetTiming(currentTimingGroup);
 			foreach (var t in timings)
 			{
@@ -175,11 +206,11 @@ namespace Arcade.Compose.Editing
 		}
 		public void Do()
 		{
-			ArcTimingManager.Instance.Add(timing, timingGroup);
+			ArcTimingManager.Instance.AddTiming(timing, timingGroup);
 		}
 		public void Undo()
 		{
-			ArcTimingManager.Instance.Remove(timing, timingGroup);
+			ArcTimingManager.Instance.RemoveTiming(timing, timingGroup);
 		}
 	}
 
@@ -201,11 +232,11 @@ namespace Arcade.Compose.Editing
 		}
 		public void Do()
 		{
-			ArcTimingManager.Instance.Remove(timing, timingGroup);
+			ArcTimingManager.Instance.RemoveTiming(timing, timingGroup);
 		}
 		public void Undo()
 		{
-			ArcTimingManager.Instance.Add(timing, timingGroup);
+			ArcTimingManager.Instance.AddTiming(timing, timingGroup);
 		}
 	}
 	public class EditTimingEvent : ICommand
@@ -236,6 +267,99 @@ namespace Arcade.Compose.Editing
 		{
 			timing.Assign(oldValues);
 			ArcTimingManager.Instance.UpdateTimingGroup(timingGroup);
+		}
+	}
+
+	public class AddTimingGroup : ICommand
+	{
+		private readonly ArcTimingGroup timingGroup;
+		public AddTimingGroup(ArcTimingGroup timingGroup)
+		{
+			this.timingGroup = timingGroup;
+		}
+		public string Name
+		{
+			get
+			{
+				return "添加 Timing Group";
+			}
+		}
+		public void Do()
+		{
+			ArcTimingManager.Instance.AddTimingGroup(timingGroup);
+		}
+		public void Undo()
+		{
+			if (AdeTimingEditor.Instance.currentTimingGroup == timingGroup)
+			{
+				AdeTimingEditor.Instance.SetCurrentTimingGroup(null);
+			}
+			ArcTimingManager.Instance.RemoveTimingGroup(timingGroup);
+		}
+
+	}
+	public class RemoveTimingGroup : ICommand
+	{
+		private readonly ArcTimingGroup timingGroup;
+		private readonly List<ArcTap> taps;
+		private readonly List<ArcHold> holds;
+		private readonly List<ArcArc> arcs;
+		public RemoveTimingGroup(ArcTimingGroup timingGroup)
+		{
+			this.timingGroup = timingGroup;
+			this.taps = ArcTapNoteManager.Instance.Taps.Where((tap) => tap.TimingGroup == timingGroup).ToList();
+			this.holds = ArcHoldNoteManager.Instance.Holds.Where((hold) => hold.TimingGroup == timingGroup).ToList();
+			this.arcs = ArcArcManager.Instance.Arcs.Where((arc) => arc.TimingGroup == timingGroup).ToList();
+		}
+		public string Name
+		{
+			get
+			{
+				return "删除 Timing Group";
+			}
+		}
+		public void Do()
+		{
+			foreach (var tap in taps)
+			{
+				AdeCursorManager.Instance.DeselectNote(tap);
+				ArcTapNoteManager.Instance.Remove(tap);
+			}
+			foreach (var hold in holds)
+			{
+				AdeCursorManager.Instance.DeselectNote(hold);
+				ArcHoldNoteManager.Instance.Remove(hold);
+			}
+			foreach (var arc in arcs)
+			{
+				AdeCursorManager.Instance.DeselectNote(arc);
+				foreach (var arctap in arc.ArcTaps)
+				{
+					AdeCursorManager.Instance.DeselectNote(arctap);
+				}
+				ArcArcManager.Instance.Remove(arc);
+			}
+			if (AdeTimingEditor.Instance.currentTimingGroup == timingGroup)
+			{
+				AdeTimingEditor.Instance.SetCurrentTimingGroup(null);
+			}
+			ArcTimingManager.Instance.RemoveTimingGroup(timingGroup);
+		}
+		public void Undo()
+		{
+			foreach (var tap in taps)
+			{
+				ArcTapNoteManager.Instance.Add(tap);
+			}
+			foreach (var hold in holds)
+			{
+				ArcHoldNoteManager.Instance.Add(hold);
+			}
+			foreach (var arc in arcs)
+			{
+				ArcArcManager.Instance.Add(arc);
+			}
+			ArcTimingManager.Instance.AddTimingGroup(timingGroup);
 		}
 	}
 }

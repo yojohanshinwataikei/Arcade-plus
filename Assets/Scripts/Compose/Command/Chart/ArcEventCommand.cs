@@ -49,6 +49,10 @@ namespace Arcade.Compose.Command
 			}
 			else if (note is ArcArc)
 			{
+				foreach (var arctap in (note as ArcArc).ArcTaps)
+				{
+					AdeCursorManager.Instance.DeselectNote(arctap);
+				}
 				ArcArcManager.Instance.Remove(note as ArcArc);
 			}
 		}
@@ -83,6 +87,10 @@ namespace Arcade.Compose.Command
 			}
 			else if (note is ArcArc)
 			{
+				foreach (var arctap in (note as ArcArc).ArcTaps)
+				{
+					AdeCursorManager.Instance.DeselectNote(arctap);
+				}
 				ArcArcManager.Instance.Remove(note as ArcArc);
 			}
 		}

@@ -26,11 +26,11 @@ namespace Arcade.Compose.Editing
 		}
 		public void Add()
 		{
-			AdeTimingEditor.Instance.Add(TimingReference);
+			AdeTimingEditor.Instance.AddTiming(TimingReference);
 		}
 		public void Delete()
 		{
-			AdeTimingEditor.Instance.Delete(TimingReference);
+			AdeTimingEditor.Instance.RemoveTiming(TimingReference);
 		}
 		public void OnEndEdit()
 		{
