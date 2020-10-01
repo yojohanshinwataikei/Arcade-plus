@@ -173,22 +173,25 @@ namespace Arcade.Aff.Faults
         }
         public override void Check(ArcChart chart)
         {
-            foreach (var h in chart.Holds)
-            {
-                foreach (var t in chart.Timings)
-                {
-                    if (t.Timing > h.Timing && t.Timing < h.EndTiming)
-                    {
-                        Faults.Add(h);
-                    }
-                }
-            }
+            // foreach (var h in chart.Holds)
+            // {
+            //     foreach (var t in chart.Timings)
+            //     {
+            //         if (t.Timing > h.Timing && t.Timing < h.EndTiming)
+            //         {
+            //             Faults.Add(h);
+            //         }
+            //     }
+            // }
             foreach (var a in chart.Arcs)
             {
                 foreach (var t in chart.Timings)
                 {
                     if (t.Timing > a.Timing && t.Timing < a.EndTiming)
                     {
+                        if(Mathf.Approximately(a.XStart,a.XEnd) && Mathf.Approximately(a.YStart,a.YEnd)){
+                            continue;
+                        }
                         Faults.Add(a);
                     }
                 }
