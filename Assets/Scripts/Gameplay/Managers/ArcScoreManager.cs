@@ -68,7 +68,7 @@ namespace Arcade.Gameplay
 			}
 			foreach (var arc in ArcArcManager.Instance.Arcs)
 			{
-				if (arc.Timing > timing) break;
+				if (arc.Timing > timing) continue;
 				foreach (float t in arc.JudgeTimings)
 				{
 					if (t <= timing)
