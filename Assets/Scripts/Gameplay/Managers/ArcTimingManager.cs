@@ -17,7 +17,7 @@ namespace Arcade.Gameplay
 		}
 		private void Start()
 		{
-			speedShaderId = Shader.PropertyToID("_Speed");
+			phaseShaderId = Shader.PropertyToID("_Phase");
 		}
 
 		private int velocity = 30;
@@ -36,7 +36,8 @@ namespace Arcade.Gameplay
 		private List<SpriteRenderer> beatLineInstances = new List<SpriteRenderer>();
 		private float earliestRenderTime = 0;
 		private float latestRenderTime = 0;
-		private int speedShaderId = 0;
+		private int phaseShaderId = 0;
+		private float phase = 0;
 		public float CurrentSpeed { get; set; }
 		public List<ArcTiming> Timings { get => timings; }
 		public int Velocity
@@ -69,7 +70,7 @@ namespace Arcade.Gameplay
 			Timings.Clear();
 			timingGroups.Clear();
 			AdeTimingEditor.Instance.SetCurrentTimingGroup(null);
-			TrackRenderer.sharedMaterial.SetFloat(speedShaderId, 0);
+			TrackRenderer.sharedMaterial.SetFloat(phaseShaderId, 0);
 			HideExceededBeatlineInstance(0);
 		}
 		public void Load(List<ArcTiming> arcTimings, List<ArcTimingGroup> arcTimingGroups)
@@ -263,7 +264,7 @@ namespace Arcade.Gameplay
 		private void UpdateRenderRange(ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
-			int nearPosition = 0;
+			int nearPosition = -20000;
 			int farPosition = 100000;
 			float earliestRenderTime, latestRenderTime;
 			if (Timings.Count == 0)
@@ -316,11 +317,23 @@ namespace Arcade.Gameplay
 					{
 						continue;
 					}
-					float nearTime = Mathf.Lerp(startTime, finishTime, Mathf.InverseLerp(startPosition, finishPosition, nearPosition));
-					float farTime = Mathf.Lerp(startTime, finishTime, Mathf.InverseLerp(startPosition, finishPosition, farPosition));
+					float nearTime;
+					float farTime;
+					if (Mathf.Approximately(startPosition, finishPosition))
+					{
+						nearTime = startTime;
+						farTime = finishTime;
+					}
+					else
+					{
+						nearTime = Mathf.Lerp(startTime, finishTime, Mathf.InverseLerp(startPosition, finishPosition, nearPosition));
+						farTime = Mathf.Lerp(startTime, finishTime, Mathf.InverseLerp(startPosition, finishPosition, farPosition));
+					}
 					earliestRenderTime = Mathf.Min(earliestRenderTime, nearTime, farTime);
 					latestRenderTime = Mathf.Max(latestRenderTime, nearTime, farTime);
 				}
+				earliestRenderTime = Mathf.Min(earliestRenderTime, currentTiming);
+				latestRenderTime = Mathf.Max(latestRenderTime, currentTiming);
 				earliestRenderTime += ArcAudioManager.Instance.AudioOffset;
 				latestRenderTime += ArcAudioManager.Instance.AudioOffset;
 			}
@@ -361,7 +374,9 @@ namespace Arcade.Gameplay
 		}
 		private void UpdateTrackSpeed()
 		{
-			TrackRenderer.sharedMaterial.SetFloat(speedShaderId, ArcGameplayManager.Instance.IsPlaying ? CurrentSpeed : 0);
+			phase += 3f * (ArcGameplayManager.Instance.IsPlaying ? CurrentSpeed : 0) * Time.deltaTime;
+			phase -= Mathf.Floor(phase);
+			TrackRenderer.sharedMaterial.SetFloat(phaseShaderId, phase);
 		}
 
 		public void ReOrderTimingGroup(ArcTimingGroup timingGroup)
@@ -406,19 +421,21 @@ namespace Arcade.Gameplay
 			{
 				timingGroup.Id = 1;
 			}
-			int pos=timingGroup.Id-1;
-			timingGroups.Insert(pos,timingGroup);
-			for(int i=pos+1;i<timingGroups.Count;i++){
-				timingGroups[i].Id=i+1;
+			int pos = timingGroup.Id - 1;
+			timingGroups.Insert(pos, timingGroup);
+			for (int i = pos + 1; i < timingGroups.Count; i++)
+			{
+				timingGroups[i].Id = i + 1;
 			}
 			OnTimingGroupChange();
 		}
 		public void RemoveTimingGroup(ArcTimingGroup timingGroup)
 		{
-			int pos=timingGroup.Id-1;
+			int pos = timingGroup.Id - 1;
 			timingGroups.Remove(timingGroup);
-			for(int i=pos;i<timingGroups.Count;i++){
-				timingGroups[i].Id=i+1;
+			for (int i = pos; i < timingGroups.Count; i++)
+			{
+				timingGroups[i].Id = i + 1;
 			}
 			OnTimingGroupChange();
 		}

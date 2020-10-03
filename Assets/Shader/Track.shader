@@ -3,7 +3,7 @@ Shader "Arcade/Track"
 	Properties
 	{
 		[PerRendererData] _MainTex ("Texture", 2D) = "white" {}
-		_Speed ("Speed", Float) = 1
+		_Phase ("Phase", Float) = 0
 		_Color ("Color", Color) = (1,1,1,1)
 	}
 	SubShader
@@ -33,7 +33,7 @@ Shader "Arcade/Track"
 				float2 uv : TEXCOORD0;
 			};
 
-			float _Speed;
+			float _Phase;
 			sampler2D _MainTex;
 			float4 _Color;
 
@@ -48,7 +48,7 @@ Shader "Arcade/Track"
 			half4 frag (v2f i) : SV_Target
 			{
 			    float2 p = i.uv;
-				p.y = (p.y + _Time.y * abs(_Speed) * 3) % 1;
+				p.y = (p.y + _Phase) % 1;
 				float4 c= tex2D(_MainTex,p);
 				c.a = _Color.a;
 				return c;
