@@ -613,6 +613,11 @@ namespace Arcade.Gameplay
 					{
 						ArcArcSegmentComponent s = segments[0];
 						int duration = s.ToTiming - s.FromTiming;
+						if (duration == 0)
+						{
+							EnableHead = false;
+							return;
+						}
 						float t = duration == 0 ? 0 : ((-arc.Position / 1000f) / (-s.ToPos.z));
 						if (t > 1)
 						{
