@@ -69,7 +69,7 @@ namespace Arcade.Gameplay
 					{
 						if (a.Color == b.Color && a.IsVoid == b.IsVoid)
 						{
-							if (a.ArcGroup == null && b.ArcGroup != null)
+							if (b.ArcGroup != null)
 							{
 								a.ArcGroup = b.ArcGroup;
 							}
@@ -77,19 +77,10 @@ namespace Arcade.Gameplay
 							{
 								b.ArcGroup = a.ArcGroup;
 							}
-							else if (a.ArcGroup != null && b.ArcGroup != null)
-							{
-								foreach (var t in b.ArcGroup)
-								{
-									if (!a.ArcGroup.Contains(t)) a.ArcGroup.Add(t);
-								}
-								b.ArcGroup = a.ArcGroup;
-							}
 							else if (a.ArcGroup == null && b.ArcGroup == null)
 							{
-								a.ArcGroup = b.ArcGroup = new List<ArcArc> { a };
+								a.ArcGroup = b.ArcGroup = new List<ArcArc>();
 							}
-							if (!a.ArcGroup.Contains(b)) a.ArcGroup.Add(b);
 						}
 						if (a.IsVoid == b.IsVoid)
 						{
@@ -100,7 +91,17 @@ namespace Arcade.Gameplay
 			}
 			foreach (ArcArc arc in Arcs)
 			{
-				if (arc.ArcGroup == null) arc.ArcGroup = new List<ArcArc> { arc };
+				if (arc.ArcGroup == null)
+				{
+					arc.ArcGroup = new List<ArcArc> { arc };
+				}
+				else
+				{
+					if (!arc.ArcGroup.Contains(arc))
+					{
+						arc.ArcGroup.Add(arc);
+					}
+				}
 				arc.ArcGroup.Sort((ArcArc a, ArcArc b) => a.Timing.CompareTo(b.Timing));
 			}
 			foreach (ArcArc arc in Arcs)
