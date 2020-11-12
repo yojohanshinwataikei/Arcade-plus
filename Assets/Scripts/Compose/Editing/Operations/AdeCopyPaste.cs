@@ -118,6 +118,7 @@ namespace Arcade.Compose
 						int duration = note.EndTiming - note.Timing;
 						note.Timing = timing + dif;
 						note.EndTiming = timing + duration + dif;
+						(note as ArcArc)?.Rebuild();
 						break;
 					case ArcArcTap note:
 						if (note.Arc.Timing > timing + dif || note.Arc.EndTiming < timing + dif)
