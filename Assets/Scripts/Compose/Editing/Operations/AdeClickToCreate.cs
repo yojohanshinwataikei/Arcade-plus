@@ -306,11 +306,11 @@ namespace Arcade.Compose.Editing
 		}
 		private IEnumerator PostCreateArcNoteCoroutine(ArcArc arc)
 		{
-			AdePositionSelector.Instance.ModifyNote(arc, (a) => { arc.XStart = arc.XEnd = a.x; arc.YStart = arc.YEnd = a.y; arc.Rebuild(); });
+			AdePositionSelector.Instance.ModifyNote(arc, (a) => { arc.XStart = arc.XEnd = a.x; arc.YStart = arc.YEnd = a.y; arc.Rebuild(); ArcArcManager.Instance.CalculateArcRelationship(); });
 			while (AdePositionSelector.Instance.Enable) yield return null;
-			AdeTimingSelector.Instance.ModifyNote(arc, (a) => { arc.EndTiming = a; arc.Rebuild(); });
+			AdeTimingSelector.Instance.ModifyNote(arc, (a) => { arc.EndTiming = a; arc.Rebuild(); ArcArcManager.Instance.CalculateArcRelationship(); });
 			while (AdeTimingSelector.Instance.Enable) yield return null;
-			AdePositionSelector.Instance.ModifyNote(arc, (a) => { arc.XEnd = a.x; arc.YEnd = a.y; arc.Rebuild(); });
+			AdePositionSelector.Instance.ModifyNote(arc, (a) => { arc.XEnd = a.x; arc.YEnd = a.y; arc.Rebuild(); ArcArcManager.Instance.CalculateArcRelationship(); });
 			while (AdePositionSelector.Instance.Enable) yield return null;
 			CommandManager.Instance.Commit();
 			pendingNote = null;
