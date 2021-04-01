@@ -71,9 +71,10 @@ namespace Arcade.Aff
 	}
 	public class RawAffTimingGroup : IRawAffItem
 	{
-		public List<IRawAffNestableItem> items;
+		public TimingGroupType Type;
+		public List<IRawAffNestableItem> Items;
 	}
-	public class RawAffSceneControl : IRawAffItem
+	public class RawAffSceneControl : IRawAffNestableItem
 	{
 		public int Timing;
 		public string Type;
@@ -262,14 +263,18 @@ namespace Arcade.Aff
 			else if (item is RawAffTimingGroup)
 			{
 				var timinggroup = item as RawAffTimingGroup;
-				writer.WriteLine($"{intent}timinggroup(){{");
-				foreach (var nestedItem in timinggroup.items)
+				writer.WriteLine($"{intent}timinggroup({TimingGroupTypeStrings[timinggroup.Type]}){{");
+				foreach (var nestedItem in timinggroup.Items)
 				{
 					writeItem(writer, nestedItem, intent + "  ");
 				}
 				writer.WriteLine($"{intent}}};");
 			}
 		}
+		public static Dictionary<TimingGroupType,string> TimingGroupTypeStrings=new Dictionary<TimingGroupType, string>{
+			[TimingGroupType.Normal]="",
+			[TimingGroupType.NoInput]="noinput",
+		};
 	}
 
 	class AffErrorListener<T> : IAntlrErrorListener<T>
@@ -496,7 +501,7 @@ namespace Arcade.Aff
 			var effect = CheckValueType<RawAffWord>(context.values().value()[8], "arc", "效果类型");
 			var rawIsVoid = CheckValueType<RawAffWord>(context.values().value()[9], "arc", "是否黑线");
 			var isVoid = ParseWord(bools, rawIsVoid.data, context.values().value()[9], "arc", "是否黑线");
-			if (timing == null || endTiming == null || xStart == null || xEnd == null || lineTypes == null || yStart == null || yEnd == null || color == null || effect == null || isVoid == null)
+			if (timing == null || endTiming == null || xStart == null || xEnd == null || lineType == null || yStart == null || yEnd == null || color == null || effect == null || isVoid == null)
 			{
 				return;
 			}
@@ -647,8 +652,14 @@ namespace Arcade.Aff
 		void GenTimingGroup(ArcaeaFileFormatParser.EventContext context)
 		{
 			RejectSubevents(context, "timinggroup");
-			EnsureValuesCount(context, "timinggroup", 0);
+			LimitValuesCount(context, "timinggroup", 1);
 			List<IRawAffNestableItem> items = new List<IRawAffNestableItem>();
+			TimingGroupType? timingGroupType = TimingGroupType.Normal;
+			if (context.values().value().Length > 0)
+			{
+				var rawTimingGroupType = CheckValueType<RawAffWord>(context.values().value()[0], "arc", "arc 类型");
+				timingGroupType = ParseWord(timingGroupTypes, rawTimingGroupType.data, context.values().value()[0], "arc", "arc 类型");
+			}
 			foreach (var item in context.segment().body().item())
 			{
 				IRawAffEvent @event = item.@event().value;
@@ -666,9 +677,14 @@ namespace Arcade.Aff
 				}
 				items.Add(rawItem as IRawAffNestableItem);
 			}
+			if (timingGroupType == null)
+			{
+				return;
+			}
 			context.value = new RawAffTimingGroup()
 			{
-				items = items
+				Items = items,
+				Type = timingGroupType.Value,
 			};
 		}
 
@@ -707,6 +723,17 @@ namespace Arcade.Aff
 			}
 			return true;
 		}
+
+		bool LimitValuesCount(ArcaeaFileFormatParser.EventContext context, string type, int count)
+		{
+			if (context.values().value().Length > count)
+			{
+				chart.warning.Add($"第 {context.values().Start.Line + lineOffset} 行第 {context.values().Start.Column + 1} 列，{type} 事件的参数个数应当为至多 {count} 个而非 {context.values().value().Length} 个");
+				return false;
+			}
+			return true;
+		}
+
 
 		T CheckValueType<T>(ArcaeaFileFormatParser.ValueContext context, string type, string field) where T : class, IRawAffValue
 		{
@@ -764,6 +791,11 @@ namespace Arcade.Aff
 			["qi"] = CameraEaseType.Qi,
 			["qo"] = CameraEaseType.Qo,
 			["reset"] = CameraEaseType.Reset,
+		};
+
+		Dictionary<string, TimingGroupType> timingGroupTypes = new Dictionary<string, TimingGroupType>()
+		{
+			["noinput"] = TimingGroupType.NoInput,
 		};
 	}
 

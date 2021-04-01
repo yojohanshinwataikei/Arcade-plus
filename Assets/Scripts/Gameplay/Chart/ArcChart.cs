@@ -72,10 +72,11 @@ namespace Arcade.Gameplay.Chart
 			{
 				ArcTimingGroup arcTimingGroup = new ArcTimingGroup()
 				{
-					Id = TimingGroups.Count + 1
+					Id = TimingGroups.Count + 1,
+					Type = (item as RawAffTimingGroup).Type,
 				};
 				TimingGroups.Add(arcTimingGroup);
-				foreach (var nestedItem in (item as RawAffTimingGroup).items)
+				foreach (var nestedItem in (item as RawAffTimingGroup).Items)
 				{
 					addRawItem(nestedItem, arcTimingGroup);
 				}
@@ -135,14 +136,15 @@ namespace Arcade.Gameplay.Chart
 			{
 				var timingGroupItem = new RawAffTimingGroup()
 				{
-					items = new List<IRawAffNestableItem>()
+					Items = new List<IRawAffNestableItem>(),
+					Type = timingGroup.Type
 				};
 				foreach (var e in timingGroupEvents[timingGroup])
 				{
 					if (e is IIntoRawItem)
 					{
 						var rawItem = (e as IIntoRawItem).IntoRawItem() as IRawAffNestableItem;
-						timingGroupItem.items.Add(rawItem);
+						timingGroupItem.Items.Add(rawItem);
 					}
 
 				}
@@ -258,6 +260,11 @@ namespace Arcade.Gameplay.Chart
 		TrackHide,
 		TrackShow,
 		Unknown,
+	}
+	public enum TimingGroupType
+	{
+		Normal,
+		NoInput,
 	}
 	public abstract class ArcEvent
 	{
@@ -1318,6 +1325,7 @@ namespace Arcade.Gameplay.Chart
 	{
 		public int Id;
 		public List<ArcTiming> Timings = new List<ArcTiming>();
+		public TimingGroupType Type = TimingGroupType.Normal;
 		public float earliestRenderTime = 0;
 		public float latestRenderTime = 0;
 	}

@@ -405,7 +405,7 @@ namespace Arcade.Compose
 				{
 					if (raw.warning.Count > 0)
 					{
-						AdeSingleDialog.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并试图通过删除有问题的语句来进行修复\n谱面在存在的问题：\n{string.Join("\n", raw.warning.Select(s => $"- {s}"))}", "谱面解析出现问题");
+						AdeSingleDialog.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并对谱面进行了自动修复\n谱面在存在的问题：\n{string.Join("\n", raw.warning.Select(s => $"- {s}"))}", "谱面解析出现问题");
 					}
 					chart = new Gameplay.Chart.ArcChart(raw);
 				}
