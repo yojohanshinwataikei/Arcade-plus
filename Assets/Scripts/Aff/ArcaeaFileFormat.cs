@@ -227,7 +227,7 @@ namespace Arcade.Aff
 					arc.IsVoid = true;
 				}
 				writer.WriteLine($"{intent}arc({arc.Timing},{arc.EndTiming},{arc.XStart.ToString("f2")},{arc.XEnd.ToString("f2")}" +
-					$",{ArcChart.ToLineTypeString(arc.LineType)},{arc.YStart.ToString("f2")},{arc.YEnd.ToString("f2")},{arc.Color},none,{arc.IsVoid.ToString().ToLower()})" +
+					$",{ArcLineTypeStrings[arc.LineType]},{arc.YStart.ToString("f2")},{arc.YEnd.ToString("f2")},{arc.Color},none,{arc.IsVoid.ToString().ToLower()})" +
 					(arc.ArcTaps.Count > 0 ? $"[{string.Join(",", arc.ArcTaps.Select(e => $"arctap({e.Timing})"))}]" : "") +
 					";");
 			}
@@ -235,7 +235,7 @@ namespace Arcade.Aff
 			{
 				var cam = item as RawAffCamera;
 				writer.WriteLine($"{intent}camera({cam.Timing},{cam.MoveX.ToString("f2")},{cam.MoveY.ToString("f2")},{cam.MoveZ.ToString("f2")}," +
-					$"{cam.RotateX.ToString("f2")},{cam.RotateY.ToString("f2")},{cam.RotateZ.ToString("f2")},{ArcChart.ToCameraTypeString(cam.CameraType)},{cam.Duration});");
+					$"{cam.RotateX.ToString("f2")},{cam.RotateY.ToString("f2")},{cam.RotateZ.ToString("f2")},{CameraEaseTypeStrings[cam.CameraType]},{cam.Duration});");
 			}
 			else if (item is RawAffSceneControl)
 			{
@@ -271,9 +271,29 @@ namespace Arcade.Aff
 				writer.WriteLine($"{intent}}};");
 			}
 		}
-		public static Dictionary<TimingGroupType,string> TimingGroupTypeStrings=new Dictionary<TimingGroupType, string>{
-			[TimingGroupType.Normal]="",
-			[TimingGroupType.NoInput]="noinput",
+		public static Dictionary<ArcLineType, string> ArcLineTypeStrings = new Dictionary<ArcLineType, string>
+		{
+			[ArcLineType.B] = "b",
+			[ArcLineType.S] = "s",
+			[ArcLineType.Si] = "si",
+			[ArcLineType.So] = "so",
+			[ArcLineType.SiSi] = "sisi",
+			[ArcLineType.SiSo] = "siso",
+			[ArcLineType.SoSi] = "sosi",
+			[ArcLineType.SoSo] = "soso",
+		};
+		public static Dictionary<CameraEaseType, string> CameraEaseTypeStrings = new Dictionary<CameraEaseType, string>
+		{
+			[CameraEaseType.L] = "l",
+			[CameraEaseType.Reset] = "reset",
+			[CameraEaseType.Qi] = "qi",
+			[CameraEaseType.Qo] = "qo",
+			[CameraEaseType.S] = "s",
+		};
+		public static Dictionary<TimingGroupType, string> TimingGroupTypeStrings = new Dictionary<TimingGroupType, string>
+		{
+			[TimingGroupType.Normal] = "",
+			[TimingGroupType.NoInput] = "noinput",
 		};
 	}
 

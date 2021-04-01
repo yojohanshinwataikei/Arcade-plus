@@ -66,7 +66,7 @@ namespace Arcade.Gameplay.Chart
 			}
 			else if (item is RawAffSceneControl)
 			{
-				SceneControl.Add(new ArcSceneControl(item as RawAffSceneControl));
+				SceneControl.Add(new ArcSceneControl(item as RawAffSceneControl, timingGroup));
 			}
 			else if (item is RawAffTimingGroup)
 			{
@@ -168,61 +168,6 @@ namespace Arcade.Gameplay.Chart
 			}
 			return events;
 		}
-
-		public static ArcLineType ToArcLineType(string type)
-		{
-			switch (type)
-			{
-				case "b": return ArcLineType.B;
-				case "s": return ArcLineType.S;
-				case "si": return ArcLineType.Si;
-				case "so": return ArcLineType.So;
-				case "sisi": return ArcLineType.SiSi;
-				case "siso": return ArcLineType.SiSo;
-				case "sosi": return ArcLineType.SoSi;
-				case "soso": return ArcLineType.SoSo;
-				default: return ArcLineType.S;
-			}
-		}
-		public static string ToLineTypeString(ArcLineType type)
-		{
-			switch (type)
-			{
-				case ArcLineType.B: return "b";
-				case ArcLineType.S: return "s";
-				case ArcLineType.Si: return "si";
-				case ArcLineType.SiSi: return "sisi";
-				case ArcLineType.SiSo: return "siso";
-				case ArcLineType.So: return "so";
-				case ArcLineType.SoSi: return "sosi";
-				case ArcLineType.SoSo: return "soso";
-				default: return "s";
-			}
-		}
-		public static CameraEaseType ToCameraType(string type)
-		{
-			switch (type)
-			{
-				case "l": return CameraEaseType.L;
-				case "reset": return CameraEaseType.Reset;
-				case "qi": return CameraEaseType.Qi;
-				case "qo": return CameraEaseType.Qo;
-				case "s": return CameraEaseType.S;
-				default: return CameraEaseType.Reset;
-			}
-		}
-		public static string ToCameraTypeString(CameraEaseType type)
-		{
-			switch (type)
-			{
-				case CameraEaseType.L: return "l";
-				case CameraEaseType.Reset: return "reset";
-				case CameraEaseType.Qi: return "qi";
-				case CameraEaseType.Qo: return "qo";
-				case CameraEaseType.S: return "s";
-				default: return "reset";
-			}
-		}
 	}
 	public interface ISelectable
 	{
@@ -275,13 +220,13 @@ namespace Arcade.Gameplay.Chart
 		}
 		public abstract ArcEvent Clone();
 	}
-	public class ArcSceneControl : ArcEvent, IIntoRawItem
+	public class ArcSceneControl : ArcEvent, IIntoRawItem, IHasTimingGroup, ISetableTimingGroup
 	{
 
 		public ArcSceneControl()
 		{
 		}
-		public ArcSceneControl(RawAffSceneControl rawAffSceneControl)
+		public ArcSceneControl(RawAffSceneControl rawAffSceneControl, ArcTimingGroup timingGroup)
 		{
 			Timing = rawAffSceneControl.Timing;
 			RawType = rawAffSceneControl.Type;
@@ -294,6 +239,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				Type = SceneControlType.TrackShow;
 			}
+			TimingGroup = timingGroup;
 		}
 		public IRawAffItem IntoRawItem()
 		{
@@ -319,6 +265,7 @@ namespace Arcade.Gameplay.Chart
 			return item;
 		}
 		public SceneControlType Type = SceneControlType.Unknown;
+		public ArcTimingGroup TimingGroup { get; set; }
 		public string RawType;
 		public List<IRawAffValue> RawParams;
 
