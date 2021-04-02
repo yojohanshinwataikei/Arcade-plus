@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Arcade.Gameplay.Chart;
 
@@ -57,7 +58,10 @@ namespace Arcade.Gameplay
 		}
 		public void Load(List<ArcCamera> cameras)
 		{
-			Cameras = cameras;
+			// Note: We replaced the inplace sort by sort to another list and reassign
+			// just because we do not have stable inplace sort now in dot net
+			Cameras = cameras.OrderBy(camera => camera.Timing).ToList();
+			ArcGameplayManager.Instance.Chart.Cameras = Cameras;
 		}
 
 		public void ResetCamera()
@@ -113,6 +117,7 @@ namespace Arcade.Gameplay
 			}
 			Vector3 position = ResetPosition;
 			Vector3 rotation = ResetRotation;
+			IsReset = true;
 			foreach (var c in Cameras)
 			{
 				if (c.Timing > currentTiming) break;

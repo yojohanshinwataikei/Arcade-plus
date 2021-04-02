@@ -2,6 +2,7 @@
 
 - Noinput 类型的 TimingGroup 谱面预览支持
 - HideGroup 类型的 SceneControl 谱面预览支持
+- 修复谱面含有 Camera 时开头部分镜头可能不会随着 Arc 的位置晃动的问题
 
 ---
 
