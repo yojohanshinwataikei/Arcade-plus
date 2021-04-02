@@ -10,11 +10,12 @@ using Arcade.Compose.Editing;
 
 namespace Arcade.Compose
 {
-	public class AdeCopyPaste : MonoBehaviour, IMarkingMenuItemProvider
+	public class AdeCopyOrCutPaste : MonoBehaviour, IMarkingMenuItemProvider
 	{
-		public static AdeCopyPaste Instance { get; private set; }
+		public static AdeCopyOrCutPaste Instance { get; private set; }
 
 		public MarkingMenuItem CopyItem;
+		public MarkingMenuItem CutItem;
 		public MarkingMenuItem[] CopyingItems;
 
 		public bool IsOnly => enable;
@@ -27,7 +28,7 @@ namespace Arcade.Compose
 					if (!ArcGameplayManager.Instance.IsLoaded) return null;
 					if (AdeCursorManager.Instance == null) return null;
 					if (AdeCursorManager.Instance.SelectedNotes.Count == 0) return null;
-					return new MarkingMenuItem[] { CopyItem };
+					return new MarkingMenuItem[] { CopyItem, CutItem };
 				}
 				else return CopyingItems;
 			}
@@ -55,6 +56,10 @@ namespace Arcade.Compose
 			{
 				CopySelectedNotes();
 			}
+			else if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X) && EventSystem.current.currentSelectedGameObject == null)
+			{
+				CutSelectedNotes();
+			}
 			if (!enable) return;
 			if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z))
 			{
@@ -65,10 +70,17 @@ namespace Arcade.Compose
 		}
 		public void CopySelectedNotes()
 		{
-			Copy(AdeCursorManager.Instance.SelectedNotes.ToArray());
+			if (enable) return;
+			CopyOrCut(AdeCursorManager.Instance.SelectedNotes.ToArray(), false);
 			AdeCursorManager.Instance.DeselectAllNotes();
 		}
-		public void Copy(ArcNote[] notes)
+		public void CutSelectedNotes()
+		{
+			if (enable) return;
+			CopyOrCut(AdeCursorManager.Instance.SelectedNotes.ToArray(), true);
+			AdeCursorManager.Instance.DeselectAllNotes();
+		}
+		public void CopyOrCut(ArcNote[] notes, bool cut)
 		{
 			if (notes.Length == 0) return;
 			List<ICommand> commands = new List<ICommand>();
@@ -83,14 +95,24 @@ namespace Arcade.Compose
 						continue;
 					}
 					commands.Add(new AddArcTapCommand((n as ArcArcTap).Arc, ne as ArcArcTap));
+					if (cut)
+					{
+						commands.Add(new RemoveArcTapCommand((n as ArcArcTap).Arc, (n as ArcArcTap)));
+					}
 				}
-				else if (ne is ArcArc)
+				else
 				{
 					commands.Add(new AddArcEventCommand(ne));
-					foreach (var at in (ne as ArcArc).ArcTaps)
-						newNotes.Add(at);
+					if (cut)
+					{
+						commands.Add(new RemoveArcEventCommand(n));
+					}
+					if (ne is ArcArc)
+					{
+						foreach (var at in (ne as ArcArc).ArcTaps)
+							newNotes.Add(at);
+					}
 				}
-				else commands.Add(new AddArcEventCommand(ne));
 				newNotes.Add(ne as ArcNote);
 			}
 			CommandManager.Instance.Prepare(new BatchCommand(commands.ToArray(), "复制"));
