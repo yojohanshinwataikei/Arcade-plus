@@ -22,6 +22,7 @@ namespace Arcade.Gameplay
 		private void Update()
 		{
 			ComboText.text = "";
+			ScoreText.text = "00000000";
 			if (!ArcGameplayManager.Instance.IsLoaded) return;
 			if (ArcGameplayManager.Instance.Chart == null) return;
 			ScoreText.text = CalculateScore(ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset).ToString("D8");
@@ -112,7 +113,11 @@ namespace Arcade.Gameplay
 		private int CalculateScore(int timing)
 		{
 			double single = CalculateSingleScore();
-			if (single == 0) return 0;
+			if (single == 0)
+			{
+				combo = 0;
+				return 0;
+			}
 			combo = CalculateCombo(timing);
 			return (int)Math.Round((combo * single + combo));
 		}
