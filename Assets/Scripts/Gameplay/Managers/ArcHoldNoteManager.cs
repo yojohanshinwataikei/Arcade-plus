@@ -118,6 +118,7 @@ namespace Arcade.Gameplay
 			ArcTimingManager timing = ArcTimingManager.Instance;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			int currentTiming = ArcGameplayManager.Instance.Timing;
+			ArcEffectManager.Instance.ResetHoldNoteEffect();
 			foreach (var t in Holds)
 			{
 				if (t.NoInput())
@@ -140,7 +141,6 @@ namespace Arcade.Gameplay
 					t.Judging = false;
 					t.Judged = true;
 					t.AudioPlayed = true;
-					ArcEffectManager.Instance.SetHoldNoteEffect(t.Track, false);
 				}
 				else
 				{

@@ -59,7 +59,7 @@ namespace Arcade.Gameplay
 		{
 			Source.PlayOneShot(ArcAudio);
 		}
-		public void ResetJudge()
+		public void ResetHoldNoteEffect()
 		{
 			for (int i = 1; i < 5; ++i) SetHoldNoteEffect(i, false);
 		}

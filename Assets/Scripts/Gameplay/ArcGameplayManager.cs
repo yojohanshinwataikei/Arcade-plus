@@ -129,7 +129,6 @@ namespace Arcade.Gameplay
 				foreach (var t in Chart.Holds) { t.Judged = false; t.Judging = false; t.AudioPlayed = false; };
 				foreach (var t in Chart.Taps) { t.Judged = false; };
 			}
-			ArcEffectManager.Instance.ResetJudge();
 		}
 		public void PlayDelayed()
 		{
