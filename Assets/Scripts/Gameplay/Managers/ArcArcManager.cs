@@ -154,7 +154,7 @@ namespace Arcade.Gameplay
 				}
 				t.Position = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup);
 				t.EndPosition = timingManager.CalculatePositionByTiming(t.EndTiming + offset, t.TimingGroup);
-				if (t.Position > 100000 || t.EndPosition < -100000)
+				if (Mathf.Min(t.Position, t.EndPosition) > 100000 || Mathf.Max(t.Position, t.EndPosition) < -100000)
 				{
 					t.Enable = false;
 					continue;
@@ -163,7 +163,7 @@ namespace Arcade.Gameplay
 				t.transform.localPosition = new Vector3(0, 0, -t.Position / 1000f);
 				if (!t.IsVoid)
 				{
-					t.arcRenderer.EnableEffect = currentTiming > t.Timing + offset && currentTiming < t.EndTiming + offset && !t.IsVoid && t.Judging;
+					t.arcRenderer.EnableEffect = currentTiming > t.Timing + offset && currentTiming <= t.EndTiming + offset && !t.IsVoid && t.Judging;
 					foreach (var a in t.ArcGroup)
 					{
 						if (!a.Flag)
@@ -219,7 +219,7 @@ namespace Arcade.Gameplay
 					continue;
 				}
 				float pos = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup) / 1000f;
-				if (pos > -10 && pos <= 90)
+				if (pos > -100 && pos <= 90)
 				{
 					t.Alpha = 1;
 					t.Enable = true;

@@ -557,7 +557,7 @@ namespace Arcade.Gameplay
 					s.Alpha = currentHighColor.a * (100 - pos) / 10f;
 					s.From = 0;
 				}
-				else if (pos > 100 || endPos < -20)
+				else if (Mathf.Min(pos, endPos) > 100 || Mathf.Max(pos, endPos) < -100)
 				{
 					s.Enable = false;
 				}
@@ -582,7 +582,7 @@ namespace Arcade.Gameplay
 			int currentTiming = ArcGameplayManager.Instance.Timing;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
-			if (arc.Position > 100000 || arc.Position < -10000)
+			if (arc.Position > 100000 || arc.Position < -100000)
 			{
 				EnableHead = false;
 				return;
@@ -651,7 +651,6 @@ namespace Arcade.Gameplay
 			}
 
 			float pos = transform.position.z;
-			int currentTiming = ArcGameplayManager.Instance.Timing;
 			if (pos < -90 && pos > -100)
 			{
 				Color c = Color.Lerp(currentLowColor, currentHighColor, arc.YStart);
@@ -659,13 +658,15 @@ namespace Arcade.Gameplay
 				EnableHeightIndicator = true;
 				HeightIndicatorRenderer.color = c;
 			}
-			else if (pos < -100 || pos > 10)
+			else if (pos < -100 || pos > 100)
 			{
 				EnableHeightIndicator = false;
 			}
 			else
 			{
-				if (arc.Judging && pos > 0) EnableHeightIndicator = false;
+				int currentTiming = ArcGameplayManager.Instance.Timing;
+				int offset = ArcAudioManager.Instance.AudioOffset;
+				if (arc.Judging && arc.Timing + offset < currentTiming) EnableHeightIndicator = false;
 				else EnableHeightIndicator = true;
 				HeightIndicatorRenderer.color = Color.Lerp(currentLowColor, currentHighColor, arc.YStart);
 			}
@@ -682,23 +683,7 @@ namespace Arcade.Gameplay
 				return;
 			}
 
-			if (arc.Position > 0 && arc.Position < 100000)
-			{
-				if (IsHead && !arc.IsVoid)
-				{
-					float p = 1 - arc.Position / 100000;
-					float scale = 0.35f + 0.5f * (1 - p);
-					EnableArcCap = true;
-					ArcCapRenderer.color = new Color(1, 1, 1, p);
-					ArcCap.localScale = new Vector3(scale, scale);
-					ArcCap.position = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XStart), ArcAlgorithm.ArcYToWorld(arc.YStart));
-				}
-				else
-				{
-					EnableArcCap = false;
-				}
-			}
-			else if (arc.Timing + offset < currentTiming && arc.EndTiming + offset > currentTiming)
+			if (arc.Timing + offset < currentTiming && arc.EndTiming + offset >= currentTiming)
 			{
 				EnableArcCap = true;
 				ArcCapRenderer.color = new Color(1, 1, 1, arc.IsVoid ? 0.5f : 1f);
@@ -706,7 +691,7 @@ namespace Arcade.Gameplay
 
 				foreach (var s in segments)
 				{
-					if (arc.Position / 1000f < s.FromPos.z && arc.Position / 1000f >= s.ToPos.z)
+					if (s.FromTiming + offset < currentTiming && s.ToTiming + offset >= currentTiming)
 					{
 						float t = (s.FromPos.z - arc.Position / 1000f) / (s.FromPos.z - s.ToPos.z);
 						ArcCap.position = new Vector3(s.FromPos.x + (s.ToPos.x - s.FromPos.x) * t,
@@ -715,6 +700,15 @@ namespace Arcade.Gameplay
 						break;
 					}
 				}
+			}
+			else if (arc.Timing + offset >= currentTiming && IsHead && !arc.IsVoid)
+			{
+				float p = 1 - Mathf.Abs(arc.Position) / 100000;
+				float scale = 0.35f + 0.5f * (1 - p);
+				EnableArcCap = true;
+				ArcCapRenderer.color = new Color(1, 1, 1, p);
+				ArcCap.localScale = new Vector3(scale, scale);
+				ArcCap.position = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XStart), ArcAlgorithm.ArcYToWorld(arc.YStart));
 			}
 			else
 			{
