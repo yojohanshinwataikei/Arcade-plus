@@ -591,7 +591,8 @@ namespace Arcade.Gameplay.Chart
 			JudgeTimings.Clear();
 			int u = 0;
 			double bpm = ArcTimingManager.Instance.CalculateBpmByTiming(Timing, TimingGroup);
-			if (bpm <= 0) return;
+			bpm = Math.Abs(bpm);
+			if (bpm == 0) return;
 			double interval = 60000f / bpm / (bpm >= 255 ? 1 : 2);
 			int total = (int)((EndTiming - Timing) / interval);
 			if ((u ^ 1) >= total)
@@ -1096,7 +1097,12 @@ namespace Arcade.Gameplay.Chart
 			if (EndTiming == Timing) return;
 			int u = RenderHead ? 0 : 1;
 			double bpm = ArcTimingManager.Instance.CalculateBpmByTiming(Timing, TimingGroup);
-			if (bpm <= 0) return;
+			bpm = Math.Abs(bpm);
+			if (bpm == 0)
+			{
+				JudgeTimings.Add(Timing);
+				return;
+			};
 			double interval = 60000f / bpm / (bpm >= 255 ? 1 : 2);
 			int total = (int)((EndTiming - Timing) / interval);
 			if ((u ^ 1) >= total)
