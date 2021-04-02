@@ -69,6 +69,7 @@ crashlytics-build.properties
 # these folder is used when testting or debugging the project
 /Background
 /Skin
+/Arcade
 
 ### macOS ###
 # General

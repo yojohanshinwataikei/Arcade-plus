@@ -61,14 +61,14 @@ namespace Arcade.Gameplay
 			foreach (var t in Holds)
 			{
 				int duration = t.EndTiming - t.Timing;
-				if (!timing.ShouldTryRender(t.Timing + offset, t.TimingGroup, duration + 120) || t.Judged || t.GroupHide())
+				if (!timing.ShouldTryRender(t.Timing + offset, t.TimingGroup, duration) || t.Judged || t.GroupHide())
 				{
 					t.Enable = false;
 					continue;
 				}
 				t.Position = timing.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup);
 				float endPosition = timing.CalculatePositionByTiming(t.EndTiming + offset, t.TimingGroup);
-				if (t.Position > 100000 || endPosition < -10000)
+				if (t.Position > 100000 || endPosition < -100000)
 				{
 					t.Enable = false;
 					continue;

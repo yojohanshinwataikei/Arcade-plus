@@ -261,12 +261,12 @@ namespace Arcade.Compose
 				int offset = ArcAudioManager.Instance.AudioOffset;
 				foreach (var t in beatlineTimings)
 				{
-					if (!ArcTimingManager.Instance.ShouldTryRender(((int)t.Timing + offset), timingGroup, 0))
+					if (!ArcTimingManager.Instance.ShouldTryRender(((int)t.Timing + offset), timingGroup, 0, false))
 					{
 						continue;
 					}
 					float pos = ArcTimingManager.Instance.CalculatePositionByTiming(((int)t.Timing + offset), timingGroup);
-					if (pos > 100000 || pos < -10000)
+					if (pos > 100000 || pos < -100000)
 					{
 						continue;
 					}

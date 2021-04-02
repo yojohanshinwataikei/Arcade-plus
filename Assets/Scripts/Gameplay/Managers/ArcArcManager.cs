@@ -147,14 +147,14 @@ namespace Arcade.Gameplay
 			{
 				RenderArcTaps(t);
 				int duration = t.EndTiming - t.Timing;
-				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup, duration + (t.IsVoid ? 50 : 120)) || t.Judged || t.GroupHide())
+				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup, duration) || t.Judged || t.GroupHide())
 				{
 					t.Enable = false;
 					continue;
 				}
 				t.Position = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup);
 				t.EndPosition = timingManager.CalculatePositionByTiming(t.EndTiming + offset, t.TimingGroup);
-				if (t.Position > 100000 || t.EndPosition < -20000)
+				if (t.Position > 100000 || t.EndPosition < -100000)
 				{
 					t.Enable = false;
 					continue;
@@ -208,7 +208,7 @@ namespace Arcade.Gameplay
 
 			foreach (ArcArcTap t in arc.ArcTaps)
 			{
-				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup, 50) || t.Judged || t.GroupHide())
+				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup) || t.Judged || t.GroupHide())
 				{
 					t.Enable = false;
 					continue;

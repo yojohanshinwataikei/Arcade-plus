@@ -25,6 +25,8 @@ namespace Arcade.Gameplay
 		public Transform BeatlineLayer;
 		public GameObject BeatlinePrefab;
 
+		public const int LostDelay = 120;
+
 		// Note: This should be ordered!
 		[HideInInspector]
 		private List<ArcTiming> timings = new List<ArcTiming>();
@@ -264,7 +266,7 @@ namespace Arcade.Gameplay
 		private void UpdateRenderRange(ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
-			int nearPosition = -20000;
+			int nearPosition = -100000;
 			int farPosition = 100000;
 			float earliestRenderTime, latestRenderTime;
 			if (Timings.Count == 0)
@@ -354,12 +356,12 @@ namespace Arcade.Gameplay
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			foreach (float t in beatlineTimings)
 			{
-				if (!ShouldTryRender((int)(t + offset), null, 0))
+				if (!ShouldTryRender((int)(t + offset), null, 0, false))
 				{
 					continue;
 				}
 				float pos = CalculatePositionByTiming((int)(t + offset), null);
-				if (pos > 100000 || pos < -10000)
+				if (pos > 100000 || pos < -100000)
 				{
 					continue;
 				}
@@ -445,7 +447,7 @@ namespace Arcade.Gameplay
 		}
 		// Note: this is a function used to optimize rendering by avoid not needed position calculation
 		// Invoker should manually check position again after this check passed
-		public bool ShouldTryRender(int timing, ArcTimingGroup timingGroup, int delay = 120)
+		public bool ShouldTryRender(int timing, ArcTimingGroup timingGroup, int duration = 0, bool note = true)
 		{
 			float earliestRenderTime;
 			float latestRenderTime;
@@ -459,8 +461,12 @@ namespace Arcade.Gameplay
 				earliestRenderTime = timingGroup.earliestRenderTime;
 				latestRenderTime = timingGroup.latestRenderTime;
 			}
-			if (timing + delay >= earliestRenderTime && timing <= latestRenderTime)
+			if (timing + duration >= earliestRenderTime && timing <= latestRenderTime)
 			{
+				if (note && timing + duration + LostDelay < ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset)
+				{
+					return false;
+				}
 				return true;
 			}
 			return false;
