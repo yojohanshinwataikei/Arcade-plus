@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Arcade.Gameplay.Chart;
 
 namespace Arcade.Gameplay
 {
@@ -19,6 +21,7 @@ namespace Arcade.Gameplay
 
 		private void Update()
 		{
+			ComboText.text = "";
 			if (!ArcGameplayManager.Instance.IsLoaded) return;
 			if (ArcGameplayManager.Instance.Chart == null) return;
 			ScoreText.text = CalculateScore(ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset).ToString("D8");
@@ -30,13 +33,21 @@ namespace Arcade.Gameplay
 		private double CalculateSingleScore()
 		{
 			int total = 0;
-			total += ArcTapNoteManager.Instance.Taps.Count;
+			total += ArcTapNoteManager.Instance.Taps.Where((tap) => !tap.NoInput()).Count();
 			foreach (var hold in ArcHoldNoteManager.Instance.Holds)
 			{
+				if (hold.NoInput())
+				{
+					continue;
+				}
 				total += hold.JudgeTimings.Count;
 			}
 			foreach (var arc in ArcArcManager.Instance.Arcs)
 			{
+				if (arc.NoInput())
+				{
+					continue;
+				}
 				total += arc.JudgeTimings.Count;
 				total += arc.ArcTaps.Count;
 			}
@@ -48,6 +59,10 @@ namespace Arcade.Gameplay
 			int note = 0;
 			foreach (var tap in ArcTapNoteManager.Instance.Taps)
 			{
+				if (tap.NoInput())
+				{
+					continue;
+				}
 				if (tap.Timing <= timing)
 				{
 					note++;
@@ -55,6 +70,10 @@ namespace Arcade.Gameplay
 			}
 			foreach (var hold in ArcHoldNoteManager.Instance.Holds)
 			{
+				if (hold.NoInput())
+				{
+					continue;
+				}
 				if (hold.Timing <= timing)
 				{
 					foreach (float t in hold.JudgeTimings)
@@ -68,6 +87,10 @@ namespace Arcade.Gameplay
 			}
 			foreach (var arc in ArcArcManager.Instance.Arcs)
 			{
+				if (arc.NoInput())
+				{
+					continue;
+				}
 				if (arc.Timing > timing) continue;
 				foreach (float t in arc.JudgeTimings)
 				{

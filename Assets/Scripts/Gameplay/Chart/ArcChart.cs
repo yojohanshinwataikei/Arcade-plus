@@ -177,6 +177,13 @@ namespace Arcade.Gameplay.Chart
 	{
 		ArcTimingGroup TimingGroup { get; }
 	}
+	public static class ArcChartExtension
+	{
+		public static bool NoInput(this IHasTimingGroup hasTimingGroup)
+		{
+			return hasTimingGroup.TimingGroup?.Type == TimingGroupType.NoInput;
+		}
+	}
 	public interface ISetableTimingGroup
 	{
 		ArcTimingGroup TimingGroup { set; }
