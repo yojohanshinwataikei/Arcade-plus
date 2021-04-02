@@ -183,6 +183,10 @@ namespace Arcade.Gameplay.Chart
 		{
 			return hasTimingGroup.TimingGroup?.Type == TimingGroupType.NoInput;
 		}
+		public static bool GroupHide(this IHasTimingGroup hasTimingGroup)
+		{
+			return hasTimingGroup.TimingGroup?.GroupHide ?? false;
+		}
 	}
 	public interface ISetableTimingGroup
 	{
@@ -211,6 +215,7 @@ namespace Arcade.Gameplay.Chart
 	{
 		TrackHide,
 		TrackShow,
+		HideGroup,
 		Unknown,
 	}
 	public enum TimingGroupType
@@ -246,6 +251,14 @@ namespace Arcade.Gameplay.Chart
 			{
 				Type = SceneControlType.TrackShow;
 			}
+			else if (RawType == "hidegroup" && RawParams.Count == 2)
+			{
+				if ((RawParams[0] is RawAffFloat) && (RawParams[1] is RawAffInt))
+				{
+					Type = SceneControlType.HideGroup;
+					Enable = (RawParams[1] as RawAffInt).data > 0;
+				}
+			}
 			TimingGroup = timingGroup;
 		}
 		public IRawAffItem IntoRawItem()
@@ -264,6 +277,14 @@ namespace Arcade.Gameplay.Chart
 			{
 				item.Type = "trackshow";
 			}
+			else if (Type == SceneControlType.HideGroup)
+			{
+				item.Type = "hidegroup";
+				item.Params = new List<IRawAffValue>{
+					new RawAffFloat{data=0},
+					new RawAffInt{data=Enable?1:0},
+				};
+			}
 			else
 			{
 				item.Type = RawType;
@@ -272,6 +293,7 @@ namespace Arcade.Gameplay.Chart
 			return item;
 		}
 		public SceneControlType Type = SceneControlType.Unknown;
+		public bool Enable;
 		public ArcTimingGroup TimingGroup { get; set; }
 		public string RawType;
 		public List<IRawAffValue> RawParams;
@@ -1280,6 +1302,7 @@ namespace Arcade.Gameplay.Chart
 		public int Id;
 		public List<ArcTiming> Timings = new List<ArcTiming>();
 		public TimingGroupType Type = TimingGroupType.Normal;
+		public bool GroupHide = false;
 		public float earliestRenderTime = 0;
 		public float latestRenderTime = 0;
 	}

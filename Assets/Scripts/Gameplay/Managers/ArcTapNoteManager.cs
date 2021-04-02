@@ -60,7 +60,7 @@ namespace Arcade.Gameplay
 
 			foreach (var t in Taps)
 			{
-				if (!timing.ShouldTryRender(t.Timing + offset, t.TimingGroup) || t.Judged)
+				if (!timing.ShouldTryRender(t.Timing + offset, t.TimingGroup) || t.Judged || t.GroupHide())
 				{
 					t.Enable = false;
 					continue;
