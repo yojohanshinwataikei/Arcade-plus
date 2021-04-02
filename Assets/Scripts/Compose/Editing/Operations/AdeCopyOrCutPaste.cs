@@ -129,52 +129,45 @@ namespace Arcade.Compose
 			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			bool hasIllegalArcTap = true;
 			int beginTiming = notes.Min((n) => n.Timing);
-
-			foreach (var n in notes)
-			{
-				n.Judged = false;
-				int dif = n.Timing - beginTiming;
-				switch (n)
+			if (beginTiming!=timing){
+				foreach (var n in notes)
 				{
-					case ArcLongNote note:
-						int duration = note.EndTiming - note.Timing;
-						note.Timing = timing + dif;
-						note.EndTiming = timing + duration + dif;
-						(note as ArcArc)?.Rebuild();
-						if (note is ArcArc)
-						{
-							ArcArcManager.Instance.CalculateArcRelationship();
-						}
-						break;
-					case ArcArcTap note:
-						if (note.Arc.Timing > timing + dif || note.Arc.EndTiming < timing + dif)
-						{
-							hasIllegalArcTap = false;
-						}
-						note.RemoveArcTapConnection();
-						note.Timing = timing + dif;
-						note.Relocate();
-						note.SetupArcTapConnection();
-						break;
-					case ArcTap note:
-						note.Timing = timing + dif;
-						note.SetupArcTapConnection();
-						break;
-					default:
-						n.Timing = timing + dif;
-						break;
+					n.Judged = false;
+					int dif = n.Timing - beginTiming;
+					switch (n)
+					{
+						case ArcLongNote note:
+							int duration = note.EndTiming - note.Timing;
+							note.Timing = timing + dif;
+							note.EndTiming = timing + duration + dif;
+							note.Judging = false;
+							(note as ArcArc)?.Rebuild();
+							if (note is ArcArc)
+							{
+								ArcArcManager.Instance.CalculateArcRelationship();
+							}
+							break;
+						case ArcArcTap note:
+							if (note.Arc.Timing > timing + dif || note.Arc.EndTiming < timing + dif)
+							{
+								hasIllegalArcTap = false;
+							}
+							note.RemoveArcTapConnection();
+							note.Timing = timing + dif;
+							note.Relocate();
+							break;
+						case ArcTap note:
+							note.Timing = timing + dif;
+							note.SetupArcTapConnection();
+							break;
+						default:
+							n.Timing = timing + dif;
+							break;
+					}
 				}
 			}
 
 			int offset = ArcAudioManager.Instance.AudioOffset;
-
-			foreach (var t in ArcTapNoteManager.Instance.Taps)
-			{
-				if (ArcTimingManager.Instance.ShouldTryRender(t.Timing + offset, timingGroup))
-				{
-					t.SetupArcTapConnection();
-				}
-			}
 
 			if (Input.GetMouseButtonDown(0))
 			{
