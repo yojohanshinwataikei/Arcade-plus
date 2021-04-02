@@ -77,7 +77,7 @@ namespace Arcade.Gameplay
 				if (ArcCameraManager.Instance.EditorCamera)
 					t.transform.localScale = new Vector3(1.53f, 2, 1);
 				else
-					t.transform.localScale = new Vector3(1.53f, 2f + 5.1f * pos / 100f, 1);
+					t.transform.localScale = new Vector3(1.53f, 2f + 5.1f * Mathf.Max(0f, pos) / 100f, 1);
 				t.Alpha = pos < 90 ? 1 : (100 - pos) / 10f;
 			}
 		}

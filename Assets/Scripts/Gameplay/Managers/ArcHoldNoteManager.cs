@@ -68,12 +68,30 @@ namespace Arcade.Gameplay
 				}
 				t.Position = timing.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup);
 				float endPosition = timing.CalculatePositionByTiming(t.EndTiming + offset, t.TimingGroup);
+				t.Enable = true;
+				if (t.Judging)
+				{
+					t.Position = 0;
+				}
+				if (endPosition < t.Position)
+				{
+					var p = t.Position;
+					t.Position = endPosition;
+					endPosition = p;
+				}
 				if (t.Position > 100000 || endPosition < -100000)
 				{
 					t.Enable = false;
 					continue;
 				}
-				t.Enable = true;
+				if (endPosition > 100000)
+				{
+					endPosition = 100000;
+				}
+				if (t.Position < -100000)
+				{
+					t.Position = -100000;
+				}
 				float pos = t.Position / 1000f;
 				float length = (endPosition - t.Position) / 1000f;
 				t.transform.localPosition = new Vector3(Lanes[t.Track - 1], pos, 0);
@@ -83,19 +101,16 @@ namespace Arcade.Gameplay
 				float alpha = 1;
 				if (t.Judging)
 				{
-					t.From = Mathf.Clamp((-pos / length), 0, 1);
 					t.FlashCount = (t.FlashCount + 1) % 4;
 					if (t.FlashCount == 0) alpha = 0.85f;
 					t.Highlight = true;
 				}
 				else
 				{
-					t.From = 0;
 					alpha = t.Timing + offset < ArcGameplayManager.Instance.Timing ? 0.5f : 1;
 					t.Highlight = false;
 				}
 				t.Alpha = alpha * 0.8627451f;
-				t.To = Mathf.Clamp((100 - pos) / length, 0, 1);
 			}
 		}
 		private void JudgeHoldNotes()
