@@ -67,6 +67,14 @@ namespace Arcade.Gameplay
 		public OnMusicFinishedEvent OnMusicFinished = new OnMusicFinishedEvent();
 		public ArcChart Chart { get; set; }
 
+		public float TimingPointDensityFactor
+		{
+			get
+			{
+				return Chart.TimingPointDensityFactor;
+			}
+		}
+
 		private double lastDspTime = 0;
 		private double deltaDspTime = 0;
 

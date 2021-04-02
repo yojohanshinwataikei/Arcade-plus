@@ -15,6 +15,7 @@ namespace Arcade.Gameplay.Chart
 	public class ArcChart
 	{
 		public int AudioOffset;
+		public float TimingPointDensityFactor;
 		public Dictionary<string, string> AdditionalMetadata = new Dictionary<string, string>();
 		public List<ArcTap> Taps = new List<ArcTap>();
 		public List<ArcHold> Holds = new List<ArcHold>();
@@ -28,6 +29,7 @@ namespace Arcade.Gameplay.Chart
 		public ArcChart(RawAffChart raw)
 		{
 			AudioOffset = raw.AudioOffset;
+			TimingPointDensityFactor = raw.TimingPointDensityFactor;
 			AdditionalMetadata = raw.additionalMetadata;
 			foreach (var item in raw.items)
 			{
@@ -123,6 +125,7 @@ namespace Arcade.Gameplay.Chart
 
 			RawAffChart raw = new RawAffChart();
 			raw.AudioOffset = ArcAudioManager.Instance.AudioOffset;
+			raw.TimingPointDensityFactor = TimingPointDensityFactor;
 			raw.additionalMetadata = AdditionalMetadata;
 			foreach (var e in mainEvents)
 			{
@@ -593,7 +596,7 @@ namespace Arcade.Gameplay.Chart
 			double bpm = ArcTimingManager.Instance.CalculateBpmByTiming(Timing, TimingGroup);
 			bpm = Math.Abs(bpm);
 			if (bpm == 0) return;
-			double interval = 60000f / bpm / (bpm >= 255 ? 1 : 2);
+			double interval = 60000f / bpm / (bpm >= 255 ? 1 : 2) / ArcGameplayManager.Instance.TimingPointDensityFactor;
 			int total = (int)((EndTiming - Timing) / interval);
 			if ((u ^ 1) >= total)
 			{
@@ -1103,7 +1106,7 @@ namespace Arcade.Gameplay.Chart
 				JudgeTimings.Add(Timing);
 				return;
 			};
-			double interval = 60000f / bpm / (bpm >= 255 ? 1 : 2);
+			double interval = 60000f / bpm / (bpm >= 255 ? 1 : 2) / ArcGameplayManager.Instance.TimingPointDensityFactor;
 			int total = (int)((EndTiming - Timing) / interval);
 			if ((u ^ 1) >= total)
 			{

@@ -87,6 +87,7 @@ namespace Arcade.Aff
 	public class RawAffChart
 	{
 		public int AudioOffset = 0;
+		public float TimingPointDensityFactor = 1;
 		public Dictionary<string, string> additionalMetadata = new Dictionary<string, string>();
 		public List<IRawAffItem> items = new List<IRawAffItem>();
 		public List<string> warning = new List<string>();
@@ -107,6 +108,7 @@ namespace Arcade.Aff
 				// manually parse metadata
 				int metadataLinesCount = 0;
 				bool AudioOffsetSet = false;
+				bool TimingPointDensityFactorSet = false;
 				while (true)
 				{
 					string line = reader.ReadLine();
@@ -144,6 +146,33 @@ namespace Arcade.Aff
 							else
 							{
 								chart.warning.Add($"第 {metadataLinesCount} 行：AudioOffset 的值不是整数，此行会被忽略");
+							}
+						}
+					}
+					else if (key == "TimingPointDensityFactor")
+					{
+						if (TimingPointDensityFactorSet)
+						{
+							chart.warning.Add($"第 {metadataLinesCount} 行：TimingPointDensityFactor 被重复设置为 {value}，此行会被忽略");
+						}
+						else
+						{
+							float factor;
+							if (float.TryParse(value, out factor))
+							{
+								if (factor > 0)
+								{
+									chart.TimingPointDensityFactor = factor;
+									TimingPointDensityFactorSet = true;
+								}
+								else
+								{
+									chart.warning.Add($"第 {metadataLinesCount} 行：TimingPointDensityFactor 的值不是正数，此行会被忽略");
+								}
+							}
+							else
+							{
+								chart.warning.Add($"第 {metadataLinesCount} 行：TimingPointDensityFactor 的值不是浮点数，此行会被忽略");
 							}
 						}
 					}
@@ -191,6 +220,10 @@ namespace Arcade.Aff
 		{
 			TextWriter writer = new StreamWriter(stream);
 			writer.WriteLine($"AudioOffset:{chart.AudioOffset}");
+			if (chart.TimingPointDensityFactor != 1f)
+			{
+				writer.WriteLine($"TimingPointDensityFactor:{chart.TimingPointDensityFactor}");
+			}
 			foreach (var entry in chart.additionalMetadata)
 			{
 				writer.WriteLine($"{entry.Key}:{entry.Value}");

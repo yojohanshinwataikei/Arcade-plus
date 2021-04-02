@@ -208,15 +208,12 @@ namespace Arcade.Gameplay
 
 			foreach (ArcArcTap t in arc.ArcTaps)
 			{
-				Debug.Log("[Arctap]start");
 				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup) || t.Judged || t.GroupHide())
 				{
-					Debug.Log("[Arctap]early skip");
 					t.Enable = false;
 					continue;
 				}
 				float pos = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup) / 1000f;
-				Debug.Log($"[Arctap]pos: {pos} Timing: {t.Timing}");
 				if (pos > -100 && pos <= 90)
 				{
 					t.Alpha = 1;
