@@ -242,6 +242,10 @@ namespace Arcade.Gameplay
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			foreach (ArcArc arc in Arcs)
 			{
+				if (arc.NoInput())
+				{
+					continue;
+				}
 				JudgeArcTaps(arc);
 				if (arc.Judged) continue;
 				if (currentTiming > arc.EndTiming + offset)

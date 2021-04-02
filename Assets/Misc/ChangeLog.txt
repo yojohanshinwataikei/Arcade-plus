@@ -1,5 +1,7 @@
 0.3.4
 
+- Noinput 类型的 TimingGroup 谱面预览支持
+
 ---
 
 0.3.3

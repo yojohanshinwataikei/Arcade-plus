@@ -88,6 +88,10 @@ namespace Arcade.Gameplay
 			int currentTiming = ArcGameplayManager.Instance.Timing;
 			foreach (var t in Taps)
 			{
+				if (t.NoInput())
+				{
+					continue;
+				}
 				if (t.Judged) continue;
 				if (currentTiming > t.Timing + offset && currentTiming <= t.Timing + offset + 150)
 				{
