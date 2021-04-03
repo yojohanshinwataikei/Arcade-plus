@@ -280,15 +280,14 @@ namespace Arcade.Compose
 				float distance = float.MaxValue;
 				foreach (var h in hits)
 				{
-					ArcNote t = ArcGameplayManager.Instance.FindNoteByInstance(h.transform.gameObject);
-					if (t is ArcArc && h.point.z > 0 && t.Timing + ArcAudioManager.Instance.AudioOffset < ArcGameplayManager.Instance.Timing)
+					ArcNote t = ArcGameplayManager.Instance.FindNoteByRaycastHit(h);
+					if (t != null)
 					{
-						continue;
-					}
-					if (h.distance < distance)
-					{
-						distance = h.distance;
-						n = t;
+						if (h.distance < distance)
+						{
+							distance = h.distance;
+							n = t;
+						}
 					}
 				}
 				if (n != null)

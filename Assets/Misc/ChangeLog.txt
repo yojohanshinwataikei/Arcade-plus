@@ -3,6 +3,7 @@
 - 你现在可以从负数时间开始播放谱面
 - 修复 SceneControl 与 AudioOffset 的关系错误的问题
 - 启动时默认的 Arc 形状类型现在为 S
+- 修复 BPM 为负数时 Arc 无法选中的问题
 
 ---
 

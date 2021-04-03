@@ -179,16 +179,16 @@ namespace Arcade.Gameplay
 			IsPlaying = false;
 		}
 
-		public ArcNote FindNoteByInstance(GameObject gameObject)
+		public ArcNote FindNoteByRaycastHit(RaycastHit h)
 		{
-			foreach (var tap in Chart.Taps) if (tap.Instance.Equals(gameObject)) return tap;
-			foreach (var hold in Chart.Holds) if (hold.Instance.Equals(gameObject)) return hold;
+			foreach (var tap in Chart.Taps) if (tap.Instance.Equals(h.transform.gameObject)) return tap;
+			foreach (var hold in Chart.Holds) if (hold.Instance.Equals(h.transform.gameObject)) return hold;
 			foreach (var arc in Chart.Arcs)
 			{
-				if (arc.IsMyself(gameObject)) return arc;
+				if (arc.IsHitMyself(h)) return arc;
 				foreach (var arctap in arc.ArcTaps)
 				{
-					if (arctap.IsMyself(gameObject)) return arctap;
+					if (arctap.IsMyself(h.transform.gameObject)) return arctap;
 				}
 			}
 			return null;

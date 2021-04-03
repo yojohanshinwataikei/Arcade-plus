@@ -1166,9 +1166,9 @@ namespace Arcade.Gameplay.Chart
 			ArcTaps.Remove(arctap);
 		}
 
-		public bool IsMyself(GameObject gameObject)
+		public bool IsHitMyself(RaycastHit h)
 		{
-			return arcRenderer.IsMyself(gameObject);
+			return arcRenderer.IsHitMyself(h);
 		}
 
 		public int FlashCount;

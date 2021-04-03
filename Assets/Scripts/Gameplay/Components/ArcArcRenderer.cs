@@ -466,6 +466,7 @@ namespace Arcade.Gameplay
 
 			List<Vector3> vert = new List<Vector3>();
 			List<int> tri = new List<int>();
+			List<Vector2> uv = new List<Vector2>();
 
 			float offset = arc.IsVoid ? OffsetVoid : OffsetNormal;
 
@@ -473,20 +474,31 @@ namespace Arcade.Gameplay
 			vert.Add(pos + new Vector3(-offset, -offset / 2, 0));
 			vert.Add(pos + new Vector3(0, offset / 2, 0));
 			vert.Add(pos + new Vector3(offset, -offset / 2, 0));
+			uv.Add(new Vector2(0, 0));
+			uv.Add(new Vector2(0, 0));
+			uv.Add(new Vector2(0, 0));
 
 			int t = 0;
 			foreach (var seg in segments)
 			{
 				if (seg.FromTiming > seg.ToTiming) break;
+				float ratio = 1;
 				if (seg.FromTiming == seg.ToTiming)
 				{
 					if (seg.FromPos.Equals(seg.ToPos))
 						break;
 				}
+				else
+				{
+					ratio = ((float)(seg.ToTiming - arc.Timing)) / ((float)(arc.EndTiming - arc.Timing));
+				}
 				pos = seg.ToPos;
 				vert.Add(pos + new Vector3(-offset, -offset / 2, 0));
 				vert.Add(pos + new Vector3(0, offset / 2, 0));
 				vert.Add(pos + new Vector3(offset, -offset / 2, 0));
+				uv.Add(new Vector2(ratio, 0));
+				uv.Add(new Vector2(ratio, 0));
+				uv.Add(new Vector2(ratio, 0));
 
 				tri.AddRange(new int[] { t + 1, t, t + 3, t + 1, t + 3, t, t + 1, t + 3, t + 4, t + 1, t + 4, t + 3,
 					t + 1, t + 2, t + 5, t + 1, t + 5, t + 2, t + 1, t + 5, t + 4, t + 1, t + 4, t + 5 });
@@ -497,7 +509,8 @@ namespace Arcade.Gameplay
 			ArcCollider.sharedMesh = new Mesh()
 			{
 				vertices = vert.ToArray(),
-				triangles = tri.ToArray()
+				triangles = tri.ToArray(),
+				uv = uv.ToArray(),
 			};
 		}
 
@@ -716,9 +729,22 @@ namespace Arcade.Gameplay
 			}
 		}
 
-		public bool IsMyself(GameObject gameObject)
+		public bool IsHitMyself(RaycastHit h)
 		{
-			return ArcCollider.gameObject.Equals(gameObject) || HeadCollider.gameObject.Equals(gameObject);
+			if (HeadCollider.gameObject.Equals(h.transform.gameObject))
+			{
+				return true;
+			}
+			else if (ArcCollider.gameObject.Equals(h.transform.gameObject))
+			{
+				if (arc.Judging || arc.IsVoid)
+				{
+					double timing = ((double)h.textureCoord.x) * (arc.EndTiming - arc.Timing) + arc.Timing;
+					return timing + ArcAudioManager.Instance.AudioOffset > ArcGameplayManager.Instance.Timing;
+				}
+				return true;
+			}
+			return false;
 		}
 	}
 }
