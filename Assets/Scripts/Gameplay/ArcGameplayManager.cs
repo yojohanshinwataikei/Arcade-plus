@@ -87,8 +87,11 @@ namespace Arcade.Gameplay
 				float playBackSpeed = ArcAudioManager.Instance.PlayBackSpeed;
 				timing += Time.deltaTime * playBackSpeed;
 				float t = ArcAudioManager.Instance.Timing;
-				float delta = timing - t;
-				if (Mathf.Abs(delta) > 0.016f) timing = t;
+				if (timing >= 0 || ArcAudioManager.Instance.Timing > 0)
+				{
+					float delta = timing - t;
+					if (Mathf.Abs(delta) > 0.016f) timing = t;
+				}
 			}
 			if (Timing > Length)
 			{
@@ -143,15 +146,23 @@ namespace Arcade.Gameplay
 			timing = -3f;
 			ResetJudge();
 			ArcAudioManager.Instance.Source.Stop();
-			ArcAudioManager.Instance.Source.time = 0;
+			ArcAudioManager.Instance.Timing = 0;
 			ArcAudioManager.Instance.Source.PlayDelayed(3);
 			IsPlaying = true;
 		}
 
 		public void Play()
 		{
-			ArcAudioManager.Instance.Play();
-			ArcAudioManager.Instance.Timing = timing;
+			if (timing < 0)
+			{
+				ArcAudioManager.Instance.Timing = 0;
+				ArcAudioManager.Instance.Source.PlayDelayed(-timing);
+			}
+			else
+			{
+				ArcAudioManager.Instance.Timing = timing;
+				ArcAudioManager.Instance.Play();
+			}
 			IsPlaying = true;
 		}
 		public void Pause()
