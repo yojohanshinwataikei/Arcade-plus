@@ -45,9 +45,10 @@ public class ArcSceneControlManager : MonoBehaviour
 	private void Update()
 	{
 		bool newTrackVisible = true;
-        foreach (ArcTimingGroup tg in ArcTimingManager.Instance.timingGroups){
-            tg.GroupHide=false;
-        }
+		foreach (ArcTimingGroup tg in ArcTimingManager.Instance.timingGroups)
+		{
+			tg.GroupHide = false;
+		}
 		foreach (ArcSceneControl sc in SceneControls.OrderBy(sc => sc.Timing))
 		{
 			if (sc.Timing + ArcAudioManager.Instance.AudioOffset > ArcGameplayManager.Instance.Timing)

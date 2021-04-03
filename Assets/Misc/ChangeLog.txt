@@ -1,5 +1,6 @@
 0.3.5
 
+- 启动时默认的 Arc 形状类型现在为 S
 - 修复 SceneControl 与 AudioOffset 的关系错误的问题
 
 ---

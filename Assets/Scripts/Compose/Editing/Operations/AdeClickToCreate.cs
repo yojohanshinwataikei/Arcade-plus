@@ -121,7 +121,7 @@ namespace Arcade.Compose.Editing
 		private ArcArc selectedArc;
 		private int currentArcColor;
 		private bool currentArcIsVoid;
-		private ArcLineType currentArcType;
+		private ArcLineType currentArcType = ArcLineType.S;
 
 		private void Awake()
 		{
