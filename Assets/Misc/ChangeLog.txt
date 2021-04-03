@@ -1,3 +1,9 @@
+0.3.5
+
+- 修复 SceneControl 与 AudioOffset 的关系错误的问题
+
+---
+
 0.3.4
 
 - Noinput 类型的 TimingGroup 谱面预览支持

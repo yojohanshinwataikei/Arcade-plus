@@ -50,7 +50,7 @@ public class ArcSceneControlManager : MonoBehaviour
         }
 		foreach (ArcSceneControl sc in SceneControls.OrderBy(sc => sc.Timing))
 		{
-			if (sc.Timing > ArcGameplayManager.Instance.Timing + ArcAudioManager.Instance.AudioOffset)
+			if (sc.Timing + ArcAudioManager.Instance.AudioOffset > ArcGameplayManager.Instance.Timing)
 			{
 				break;
 			}
