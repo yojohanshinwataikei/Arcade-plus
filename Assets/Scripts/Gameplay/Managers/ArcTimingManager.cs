@@ -463,7 +463,7 @@ namespace Arcade.Gameplay
 			}
 			if (timing + duration >= earliestRenderTime && timing <= latestRenderTime)
 			{
-				if (note && timing + duration + LostDelay < ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset)
+				if (note && timing + duration + LostDelay < ArcGameplayManager.Instance.Timing)
 				{
 					return false;
 				}
