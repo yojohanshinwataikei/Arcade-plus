@@ -341,7 +341,12 @@ namespace Arcade.Gameplay
 				for (int i = 0; i < quantity - count; ++i)
 				{
 					GameObject g = Instantiate(SegmentPrefab, transform);
-					segments.Add(g.GetComponent<ArcArcSegmentComponent>());
+					ArcArcSegmentComponent component = g.GetComponent<ArcArcSegmentComponent>();
+					component.Enable = Enable;
+					component.Alpha = Alpha;
+					component.Highlight = Highlight;
+					component.Selected = Selected;
+					segments.Add(component);
 				}
 			}
 			else if (count > quantity)
@@ -387,7 +392,11 @@ namespace Arcade.Gameplay
 			int v1 = duration < 1000 ? 14 : 7;
 			float v2 = 1f / (v1 * duration / 1000f);
 			int segSize = (int)(duration * v2);
-			segmentCount = (segSize == 0 ? 0 : duration / segSize) + 1;
+			segmentCount = 0;
+			if (segSize != 0)
+			{
+				segmentCount = duration / segSize + (duration % segSize == 0 ? 0 : 1);
+			}
 			InstantiateSegment(segmentCount);
 
 			float startHeight = 0;
