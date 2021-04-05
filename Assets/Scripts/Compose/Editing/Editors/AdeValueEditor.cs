@@ -141,6 +141,7 @@ namespace Arcade.Compose.Editing
 				{
 					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
+				ArcGameplayManager.Instance.ResetJudge();
 			}
 			catch (Exception Ex)
 			{
@@ -208,6 +209,7 @@ namespace Arcade.Compose.Editing
 				{
 					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
+				ArcGameplayManager.Instance.ResetJudge();
 			}
 			catch (Exception Ex)
 			{
