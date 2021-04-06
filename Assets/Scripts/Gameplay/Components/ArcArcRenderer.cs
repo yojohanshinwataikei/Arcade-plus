@@ -397,7 +397,7 @@ namespace Arcade.Gameplay
 			{
 				segmentCount = duration / segSize + (duration % segSize == 0 ? 0 : 1);
 			}
-			if (segmentCount == 0 && arc.XStart != arc.XEnd && arc.YStart != arc.YEnd)
+			if (segmentCount == 0 && (arc.XStart != arc.XEnd || arc.YStart != arc.YEnd))
 			{
 				segmentCount = 1;
 			}
@@ -762,7 +762,7 @@ namespace Arcade.Gameplay
 				if (arc.Judging || arc.IsVoid)
 				{
 					double timing = ((double)h.textureCoord.x) * (arc.EndTiming - arc.Timing) + arc.Timing;
-					return timing + ArcAudioManager.Instance.AudioOffset > ArcGameplayManager.Instance.Timing;
+					return timing + ArcAudioManager.Instance.AudioOffset + double.Epsilon >= ArcGameplayManager.Instance.Timing;
 				}
 				return true;
 			}
