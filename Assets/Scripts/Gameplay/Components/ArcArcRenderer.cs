@@ -415,14 +415,16 @@ namespace Arcade.Gameplay
 				segments[i].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * i, arc.Timing + segSize * (i + 1), startHeight, endHeight);
 			}
 
-			startHeight = endHeight;
-			start = end;
-			endHeight = arc.YEnd;
-			end = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XEnd),
-							  ArcAlgorithm.ArcYToWorld(arc.YEnd),
-							  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, arc.EndTiming + offset, arc.TimingGroup) / 1000f);
-			segments[segmentCount - 1].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * (segmentCount - 1), arc.EndTiming, startHeight, endHeight);
-
+			if (segmentCount > 0)
+			{
+				startHeight = endHeight;
+				start = end;
+				endHeight = arc.YEnd;
+				end = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XEnd),
+								  ArcAlgorithm.ArcYToWorld(arc.YEnd),
+								  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, arc.EndTiming + offset, arc.TimingGroup) / 1000f);
+				segments[segmentCount - 1].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * (segmentCount - 1), arc.EndTiming, startHeight, endHeight);
+			}
 			HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : ArcGreenHigh));
 			LowColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : ArcGreenLow));
 		}
@@ -471,7 +473,14 @@ namespace Arcade.Gameplay
 		}
 		public void BuildCollider()
 		{
-			if (arc.Timing > arc.EndTiming) return;
+			if (arc.Timing > arc.EndTiming || segments.Count == 0)
+			{
+				if (ArcCollider.sharedMesh)
+				{
+					Destroy(ArcCollider.sharedMesh);
+				}
+				return;
+			}
 
 			List<Vector3> vert = new List<Vector3>();
 			List<int> tri = new List<int>();

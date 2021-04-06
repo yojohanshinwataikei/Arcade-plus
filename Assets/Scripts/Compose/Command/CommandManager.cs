@@ -64,7 +64,8 @@ namespace Arcade.Compose.Command
 
 		public void Add(ICommand command)
 		{
-			if(preparing!=null){
+			if (preparing != null)
+			{
 				throw new Exception("有正在进行的命令，暂时不能执行新命令");
 			}
 			command.Do();
@@ -78,7 +79,8 @@ namespace Arcade.Compose.Command
 		}
 		public void Undo()
 		{
-			if(preparing!=null){
+			if (preparing != null)
+			{
 				AdeToast.Instance.Show("有正在进行的命令，暂时不能撤销");
 				return;
 			}
@@ -91,7 +93,8 @@ namespace Arcade.Compose.Command
 		}
 		public void Redo()
 		{
-			if(preparing!=null){
+			if (preparing != null)
+			{
 				AdeToast.Instance.Show("有正在进行的命令，暂时不能重做");
 				return;
 			}
@@ -104,6 +107,7 @@ namespace Arcade.Compose.Command
 		}
 		public void Clear()
 		{
+			Cancel();
 			undo.Clear();
 			redo.Clear();
 		}
@@ -125,15 +129,17 @@ namespace Arcade.Compose.Command
 		}
 		public void Prepare(ICommand command)
 		{
-			if(preparing!=null){
+			if (preparing != null)
+			{
 				throw new Exception("有正在进行的命令，暂时不能准备新命令");
 			}
-			preparing=command;
+			preparing = command;
 			preparing.Do();
 		}
 		public void Commit()
 		{
-			if(preparing!=null){
+			if (preparing != null)
+			{
 				Debug.Log($"Add: {preparing.Name}");
 				undo.AddLast(preparing);
 				if (undo.Count > bufferSize)
@@ -141,14 +147,15 @@ namespace Arcade.Compose.Command
 					undo.RemoveFirst();
 				}
 				redo.Clear();
-				preparing=null;
+				preparing = null;
 			}
 		}
 		public void Cancel()
 		{
-			if(preparing!=null){
+			if (preparing != null)
+			{
 				preparing.Undo();
-				preparing=null;
+				preparing = null;
 			}
 		}
 	}
