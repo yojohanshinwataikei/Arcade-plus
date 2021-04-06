@@ -397,6 +397,10 @@ namespace Arcade.Gameplay
 			{
 				segmentCount = duration / segSize + (duration % segSize == 0 ? 0 : 1);
 			}
+			if (segmentCount == 0 && arc.XStart != arc.XEnd && arc.YStart != arc.YEnd)
+			{
+				segmentCount = 1;
+			}
 			InstantiateSegment(segmentCount);
 
 			float startHeight = 0;
