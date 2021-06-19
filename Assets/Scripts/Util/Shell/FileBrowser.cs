@@ -33,7 +33,7 @@ namespace Arcade.Util.Shell
 			else
 			{
 				var p = new System.Diagnostics.Process();
-				p.StartInfo.FileName = "open";
+				p.StartInfo.FileName = (Application.platform == RuntimePlatform.LinuxEditor || Application.platform == RuntimePlatform.LinuxPlayer) ? "xdg-open" : "open";
 				p.StartInfo.Arguments = "\"" + SelectPath + "\"";
 				p.StartInfo.UseShellExecute = false;
 				p.Start();
