@@ -1,29 +1,38 @@
 fileFormatVersion: 2
-guid: 33b9495ba614d4a0f9688202922d4da0
+guid: 110fdfb459db4fc448a2ccd37e200fa4
 folderAsset: yes
-timeCreated: 1483902786
-licenseType: Pro
 PluginImporter:
-  serializedVersion: 1
+  externalObjects: {}
+  serializedVersion: 2
   iconMap: {}
   executionOrder: {}
   isPreloaded: 0
   isOverridable: 0
   platformData:
-    Any:
+  - first:
+      Any: 
+    second:
       enabled: 0
       settings: {}
-    Editor:
+  - first:
+      Editor: Editor
+    second:
       enabled: 1
       settings:
         DefaultValueInitialized: true
-    OSXIntel:
+  - first:
+      Standalone: OSXIntel
+    second:
       enabled: 1
       settings: {}
-    OSXIntel64:
+  - first:
+      Standalone: OSXIntel64
+    second:
       enabled: 1
       settings: {}
-    OSXUniversal:
+  - first:
+      Standalone: OSXUniversal
+    second:
       enabled: 1
       settings: {}
   userData: 
