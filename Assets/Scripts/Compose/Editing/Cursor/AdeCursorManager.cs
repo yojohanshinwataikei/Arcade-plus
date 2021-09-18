@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Gameplay;
@@ -351,6 +352,39 @@ namespace Arcade.Compose
 				}
 			}
 			InfoText.text = content;
+		}
+
+		public void SelectNotesInRange(int start, int end)
+		{
+			if (!Input.GetKey(KeyCode.LeftControl))
+			{
+				DeselectAllNotes();
+			}
+			List<ArcNote> list = new List<ArcNote>();
+			list.AddRange(ArcTapNoteManager.Instance.Taps.Where((ArcTap a) => a.Timing >= start && a.Timing <= end));
+			list.AddRange(ArcHoldNoteManager.Instance.Holds.Where((ArcHold a) => a.Timing >= start && a.Timing <= end && a.EndTiming >= start && a.EndTiming <= end));
+			IEnumerable<ArcArc> enumerable = ArcArcManager.Instance.Arcs.Where((ArcArc a) => a.Timing >= start && a.Timing <= end && a.EndTiming >= start && a.EndTiming <= end);
+			list.AddRange(enumerable);
+			foreach (ArcArc item in enumerable)
+			{
+				list.AddRange(item.ArcTaps);
+			}
+			foreach (ArcNote item2 in list)
+			{
+				if (item2.Instance != null)
+				{
+					item2.Selected = true;
+				}
+				if (SelectedNotes.Contains(item2))
+				{
+					continue;
+				}
+				SelectedNotes.Add(item2);
+				foreach (INoteSelectEvent noteEventListener in NoteEventListeners)
+				{
+					noteEventListener.OnNoteSelect(item2);
+				}
+			}
 		}
 
 		public void SelectNote(ArcNote note)
