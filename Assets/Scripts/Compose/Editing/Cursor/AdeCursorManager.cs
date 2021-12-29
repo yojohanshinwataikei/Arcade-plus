@@ -8,6 +8,7 @@ using UnityEngine.Events;
 using Arcade.Compose.Command;
 using Arcade.Compose.Editing;
 using Arcade.Compose.MarkingMenu;
+using System.Linq;
 
 namespace Arcade.Compose
 {
@@ -238,7 +239,7 @@ namespace Arcade.Compose
 		{
 			UpdateHorizontal();
 			UpdateVertical();
-			RaycastSelecting();
+			Selecting();
 			UpdateInfo();
 			DeleteListener();
 		}
@@ -269,10 +270,36 @@ namespace Arcade.Compose
 				VerticalY.DrawLine(new Vector3(AttachedVerticalPoint.x, 0), new Vector3(AttachedVerticalPoint.x, 5.5f));
 			}
 		}
-		private void RaycastSelecting()
+
+		private float? rangeSelectPosition = null;
+		private void Selecting()
 		{
+			if (!Input.GetKey(KeyCode.LeftShift))
+			{
+				rangeSelectPosition = null;
+			}
+
 			if (Input.GetMouseButtonDown(0))
 			{
+				//range selection shortcut
+				if (Input.GetKey(KeyCode.LeftShift))
+				{
+					if (rangeSelectPosition == null)
+					{
+						rangeSelectPosition = AttachedTiming;
+					}
+					else
+					{
+						if (!Input.GetKey(KeyCode.LeftControl))
+						{
+							DeselectAllNotes();
+						}
+						RangeSelectNote(rangeSelectPosition.Value, AttachedTiming);
+						rangeSelectPosition = null;
+					}
+					return;
+				}
+
 				Ray ray = GameplayCamera.ScreenPointToRay();
 
 				RaycastHit[] hits = Physics.RaycastAll(ray, 120, 1 << 9);
@@ -339,6 +366,10 @@ namespace Arcade.Compose
 					content += $"\n{AdeClickToCreate.Instance.CurrentArcColor}/{AdeClickToCreate.Instance.CurrentArcIsVoid}/{AdeClickToCreate.Instance.CurrentArcType}";
 				}
 			}
+			if (rangeSelectPosition != null)
+			{
+				content += $"\n段落选择起点: {rangeSelectPosition}";
+			}
 			if (SelectedNotes.Count == 1 && SelectedNotes[0] is ArcArc)
 			{
 				ArcArc arc = SelectedNotes[0] as ArcArc;
@@ -353,6 +384,43 @@ namespace Arcade.Compose
 			InfoText.text = content;
 		}
 
+		public void RangeSelectNote(float from, float to)
+		{
+			float start = Mathf.Min(from, to);
+			float end = Mathf.Max(from, to);
+			List<ArcNote> list = new List<ArcNote>();
+			foreach (var tap in ArcTapNoteManager.Instance.Taps)
+			{
+				if (tap.Timing >= start && tap.Timing <= end)
+				{
+					SelectNote(tap);
+				}
+			}
+			foreach (var hold in ArcHoldNoteManager.Instance.Holds)
+			{
+				if (hold.Timing >= start && hold.EndTiming <= end)
+				{
+					SelectNote(hold);
+				}
+			}
+			foreach (var arc in ArcArcManager.Instance.Arcs)
+			{
+				if (arc.Timing >= start && arc.EndTiming <= end)
+				{
+					SelectNote(arc);
+				}
+				if (arc.Timing <= end && arc.EndTiming >= start)
+				{
+					foreach (var arctap in arc.ArcTaps)
+					{
+						if (arctap.Timing >= start && arctap.Timing <= end)
+						{
+							SelectNote(arctap);
+						}
+					}
+				}
+			}
+		}
 		public void SelectNote(ArcNote note)
 		{
 			if (note.Instance != null) note.Selected = true;
