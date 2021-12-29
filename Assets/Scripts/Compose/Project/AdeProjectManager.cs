@@ -181,6 +181,7 @@ namespace Arcade.Compose
 			catch (Exception Ex)
 			{
 				AdeSingleDialog.Instance.Show(Ex.Message, "读取错误");
+				Debug.Log(Ex);
 				CurrentProjectMetadata = null;
 				CurrentProjectFolder = null;
 			}
