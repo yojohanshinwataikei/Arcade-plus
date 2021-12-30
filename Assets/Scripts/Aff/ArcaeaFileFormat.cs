@@ -369,7 +369,7 @@ namespace Arcade.Aff
 				}
 				else
 				{
-					chart.warning.Add($"第 {context.Int().Symbol.Line + lineOffset} 行第 {context.Int().Symbol.Column + 1} 列，整数无法解析，可能是超出了数据范围");
+					chart.warning.Add($"第 {context.Int().Symbol.Line + lineOffset} 行第 {context.Int().Symbol.Column + 1} 列，整数无法解析，可能是超出了数据范围，相关事件将被忽略");
 				}
 			}
 			else if (context.Float() != null)
@@ -381,7 +381,7 @@ namespace Arcade.Aff
 				}
 				else
 				{
-					chart.warning.Add($"第 {context.Int().Symbol.Line + lineOffset} 行第 {context.Int().Symbol.Column + 1} 列，浮点数无法解析，可能是超出了数据范围");
+					chart.warning.Add($"第 {context.Int().Symbol.Line + lineOffset} 行第 {context.Int().Symbol.Column + 1} 列，浮点数无法解析，可能是超出了数据范围，相关事件将被忽略");
 				}
 			}
 			else if (context.Word() != null)
@@ -428,7 +428,7 @@ namespace Arcade.Aff
 				}
 				else
 				{
-					chart.warning.Add($"第 {context.Start.Line + lineOffset} 行第 {context.Start.Column + 1} 列，不支持的事件类型：{context.Word().GetText()}");
+					chart.warning.Add($"第 {context.Start.Line + lineOffset} 行第 {context.Start.Column + 1} 列，不支持的事件类型：{context.Word().GetText()}，该事件将被忽略");
 				}
 			}
 		}
@@ -446,7 +446,7 @@ namespace Arcade.Aff
 					}
 					else
 					{
-						chart.warning.Add($"第 {item.@event().Start.Line + lineOffset} 行第 {item.@event().Start.Column + 1} 列，不可作为物件使用的事件：{item.@event().GetText()}");
+						chart.warning.Add($"第 {item.@event().Start.Line + lineOffset} 行第 {item.@event().Start.Column + 1} 列，不可作为物件使用的事件：{item.@event().GetText()}，该事件将被忽略");
 					}
 				}
 			}
@@ -470,7 +470,7 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (track.data > 4 || track.data <= 0)
 			{
-				chart.warning.Add($"第 {context.values().value()[1].Start.Line + lineOffset} 行第 {context.values().value()[1].Start.Column + 1} 列，tap 事件的轨道参数超过范围");
+				chart.warning.Add($"第 {context.values().value()[1].Start.Line + lineOffset} 行第 {context.values().value()[1].Start.Column + 1} 列，tap 事件的轨道参数超过范围，此 tap 将被忽略");
 				valueError = true;
 			}
 			if (!valueError)
@@ -496,12 +496,14 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (endTiming.data < timing.data)
 			{
-				chart.warning.Add($"第 {context.values().value()[1].Start.Line + lineOffset} 行第 {context.values().value()[1].Start.Column + 1} 列，hold 事件的结束时间早于开始时间");
-				valueError = true;
+				chart.warning.Add($"第 {context.values().value()[1].Start.Line + lineOffset} 行第 {context.values().value()[1].Start.Column + 1} 列，hold 事件的结束时间早于开始时间，作为修复将会交换起止时间");
+				var tmp = timing;
+				timing = endTiming;
+				endTiming = tmp;
 			}
 			if (track.data > 4 || track.data <= 0)
 			{
-				chart.warning.Add($"第 {context.values().value()[2].Start.Line + lineOffset} 行第 {context.values().value()[2].Start.Column + 1} 列，hold 事件的轨道参数超过范围");
+				chart.warning.Add($"第 {context.values().value()[2].Start.Line + lineOffset} 行第 {context.values().value()[2].Start.Column + 1} 列，hold 事件的轨道参数超过范围，此 hold 将被忽略");
 				valueError = true;
 			}
 			if (!valueError)
@@ -527,7 +529,7 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (segment.data < 0)
 			{
-				chart.warning.Add($"第 {context.values().value()[2].Start.Line + lineOffset} 行第 {context.values().value()[2].Start.Column + 1} 列，timing 事件的单个小节拍数小于 0");
+				chart.warning.Add($"第 {context.values().value()[2].Start.Line + lineOffset} 行第 {context.values().value()[2].Start.Column + 1} 列，timing 事件的单个小节拍数小于 0，此 timing 将被忽略");
 				valueError = true;
 			}
 			if (!valueError)
@@ -561,13 +563,15 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (endTiming.data < timing.data)
 			{
-				chart.warning.Add($"第 {context.values().value()[1].Start.Line + lineOffset} 行第 {context.values().value()[1].Start.Column + 1} 列，arc 事件的结束时间早于开始时间");
-				valueError = true;
+				chart.warning.Add($"第 {context.values().value()[1].Start.Line + lineOffset} 行第 {context.values().value()[1].Start.Column + 1} 列，arc 事件的结束时间早于开始时间，作为修复将会交换起止时间");
+				var tmp = timing;
+				timing = endTiming;
+				endTiming = tmp;
 			}
 			if (color.data < 0 || color.data >= 3)
 			{
-				chart.warning.Add($"第 {context.values().value()[7].Start.Line + lineOffset} 行第 {context.values().value()[7].Start.Column + 1} 列，arc 事件的颜色超出范围");
-				valueError = true;
+				chart.warning.Add($"第 {context.values().value()[7].Start.Line + lineOffset} 行第 {context.values().value()[7].Start.Column + 1} 列，arc 事件的颜色超出范围，作为修复其颜色见会被设为红色");
+				color.data = 0;
 			}
 			List<RawAffArctap> arctaps = new List<RawAffArctap>();
 			var subevents = context.subevents();
@@ -582,7 +586,7 @@ namespace Arcade.Aff
 							var arctap = @event.value as RawAffArctap;
 							if (arctap.Timing < timing.data || arctap.Timing > endTiming.data)
 							{
-								chart.warning.Add($"第 {@event.values().value()[0].Start.Line + lineOffset} 行第 {@event.values().value()[0].Start.Column + 1} 列，arctap 事件的时间超出所属 arc 的时间范围");
+								chart.warning.Add($"第 {@event.values().value()[0].Start.Line + lineOffset} 行第 {@event.values().value()[0].Start.Column + 1} 列，arctap 事件的时间超出所属 arc 的时间范围，此 arctap 事件将被忽略");
 							}
 							else
 							{
@@ -591,7 +595,7 @@ namespace Arcade.Aff
 						}
 						else
 						{
-							chart.warning.Add($"第 {@event.Start.Line + lineOffset} 行第 {@event.Start.Column + 1} 列，arc 事件的子事件必须为 arctap 事件");
+							chart.warning.Add($"第 {@event.Start.Line + lineOffset} 行第 {@event.Start.Column + 1} 列，arc 事件的子事件必须为 arctap 事件，此事件将被忽略");
 						}
 					}
 				}
@@ -653,8 +657,8 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (duration.data < 0)
 			{
-				chart.warning.Add($"第 {context.values().value()[8].Start.Line + lineOffset} 行第 {context.values().value()[8].Start.Column + 1} 列，camera 事件的时长小于零");
-				valueError = true;
+				chart.warning.Add($"第 {context.values().value()[8].Start.Line + lineOffset} 行第 {context.values().value()[8].Start.Column + 1} 列，camera 事件的时长小于零，作为修复其时长见会被设为零");
+				duration.data = 0;
 			}
 			if (!valueError)
 			{
@@ -718,13 +722,13 @@ namespace Arcade.Aff
 				IRawAffEvent @event = item.@event().value;
 				if (!(@event is IRawAffItem))
 				{
-					chart.warning.Add($"第 {item.@event().Start.Line + lineOffset} 行第 {item.@event().Start.Column + 1} 列，不可作为物件使用的事件：{item.@event().GetText()}");
+					chart.warning.Add($"第 {item.@event().Start.Line + lineOffset} 行第 {item.@event().Start.Column + 1} 列，不可作为物件使用的事件：{item.@event().GetText()}，此事件将被忽略");
 					continue;
 				}
 				IRawAffItem rawItem = @event as IRawAffItem;
 				if (!(rawItem is IRawAffNestableItem))
 				{
-					chart.warning.Add($"第 {item.Start.Line + lineOffset} 行第 {item.Start.Column + 1} 列，不可在 timinggroup 中嵌套使用的物件：{item.@event().GetText()}");
+					chart.warning.Add($"第 {item.Start.Line + lineOffset} 行第 {item.Start.Column + 1} 列，不可在 timinggroup 中嵌套使用的物件：{item.@event().GetText()}，此物件将被忽略");
 					nonNestableItems.Add(rawItem);
 					continue;
 				}
@@ -745,7 +749,7 @@ namespace Arcade.Aff
 		{
 			if (context.subevents() != null)
 			{
-				chart.warning.Add($"第 {context.subevents().Start.Line + lineOffset} 行第 {context.subevents().Start.Column + 1} 列，{type} 事件不应包含子事件");
+				chart.warning.Add($"第 {context.subevents().Start.Line + lineOffset} 行第 {context.subevents().Start.Column + 1} 列，{type} 事件不应包含子事件，这些子事件将被忽略");
 			}
 		}
 
@@ -753,7 +757,7 @@ namespace Arcade.Aff
 		{
 			if (context.segment() != null)
 			{
-				chart.warning.Add($"第 {context.subevents().Start.Line + lineOffset} 行第 {context.subevents().Start.Column + 1} 列，{type} 事件不应包含事件块");
+				chart.warning.Add($"第 {context.subevents().Start.Line + lineOffset} 行第 {context.subevents().Start.Column + 1} 列，{type} 事件不应包含事件块，此事件块将被忽略");
 			}
 		}
 
@@ -761,7 +765,7 @@ namespace Arcade.Aff
 		{
 			if (context.values().value().Length != count)
 			{
-				chart.warning.Add($"第 {context.values().Start.Line + lineOffset} 行第 {context.values().Start.Column + 1} 列，{type} 事件的参数个数应当为 {count} 个而非 {context.values().value().Length} 个");
+				chart.warning.Add($"第 {context.values().Start.Line + lineOffset} 行第 {context.values().Start.Column + 1} 列，{type} 事件的参数个数应当为 {count} 个而非 {context.values().value().Length} 个，此事件将被忽略");
 				return false;
 			}
 			return true;
@@ -771,7 +775,7 @@ namespace Arcade.Aff
 		{
 			if (context.values().value().Length < count)
 			{
-				chart.warning.Add($"第 {context.values().Start.Line + lineOffset} 行第 {context.values().Start.Column + 1} 列，{type} 事件的参数个数应当为至少 {count} 个而非 {context.values().value().Length} 个");
+				chart.warning.Add($"第 {context.values().Start.Line + lineOffset} 行第 {context.values().Start.Column + 1} 列，{type} 事件的参数个数应当为至少 {count} 个而非 {context.values().value().Length} 个，此事件将被忽略");
 				return false;
 			}
 			return true;
@@ -781,7 +785,7 @@ namespace Arcade.Aff
 		{
 			if (context.values().value().Length > count)
 			{
-				chart.warning.Add($"第 {context.values().Start.Line + lineOffset} 行第 {context.values().Start.Column + 1} 列，{type} 事件的参数个数应当为至多 {count} 个而非 {context.values().value().Length} 个");
+				chart.warning.Add($"第 {context.values().Start.Line + lineOffset} 行第 {context.values().Start.Column + 1} 列，{type} 事件的参数个数应当为至多 {count} 个而非 {context.values().value().Length} 个，此事件将被忽略");
 				return false;
 			}
 			return true;
@@ -798,7 +802,7 @@ namespace Arcade.Aff
 				}
 				else
 				{
-					chart.warning.Add($"第 {context.Start.Line + lineOffset} 行第 {context.Start.Column + 1} 列，{type} 事件的 {field} 参数的值类型错误");
+					chart.warning.Add($"第 {context.Start.Line + lineOffset} 行第 {context.Start.Column + 1} 列，{type} 事件的 {field} 参数的值类型错误，此事件将被忽略");
 				}
 			}
 			return null;
@@ -815,7 +819,7 @@ namespace Arcade.Aff
 			{
 				return result;
 			}
-			chart.warning.Add($"第 {context.Start.Line + lineOffset} 行第 {context.Start.Column + 1} 列，{type} 事件的 {field} 参数的值不是合法的几个值之一");
+			chart.warning.Add($"第 {context.Start.Line + lineOffset} 行第 {context.Start.Column + 1} 列，{type} 事件的 {field} 参数的值不是合法的几个值之一，此事件将被忽略");
 			return null;
 		}
 
