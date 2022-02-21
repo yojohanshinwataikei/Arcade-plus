@@ -16,13 +16,19 @@ Also, macOS and Linux support is experimental for now, if you find any bug that 
 
 ### Why this version do not have localisation feature?
 
-Localisation feature was supported in old versions of Arcade. However, Sch decided to remove this feature because bad code design and messing UI layout. Because of this, we removed this feature as well.
+Localization feature was supported in old versions of Arcade. However, Sch decided to remove this feature because bad code design and messing UI layout. Because of this, we removed this feature as well.
 
 Also, UI Layout was completely reworked in this fork, so adding localisation feature back is somehow acceptable, but we will do some other works before that. Pull request is always welcomed though.
 
 ### The playfield does not look like the old Arcade!
 
-Due to copyright issue, we can not use old graphic and sound assets. You need to find a set of skin to make it back. The documentation of skinning is not availiable now, but you can read our implementation of skinning system to know the structure of skin folder for now.
+Due to copyright issue, we can not use old graphic and sound assets. You need to find a set of skin to make it back. The documentation of skinning is not available now, but you can read our implementation of skinning system to know the structure of skin folder for now.
+
+### I want to contribute to Arcade-plus!
+
+Pull request is always welcomed, however please make sure you do not update Unity in your pull request. You can see the current using Unity version in [ProjectVersion.txt](ProjectSettings\ProjectVersion.txt).
+
+We are planning to add some documentation for this project, but for now you can only read the code. Sorry for that.
 
 ## license
 
@@ -37,3 +43,4 @@ Most parts of this project is licensed under the MIT license. See [License](LICE
 - Files under `Assets/Textures/Icon/MDI` are generated from [Material Design Icons](https://materialdesignicons.com/), go to their site for license issue.
 - The `Assets/Textures/Icon/OBS.png` are generated from the icon of [Open Broadcaster Software](https://obsproject.com/), go to their site for license issue.
 - Files under `Assets/Fonts` are free font files. These files are licensed by their authors.
+- All other Texture files in this repo is also licensed under CC-BY-4.0, see [LICENSE.texture](LICENSE.texture).
