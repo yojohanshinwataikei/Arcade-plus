@@ -36,11 +36,11 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.ide.rider": {
-      "version": "2.0.7",
+      "version": "3.0.12",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.1"
+        "com.unity.ext.nunit": "1.0.6"
       },
       "url": "https://packages.unity.cn"
     },
@@ -61,32 +61,30 @@
       "url": "https://packages.unity.cn"
     },
     "com.unity.render-pipelines.core": {
-      "version": "10.8.1",
+      "version": "12.1.4",
       "depth": 1,
-      "source": "registry",
+      "source": "builtin",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
         "com.unity.modules.physics": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
-      },
-      "url": "https://packages.unity.cn"
+      }
     },
     "com.unity.searcher": {
-      "version": "4.3.2",
+      "version": "4.9.1",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.cn"
     },
     "com.unity.shadergraph": {
-      "version": "10.8.1",
+      "version": "12.1.4",
       "depth": 1,
-      "source": "registry",
+      "source": "builtin",
       "dependencies": {
-        "com.unity.render-pipelines.core": "10.8.1",
-        "com.unity.searcher": "4.3.2"
-      },
-      "url": "https://packages.unity.cn"
+        "com.unity.render-pipelines.core": "12.1.4",
+        "com.unity.searcher": "4.9.1"
+      }
     },
     "com.unity.sysroot": {
       "version": "1.0.0",
@@ -144,14 +142,13 @@
       }
     },
     "com.unity.visualeffectgraph": {
-      "version": "10.8.1",
+      "version": "12.1.4",
       "depth": 0,
-      "source": "registry",
+      "source": "builtin",
       "dependencies": {
-        "com.unity.shadergraph": "10.8.1",
-        "com.unity.render-pipelines.core": "10.8.1"
-      },
-      "url": "https://packages.unity.cn"
+        "com.unity.shadergraph": "12.1.4",
+        "com.unity.render-pipelines.core": "12.1.4"
+      }
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
