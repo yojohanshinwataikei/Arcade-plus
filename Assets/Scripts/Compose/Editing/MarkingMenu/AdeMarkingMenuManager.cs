@@ -3,6 +3,7 @@ using UnityEngine;
 using Arcade.Util.UnityExtension;
 using Arcade.Compose.MarkingMenu;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Compose
 {
@@ -27,15 +28,15 @@ namespace Arcade.Compose
 		}
 		private void Update()
 		{
-			if (Input.GetMouseButtonDown(1))
+			if (Mouse.current.rightButton.wasPressedThisFrame)
 			{
 				Enter();
 			}
-			if (Input.GetMouseButtonUp(1) || (isOn && !Input.GetMouseButton(1)))
+			if (Mouse.current.rightButton.wasReleasedThisFrame || (isOn && !Mouse.current.rightButton.isPressed))
 			{
 				Exit();
 			}
-			if (isOn && Input.GetMouseButton(1))
+			if (isOn && Mouse.current.rightButton.isPressed)
 			{
 				Check();
 			}

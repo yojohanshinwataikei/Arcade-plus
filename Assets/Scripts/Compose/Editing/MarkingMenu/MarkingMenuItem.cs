@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Compose.MarkingMenu
 {
@@ -104,7 +105,7 @@ namespace Arcade.Compose.MarkingMenu
 		}
 		private void Update()
 		{
-			if (Input.GetMouseButton(1) && PointerInItem)
+			if (Mouse.current.rightButton.isPressed && PointerInItem)
 			{
 				pointerInItemTiming += Time.deltaTime;
 			}

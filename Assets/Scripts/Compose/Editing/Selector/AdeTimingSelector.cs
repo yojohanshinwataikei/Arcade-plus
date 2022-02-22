@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Arcade.Gameplay.Chart;
 using Arcade.Gameplay;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Compose.Editing
 {
@@ -45,7 +46,7 @@ namespace Arcade.Compose.Editing
 				}
 			}
 			currentSetter?.Invoke(timing);
-			if (Input.GetMouseButtonDown(0)) EndModify();
+			if (Mouse.current.leftButton.wasPressedThisFrame) EndModify();
 		}
 		public void EndModify()
 		{

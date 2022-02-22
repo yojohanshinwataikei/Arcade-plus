@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Util.UnityExtension
 {
@@ -14,7 +15,7 @@ namespace Arcade.Util.UnityExtension
         public static Vector2 ScaledMousePosition(Vector2 size)
         {
             float ratio = size.x / Screen.width;
-            Vector2 mousePosition = Input.mousePosition;
+            Vector2 mousePosition = Mouse.current.position.ReadValue();
             return mousePosition * ratio;
         }
     }

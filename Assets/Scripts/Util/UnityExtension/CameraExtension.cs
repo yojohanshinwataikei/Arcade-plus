@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Util.UnityExtension
 {
@@ -6,7 +7,7 @@ namespace Arcade.Util.UnityExtension
     {
         public static Ray ScreenPointToRay(this Camera camera)
         {
-            return camera.ScreenPointToRay(Input.mousePosition);
+            return camera.ScreenPointToRay(Mouse.current.position.ReadValue());
         }
     }
 }

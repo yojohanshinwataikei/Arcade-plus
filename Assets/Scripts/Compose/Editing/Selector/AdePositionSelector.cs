@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Arcade.Gameplay.Chart;
 using Arcade.Gameplay;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Compose.Editing
 {
@@ -38,7 +39,7 @@ namespace Arcade.Compose.Editing
             if (!AdeCursorManager.Instance.IsVerticalHit) return;
             Vector3 pos = AdeCursorManager.Instance.AttachedVerticalPoint;
             currentSetter?.Invoke(new Vector2(ArcAlgorithm.WorldXToArc(pos.x), ArcAlgorithm.WorldYToArc(pos.y)));
-            if (Input.GetMouseButtonDown(0)) EndModify();
+            if (Mouse.current.leftButton.wasPressedThisFrame) EndModify();
         }
         public void EndModify()
         {

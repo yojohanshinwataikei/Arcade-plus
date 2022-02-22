@@ -7,6 +7,7 @@ using Arcade.Compose.Command;
 using System.Linq;
 using UnityEngine.EventSystems;
 using Arcade.Compose.Editing;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Compose
 {
@@ -52,16 +53,16 @@ namespace Arcade.Compose
 		}
 		private void Update()
 		{
-			if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C) && EventSystem.current.currentSelectedGameObject == null)
+			if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.cKey.wasPressedThisFrame && EventSystem.current.currentSelectedGameObject == null)
 			{
 				CopySelectedNotes();
 			}
-			else if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.X) && EventSystem.current.currentSelectedGameObject == null)
+			else if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.xKey.wasPressedThisFrame && EventSystem.current.currentSelectedGameObject == null)
 			{
 				CutSelectedNotes();
 			}
 			if (!enable) return;
-			if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Z))
+			if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.zKey.wasPressedThisFrame)
 			{
 				CancelPaste();
 				return;
@@ -129,7 +130,8 @@ namespace Arcade.Compose
 			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			bool hasIllegalArcTap = true;
 			int beginTiming = notes.Min((n) => n.Timing);
-			if (beginTiming!=timing){
+			if (beginTiming != timing)
+			{
 				foreach (var n in notes)
 				{
 					n.Judged = false;
@@ -169,7 +171,7 @@ namespace Arcade.Compose
 
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
-			if (Input.GetMouseButtonDown(0))
+			if (Mouse.current.leftButton.wasPressedThisFrame)
 			{
 				if (hasIllegalArcTap) Paste();
 				else
@@ -186,7 +188,7 @@ namespace Arcade.Compose
 		private void Paste()
 		{
 			CommandManager.Instance.Commit();
-			if (Input.GetKey(KeyCode.LeftControl))
+			if (Keyboard.current.leftCtrlKey.isPressed)
 			{
 				foreach (var note in notes)
 				{

@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Compose.Command;
 using Arcade.Util.Loader;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Compose
 {
@@ -112,9 +113,9 @@ namespace Arcade.Compose
 				ArcGameplayManager.Instance.Timing = ArcGameplayManager.Instance.Chart.LastEventTiming - 500;
 				shouldReload = false;
 			}
-			if (Input.GetKey(KeyCode.LeftControl))
+			if (Keyboard.current.leftCtrlKey.isPressed)
 			{
-				if (Input.GetKeyDown(KeyCode.S))
+				if (Keyboard.current.sKey.wasPressedThisFrame)
 				{
 					SaveProject();
 				}

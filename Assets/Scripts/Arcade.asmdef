@@ -1,8 +1,10 @@
 {
     "name": "Arcade",
+    "rootNamespace": "",
     "references": [
         "Demigiant.DOTween",
-        "SFB.Runtime"
+        "SFB.Runtime",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

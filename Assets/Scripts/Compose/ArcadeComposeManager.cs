@@ -11,6 +11,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using System.Globalization;
 using Arcade.Compose.Command;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace Arcade.Compose
 {
@@ -157,11 +159,11 @@ namespace Arcade.Compose
 		}
 		private void Update()
 		{
-			if (Input.mouseScrollDelta.y != 0 && !AdePositionSelector.Instance.Enable && AdeCursorManager.Instance.IsHorizontalHit)
+			if (Mouse.current.scroll.ReadValue().y != 0 && !AdePositionSelector.Instance.Enable && AdeCursorManager.Instance.IsHorizontalHit)
 			{
 				float timing = GameplayManager.Timingf * 1000;
 				int offset = ArcAudioManager.Instance.AudioOffset;
-				timing = AdeGridManager.Instance.AttachScroll(timing - offset, Input.mouseScrollDelta.y) + offset;
+				timing = AdeGridManager.Instance.AttachScroll(timing - offset, Mouse.current.scroll.ReadValue().y) + offset;
 				if (timing < 0) timing += GameplayManager.Length;
 				if (timing > GameplayManager.Length) timing -= GameplayManager.Length;
 				if (timing < 0 || timing > GameplayManager.Length) timing = 0;
@@ -170,13 +172,13 @@ namespace Arcade.Compose
 			}
 			if (EventSystem.current.currentSelectedGameObject == null && IsEditorMode)
 			{
-				if (Input.GetKeyDown(KeyCode.Space))
+				if (Keyboard.current.spaceKey.wasPressedThisFrame)
 				{
 					GameplayManager.Play();
 					playShotTiming = GameplayManager.Timing;
 					//AdeToast.Instance.Show("松开空格暂停并倒回，按下Q仅暂停", "Release 'Space' pause and rollback);
 				}
-				if (Input.GetKeyUp(KeyCode.Space) && GameplayManager.IsPlaying)
+				if (Keyboard.current.spaceKey.wasReleasedThisFrame && GameplayManager.IsPlaying)
 				{
 					GameplayManager.Pause();
 					GameplayManager.Timing = playShotTiming;
@@ -184,7 +186,7 @@ namespace Arcade.Compose
 			}
 			try
 			{
-				if (Input.GetKeyDown(PlayerPrefs.GetString("HotKeyNoReturn", "q")))
+				if (((KeyControl)Keyboard.current[PlayerPrefs.GetString("HotKeyNoReturn", "q")]).wasPressedThisFrame)
 				{
 					if (GameplayManager.IsPlaying) GameplayManager.Pause();
 					else GameplayManager.Play();

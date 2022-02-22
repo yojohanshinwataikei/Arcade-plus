@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Arcade.Compose.Command
@@ -53,10 +54,10 @@ namespace Arcade.Compose.Command
 
 		private void Update()
 		{
-			if (Input.GetKey(KeyCode.LeftControl))
+			if (Keyboard.current.leftCtrlKey.isPressed)
 			{
-				if (Input.GetKeyDown(KeyCode.Z)) Undo();
-				else if (Input.GetKeyDown(KeyCode.Y)) Redo();
+				if (Keyboard.current.zKey.wasPressedThisFrame) Undo();
+				else if (Keyboard.current.yKey.wasPressedThisFrame) Redo();
 			}
 			UndoClickable = undo.Count != 0;
 			RedoClickable = redo.Count != 0;

@@ -5,6 +5,7 @@ using Arcade.Compose.MarkingMenu;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Compose.Editing
 {
@@ -141,7 +142,7 @@ namespace Arcade.Compose.Editing
 			if (!enable) return;
 			if (Mode == ClickToCreateMode.Idle) return;
 			UpdateArcTapCursor();
-			if (Input.GetMouseButtonDown(0))
+			if (Mouse.current.leftButton.wasPressedThisFrame)
 			{
 				AddNoteHandler();
 			}

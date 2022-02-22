@@ -8,7 +8,7 @@ using UnityEngine.Events;
 using Arcade.Compose.Command;
 using Arcade.Compose.Editing;
 using Arcade.Compose.MarkingMenu;
-using System.Linq;
+using UnityEngine.InputSystem;
 
 namespace Arcade.Compose
 {
@@ -274,15 +274,15 @@ namespace Arcade.Compose
 		private float? rangeSelectPosition = null;
 		private void Selecting()
 		{
-			if (!Input.GetKey(KeyCode.LeftShift))
+			if (!Keyboard.current.leftShiftKey.isPressed)
 			{
 				rangeSelectPosition = null;
 			}
 
-			if (Input.GetMouseButtonDown(0))
+			if (Mouse.current.leftButton.wasPressedThisFrame)
 			{
 				//range selection shortcut
-				if (Input.GetKey(KeyCode.LeftShift))
+				if (Keyboard.current.leftShiftKey.isPressed)
 				{
 					if (rangeSelectPosition == null)
 					{
@@ -290,7 +290,7 @@ namespace Arcade.Compose
 					}
 					else
 					{
-						if (!Input.GetKey(KeyCode.LeftControl))
+						if (!Keyboard.current.leftCtrlKey.isPressed)
 						{
 							DeselectAllNotes();
 						}
@@ -319,7 +319,7 @@ namespace Arcade.Compose
 				}
 				if (n != null)
 				{
-					if (!Input.GetKey(KeyCode.LeftControl))
+					if (!Keyboard.current.leftCtrlKey.isPressed)
 					{
 						DeselectAllNotes();
 						SelectNote(n);
@@ -332,7 +332,7 @@ namespace Arcade.Compose
 				}
 				else
 				{
-					if (!Input.GetKey(KeyCode.LeftControl) && IsHorizontalHit)
+					if (!Keyboard.current.leftCtrlKey.isPressed && IsHorizontalHit)
 					{
 						DeselectAllNotes();
 					}
@@ -341,7 +341,7 @@ namespace Arcade.Compose
 		}
 		private void DeleteListener()
 		{
-			if (Input.GetKeyDown(KeyCode.Delete))
+			if (Keyboard.current.deleteKey.wasPressedThisFrame)
 			{
 				DeleteSelectedNotes();
 			}
