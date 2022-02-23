@@ -12,7 +12,6 @@ using UnityEngine.Events;
 using System.Globalization;
 using Arcade.Compose.Command;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Controls;
 
 namespace Arcade.Compose
 {
@@ -131,14 +130,14 @@ namespace Arcade.Compose
 			ResolutionDropdown.onValueChanged.AddListener((int value) =>
 			{
 				ArcadePreference.ScreenResolution = ResolutionDropdown.options[value].text;
-				SetResolution(ArcadePreference.ScreenResolution,ArcadePreference.Fullscreen);
+				SetResolution(ArcadePreference.ScreenResolution, ArcadePreference.Fullscreen);
 				SavePreferences();
 			});
 			FullscreenToggle.onValueChanged.AddListener((bool value) =>
 			{
 				ArcadePreference.Fullscreen = value;
 				ResolutionDropdown.interactable = !value;
-				SetResolution(ArcadePreference.ScreenResolution,ArcadePreference.Fullscreen);
+				SetResolution(ArcadePreference.ScreenResolution, ArcadePreference.Fullscreen);
 				SavePreferences();
 			});
 			TargetFramerateDropdown.onValueChanged.AddListener((int value) =>
@@ -172,30 +171,23 @@ namespace Arcade.Compose
 			}
 			if (EventSystem.current.currentSelectedGameObject == null && IsEditorMode)
 			{
-				if (Keyboard.current.spaceKey.wasPressedThisFrame)
+				bool holding = AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.PlayWhenHolding);
+				if (holding && !GameplayManager.IsPlaying)
 				{
 					GameplayManager.Play();
 					playShotTiming = GameplayManager.Timing;
 					//AdeToast.Instance.Show("松开空格暂停并倒回，按下Q仅暂停", "Release 'Space' pause and rollback);
 				}
-				if (Keyboard.current.spaceKey.wasReleasedThisFrame && GameplayManager.IsPlaying)
+				if (!holding && GameplayManager.IsPlaying)
 				{
 					GameplayManager.Pause();
 					GameplayManager.Timing = playShotTiming;
 				}
 			}
-			try
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.PlayOrPause))
 			{
-				if (((KeyControl)Keyboard.current[PlayerPrefs.GetString("HotKeyNoReturn", "q")]).wasPressedThisFrame)
-				{
-					if (GameplayManager.IsPlaying) GameplayManager.Pause();
-					else GameplayManager.Play();
-				}
-			}
-			catch (ArgumentException)
-			{
-				AdeToast.Instance.Show("热键：在此处暂停（不返回) 设置不正确\n已改回默认值");
-				PlayerPrefs.SetString("HotKeyNoReturn", "q");
+				if (GameplayManager.IsPlaying) GameplayManager.Pause();
+				else GameplayManager.Play();
 			}
 		}
 		private void OnEnable()

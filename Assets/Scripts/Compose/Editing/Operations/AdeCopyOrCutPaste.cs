@@ -5,7 +5,6 @@ using Arcade.Compose.MarkingMenu;
 using Arcade.Gameplay;
 using Arcade.Compose.Command;
 using System.Linq;
-using UnityEngine.EventSystems;
 using Arcade.Compose.Editing;
 using UnityEngine.InputSystem;
 
@@ -53,16 +52,16 @@ namespace Arcade.Compose
 		}
 		private void Update()
 		{
-			if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.cKey.wasPressedThisFrame && EventSystem.current.currentSelectedGameObject == null)
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Copy))
 			{
 				CopySelectedNotes();
 			}
-			else if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.xKey.wasPressedThisFrame && EventSystem.current.currentSelectedGameObject == null)
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Cut))
 			{
 				CutSelectedNotes();
 			}
 			if (!enable) return;
-			if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.zKey.wasPressedThisFrame)
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Undo))
 			{
 				CancelPaste();
 				return;
@@ -188,7 +187,7 @@ namespace Arcade.Compose
 		private void Paste()
 		{
 			CommandManager.Instance.Commit();
-			if (Keyboard.current.leftCtrlKey.isPressed)
+			if (AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
 			{
 				foreach (var note in notes)
 				{

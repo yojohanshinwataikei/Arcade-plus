@@ -2,7 +2,7 @@
     "name": "ArcadeInput",
     "maps": [
         {
-            "name": "Arcade Input",
+            "name": "Arcade Hotkey",
             "id": "cd950ed4-bcec-4ef6-b1f8-1c8be8aefa42",
             "actions": [
                 {
@@ -54,24 +54,6 @@
                     "name": "Delete",
                     "type": "Button",
                     "id": "f3ce9796-e49b-4cab-8260-359961eff90f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Multiple Selection",
-                    "type": "Button",
-                    "id": "e1271f70-f5b2-4382-9ee5-642ddc614b2b",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Range Selection",
-                    "type": "Button",
-                    "id": "aeac5385-b849-48fc-b1e7-9bb431460ccc",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -275,28 +257,6 @@
                 },
                 {
                     "name": "",
-                    "id": "8662ddea-685f-4061-b603-ecc10cc52258",
-                    "path": "<Keyboard>/ctrl",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Multiple Selection",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "5bfd48fc-07d2-4f9c-9f3c-e286f289e21f",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Range Selection",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "0921c6b1-d9ae-4c5a-a286-a9efc6771f08",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -314,6 +274,54 @@
                     "processors": "",
                     "groups": "",
                     "action": "Play Or Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Arcade Input",
+            "id": "dfc1fc89-02b1-4e85-9598-9b1f3b504fb6",
+            "actions": [
+                {
+                    "name": "Multiple Selection",
+                    "type": "Button",
+                    "id": "75a55bcc-6ccf-43d4-a9d1-b53e1e2cf773",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Range Selection",
+                    "type": "Button",
+                    "id": "2982c6a7-fc16-4a6a-ad91-8a0de0d23d34",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2e5ec33d-b969-4ccc-a8d9-07dbb5cb2f32",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Multiple Selection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "62702fd1-0687-431e-a718-529266c2c563",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Range Selection",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

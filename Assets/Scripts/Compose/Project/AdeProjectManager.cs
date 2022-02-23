@@ -12,7 +12,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Compose.Command;
 using Arcade.Util.Loader;
-using UnityEngine.InputSystem;
 
 namespace Arcade.Compose
 {
@@ -113,12 +112,9 @@ namespace Arcade.Compose
 				ArcGameplayManager.Instance.Timing = ArcGameplayManager.Instance.Chart.LastEventTiming - 500;
 				shouldReload = false;
 			}
-			if (Keyboard.current.leftCtrlKey.isPressed)
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Save))
 			{
-				if (Keyboard.current.sKey.wasPressedThisFrame)
-				{
-					SaveProject();
-				}
+				SaveProject();
 			}
 		}
 
@@ -401,13 +397,13 @@ namespace Arcade.Compose
 			{
 				if (raw.error.Count > 0)
 				{
-					AdeSingleDialog.Instance.Show($"格式问题：\n{(raw.error.Count > 256?"* 谱面错误太多，仅显示前 256 条":"")}{string.Join("\n", raw.error.Take(256).Select(s => $"- {s}"))}", "谱面解析失败");
+					AdeSingleDialog.Instance.Show($"格式问题：\n{(raw.error.Count > 256 ? "* 谱面错误太多，仅显示前 256 条" : "")}{string.Join("\n", raw.error.Take(256).Select(s => $"- {s}"))}", "谱面解析失败");
 				}
 				else
 				{
 					if (raw.warning.Count > 0)
 					{
-						AdeSingleDialog.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并对谱面进行了自动修复\n谱面在存在的问题：\n{(raw.warning.Count > 256?"* 谱面错误太多，仅显示前 256 条":"")}{string.Join("\n", raw.warning.Take(256).Select(s => $"- {s}"))}", "谱面解析出现问题");
+						AdeSingleDialog.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并对谱面进行了自动修复\n谱面在存在的问题：\n{(raw.warning.Count > 256 ? "* 谱面错误太多，仅显示前 256 条" : "")}{string.Join("\n", raw.warning.Take(256).Select(s => $"- {s}"))}", "谱面解析出现问题");
 					}
 					chart = new Gameplay.Chart.ArcChart(raw);
 				}

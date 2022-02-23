@@ -274,7 +274,7 @@ namespace Arcade.Compose
 		private float? rangeSelectPosition = null;
 		private void Selecting()
 		{
-			if (!Keyboard.current.leftShiftKey.isPressed)
+			if (!AdeInputManager.Instance.Inputs.RangeSelection.IsPressed())
 			{
 				rangeSelectPosition = null;
 			}
@@ -282,7 +282,7 @@ namespace Arcade.Compose
 			if (Mouse.current.leftButton.wasPressedThisFrame)
 			{
 				//range selection shortcut
-				if (Keyboard.current.leftShiftKey.isPressed)
+				if (AdeInputManager.Instance.Inputs.RangeSelection.IsPressed())
 				{
 					if (rangeSelectPosition == null)
 					{
@@ -290,7 +290,7 @@ namespace Arcade.Compose
 					}
 					else
 					{
-						if (!Keyboard.current.leftCtrlKey.isPressed)
+						if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
 						{
 							DeselectAllNotes();
 						}
@@ -319,7 +319,7 @@ namespace Arcade.Compose
 				}
 				if (n != null)
 				{
-					if (!Keyboard.current.leftCtrlKey.isPressed)
+					if (!AdeInputManager.Instance.Inputs.RangeSelection.IsPressed())
 					{
 						DeselectAllNotes();
 						SelectNote(n);
@@ -332,7 +332,7 @@ namespace Arcade.Compose
 				}
 				else
 				{
-					if (!Keyboard.current.leftCtrlKey.isPressed && IsHorizontalHit)
+					if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed() && IsHorizontalHit)
 					{
 						DeselectAllNotes();
 					}
@@ -341,7 +341,7 @@ namespace Arcade.Compose
 		}
 		private void DeleteListener()
 		{
-			if (Keyboard.current.deleteKey.wasPressedThisFrame)
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Delete))
 			{
 				DeleteSelectedNotes();
 			}
