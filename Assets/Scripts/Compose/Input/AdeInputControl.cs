@@ -31,82 +31,82 @@ namespace Arcade.Compose
             ""actions"": [
                 {
                     ""name"": ""Save"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""27bfa70c-3b88-47aa-a92c-9bb0cec59a16"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""HotKey"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Undo"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""889fa30d-eb57-4857-a956-de96e730ca3f"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""HotKey"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Redo"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""c1156be1-7d46-4c8a-9d2e-5e910052e63e"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""HotKey"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Copy"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""a7d9cd85-ea2c-45a0-9812-27af8acb48a1"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""HotKey"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Cut"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""67028a87-7bf3-4fad-9f23-31c19e973a4b"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""HotKey"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Delete"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""f3ce9796-e49b-4cab-8260-359961eff90f"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""HotKey"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Play When Holding"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""906c56a2-3584-45c7-a679-d656873a9e8f"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""HotKey"",
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Play Or Pause"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""9ec2475b-e083-4ab6-9137-f1e1c2db9746"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""interactions"": ""HotKey"",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""f71ea1f3-0675-4b96-ae2b-3141525fedca"",
-                    ""path"": ""OneModifier"",
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""319eecb4-07e2-4354-ac21-5328068fb2a1"",
+                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -115,19 +115,8 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Modifier"",
-                    ""id"": ""79658c04-918d-44ac-96f9-9b666f6710d8"",
-                    ""path"": ""<Keyboard>/ctrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Save"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Binding"",
-                    ""id"": ""aefe43ed-e080-4c4e-9227-8fae1b384d59"",
+                    ""name"": ""key"",
+                    ""id"": ""84338b69-3c9d-4e28-8579-8a89fc347a2f"",
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -137,75 +126,42 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""ef385b77-265f-4555-acbd-67d6b142b018"",
-                    ""path"": ""OneModifier"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Copy"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""c0817fb1-2434-47a4-9586-fcea6c79b289"",
+                    ""name"": ""modifier1"",
+                    ""id"": ""b84e1665-c973-4146-be51-205cc7ff479b"",
                     ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Copy"",
+                    ""action"": ""Save"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""binding"",
-                    ""id"": ""13600e59-a551-4b46-b56f-a672a48e92c6"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""name"": ""modifier2"",
+                    ""id"": ""f735247b-c3ea-4272-9d4d-651f7df1aa7a"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Copy"",
+                    ""action"": ""Save"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""b98cdf0c-4ced-4b51-b5e9-3d6c05a52023"",
-                    ""path"": ""OneModifier"",
+                    ""name"": ""modifier3"",
+                    ""id"": ""7fd164da-da3a-4bbf-80fa-206588c1799a"",
+                    ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Cut"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""modifier"",
-                    ""id"": ""b0e7ebe1-2483-418c-9ab6-48abb6340c3f"",
-                    ""path"": ""<Keyboard>/ctrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Cut"",
+                    ""action"": ""Save"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""binding"",
-                    ""id"": ""4fcfb124-2ff4-4dd3-b278-8663e97c8e84"",
-                    ""path"": ""<Keyboard>/x"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Cut"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""ad265ab8-6676-44cc-b715-484b855241fc"",
-                    ""path"": ""OneModifier"",
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""a85a3493-23b8-4814-9b41-c51072de6e11"",
+                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -214,19 +170,8 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Modifier"",
-                    ""id"": ""d19523e7-6ddc-4480-899f-2d6d38ed25e5"",
-                    ""path"": ""<Keyboard>/ctrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Undo"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Binding"",
-                    ""id"": ""02089682-7ff6-4377-bcfd-3aa33b25b4fc"",
+                    ""name"": ""key"",
+                    ""id"": ""771324b2-928f-492a-afac-2ef782ac63ef"",
                     ""path"": ""<Keyboard>/z"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -236,9 +181,42 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": ""One Modifier"",
-                    ""id"": ""c4417cf8-827e-443d-aaff-f8db2403aa65"",
-                    ""path"": ""OneModifier"",
+                    ""name"": ""modifier1"",
+                    ""id"": ""1aed99bf-a749-4b6b-8731-2d8e2309020e"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Undo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""367112b7-6341-4826-a820-9d66d6003cc5"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Undo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""4a96474e-31fe-4470-bc91-488eeee61e44"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Undo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""6b7b8406-1e91-4d01-8c9f-9015edac55b7"",
+                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -247,19 +225,8 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""Modifier"",
-                    ""id"": ""ce1bfcdd-92e0-46ca-962b-d3eadcea9265"",
-                    ""path"": ""<Keyboard>/ctrl"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Redo"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Binding"",
-                    ""id"": ""a0fd6665-6ffc-46be-b5db-329ebcb3c8a0"",
+                    ""name"": ""key"",
+                    ""id"": ""4f8a71ec-0193-403b-a0e6-315df24c9b4f"",
                     ""path"": ""<Keyboard>/y"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -269,37 +236,312 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""a4440d87-b945-4619-b003-f4744f76710f"",
+                    ""name"": ""modifier1"",
+                    ""id"": ""0a7e327d-eb7f-42e4-b267-e875c31810dc"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Redo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""f28c3540-8cc5-4beb-9fe6-a57a15e95f5b"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Redo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""ef0c9542-2160-49d5-8d89-5191f4aecb69"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Redo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""e9670b28-b4cf-41fb-927f-b9cfe4965f57"",
+                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Copy"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""0abcb00d-476e-481c-8390-e175ef4820d2"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Copy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""bb454470-0fa9-4f45-a1f3-9c97f732148e"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Copy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""b57463ea-68ba-4822-80cd-262dbb06c5df"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Copy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""e6e107b9-fb6b-4816-8b34-b95f27e2f35f"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Copy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""95ef7516-08ad-4bbe-9ded-cb001b93d2c8"",
+                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cut"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""a7501803-a0d7-4417-be21-aebfc5fe021c"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""cf48e9e7-c448-4c55-bda7-c0ec3a816402"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""2246909d-cb72-4520-944f-fa605391d912"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""2bf19eae-8bd5-4a66-ae46-666677f135d9"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cut"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""4c3b6eec-2790-490a-8836-38575b745b41"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Delete"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""8dcb385f-199c-4e57-a47b-e84f1580f94c"",
                     ""path"": ""<Keyboard>/delete"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Delete"",
                     ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""8f4b9295-9452-4708-b3c7-44379006fd5d"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Delete"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""e3185d5e-2496-438a-b7d4-fd7256e32210"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Delete"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""abaeb962-c302-4760-bfd7-4754150abf73"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Delete"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""31f2358e-925e-4906-9205-da75aa5d7ec9"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Play When Holding"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""0921c6b1-d9ae-4c5a-a286-a9efc6771f08"",
+                    ""name"": ""key"",
+                    ""id"": ""c3af1e8b-37e8-4db1-8b2f-f31566587af2"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Play When Holding"",
                     ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""da472101-0330-4206-9d1d-6cfcb3f3c591"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Play When Holding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""d8dc1cf1-5130-4e6d-ae7c-858c3c7115f2"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Play When Holding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""2897b11b-5a5a-4790-9310-116f42841a48"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Play When Holding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""64017bfe-ef30-40c2-8872-78e40fcaae78"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Play Or Pause"",
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""d8daa87c-6949-429a-9aeb-b8b5f432744a"",
+                    ""name"": ""key"",
+                    ""id"": ""6b090b2b-84b7-4990-a1d8-f9ba03a4a53c"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Play Or Pause"",
                     ""isComposite"": false,
-                    ""isPartOfComposite"": false
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""52828ae8-42dc-437e-a2a6-1d52e3abfabc"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Play Or Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""e0bbaca4-3b0f-4c79-892a-aaa836bb0003"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Play Or Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""05f54591-7d44-45ff-aa48-7c37a097de9c"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Play Or Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },

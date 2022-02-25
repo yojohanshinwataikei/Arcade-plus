@@ -52,7 +52,7 @@ namespace Arcade.Compose
 			{
 				return false;
 			}
-			return action.WasPressedThisFrame();
+			return action.WasPerformedThisFrame();
 		}
 
 		public bool CheckHotkeyActionPressing(InputAction action)
