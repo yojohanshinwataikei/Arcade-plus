@@ -10,12 +10,19 @@ namespace Arcade.Util.Input
 #if UNITY_EDITOR
 	[InitializeOnLoad]
 #endif
+	// Note: since interaction can not change magnitude, please use action.inProgress instead of action.isPressed
 	public class HotKeyInteraction : IInputInteraction<KeyWithModifiersData>
 	{
+		public bool needModifier1;
+		public bool needModifier2;
+		public bool needModifier3;
+
 		private bool pressing = false;
 		public void Process(ref InputInteractionContext context)
 		{
+
 			KeyWithModifiersData data = context.ReadValue<KeyWithModifiersData>();
+			bool modifierMatched = (needModifier1 == data.modifier1) && (needModifier2 == data.modifier2) && (needModifier3 == data.modifier3);
 			if (pressing)
 			{
 				if (data.keyValue < InputSystem.settings.defaultButtonPressPoint)
@@ -24,7 +31,7 @@ namespace Arcade.Util.Input
 					context.Canceled();
 				}
 			}
-			else if (data.modifierMatched)
+			else if (modifierMatched)
 			{
 				if (data.keyValue >= InputSystem.settings.defaultButtonPressPoint)
 				{

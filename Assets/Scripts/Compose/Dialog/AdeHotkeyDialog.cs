@@ -1,19 +1,18 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-public class AdeHotkeyDialog : MonoBehaviour
+namespace Arcade.Compose
 {
-    public GameObject View;
-    public InputField NoReturn;
-    public void Show()
+    public class AdeHotkeyDialog : MonoBehaviour
     {
-        View.SetActive(true);
-        NoReturn.text = PlayerPrefs.GetString("HotKeyNoReturn", "q");
-    }
-    public void OnNoReturnHotKey(InputField inputField)
-    {
-        PlayerPrefs.SetString("HotKeyNoReturn", inputField.text.ToLower());
-        inputField.text = inputField.text.ToLower();
+        public GameObject View;
+        public AdeHotkeyRebindingButton[] RebindingButtons;
+        public void Show()
+        {
+            foreach (var button in RebindingButtons)
+            {
+                AdeInputManager.Instance.UpdateTextForHotkeyButton(button);
+            }
+            View.SetActive(true);
+        }
     }
 }
-

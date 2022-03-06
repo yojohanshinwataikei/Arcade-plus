@@ -35,7 +35,7 @@ namespace Arcade.Compose
                     ""id"": ""27bfa70c-3b88-47aa-a92c-9bb0cec59a16"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""HotKey"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
@@ -44,7 +44,7 @@ namespace Arcade.Compose
                     ""id"": ""889fa30d-eb57-4857-a956-de96e730ca3f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""HotKey"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
@@ -53,7 +53,7 @@ namespace Arcade.Compose
                     ""id"": ""c1156be1-7d46-4c8a-9d2e-5e910052e63e"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""HotKey"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
@@ -62,7 +62,7 @@ namespace Arcade.Compose
                     ""id"": ""a7d9cd85-ea2c-45a0-9812-27af8acb48a1"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""HotKey"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
@@ -71,7 +71,7 @@ namespace Arcade.Compose
                     ""id"": ""67028a87-7bf3-4fad-9f23-31c19e973a4b"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""HotKey"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
@@ -80,7 +80,7 @@ namespace Arcade.Compose
                     ""id"": ""f3ce9796-e49b-4cab-8260-359961eff90f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""HotKey"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
@@ -89,7 +89,7 @@ namespace Arcade.Compose
                     ""id"": ""906c56a2-3584-45c7-a679-d656873a9e8f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""HotKey"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
                 },
                 {
@@ -98,7 +98,7 @@ namespace Arcade.Compose
                     ""id"": ""9ec2475b-e083-4ab6-9137-f1e1c2db9746"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": ""HotKey"",
+                    ""interactions"": """",
                     ""initialStateCheck"": true
                 }
             ],
@@ -106,8 +106,8 @@ namespace Arcade.Compose
                 {
                     ""name"": ""Key With Modifiers"",
                     ""id"": ""319eecb4-07e2-4354-ac21-5328068fb2a1"",
-                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
-                    ""interactions"": """",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey(needModifier1=true)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Save"",
@@ -138,17 +138,6 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier2"",
-                    ""id"": ""f735247b-c3ea-4272-9d4d-651f7df1aa7a"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Save"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier3"",
                     ""id"": ""7fd164da-da3a-4bbf-80fa-206588c1799a"",
                     ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
@@ -159,10 +148,21 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier3"",
+                    ""id"": ""f735247b-c3ea-4272-9d4d-651f7df1aa7a"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Save"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""Key With Modifiers"",
                     ""id"": ""a85a3493-23b8-4814-9b41-c51072de6e11"",
-                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
-                    ""interactions"": """",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey(needModifier1=true)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Undo"",
@@ -193,17 +193,6 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier2"",
-                    ""id"": ""367112b7-6341-4826-a820-9d66d6003cc5"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Undo"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier3"",
                     ""id"": ""4a96474e-31fe-4470-bc91-488eeee61e44"",
                     ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
@@ -214,10 +203,21 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier3"",
+                    ""id"": ""367112b7-6341-4826-a820-9d66d6003cc5"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Undo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""Key With Modifiers"",
                     ""id"": ""6b7b8406-1e91-4d01-8c9f-9015edac55b7"",
-                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
-                    ""interactions"": """",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey(needModifier1=true)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Redo"",
@@ -248,17 +248,6 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier2"",
-                    ""id"": ""f28c3540-8cc5-4beb-9fe6-a57a15e95f5b"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Redo"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier3"",
                     ""id"": ""ef0c9542-2160-49d5-8d89-5191f4aecb69"",
                     ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
@@ -269,10 +258,21 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier3"",
+                    ""id"": ""f28c3540-8cc5-4beb-9fe6-a57a15e95f5b"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Redo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""Key With Modifiers"",
                     ""id"": ""e9670b28-b4cf-41fb-927f-b9cfe4965f57"",
-                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
-                    ""interactions"": """",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey(needModifier1=true)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Copy"",
@@ -303,17 +303,6 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier2"",
-                    ""id"": ""b57463ea-68ba-4822-80cd-262dbb06c5df"",
-                    ""path"": ""<Keyboard>/shift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Copy"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""modifier3"",
                     ""id"": ""e6e107b9-fb6b-4816-8b34-b95f27e2f35f"",
                     ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
@@ -324,10 +313,21 @@ namespace Arcade.Compose
                     ""isPartOfComposite"": true
                 },
                 {
+                    ""name"": ""modifier3"",
+                    ""id"": ""b57463ea-68ba-4822-80cd-262dbb06c5df"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Copy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""Key With Modifiers"",
                     ""id"": ""95ef7516-08ad-4bbe-9ded-cb001b93d2c8"",
-                    ""path"": ""KeyWithModifiers(needModifier1=true)"",
-                    ""interactions"": """",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey(needModifier1=true)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Cut"",
@@ -358,8 +358,8 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier2"",
-                    ""id"": ""2246909d-cb72-4520-944f-fa605391d912"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""id"": ""2bf19eae-8bd5-4a66-ae46-666677f135d9"",
+                    ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -369,8 +369,8 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier3"",
-                    ""id"": ""2bf19eae-8bd5-4a66-ae46-666677f135d9"",
-                    ""path"": ""<Keyboard>/alt"",
+                    ""id"": ""2246909d-cb72-4520-944f-fa605391d912"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -382,7 +382,7 @@ namespace Arcade.Compose
                     ""name"": ""Key With Modifiers"",
                     ""id"": ""4c3b6eec-2790-490a-8836-38575b745b41"",
                     ""path"": ""KeyWithModifiers"",
-                    ""interactions"": """",
+                    ""interactions"": ""HotKey"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Delete"",
@@ -413,8 +413,8 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier2"",
-                    ""id"": ""e3185d5e-2496-438a-b7d4-fd7256e32210"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""id"": ""abaeb962-c302-4760-bfd7-4754150abf73"",
+                    ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -424,8 +424,8 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier3"",
-                    ""id"": ""abaeb962-c302-4760-bfd7-4754150abf73"",
-                    ""path"": ""<Keyboard>/alt"",
+                    ""id"": ""e3185d5e-2496-438a-b7d4-fd7256e32210"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -437,7 +437,7 @@ namespace Arcade.Compose
                     ""name"": ""Key With Modifiers"",
                     ""id"": ""31f2358e-925e-4906-9205-da75aa5d7ec9"",
                     ""path"": ""KeyWithModifiers"",
-                    ""interactions"": """",
+                    ""interactions"": ""HotKey"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Play When Holding"",
@@ -468,8 +468,8 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier2"",
-                    ""id"": ""d8dc1cf1-5130-4e6d-ae7c-858c3c7115f2"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""id"": ""2897b11b-5a5a-4790-9310-116f42841a48"",
+                    ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -479,8 +479,8 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier3"",
-                    ""id"": ""2897b11b-5a5a-4790-9310-116f42841a48"",
-                    ""path"": ""<Keyboard>/alt"",
+                    ""id"": ""d8dc1cf1-5130-4e6d-ae7c-858c3c7115f2"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -492,7 +492,7 @@ namespace Arcade.Compose
                     ""name"": ""Key With Modifiers"",
                     ""id"": ""64017bfe-ef30-40c2-8872-78e40fcaae78"",
                     ""path"": ""KeyWithModifiers"",
-                    ""interactions"": """",
+                    ""interactions"": ""HotKey"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Play Or Pause"",
@@ -523,8 +523,8 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier2"",
-                    ""id"": ""e0bbaca4-3b0f-4c79-892a-aaa836bb0003"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""id"": ""05f54591-7d44-45ff-aa48-7c37a097de9c"",
+                    ""path"": ""<Keyboard>/alt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -534,8 +534,8 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""modifier3"",
-                    ""id"": ""05f54591-7d44-45ff-aa48-7c37a097de9c"",
-                    ""path"": ""<Keyboard>/alt"",
+                    ""id"": ""e0bbaca4-3b0f-4c79-892a-aaa836bb0003"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
