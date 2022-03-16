@@ -15,6 +15,7 @@ namespace Arcade.Compose
 		public AdeInputControl.ArcadeHotkeyActions Hotkeys { get => Controls.ArcadeHotkey; }
 		public AdeInputControl.ArcadeInputActions Inputs { get => Controls.ArcadeInput; }
 		public EventSystem eventSystem;
+		public AdeHotkeyDialog Dialog;
 
 		public static AdeInputManager Instance { get; private set; }
 
@@ -81,12 +82,16 @@ namespace Arcade.Compose
 		public void SetHotkeyRebindingButton(AdeHotkeyRebindingButton button)
 		{
 			AdeHotkeyRebindingButton nextRebindingButton = button;
-			InputAction action = Hotkeys.Get().FindAction(button.HotkeyName);
-			if (action == null)
+			InputAction action = null;
+			if (button != null)
 			{
-				Debug.LogError($"{button.HotkeyName} is not a known hotkey");
-				nextRebindingButton = null;
-			}
+				action = Hotkeys.Get().FindAction(button.HotkeyName);
+				if (action == null)
+				{
+					Debug.LogError($"{button.HotkeyName} is not a known hotkey");
+					nextRebindingButton = null;
+				}
+			};
 			// cleanup old operation
 			if (rebindingOperation != null)
 			{
@@ -128,7 +133,6 @@ namespace Arcade.Compose
 					})
 					.OnApplyBinding((operation, bindingPath) =>
 					{
-						Debug.Log($"{bindingPath}");
 						if (action.bindings.Count != 5)
 						{
 							Debug.LogError("The action for the rebinding button is not hotkey: not a hotkey binding");
@@ -198,25 +202,22 @@ namespace Arcade.Compose
 						param.Add($"needModifier1={needModifier1.Value.ToString().ToLower()}");
 						param.Add($"needModifier2={needModifier2.Value.ToString().ToLower()}");
 						param.Add($"needModifier3={needModifier3.Value.ToString().ToLower()}");
-						Debug.Log($"HotKey({string.Join(",", param)})");
-						InputBinding compositeBinding=action.bindings[0];
+						InputBinding compositeBinding = action.bindings[0];
 						// Note: LoadBindingOverridesFromJson will apply empty string
 						// and SaveBindingOverridesAsJson will save null to empty string
 						// so as a workaround here we set the overridePath to path
-						compositeBinding.overridePath=compositeBinding.path;
-						compositeBinding.overrideInteractions=$"HotKey({string.Join(",", param)})";
+						compositeBinding.overridePath = compositeBinding.path;
+						compositeBinding.overrideInteractions = $"HotKey({string.Join(",", param)})";
 						action.ApplyBindingOverride(0, compositeBinding);
 					})
 					.OnComplete((operation) =>
 					{
 						CleanupCurrentOperation();
-						Debug.Log("rebind complete");
-    					PlayerPrefs.SetString("hotkeyRebinding", Hotkeys.Get().SaveBindingOverridesAsJson());
+						PlayerPrefs.SetString("hotkeyRebinding", Hotkeys.Get().SaveBindingOverridesAsJson());
 					})
 					.OnCancel((operation) =>
 					{
 						CleanupCurrentOperation();
-						Debug.Log("rebind cancelled");
 					}).Start();
 				rebindingButton = nextRebindingButton;
 			}
@@ -225,7 +226,6 @@ namespace Arcade.Compose
 
 		private void CleanupCurrentOperation()
 		{
-			// TODO: update rebindingButton text
 			rebindingOperation.Dispose();
 			rebindingOperation = null;
 			AdeHotkeyRebindingButton lastButton = rebindingButton;
@@ -236,6 +236,10 @@ namespace Arcade.Compose
 
 		public void UpdateTextForHotkeyButton(AdeHotkeyRebindingButton button)
 		{
+			if (button == null)
+			{
+				return;
+			}
 			if (button == rebindingButton)
 			{
 				string text = "<?>";
@@ -251,12 +255,10 @@ namespace Arcade.Compose
 				{
 					text = "Ctrl+" + text;
 				}
-				Debug.Log(text);
 				button.Text.text = text;
 				return;
 			}
 			InputAction action = Hotkeys.Get().FindAction(button.HotkeyName);
-			Debug.Log($"{action.bindings[0].effectivePath}");
 			if (action == null)
 			{
 				Debug.LogError($"{button.HotkeyName} is not a known hotkey");
@@ -372,11 +374,21 @@ namespace Arcade.Compose
 			button.Text.text = result;
 		}
 
+		public void ResetHotkey()
+		{
+			SetHotkeyRebindingButton(null);
+			Hotkeys.Get().RemoveAllBindingOverrides();
+			PlayerPrefs.SetString("hotkeyRebinding", Hotkeys.Get().SaveBindingOverridesAsJson());
+			foreach (var button in Dialog.RebindingButtons)
+			{
+				AdeInputManager.Instance.UpdateTextForHotkeyButton(button);
+			}
+		}
+
 		private void Update()
 		{
 			if (rebindingButton != null)
 			{
-				Debug.Log("UpdateTextForHotkeyButton");
 				UpdateTextForHotkeyButton(rebindingButton);
 			}
 		}

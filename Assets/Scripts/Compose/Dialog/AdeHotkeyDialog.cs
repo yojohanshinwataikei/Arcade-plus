@@ -14,5 +14,11 @@ namespace Arcade.Compose
             }
             View.SetActive(true);
         }
+
+        public void Hide()
+        {
+            AdeInputManager.Instance.SetHotkeyRebindingButton(null);
+            View.SetActive(false);
+        }
     }
 }
