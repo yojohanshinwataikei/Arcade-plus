@@ -59,7 +59,8 @@ public class AdeMirror : MonoBehaviour, IMarkingMenuItemProvider
 					ArcArc newarc = arc.Clone() as ArcArc;
 					newarc.XStart = 1 - newarc.XStart;
 					newarc.XEnd = 1 - newarc.XEnd;
-					if(newarc.Color<2){
+					if (newarc.Color < 2)
+					{
 						newarc.Color = 1 - newarc.Color;
 					}
 					commands.Add(new EditArcEventCommand(arc, newarc));
@@ -67,6 +68,13 @@ public class AdeMirror : MonoBehaviour, IMarkingMenuItemProvider
 			}
 		}
 		CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "镜像"));
+	}
+	private void Update()
+	{
+		if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Mirror))
+		{
+			MirrorSelectedNotes();
+		}
 	}
 }
 

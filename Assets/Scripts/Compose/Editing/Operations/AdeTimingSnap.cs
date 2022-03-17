@@ -77,17 +77,21 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 					}
 					if (newEndTiming == newTiming)
 					{
-						bool needAvoidZeroLength=false;
-						if(note is ArcHold){
-							needAvoidZeroLength=true;
+						bool needAvoidZeroLength = false;
+						if (note is ArcHold)
+						{
+							needAvoidZeroLength = true;
 						}
-						if(note is ArcArc){
-							var arc= note as ArcArc;
-							if(arc.ArcTaps.Count>0){
-								needAvoidZeroLength=true;
+						if (note is ArcArc)
+						{
+							var arc = note as ArcArc;
+							if (arc.ArcTaps.Count > 0)
+							{
+								needAvoidZeroLength = true;
 							}
-							if(Mathf.Approximately(arc.XStart,arc.XEnd)&&Mathf.Approximately(arc.YStart,arc.YEnd)){
-								needAvoidZeroLength=true;
+							if (Mathf.Approximately(arc.XStart, arc.XEnd) && Mathf.Approximately(arc.YStart, arc.YEnd))
+							{
+								needAvoidZeroLength = true;
 							}
 						}
 						if (needAvoidZeroLength)
@@ -131,5 +135,12 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 	{
 		int newTiming = Mathf.FloorToInt(AdeGridManager.Instance.AttachScroll(timing, 1));
 		return newTiming;
+	}
+	private void Update()
+	{
+		if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.TimingSnap))
+		{
+			SnapSelectedNotesTiming();
+		}
 	}
 }

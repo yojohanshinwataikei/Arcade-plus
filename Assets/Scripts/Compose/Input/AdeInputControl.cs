@@ -75,6 +75,24 @@ namespace Arcade.Compose
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Mirror"",
+                    ""type"": ""Value"",
+                    ""id"": ""a3dd6aa5-3f56-40f1-9ef1-0a2d960496e4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Timing Snap"",
+                    ""type"": ""Value"",
+                    ""id"": ""697ed886-b7a2-4a2e-8b8d-fa629cb3c878"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Delete"",
                     ""type"": ""Value"",
                     ""id"": ""f3ce9796-e49b-4cab-8260-359961eff90f"",
@@ -542,6 +560,116 @@ namespace Arcade.Compose
                     ""action"": ""Play Or Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""4267cf68-4f96-4c30-be29-0bfd7c0b0a2b"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey(needModifier1=true)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mirror"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""48b0b425-9e74-4b68-98ea-eb6044f3d971"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mirror"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""d975a9fe-7a42-4e4f-b96e-1502289963fb"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mirror"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""37ffdad2-5f07-49b4-afb0-1eb9c4d35a01"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mirror"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""aa37989c-fb13-4d4d-acae-76924b9f9fbc"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Mirror"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""604ea10d-c6e4-4a2d-ad6e-2faaa0807788"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey(needModifier1=true)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Timing Snap"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""943983ea-c143-4a6e-9a9e-744d0fe7b780"",
+                    ""path"": ""<Keyboard>/n"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Timing Snap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""04f52933-97d8-44ad-b823-c5d218f088b8"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Timing Snap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""3cd0bc03-efc9-43a8-8100-e98ecfb88c14"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Timing Snap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""924c9f0a-5afa-4078-9c8d-b9dadd1dab66"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Timing Snap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -603,6 +731,8 @@ namespace Arcade.Compose
             m_ArcadeHotkey_Redo = m_ArcadeHotkey.FindAction("Redo", throwIfNotFound: true);
             m_ArcadeHotkey_Copy = m_ArcadeHotkey.FindAction("Copy", throwIfNotFound: true);
             m_ArcadeHotkey_Cut = m_ArcadeHotkey.FindAction("Cut", throwIfNotFound: true);
+            m_ArcadeHotkey_Mirror = m_ArcadeHotkey.FindAction("Mirror", throwIfNotFound: true);
+            m_ArcadeHotkey_TimingSnap = m_ArcadeHotkey.FindAction("Timing Snap", throwIfNotFound: true);
             m_ArcadeHotkey_Delete = m_ArcadeHotkey.FindAction("Delete", throwIfNotFound: true);
             m_ArcadeHotkey_PlayWhenHolding = m_ArcadeHotkey.FindAction("Play When Holding", throwIfNotFound: true);
             m_ArcadeHotkey_PlayOrPause = m_ArcadeHotkey.FindAction("Play Or Pause", throwIfNotFound: true);
@@ -674,6 +804,8 @@ namespace Arcade.Compose
         private readonly InputAction m_ArcadeHotkey_Redo;
         private readonly InputAction m_ArcadeHotkey_Copy;
         private readonly InputAction m_ArcadeHotkey_Cut;
+        private readonly InputAction m_ArcadeHotkey_Mirror;
+        private readonly InputAction m_ArcadeHotkey_TimingSnap;
         private readonly InputAction m_ArcadeHotkey_Delete;
         private readonly InputAction m_ArcadeHotkey_PlayWhenHolding;
         private readonly InputAction m_ArcadeHotkey_PlayOrPause;
@@ -686,6 +818,8 @@ namespace Arcade.Compose
             public InputAction @Redo => m_Wrapper.m_ArcadeHotkey_Redo;
             public InputAction @Copy => m_Wrapper.m_ArcadeHotkey_Copy;
             public InputAction @Cut => m_Wrapper.m_ArcadeHotkey_Cut;
+            public InputAction @Mirror => m_Wrapper.m_ArcadeHotkey_Mirror;
+            public InputAction @TimingSnap => m_Wrapper.m_ArcadeHotkey_TimingSnap;
             public InputAction @Delete => m_Wrapper.m_ArcadeHotkey_Delete;
             public InputAction @PlayWhenHolding => m_Wrapper.m_ArcadeHotkey_PlayWhenHolding;
             public InputAction @PlayOrPause => m_Wrapper.m_ArcadeHotkey_PlayOrPause;
@@ -713,6 +847,12 @@ namespace Arcade.Compose
                     @Cut.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnCut;
                     @Cut.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnCut;
                     @Cut.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnCut;
+                    @Mirror.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnMirror;
+                    @Mirror.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnMirror;
+                    @Mirror.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnMirror;
+                    @TimingSnap.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnTimingSnap;
+                    @TimingSnap.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnTimingSnap;
+                    @TimingSnap.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnTimingSnap;
                     @Delete.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnDelete;
                     @Delete.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnDelete;
                     @Delete.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnDelete;
@@ -741,6 +881,12 @@ namespace Arcade.Compose
                     @Cut.started += instance.OnCut;
                     @Cut.performed += instance.OnCut;
                     @Cut.canceled += instance.OnCut;
+                    @Mirror.started += instance.OnMirror;
+                    @Mirror.performed += instance.OnMirror;
+                    @Mirror.canceled += instance.OnMirror;
+                    @TimingSnap.started += instance.OnTimingSnap;
+                    @TimingSnap.performed += instance.OnTimingSnap;
+                    @TimingSnap.canceled += instance.OnTimingSnap;
                     @Delete.started += instance.OnDelete;
                     @Delete.performed += instance.OnDelete;
                     @Delete.canceled += instance.OnDelete;
@@ -802,6 +948,8 @@ namespace Arcade.Compose
             void OnRedo(InputAction.CallbackContext context);
             void OnCopy(InputAction.CallbackContext context);
             void OnCut(InputAction.CallbackContext context);
+            void OnMirror(InputAction.CallbackContext context);
+            void OnTimingSnap(InputAction.CallbackContext context);
             void OnDelete(InputAction.CallbackContext context);
             void OnPlayWhenHolding(InputAction.CallbackContext context);
             void OnPlayOrPause(InputAction.CallbackContext context);
