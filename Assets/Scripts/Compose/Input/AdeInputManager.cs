@@ -19,6 +19,8 @@ namespace Arcade.Compose
 
 		public static AdeInputManager Instance { get; private set; }
 
+		private bool rebindFinishedThisFrame = false;
+
 		private void Awake()
 		{
 			if (Controls == null)
@@ -55,7 +57,7 @@ namespace Arcade.Compose
 
 		public bool CheckHotkeyActionPressed(InputAction action)
 		{
-			if (IsFocusingOnTextField())
+			if (IsFocusingOnTextField() || rebindFinishedThisFrame)
 			{
 				return false;
 			}
@@ -64,7 +66,7 @@ namespace Arcade.Compose
 
 		public bool CheckHotkeyActionPressing(InputAction action)
 		{
-			if (IsFocusingOnTextField())
+			if (IsFocusingOnTextField() || rebindFinishedThisFrame)
 			{
 				return false;
 			}
@@ -106,11 +108,15 @@ namespace Arcade.Compose
 					.WithControlsHavingToMatchPath("<Keyboard>")
 					// Note: this use prefix match so "leftAltKey" will also match "l",
 					// which is unacceptable
+					// TODO: replace WithMatchingEventsBeingSuppressed with this when the behaviour changes
+					// so that we can disable modifiers without disable normal keys
 					.WithControlsExcluding("<Pointer>")
 					.WithCancelingThrough(Keyboard.current.escapeKey)
 					// Since we do not direct process keyboard event (unless by this class)
 					// it's safe to not suppress event
 					// all we need is to disable the actions
+					// However the action will be triggered when the rebinding operation finished
+					// so we need rebindFinishedThisFrame
 					.WithMatchingEventsBeingSuppressed(false)
 					// Disable auto match, only match when our OnPotentialMatch thinks it match
 					.OnMatchWaitForAnother(float.PositiveInfinity)
@@ -232,6 +238,7 @@ namespace Arcade.Compose
 			rebindingButton = null;
 			UpdateTextForHotkeyButton(lastButton);
 			Hotkeys.Enable();
+			rebindFinishedThisFrame = true;
 		}
 
 		public void UpdateTextForHotkeyButton(AdeHotkeyRebindingButton button)
@@ -390,6 +397,8 @@ namespace Arcade.Compose
 			if (rebindingButton != null)
 			{
 				UpdateTextForHotkeyButton(rebindingButton);
+			}else{
+				rebindFinishedThisFrame = false;
 			}
 		}
 	}
