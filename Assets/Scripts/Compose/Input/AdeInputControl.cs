@@ -693,7 +693,7 @@ namespace Arcade.Compose
                     ""name"": ""Key With Modifiers"",
                     ""id"": ""0ab6a691-79c7-4c59-8f8b-b363e885b539"",
                     ""path"": ""KeyWithModifiers"",
-                    ""interactions"": ""HotKey(needModifier1=true)"",
+                    ""interactions"": ""HotKey"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Toggle Grid"",
@@ -703,7 +703,7 @@ namespace Arcade.Compose
                 {
                     ""name"": ""key"",
                     ""id"": ""3b9ddd2a-0085-4023-a6d6-da78fb5fcb40"",
-                    ""path"": ""<Keyboard>/g"",
+                    ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -758,7 +758,7 @@ namespace Arcade.Compose
                 {
                     ""name"": ""key"",
                     ""id"": ""a220599d-908e-4e20-88da-a4305ef6ec00"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/backquote"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

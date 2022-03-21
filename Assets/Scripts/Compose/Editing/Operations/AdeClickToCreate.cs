@@ -42,6 +42,7 @@ namespace Arcade.Compose.Editing
 				}
 				if (enable != value)
 				{
+					CancelAddLongNote();
 					AdeCursorManager.Instance.Mode = value ? CursorMode.Horizontal : CursorMode.Idle;
 					if (!value)
 					{
@@ -84,6 +85,7 @@ namespace Arcade.Compose.Editing
 			{
 				if (mode != value)
 				{
+					CancelAddLongNote();
 					mode = value;
 				}
 				if (mode == ClickToCreateMode.Idle)
@@ -142,7 +144,6 @@ namespace Arcade.Compose.Editing
 		{
 			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ToggleClickToCreate))
 			{
-				CancelAddLongNote();
 				Enable = !Enable;
 			}
 			if (!enable) return;
