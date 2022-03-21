@@ -111,7 +111,9 @@ namespace Arcade.Compose
 					// TODO: replace WithMatchingEventsBeingSuppressed with this when the behaviour changes
 					// so that we can disable modifiers without disable normal keys
 					.WithControlsExcluding("<Pointer>")
-					.WithCancelingThrough(Keyboard.current.escapeKey)
+					// This will makes e also a cancelling key, which is unacceptable
+					// .WithCancelingThrough(Keyboard.current.escapeKey)
+					.WithCancelingThrough(null as string)
 					// Since we do not direct process keyboard event (unless by this class)
 					// it's safe to not suppress event
 					// all we need is to disable the actions
@@ -132,6 +134,7 @@ namespace Arcade.Compose
 						operation.RemoveCandidate(Keyboard.current.ctrlKey);
 						operation.RemoveCandidate(Keyboard.current.shiftKey);
 						operation.RemoveCandidate(Keyboard.current.anyKey);
+						operation.RemoveCandidate(Keyboard.current.escapeKey);
 						if (operation.candidates.Count > 0)
 						{
 							operation.Complete();
@@ -397,6 +400,9 @@ namespace Arcade.Compose
 			if (rebindingButton != null)
 			{
 				UpdateTextForHotkeyButton(rebindingButton);
+				if(Inputs.Cancel.IsPressed()){
+					rebindingOperation.Cancel();
+				}
 			}else{
 				rebindFinishedThisFrame = false;
 			}

@@ -1142,6 +1142,15 @@ namespace Arcade.Compose
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""21ad19c6-beeb-439f-9616-b0918e74716e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1164,6 +1173,17 @@ namespace Arcade.Compose
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Range Selection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f71baf2f-1a75-4228-a3b5-95d0c021445a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1195,6 +1215,7 @@ namespace Arcade.Compose
             m_ArcadeInput = asset.FindActionMap("Arcade Input", throwIfNotFound: true);
             m_ArcadeInput_MultipleSelection = m_ArcadeInput.FindAction("Multiple Selection", throwIfNotFound: true);
             m_ArcadeInput_RangeSelection = m_ArcadeInput.FindAction("Range Selection", throwIfNotFound: true);
+            m_ArcadeInput_Cancel = m_ArcadeInput.FindAction("Cancel", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -1417,12 +1438,14 @@ namespace Arcade.Compose
         private IArcadeInputActions m_ArcadeInputActionsCallbackInterface;
         private readonly InputAction m_ArcadeInput_MultipleSelection;
         private readonly InputAction m_ArcadeInput_RangeSelection;
+        private readonly InputAction m_ArcadeInput_Cancel;
         public struct ArcadeInputActions
         {
             private @AdeInputControl m_Wrapper;
             public ArcadeInputActions(@AdeInputControl wrapper) { m_Wrapper = wrapper; }
             public InputAction @MultipleSelection => m_Wrapper.m_ArcadeInput_MultipleSelection;
             public InputAction @RangeSelection => m_Wrapper.m_ArcadeInput_RangeSelection;
+            public InputAction @Cancel => m_Wrapper.m_ArcadeInput_Cancel;
             public InputActionMap Get() { return m_Wrapper.m_ArcadeInput; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -1438,6 +1461,9 @@ namespace Arcade.Compose
                     @RangeSelection.started -= m_Wrapper.m_ArcadeInputActionsCallbackInterface.OnRangeSelection;
                     @RangeSelection.performed -= m_Wrapper.m_ArcadeInputActionsCallbackInterface.OnRangeSelection;
                     @RangeSelection.canceled -= m_Wrapper.m_ArcadeInputActionsCallbackInterface.OnRangeSelection;
+                    @Cancel.started -= m_Wrapper.m_ArcadeInputActionsCallbackInterface.OnCancel;
+                    @Cancel.performed -= m_Wrapper.m_ArcadeInputActionsCallbackInterface.OnCancel;
+                    @Cancel.canceled -= m_Wrapper.m_ArcadeInputActionsCallbackInterface.OnCancel;
                 }
                 m_Wrapper.m_ArcadeInputActionsCallbackInterface = instance;
                 if (instance != null)
@@ -1448,6 +1474,9 @@ namespace Arcade.Compose
                     @RangeSelection.started += instance.OnRangeSelection;
                     @RangeSelection.performed += instance.OnRangeSelection;
                     @RangeSelection.canceled += instance.OnRangeSelection;
+                    @Cancel.started += instance.OnCancel;
+                    @Cancel.performed += instance.OnCancel;
+                    @Cancel.canceled += instance.OnCancel;
                 }
             }
         }
@@ -1476,6 +1505,7 @@ namespace Arcade.Compose
         {
             void OnMultipleSelection(InputAction.CallbackContext context);
             void OnRangeSelection(InputAction.CallbackContext context);
+            void OnCancel(InputAction.CallbackContext context);
         }
     }
 }
