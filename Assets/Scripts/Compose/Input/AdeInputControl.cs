@@ -111,6 +111,51 @@ namespace Arcade.Compose
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Click To Create Idle"",
+                    ""type"": ""Value"",
+                    ""id"": ""64959268-74ca-4449-a839-b2c0382a42cc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Click To Create Tap"",
+                    ""type"": ""Value"",
+                    ""id"": ""6b139abb-2056-40f0-a97b-05592be26946"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Click To Create Hold"",
+                    ""type"": ""Value"",
+                    ""id"": ""89d43f7b-c12e-4d4d-ac23-c058dde0e6e9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Click To Create Arc"",
+                    ""type"": ""Value"",
+                    ""id"": ""7e260572-6b8f-4815-b607-98d2e809c823"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Click To Create Arctap"",
+                    ""type"": ""Value"",
+                    ""id"": ""a6931930-47d8-4778-bfbc-2f716838f216"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Play When Holding"",
                     ""type"": ""Value"",
                     ""id"": ""906c56a2-3584-45c7-a679-d656873a9e8f"",
@@ -798,6 +843,281 @@ namespace Arcade.Compose
                     ""action"": ""Toggle Grid"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""3a7eb123-55ea-43c9-8754-066ba10a6e32"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Idle"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""c3426d54-d162-4974-8a4e-17092ed53644"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Idle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""0005f813-9b13-44a1-9ee2-c59cc72d1b47"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Idle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""c556fc7c-9bdf-417b-a7f4-da21250aba2d"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Idle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""e750aa39-065a-4469-adda-467f28c180af"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Idle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""ff15d1d5-debc-4060-868f-2671bdbb3ef8"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Tap"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""2f404eab-b962-4dfb-9e1b-15bf7cc215f2"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Tap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""6590e5c4-5fdd-495b-8403-9765ac03040e"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Tap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""4da525ad-e4f4-4d10-82d6-a5403fb47dd2"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Tap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""701344fc-15e0-4533-9e5f-eaea9a04abf2"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Tap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""da55891c-74d1-422c-a110-18d0102aef28"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Hold"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""83d8019d-f8f5-4bb6-9c92-13ba832e145d"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""859397f2-663d-4154-8696-466ebdd2ab4c"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""990d95e3-57c2-4a2b-82d5-f6245855b552"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""dd02532c-8748-4379-a54b-16d44942ff70"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""e4a14883-3996-47fe-b970-c542208f1b27"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""7732a26f-3858-4647-94ac-1ee1b17be884"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""bb1553d7-0406-44fb-b77b-a490a7160094"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""eb4b10b2-e5d7-40ef-99b1-56571586126a"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""933affca-8241-4048-bde7-c2ccf5721d98"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""195a39df-18a2-425f-bf65-e541ba6fa7c7"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""be256f6b-60c1-43a8-ab7d-286402ac2d71"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""b4ff4e14-0f66-43a9-87c9-6f1cc4eee638"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""a811c70a-27a8-4090-a215-2aef2d14bbd6"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""eec8459c-88cc-479f-977f-b1c6ac65d6f8"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -863,6 +1183,11 @@ namespace Arcade.Compose
             m_ArcadeHotkey_TimingSnap = m_ArcadeHotkey.FindAction("Timing Snap", throwIfNotFound: true);
             m_ArcadeHotkey_Delete = m_ArcadeHotkey.FindAction("Delete", throwIfNotFound: true);
             m_ArcadeHotkey_ToggleClickToCreate = m_ArcadeHotkey.FindAction("Toggle Click To Create", throwIfNotFound: true);
+            m_ArcadeHotkey_ClickToCreateIdle = m_ArcadeHotkey.FindAction("Click To Create Idle", throwIfNotFound: true);
+            m_ArcadeHotkey_ClickToCreateTap = m_ArcadeHotkey.FindAction("Click To Create Tap", throwIfNotFound: true);
+            m_ArcadeHotkey_ClickToCreateHold = m_ArcadeHotkey.FindAction("Click To Create Hold", throwIfNotFound: true);
+            m_ArcadeHotkey_ClickToCreateArc = m_ArcadeHotkey.FindAction("Click To Create Arc", throwIfNotFound: true);
+            m_ArcadeHotkey_ClickToCreateArctap = m_ArcadeHotkey.FindAction("Click To Create Arctap", throwIfNotFound: true);
             m_ArcadeHotkey_PlayWhenHolding = m_ArcadeHotkey.FindAction("Play When Holding", throwIfNotFound: true);
             m_ArcadeHotkey_PlayOrPause = m_ArcadeHotkey.FindAction("Play Or Pause", throwIfNotFound: true);
             m_ArcadeHotkey_ToggleGrid = m_ArcadeHotkey.FindAction("Toggle Grid", throwIfNotFound: true);
@@ -938,6 +1263,11 @@ namespace Arcade.Compose
         private readonly InputAction m_ArcadeHotkey_TimingSnap;
         private readonly InputAction m_ArcadeHotkey_Delete;
         private readonly InputAction m_ArcadeHotkey_ToggleClickToCreate;
+        private readonly InputAction m_ArcadeHotkey_ClickToCreateIdle;
+        private readonly InputAction m_ArcadeHotkey_ClickToCreateTap;
+        private readonly InputAction m_ArcadeHotkey_ClickToCreateHold;
+        private readonly InputAction m_ArcadeHotkey_ClickToCreateArc;
+        private readonly InputAction m_ArcadeHotkey_ClickToCreateArctap;
         private readonly InputAction m_ArcadeHotkey_PlayWhenHolding;
         private readonly InputAction m_ArcadeHotkey_PlayOrPause;
         private readonly InputAction m_ArcadeHotkey_ToggleGrid;
@@ -954,6 +1284,11 @@ namespace Arcade.Compose
             public InputAction @TimingSnap => m_Wrapper.m_ArcadeHotkey_TimingSnap;
             public InputAction @Delete => m_Wrapper.m_ArcadeHotkey_Delete;
             public InputAction @ToggleClickToCreate => m_Wrapper.m_ArcadeHotkey_ToggleClickToCreate;
+            public InputAction @ClickToCreateIdle => m_Wrapper.m_ArcadeHotkey_ClickToCreateIdle;
+            public InputAction @ClickToCreateTap => m_Wrapper.m_ArcadeHotkey_ClickToCreateTap;
+            public InputAction @ClickToCreateHold => m_Wrapper.m_ArcadeHotkey_ClickToCreateHold;
+            public InputAction @ClickToCreateArc => m_Wrapper.m_ArcadeHotkey_ClickToCreateArc;
+            public InputAction @ClickToCreateArctap => m_Wrapper.m_ArcadeHotkey_ClickToCreateArctap;
             public InputAction @PlayWhenHolding => m_Wrapper.m_ArcadeHotkey_PlayWhenHolding;
             public InputAction @PlayOrPause => m_Wrapper.m_ArcadeHotkey_PlayOrPause;
             public InputAction @ToggleGrid => m_Wrapper.m_ArcadeHotkey_ToggleGrid;
@@ -993,6 +1328,21 @@ namespace Arcade.Compose
                     @ToggleClickToCreate.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnToggleClickToCreate;
                     @ToggleClickToCreate.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnToggleClickToCreate;
                     @ToggleClickToCreate.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnToggleClickToCreate;
+                    @ClickToCreateIdle.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateIdle;
+                    @ClickToCreateIdle.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateIdle;
+                    @ClickToCreateIdle.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateIdle;
+                    @ClickToCreateTap.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateTap;
+                    @ClickToCreateTap.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateTap;
+                    @ClickToCreateTap.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateTap;
+                    @ClickToCreateHold.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateHold;
+                    @ClickToCreateHold.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateHold;
+                    @ClickToCreateHold.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateHold;
+                    @ClickToCreateArc.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArc;
+                    @ClickToCreateArc.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArc;
+                    @ClickToCreateArc.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArc;
+                    @ClickToCreateArctap.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArctap;
+                    @ClickToCreateArctap.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArctap;
+                    @ClickToCreateArctap.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArctap;
                     @PlayWhenHolding.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
                     @PlayWhenHolding.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
                     @PlayWhenHolding.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
@@ -1033,6 +1383,21 @@ namespace Arcade.Compose
                     @ToggleClickToCreate.started += instance.OnToggleClickToCreate;
                     @ToggleClickToCreate.performed += instance.OnToggleClickToCreate;
                     @ToggleClickToCreate.canceled += instance.OnToggleClickToCreate;
+                    @ClickToCreateIdle.started += instance.OnClickToCreateIdle;
+                    @ClickToCreateIdle.performed += instance.OnClickToCreateIdle;
+                    @ClickToCreateIdle.canceled += instance.OnClickToCreateIdle;
+                    @ClickToCreateTap.started += instance.OnClickToCreateTap;
+                    @ClickToCreateTap.performed += instance.OnClickToCreateTap;
+                    @ClickToCreateTap.canceled += instance.OnClickToCreateTap;
+                    @ClickToCreateHold.started += instance.OnClickToCreateHold;
+                    @ClickToCreateHold.performed += instance.OnClickToCreateHold;
+                    @ClickToCreateHold.canceled += instance.OnClickToCreateHold;
+                    @ClickToCreateArc.started += instance.OnClickToCreateArc;
+                    @ClickToCreateArc.performed += instance.OnClickToCreateArc;
+                    @ClickToCreateArc.canceled += instance.OnClickToCreateArc;
+                    @ClickToCreateArctap.started += instance.OnClickToCreateArctap;
+                    @ClickToCreateArctap.performed += instance.OnClickToCreateArctap;
+                    @ClickToCreateArctap.canceled += instance.OnClickToCreateArctap;
                     @PlayWhenHolding.started += instance.OnPlayWhenHolding;
                     @PlayWhenHolding.performed += instance.OnPlayWhenHolding;
                     @PlayWhenHolding.canceled += instance.OnPlayWhenHolding;
@@ -1098,6 +1463,11 @@ namespace Arcade.Compose
             void OnTimingSnap(InputAction.CallbackContext context);
             void OnDelete(InputAction.CallbackContext context);
             void OnToggleClickToCreate(InputAction.CallbackContext context);
+            void OnClickToCreateIdle(InputAction.CallbackContext context);
+            void OnClickToCreateTap(InputAction.CallbackContext context);
+            void OnClickToCreateHold(InputAction.CallbackContext context);
+            void OnClickToCreateArc(InputAction.CallbackContext context);
+            void OnClickToCreateArctap(InputAction.CallbackContext context);
             void OnPlayWhenHolding(InputAction.CallbackContext context);
             void OnPlayOrPause(InputAction.CallbackContext context);
             void OnToggleGrid(InputAction.CallbackContext context);

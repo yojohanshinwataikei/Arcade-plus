@@ -147,6 +147,17 @@ namespace Arcade.Compose.Editing
 				Enable = !Enable;
 			}
 			if (!enable) return;
+			if(AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ClickToCreateIdle)){
+				SetClickToCreateMode(ClickToCreateMode.Idle);
+			}else if(AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ClickToCreateTap)){
+				SetClickToCreateMode(ClickToCreateMode.Tap);
+			}else if(AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ClickToCreateHold)){
+				SetClickToCreateMode(ClickToCreateMode.Hold);
+			}else if(AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ClickToCreateArc)){
+				SetClickToCreateMode(ClickToCreateMode.Arc);
+			}else if(AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ClickToCreateArctap)){
+				SetClickToCreateMode(ClickToCreateMode.ArcTap);
+			}
 			if (Mode == ClickToCreateMode.Idle) return;
 			UpdateArcTapCursor();
 			if (Mouse.current.leftButton.wasPressedThisFrame)
@@ -273,6 +284,9 @@ namespace Arcade.Compose.Editing
 		public void SetClickToCreateMode(int mode)
 		{
 			ClickToCreateMode newMode = (ClickToCreateMode)mode;
+			SetClickToCreateMode(newMode);
+		}
+		public void SetClickToCreateMode(ClickToCreateMode newMode){
 			if (newMode == ClickToCreateMode.ArcTap && selectedArc == null)
 			{
 				AdeToast.Instance.Show("请选中一条 Arc");
