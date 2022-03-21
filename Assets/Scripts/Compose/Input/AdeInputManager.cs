@@ -110,6 +110,9 @@ namespace Arcade.Compose
 					// which is unacceptable
 					// TODO: replace WithMatchingEventsBeingSuppressed with this when the behaviour changes
 					// so that we can disable modifiers without disable normal keys
+					// See https://forum.unity.com/threads/binding-path-gamepad-leftstickpress-matches-control-gamepad-leftstick-with-input-system-1-3-0.1234930/
+					// See https://github.com/Unity-Technologies/InputSystem/pull/1492
+					// will comes in InputSystem 1.4.0
 					.WithControlsExcluding("<Pointer>")
 					// This will makes e also a cancelling key, which is unacceptable
 					// .WithCancelingThrough(Keyboard.current.escapeKey)

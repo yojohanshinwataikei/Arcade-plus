@@ -51,7 +51,7 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 				}
 				var newNote = note.Clone();
 				var arc = (note as ArcArcTap).Arc;
-				int newTiming = GetSnapedTiming(note.Timing);
+				int newTiming = GetSnappedTiming(note.Timing);
 				if (newTiming < arc.Timing)
 				{
 					newTiming = arc.Timing;
@@ -66,11 +66,11 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 			else
 			{
 				var newNote = note.Clone();
-				int newTiming = GetSnapedTiming(note.Timing);
+				int newTiming = GetSnappedTiming(note.Timing);
 				newNote.Timing = newTiming;
 				if (note is ArcLongNote)
 				{
-					int newEndTiming = GetSnapedTiming((note as ArcLongNote).EndTiming);
+					int newEndTiming = GetSnappedTiming((note as ArcLongNote).EndTiming);
 					if (newEndTiming < newTiming)
 					{
 						newEndTiming = newTiming;
@@ -108,7 +108,7 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 					foreach (var arcTap in (note as ArcArc).ArcTaps)
 					{
 						var newArcTap = arcTap.Clone();
-						int newArcTapTiming = GetSnapedTiming(arcTap.Timing);
+						int newArcTapTiming = GetSnappedTiming(arcTap.Timing);
 						if (newArcTapTiming < newArc.Timing)
 						{
 							newArcTapTiming = newArc.Timing;
@@ -126,7 +126,7 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 		CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "时间对齐"));
 	}
 
-	public int GetSnapedTiming(int timing)
+	public int GetSnappedTiming(int timing)
 	{
 		int newTiming = Mathf.FloorToInt(AdeGridManager.Instance.AttachTiming(timing));
 		return newTiming;
