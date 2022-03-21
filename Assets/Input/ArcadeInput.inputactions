@@ -78,15 +78,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Toggle Grid",
-                    "type": "Value",
-                    "id": "72cc2d21-9209-4846-9078-3b142ca8f058",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Toggle Click To Create",
                     "type": "Value",
                     "id": "d7eeb12a-7fd6-46bb-8a67-d67d48a64f2f",
@@ -108,6 +99,15 @@
                     "name": "Play Or Pause",
                     "type": "Value",
                     "id": "9ec2475b-e083-4ab6-9137-f1e1c2db9746",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Toggle Grid",
+                    "type": "Value",
+                    "id": "72cc2d21-9209-4846-9078-3b142ca8f058",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -667,61 +667,6 @@
                 },
                 {
                     "name": "Key With Modifiers",
-                    "id": "0ab6a691-79c7-4c59-8f8b-b363e885b539",
-                    "path": "KeyWithModifiers",
-                    "interactions": "HotKey",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Toggle Grid",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "key",
-                    "id": "3b9ddd2a-0085-4023-a6d6-da78fb5fcb40",
-                    "path": "<Keyboard>/tab",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Toggle Grid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "modifier1",
-                    "id": "2101e959-99fe-4ad2-8c4b-5fec01570d6f",
-                    "path": "<Keyboard>/ctrl",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Toggle Grid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "modifier2",
-                    "id": "f676cc43-2cc9-4905-b97d-c8646d56f8e1",
-                    "path": "<Keyboard>/alt",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Toggle Grid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "modifier3",
-                    "id": "89c677a3-a811-4e1f-b537-4a27382d99d1",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Toggle Grid",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Key With Modifiers",
                     "id": "599c42b2-c919-4d23-8b25-12493863cc12",
                     "path": "KeyWithModifiers",
                     "interactions": "HotKey",
@@ -772,6 +717,61 @@
                     "processors": "",
                     "groups": "",
                     "action": "Toggle Click To Create",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "0ab6a691-79c7-4c59-8f8b-b363e885b539",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Grid",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "3b9ddd2a-0085-4023-a6d6-da78fb5fcb40",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Grid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "2101e959-99fe-4ad2-8c4b-5fec01570d6f",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Grid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "f676cc43-2cc9-4905-b97d-c8646d56f8e1",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Grid",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "89c677a3-a811-4e1f-b537-4a27382d99d1",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Toggle Grid",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }
