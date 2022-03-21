@@ -102,6 +102,24 @@ namespace Arcade.Compose
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Toggle Grid"",
+                    ""type"": ""Value"",
+                    ""id"": ""72cc2d21-9209-4846-9078-3b142ca8f058"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Toggle Click To Create"",
+                    ""type"": ""Value"",
+                    ""id"": ""d7eeb12a-7fd6-46bb-8a67-d67d48a64f2f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Play When Holding"",
                     ""type"": ""Value"",
                     ""id"": ""906c56a2-3584-45c7-a679-d656873a9e8f"",
@@ -670,6 +688,116 @@ namespace Arcade.Compose
                     ""action"": ""Timing Snap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""0ab6a691-79c7-4c59-8f8b-b363e885b539"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey(needModifier1=true)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Grid"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""3b9ddd2a-0085-4023-a6d6-da78fb5fcb40"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Grid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""2101e959-99fe-4ad2-8c4b-5fec01570d6f"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Grid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""f676cc43-2cc9-4905-b97d-c8646d56f8e1"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Grid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""89c677a3-a811-4e1f-b537-4a27382d99d1"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Grid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""599c42b2-c919-4d23-8b25-12493863cc12"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Click To Create"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""a220599d-908e-4e20-88da-a4305ef6ec00"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Click To Create"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""3eb42962-f353-4258-be18-4d5b6a95eff8"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Click To Create"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""ebb68af6-4317-4df5-925f-520afd36f3d2"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Click To Create"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""4ee6bf8b-740c-4f88-bae3-f1de9a08bc95"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Toggle Click To Create"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -734,6 +862,8 @@ namespace Arcade.Compose
             m_ArcadeHotkey_Mirror = m_ArcadeHotkey.FindAction("Mirror", throwIfNotFound: true);
             m_ArcadeHotkey_TimingSnap = m_ArcadeHotkey.FindAction("Timing Snap", throwIfNotFound: true);
             m_ArcadeHotkey_Delete = m_ArcadeHotkey.FindAction("Delete", throwIfNotFound: true);
+            m_ArcadeHotkey_ToggleGrid = m_ArcadeHotkey.FindAction("Toggle Grid", throwIfNotFound: true);
+            m_ArcadeHotkey_ToggleClickToCreate = m_ArcadeHotkey.FindAction("Toggle Click To Create", throwIfNotFound: true);
             m_ArcadeHotkey_PlayWhenHolding = m_ArcadeHotkey.FindAction("Play When Holding", throwIfNotFound: true);
             m_ArcadeHotkey_PlayOrPause = m_ArcadeHotkey.FindAction("Play Or Pause", throwIfNotFound: true);
             // Arcade Input
@@ -807,6 +937,8 @@ namespace Arcade.Compose
         private readonly InputAction m_ArcadeHotkey_Mirror;
         private readonly InputAction m_ArcadeHotkey_TimingSnap;
         private readonly InputAction m_ArcadeHotkey_Delete;
+        private readonly InputAction m_ArcadeHotkey_ToggleGrid;
+        private readonly InputAction m_ArcadeHotkey_ToggleClickToCreate;
         private readonly InputAction m_ArcadeHotkey_PlayWhenHolding;
         private readonly InputAction m_ArcadeHotkey_PlayOrPause;
         public struct ArcadeHotkeyActions
@@ -821,6 +953,8 @@ namespace Arcade.Compose
             public InputAction @Mirror => m_Wrapper.m_ArcadeHotkey_Mirror;
             public InputAction @TimingSnap => m_Wrapper.m_ArcadeHotkey_TimingSnap;
             public InputAction @Delete => m_Wrapper.m_ArcadeHotkey_Delete;
+            public InputAction @ToggleGrid => m_Wrapper.m_ArcadeHotkey_ToggleGrid;
+            public InputAction @ToggleClickToCreate => m_Wrapper.m_ArcadeHotkey_ToggleClickToCreate;
             public InputAction @PlayWhenHolding => m_Wrapper.m_ArcadeHotkey_PlayWhenHolding;
             public InputAction @PlayOrPause => m_Wrapper.m_ArcadeHotkey_PlayOrPause;
             public InputActionMap Get() { return m_Wrapper.m_ArcadeHotkey; }
@@ -856,6 +990,12 @@ namespace Arcade.Compose
                     @Delete.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnDelete;
                     @Delete.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnDelete;
                     @Delete.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnDelete;
+                    @ToggleGrid.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnToggleGrid;
+                    @ToggleGrid.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnToggleGrid;
+                    @ToggleGrid.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnToggleGrid;
+                    @ToggleClickToCreate.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnToggleClickToCreate;
+                    @ToggleClickToCreate.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnToggleClickToCreate;
+                    @ToggleClickToCreate.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnToggleClickToCreate;
                     @PlayWhenHolding.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
                     @PlayWhenHolding.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
                     @PlayWhenHolding.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
@@ -890,6 +1030,12 @@ namespace Arcade.Compose
                     @Delete.started += instance.OnDelete;
                     @Delete.performed += instance.OnDelete;
                     @Delete.canceled += instance.OnDelete;
+                    @ToggleGrid.started += instance.OnToggleGrid;
+                    @ToggleGrid.performed += instance.OnToggleGrid;
+                    @ToggleGrid.canceled += instance.OnToggleGrid;
+                    @ToggleClickToCreate.started += instance.OnToggleClickToCreate;
+                    @ToggleClickToCreate.performed += instance.OnToggleClickToCreate;
+                    @ToggleClickToCreate.canceled += instance.OnToggleClickToCreate;
                     @PlayWhenHolding.started += instance.OnPlayWhenHolding;
                     @PlayWhenHolding.performed += instance.OnPlayWhenHolding;
                     @PlayWhenHolding.canceled += instance.OnPlayWhenHolding;
@@ -951,6 +1097,8 @@ namespace Arcade.Compose
             void OnMirror(InputAction.CallbackContext context);
             void OnTimingSnap(InputAction.CallbackContext context);
             void OnDelete(InputAction.CallbackContext context);
+            void OnToggleGrid(InputAction.CallbackContext context);
+            void OnToggleClickToCreate(InputAction.CallbackContext context);
             void OnPlayWhenHolding(InputAction.CallbackContext context);
             void OnPlayOrPause(InputAction.CallbackContext context);
         }

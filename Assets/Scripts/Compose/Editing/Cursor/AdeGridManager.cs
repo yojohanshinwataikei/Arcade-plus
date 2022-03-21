@@ -68,6 +68,9 @@ namespace Arcade.Compose
 		}
 		private void Update()
 		{
+			if(AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ToggleGrid)){
+				SwitchGridStatus();
+			}
 			if (!ArcGameplayManager.Instance.IsLoaded)
 			{
 				beatlineInUse = 0;

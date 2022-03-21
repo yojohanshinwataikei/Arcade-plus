@@ -38,6 +38,7 @@ namespace Arcade.Compose.Editing
 				if (value && !ArcGameplayManager.Instance.IsLoaded)
 				{
 					AdeToast.Instance.Show("请先加载谱面");
+					return;
 				}
 				if (enable != value)
 				{
@@ -139,6 +140,11 @@ namespace Arcade.Compose.Editing
 		}
 		private void Update()
 		{
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ToggleClickToCreate))
+			{
+				CancelAddLongNote();
+				Enable = !Enable;
+			}
 			if (!enable) return;
 			if (Mode == ClickToCreateMode.Idle) return;
 			UpdateArcTapCursor();
