@@ -156,6 +156,33 @@ namespace Arcade.Compose
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Click To Create Arc Void"",
+                    ""type"": ""Value"",
+                    ""id"": ""42a824d6-aaea-45d1-a5fa-de5cab3522e5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Click To Create Arc Color"",
+                    ""type"": ""Value"",
+                    ""id"": ""fe344389-b58d-42b0-ba98-8878ec6df468"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Click To Create Arc Type"",
+                    ""type"": ""Value"",
+                    ""id"": ""3c40295d-171e-4c32-ab68-6e5414dc6ebb"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Play When Holding"",
                     ""type"": ""Value"",
                     ""id"": ""906c56a2-3584-45c7-a679-d656873a9e8f"",
@@ -583,7 +610,7 @@ namespace Arcade.Compose
                 {
                     ""name"": ""key"",
                     ""id"": ""6b090b2b-84b7-4990-a1d8-f9ba03a4a53c"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/enter"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1118,6 +1145,171 @@ namespace Arcade.Compose
                     ""action"": ""Click To Create Arctap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""15120b63-eba1-4e89-86e0-f919d48a8961"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Void"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""4ce6fe7b-7a0d-4d26-af12-e4050d04eb10"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Void"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""12774c7c-e4a7-4ea6-bf6e-434d8b636cd8"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Void"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""0861ec0c-53b6-451b-bd61-2faf4bbce4b6"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Void"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""a3a80f5b-9b03-40b7-a5d9-120ce00fff95"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Void"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""1757dc84-6f64-46c7-bd8c-90e419ad5958"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Color"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""ef75ca92-052c-4020-b879-b98bb4bf2d32"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Color"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""7325aee5-a6ba-4e81-993e-f7e00843cb54"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Color"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""f768d1d9-f4ee-401b-b8e9-f2b8d463719d"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Color"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""2bc74f05-9448-4a44-8949-ce17cb0a4c37"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Color"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""542e771d-a1a8-4bbc-8636-e073b1639596"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Type"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""8fbf749a-8319-45c0-a70e-38005d6f9950"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Type"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""2ed4c04f-a8d8-404e-a0b7-d8cc72aed168"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Type"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""5c382725-ac79-472f-b0c5-df49dffa6a0a"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Type"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""64436cda-27f1-40a4-a082-147e03c8e954"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arc Type"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1179,7 +1371,7 @@ namespace Arcade.Compose
                 {
                     ""name"": """",
                     ""id"": ""f71baf2f-1a75-4228-a3b5-95d0c021445a"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""path"": ""*/{Cancel}"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -1208,6 +1400,9 @@ namespace Arcade.Compose
             m_ArcadeHotkey_ClickToCreateHold = m_ArcadeHotkey.FindAction("Click To Create Hold", throwIfNotFound: true);
             m_ArcadeHotkey_ClickToCreateArc = m_ArcadeHotkey.FindAction("Click To Create Arc", throwIfNotFound: true);
             m_ArcadeHotkey_ClickToCreateArctap = m_ArcadeHotkey.FindAction("Click To Create Arctap", throwIfNotFound: true);
+            m_ArcadeHotkey_ClickToCreateArcVoid = m_ArcadeHotkey.FindAction("Click To Create Arc Void", throwIfNotFound: true);
+            m_ArcadeHotkey_ClickToCreateArcColor = m_ArcadeHotkey.FindAction("Click To Create Arc Color", throwIfNotFound: true);
+            m_ArcadeHotkey_ClickToCreateArcType = m_ArcadeHotkey.FindAction("Click To Create Arc Type", throwIfNotFound: true);
             m_ArcadeHotkey_PlayWhenHolding = m_ArcadeHotkey.FindAction("Play When Holding", throwIfNotFound: true);
             m_ArcadeHotkey_PlayOrPause = m_ArcadeHotkey.FindAction("Play Or Pause", throwIfNotFound: true);
             m_ArcadeHotkey_ToggleGrid = m_ArcadeHotkey.FindAction("Toggle Grid", throwIfNotFound: true);
@@ -1289,6 +1484,9 @@ namespace Arcade.Compose
         private readonly InputAction m_ArcadeHotkey_ClickToCreateHold;
         private readonly InputAction m_ArcadeHotkey_ClickToCreateArc;
         private readonly InputAction m_ArcadeHotkey_ClickToCreateArctap;
+        private readonly InputAction m_ArcadeHotkey_ClickToCreateArcVoid;
+        private readonly InputAction m_ArcadeHotkey_ClickToCreateArcColor;
+        private readonly InputAction m_ArcadeHotkey_ClickToCreateArcType;
         private readonly InputAction m_ArcadeHotkey_PlayWhenHolding;
         private readonly InputAction m_ArcadeHotkey_PlayOrPause;
         private readonly InputAction m_ArcadeHotkey_ToggleGrid;
@@ -1310,6 +1508,9 @@ namespace Arcade.Compose
             public InputAction @ClickToCreateHold => m_Wrapper.m_ArcadeHotkey_ClickToCreateHold;
             public InputAction @ClickToCreateArc => m_Wrapper.m_ArcadeHotkey_ClickToCreateArc;
             public InputAction @ClickToCreateArctap => m_Wrapper.m_ArcadeHotkey_ClickToCreateArctap;
+            public InputAction @ClickToCreateArcVoid => m_Wrapper.m_ArcadeHotkey_ClickToCreateArcVoid;
+            public InputAction @ClickToCreateArcColor => m_Wrapper.m_ArcadeHotkey_ClickToCreateArcColor;
+            public InputAction @ClickToCreateArcType => m_Wrapper.m_ArcadeHotkey_ClickToCreateArcType;
             public InputAction @PlayWhenHolding => m_Wrapper.m_ArcadeHotkey_PlayWhenHolding;
             public InputAction @PlayOrPause => m_Wrapper.m_ArcadeHotkey_PlayOrPause;
             public InputAction @ToggleGrid => m_Wrapper.m_ArcadeHotkey_ToggleGrid;
@@ -1364,6 +1565,15 @@ namespace Arcade.Compose
                     @ClickToCreateArctap.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArctap;
                     @ClickToCreateArctap.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArctap;
                     @ClickToCreateArctap.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArctap;
+                    @ClickToCreateArcVoid.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArcVoid;
+                    @ClickToCreateArcVoid.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArcVoid;
+                    @ClickToCreateArcVoid.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArcVoid;
+                    @ClickToCreateArcColor.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArcColor;
+                    @ClickToCreateArcColor.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArcColor;
+                    @ClickToCreateArcColor.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArcColor;
+                    @ClickToCreateArcType.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArcType;
+                    @ClickToCreateArcType.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArcType;
+                    @ClickToCreateArcType.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnClickToCreateArcType;
                     @PlayWhenHolding.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
                     @PlayWhenHolding.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
                     @PlayWhenHolding.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
@@ -1419,6 +1629,15 @@ namespace Arcade.Compose
                     @ClickToCreateArctap.started += instance.OnClickToCreateArctap;
                     @ClickToCreateArctap.performed += instance.OnClickToCreateArctap;
                     @ClickToCreateArctap.canceled += instance.OnClickToCreateArctap;
+                    @ClickToCreateArcVoid.started += instance.OnClickToCreateArcVoid;
+                    @ClickToCreateArcVoid.performed += instance.OnClickToCreateArcVoid;
+                    @ClickToCreateArcVoid.canceled += instance.OnClickToCreateArcVoid;
+                    @ClickToCreateArcColor.started += instance.OnClickToCreateArcColor;
+                    @ClickToCreateArcColor.performed += instance.OnClickToCreateArcColor;
+                    @ClickToCreateArcColor.canceled += instance.OnClickToCreateArcColor;
+                    @ClickToCreateArcType.started += instance.OnClickToCreateArcType;
+                    @ClickToCreateArcType.performed += instance.OnClickToCreateArcType;
+                    @ClickToCreateArcType.canceled += instance.OnClickToCreateArcType;
                     @PlayWhenHolding.started += instance.OnPlayWhenHolding;
                     @PlayWhenHolding.performed += instance.OnPlayWhenHolding;
                     @PlayWhenHolding.canceled += instance.OnPlayWhenHolding;
@@ -1497,6 +1716,9 @@ namespace Arcade.Compose
             void OnClickToCreateHold(InputAction.CallbackContext context);
             void OnClickToCreateArc(InputAction.CallbackContext context);
             void OnClickToCreateArctap(InputAction.CallbackContext context);
+            void OnClickToCreateArcVoid(InputAction.CallbackContext context);
+            void OnClickToCreateArcColor(InputAction.CallbackContext context);
+            void OnClickToCreateArcType(InputAction.CallbackContext context);
             void OnPlayWhenHolding(InputAction.CallbackContext context);
             void OnPlayOrPause(InputAction.CallbackContext context);
             void OnToggleGrid(InputAction.CallbackContext context);

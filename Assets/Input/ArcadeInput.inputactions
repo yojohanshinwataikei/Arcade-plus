@@ -132,6 +132,33 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Click To Create Arc Void",
+                    "type": "Value",
+                    "id": "42a824d6-aaea-45d1-a5fa-de5cab3522e5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Click To Create Arc Color",
+                    "type": "Value",
+                    "id": "fe344389-b58d-42b0-ba98-8878ec6df468",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Click To Create Arc Type",
+                    "type": "Value",
+                    "id": "3c40295d-171e-4c32-ab68-6e5414dc6ebb",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Play When Holding",
                     "type": "Value",
                     "id": "906c56a2-3584-45c7-a679-d656873a9e8f",
@@ -559,7 +586,7 @@
                 {
                     "name": "key",
                     "id": "6b090b2b-84b7-4990-a1d8-f9ba03a4a53c",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -1094,6 +1121,171 @@
                     "action": "Click To Create Arctap",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "15120b63-eba1-4e89-86e0-f919d48a8961",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Void",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "4ce6fe7b-7a0d-4d26-af12-e4050d04eb10",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Void",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "12774c7c-e4a7-4ea6-bf6e-434d8b636cd8",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Void",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "0861ec0c-53b6-451b-bd61-2faf4bbce4b6",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Void",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "a3a80f5b-9b03-40b7-a5d9-120ce00fff95",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Void",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "1757dc84-6f64-46c7-bd8c-90e419ad5958",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Color",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "ef75ca92-052c-4020-b879-b98bb4bf2d32",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Color",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "7325aee5-a6ba-4e81-993e-f7e00843cb54",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Color",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "f768d1d9-f4ee-401b-b8e9-f2b8d463719d",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Color",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "2bc74f05-9448-4a44-8949-ce17cb0a4c37",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Color",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "542e771d-a1a8-4bbc-8636-e073b1639596",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Type",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "8fbf749a-8319-45c0-a70e-38005d6f9950",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Type",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "2ed4c04f-a8d8-404e-a0b7-d8cc72aed168",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Type",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "5c382725-ac79-472f-b0c5-df49dffa6a0a",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Type",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "64436cda-27f1-40a4-a082-147e03c8e954",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arc Type",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         },
@@ -1155,7 +1347,7 @@
                 {
                     "name": "",
                     "id": "f71baf2f-1a75-4228-a3b5-95d0c021445a",
-                    "path": "<Keyboard>/escape",
+                    "path": "*/{Cancel}",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
