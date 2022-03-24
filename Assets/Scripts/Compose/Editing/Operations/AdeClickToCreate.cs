@@ -169,6 +169,11 @@ namespace Arcade.Compose.Editing
 				SetClickToCreateMode(ClickToCreateMode.ArcTap);
 			}
 
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Inputs.Cancel))
+			{
+				CancelAddLongNote();
+			}
+
 			if (Mode == ClickToCreateMode.Idle) return;
 
 			if (Mode == ClickToCreateMode.Arc && postArcCoroutine == null)

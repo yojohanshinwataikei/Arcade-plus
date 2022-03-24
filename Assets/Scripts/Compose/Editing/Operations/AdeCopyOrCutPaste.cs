@@ -66,6 +66,11 @@ namespace Arcade.Compose
 				CancelPaste();
 				return;
 			}
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Inputs.Cancel))
+			{
+				CancelPaste();
+				return;
+			}
 			UpdateTiming();
 		}
 		public void CopySelectedNotes()

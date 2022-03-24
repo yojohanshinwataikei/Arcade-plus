@@ -44,7 +44,11 @@ namespace Arcade.Compose
 
 		private bool IsFocusingOnTextField()
 		{
-			InputField inputField = eventSystem.currentSelectedGameObject?.GetComponent<InputField>();
+			GameObject selected=eventSystem.currentSelectedGameObject;
+			if(selected == null){
+				return false;
+			}
+			InputField inputField = eventSystem.currentSelectedGameObject.GetComponent<InputField>();
 			if (inputField != null)
 			{
 				if (inputField.isFocused)
