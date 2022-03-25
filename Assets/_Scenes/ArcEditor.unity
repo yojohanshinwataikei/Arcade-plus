@@ -393,9 +393,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1281762158}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.Dialog.AdeSoundDialog, Arcade
         m_MethodName: OnEffectAudioChange
         m_Mode: 1
         m_Arguments:
@@ -406,9 +409,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2374,9 +2374,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1281762158}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.Dialog.AdeSoundDialog, Arcade
         m_MethodName: OnChartAudioChange
         m_Mode: 1
         m_Arguments:
@@ -2387,9 +2390,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3822,9 +3822,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 928958754}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.Editing.AdeValueEditor, Arcade
         m_MethodName: OnEndPos
         m_Mode: 2
         m_Arguments:
@@ -3835,9 +3838,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -5510,9 +5510,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 888272484}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnAudioOffsetEdited
         m_Mode: 1
         m_Arguments:
@@ -5523,9 +5526,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -18970,9 +18970,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 992819286}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeGridManager, Arcade
         m_MethodName: OnDensityChange
         m_Mode: 1
         m_Arguments:
@@ -18983,9 +18986,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -19579,9 +19579,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 928958754}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.Editing.AdeValueEditor, Arcade
         m_MethodName: OnTrack
         m_Mode: 2
         m_Arguments:
@@ -19592,9 +19595,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -28998,9 +28998,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 928958754}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.Editing.AdeValueEditor, Arcade
         m_MethodName: OnTiming
         m_Mode: 2
         m_Arguments:
@@ -29011,9 +29014,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -35645,9 +35645,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 888272484}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnComposerEdited
         m_Mode: 1
         m_Arguments:
@@ -35658,9 +35661,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -36000,9 +36000,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 928958754}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.Editing.AdeValueEditor, Arcade
         m_MethodName: OnStartPos
         m_Mode: 2
         m_Arguments:
@@ -36013,9 +36016,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -41254,9 +41254,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 928958754}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.Editing.AdeValueEditor, Arcade
         m_MethodName: OnEndTiming
         m_Mode: 2
         m_Arguments:
@@ -41267,9 +41270,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -43794,9 +43794,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 992819286}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeGridManager, Arcade
         m_MethodName: OnVerticalXChange
         m_Mode: 1
         m_Arguments:
@@ -43807,9 +43810,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -44615,9 +44615,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 888272484}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnBaseBpmEdited
         m_Mode: 1
         m_Arguments:
@@ -44628,9 +44631,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -51727,9 +51727,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 888272484}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnNameEdited
         m_Mode: 1
         m_Arguments:
@@ -51740,9 +51743,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -72024,7 +72024,7 @@ GameObject:
   - component: {fileID: 1748575957}
   - component: {fileID: 1748575958}
   m_Layer: 10
-  m_Name: ChartAudio
+  m_Name: CancelLimit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75134,9 +75134,12 @@ MonoBehaviour:
   m_CharacterLimit: 3
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 888272484}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnDiffEdited
         m_Mode: 1
         m_Arguments:
@@ -75147,9 +75150,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -79503,9 +79503,12 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
+      m_Calls: []
+  m_OnDidEndEdit:
+    m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 992819286}
-        m_TargetAssemblyTypeName: 
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeGridManager, Arcade
         m_MethodName: OnVerticalYChange
         m_Mode: 1
         m_Arguments:
@@ -79516,9 +79519,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-  m_OnDidEndEdit:
-    m_PersistentCalls:
-      m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
