@@ -319,7 +319,7 @@ namespace Arcade.Compose
 				}
 				if (n != null)
 				{
-					if (!AdeInputManager.Instance.Inputs.RangeSelection.IsPressed())
+					if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
 					{
 						DeselectAllNotes();
 						SelectNote(n);
