@@ -185,7 +185,7 @@ namespace Arcade.Aff.Faults
             // }
             foreach (var a in chart.Arcs)
             {
-                foreach (var t in chart.Timings)
+                foreach (var t in a.TimingGroup?.Timings ?? chart.Timings)
                 {
                     if (t.Timing > a.Timing && t.Timing < a.EndTiming)
                     {
