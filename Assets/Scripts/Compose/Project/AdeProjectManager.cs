@@ -191,7 +191,7 @@ namespace Arcade.Compose
 			CurrentProjectMetadata.LastWorkingTiming = ArcGameplayManager.Instance.Timing;
 			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 			string path = Path.Combine(CurrentProjectFolder, $"{CurrentDifficulty}.aff");
-			string backupPath = Path.Combine(ProjectBackupFolder, $"{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss")}.aff");
+			string backupPath = Path.Combine(ProjectBackupFolder, $"{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.aff");
 			File.Copy(path, backupPath);
 			FileStream fs = new FileStream(path, FileMode.Create);
 			try
@@ -213,7 +213,8 @@ namespace Arcade.Compose
 				yield return new WaitForSeconds(30f);
 				if (CurrentProjectMetadata == null || CurrentProjectFolder == null) continue;
 				if (ArcGameplayManager.Instance.Chart == null) continue;
-				string backupPath = Path.Combine(ProjectAutosaveFolder, $"{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd hh-mm-ss")}.aff");
+				if (ArcGameplayManager.Instance.IsPlaying) continue;
+				string backupPath = Path.Combine(ProjectAutosaveFolder, $"{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.aff");
 				FileStream fs = new FileStream(backupPath, FileMode.Create);
 				try
 				{
