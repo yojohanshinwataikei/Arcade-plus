@@ -57,7 +57,7 @@ namespace Arcade.Aff
 		public bool IsVoid;
 		public List<RawAffArctap> ArcTaps;
 	}
-	public class RawAffCamera : IRawAffItem
+	public class RawAffCamera : IRawAffNestableItem
 	{
 		public int Timing;
 		public float MoveX;

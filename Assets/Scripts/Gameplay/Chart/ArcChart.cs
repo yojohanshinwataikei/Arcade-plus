@@ -64,7 +64,7 @@ namespace Arcade.Gameplay.Chart
 			}
 			else if (item is RawAffCamera)
 			{
-				Cameras.Add(new ArcCamera(item as RawAffCamera));
+				Cameras.Add(new ArcCamera(item as RawAffCamera, timingGroup));
 			}
 			else if (item is RawAffSceneControl)
 			{
@@ -1215,8 +1215,10 @@ namespace Arcade.Gameplay.Chart
 		}
 
 	}
-	public class ArcCamera : ArcEvent, IIntoRawItem
+	public class ArcCamera : ArcEvent, IIntoRawItem, IHasTimingGroup, ISetableTimingGroup
 	{
+
+		public ArcTimingGroup TimingGroup { get; set; }
 		public Vector3 Move, Rotate;
 		public CameraEaseType CameraType;
 		public int Duration;
@@ -1227,13 +1229,14 @@ namespace Arcade.Gameplay.Chart
 		{
 		}
 
-		public ArcCamera(RawAffCamera rawAffCamera)
+		public ArcCamera(RawAffCamera rawAffCamera, ArcTimingGroup timingGroup)
 		{
 			Timing = rawAffCamera.Timing;
 			Move = new Vector3(rawAffCamera.MoveX, rawAffCamera.MoveY, rawAffCamera.MoveZ);
 			Rotate = new Vector3(rawAffCamera.RotateX, rawAffCamera.RotateY, rawAffCamera.RotateZ);
 			CameraType = rawAffCamera.CameraType;
 			Duration = rawAffCamera.Duration;
+			TimingGroup = timingGroup;
 		}
 		public IRawAffItem IntoRawItem()
 		{
