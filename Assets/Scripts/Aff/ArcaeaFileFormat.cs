@@ -706,7 +706,7 @@ namespace Arcade.Aff
 			RejectSubevents(context, "timinggroup");
 			LimitValuesCount(context, "timinggroup", 1);
 			List<IRawAffNestableItem> items = new List<IRawAffNestableItem>();
-			Arcade.Aff.RawAffWord timingGroupAttributes = new RawAffWord{data=""};
+			Arcade.Aff.RawAffWord timingGroupAttributes = new RawAffWord { data = "" };
 			if (context.values().value().Length > 0)
 			{
 				timingGroupAttributes = CheckValueType<RawAffWord>(context.values().value()[0], "arc", "arc 类型");

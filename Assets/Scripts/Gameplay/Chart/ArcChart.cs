@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Arcade.Aff;
 using UnityEngine;
 
@@ -75,8 +76,8 @@ namespace Arcade.Gameplay.Chart
 				ArcTimingGroup arcTimingGroup = new ArcTimingGroup()
 				{
 					Id = TimingGroups.Count + 1,
-					Attributes = (item as RawAffTimingGroup).Attributes,
 				};
+				arcTimingGroup.ApplyAttributes((item as RawAffTimingGroup).Attributes);
 				TimingGroups.Add(arcTimingGroup);
 				foreach (var nestedItem in (item as RawAffTimingGroup).Items)
 				{
@@ -1309,12 +1310,49 @@ namespace Arcade.Gameplay.Chart
 		public int Id;
 		public List<ArcTiming> Timings = new List<ArcTiming>();
 		public string Attributes = "";
-		public bool NoInput=false;
-		public bool FadingHolds=false;
-		public float AngleX=0;
-		public float AngleY=0;
+		public bool NoInput = false;
+		public bool FadingHolds = false;
+		public int AngleX = 0;
+		public int AngleY = 0;
 		public bool GroupHide = false;
 		public float earliestRenderTime = 0;
 		public float latestRenderTime = 0;
+
+		public void ApplyAttributes(string attributes)
+		{
+			Attributes = attributes;
+			var attributeList = attributes.Split('_');
+			foreach (var attribute in attributeList)
+			{
+				if (attribute == "noinput")
+				{
+					NoInput = true;
+					continue;
+				}
+				if (attribute == "fadingholds")
+				{
+					FadingHolds = true;
+					continue;
+				}
+				Match matchAngleX = Regex.Match(attribute, "^anglex([0-9]+)$");
+				if (matchAngleX.Success)
+				{
+					bool result=int.TryParse(matchAngleX.Groups[1].Value,out AngleX);
+					if(!result){
+						Debug.LogWarning($"Timinggroup attribute applying failed:{attribute}");
+					}
+					continue;
+				}
+				Match matchAngleY = Regex.Match(attribute, "^angley([0-9]+)$");
+				if (matchAngleY.Success)
+				{
+					bool result=int.TryParse(matchAngleX.Groups[1].Value,out AngleY);
+					if(!result){
+						Debug.LogWarning($"Timinggroup attribute applying failed:{attribute}");
+					}
+					continue;
+				}
+			}
+		}
 	}
 }
