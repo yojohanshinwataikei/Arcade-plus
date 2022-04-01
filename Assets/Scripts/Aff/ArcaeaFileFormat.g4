@@ -11,14 +11,15 @@ RBrace: '}';
 Comma: ',';
 Semicolon: ';';
 
+fragment UNDERLINE: '_';
 fragment ALPHABET: [a-zA-Z];
-Word: ALPHABET+;
 
 fragment DIGITSTART: [1-9];
 fragment ZERO: '0';
 fragment DIGIT: DIGITSTART | ZERO;
 fragment DOT: '.';
 fragment NEGATIVE: '-';
+Word: ALPHABET (UNDERLINE | DIGIT | ALPHABET)*;
 Int: NEGATIVE? (ZERO | DIGITSTART DIGIT*);
 Float: Int DOT DIGIT+;
 

@@ -71,7 +71,7 @@ namespace Arcade.Aff
 	}
 	public class RawAffTimingGroup : IRawAffItem
 	{
-		public TimingGroupType Type;
+		public string Attributes;
 		public List<IRawAffNestableItem> Items;
 	}
 	public class RawAffSceneControl : IRawAffNestableItem
@@ -296,7 +296,7 @@ namespace Arcade.Aff
 			else if (item is RawAffTimingGroup)
 			{
 				var timinggroup = item as RawAffTimingGroup;
-				writer.WriteLine($"{intent}timinggroup({TimingGroupTypeStrings[timinggroup.Type]}){{");
+				writer.WriteLine($"{intent}timinggroup({timinggroup.Attributes}){{");
 				foreach (var nestedItem in timinggroup.Items)
 				{
 					writeItem(writer, nestedItem, intent + "  ");
@@ -322,11 +322,6 @@ namespace Arcade.Aff
 			[CameraEaseType.Qi] = "qi",
 			[CameraEaseType.Qo] = "qo",
 			[CameraEaseType.S] = "s",
-		};
-		public static Dictionary<TimingGroupType, string> TimingGroupTypeStrings = new Dictionary<TimingGroupType, string>
-		{
-			[TimingGroupType.Normal] = "",
-			[TimingGroupType.NoInput] = "noinput",
 		};
 	}
 
@@ -711,11 +706,10 @@ namespace Arcade.Aff
 			RejectSubevents(context, "timinggroup");
 			LimitValuesCount(context, "timinggroup", 1);
 			List<IRawAffNestableItem> items = new List<IRawAffNestableItem>();
-			TimingGroupType? timingGroupType = TimingGroupType.Normal;
+			Arcade.Aff.RawAffWord timingGroupAttributes = new RawAffWord{data=""};
 			if (context.values().value().Length > 0)
 			{
-				var rawTimingGroupType = CheckValueType<RawAffWord>(context.values().value()[0], "arc", "arc 类型");
-				timingGroupType = ParseWord(timingGroupTypes, rawTimingGroupType.data, context.values().value()[0], "arc", "arc 类型");
+				timingGroupAttributes = CheckValueType<RawAffWord>(context.values().value()[0], "arc", "arc 类型");
 			}
 			foreach (var item in context.segment().body().item())
 			{
@@ -734,14 +728,14 @@ namespace Arcade.Aff
 				}
 				items.Add(rawItem as IRawAffNestableItem);
 			}
-			if (timingGroupType == null)
+			if (timingGroupAttributes == null)
 			{
 				return;
 			}
 			context.value = new RawAffTimingGroup()
 			{
 				Items = items,
-				Type = timingGroupType.Value,
+				Attributes = timingGroupAttributes.data,
 			};
 		}
 
@@ -848,11 +842,6 @@ namespace Arcade.Aff
 			["qi"] = CameraEaseType.Qi,
 			["qo"] = CameraEaseType.Qo,
 			["reset"] = CameraEaseType.Reset,
-		};
-
-		Dictionary<string, TimingGroupType> timingGroupTypes = new Dictionary<string, TimingGroupType>()
-		{
-			["noinput"] = TimingGroupType.NoInput,
 		};
 	}
 

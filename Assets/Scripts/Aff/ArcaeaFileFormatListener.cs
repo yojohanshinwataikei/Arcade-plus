@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from Assets\Scripts\Aff\ArcaeaFileFormat.g4 by ANTLR 4.8
+// Generated from c:\root\works\code\shadow-git\arcade-plus\Assets\Scripts\Aff\ArcaeaFileFormat.g4 by ANTLR 4.8
 
 // Unreachable code detected
 #pragma warning disable 0162

@@ -75,7 +75,7 @@ namespace Arcade.Gameplay.Chart
 				ArcTimingGroup arcTimingGroup = new ArcTimingGroup()
 				{
 					Id = TimingGroups.Count + 1,
-					Type = (item as RawAffTimingGroup).Type,
+					Attributes = (item as RawAffTimingGroup).Attributes,
 				};
 				TimingGroups.Add(arcTimingGroup);
 				foreach (var nestedItem in (item as RawAffTimingGroup).Items)
@@ -140,7 +140,7 @@ namespace Arcade.Gameplay.Chart
 				var timingGroupItem = new RawAffTimingGroup()
 				{
 					Items = new List<IRawAffNestableItem>(),
-					Type = timingGroup.Type
+					Attributes = timingGroup.Attributes
 				};
 				foreach (var e in timingGroupEvents[timingGroup])
 				{
@@ -184,7 +184,7 @@ namespace Arcade.Gameplay.Chart
 	{
 		public static bool NoInput(this IHasTimingGroup hasTimingGroup)
 		{
-			return hasTimingGroup.TimingGroup?.Type == TimingGroupType.NoInput;
+			return hasTimingGroup.TimingGroup?.NoInput ?? false;
 		}
 		public static bool GroupHide(this IHasTimingGroup hasTimingGroup)
 		{
@@ -220,11 +220,6 @@ namespace Arcade.Gameplay.Chart
 		TrackShow,
 		HideGroup,
 		Unknown,
-	}
-	public enum TimingGroupType
-	{
-		Normal,
-		NoInput,
 	}
 	public abstract class ArcEvent
 	{
@@ -1310,7 +1305,11 @@ namespace Arcade.Gameplay.Chart
 	{
 		public int Id;
 		public List<ArcTiming> Timings = new List<ArcTiming>();
-		public TimingGroupType Type = TimingGroupType.Normal;
+		public string Attributes = "";
+		public bool NoInput=false;
+		public bool FadingHolds=false;
+		public float AngleX=0;
+		public float AngleY=0;
 		public bool GroupHide = false;
 		public float earliestRenderTime = 0;
 		public float latestRenderTime = 0;
