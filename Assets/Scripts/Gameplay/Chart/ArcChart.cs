@@ -200,6 +200,10 @@ namespace Arcade.Gameplay.Chart
 			direction = Quaternion.AngleAxis((float)(angleY) / 10, new Vector3(0, -1, 0)) * direction;
 			return direction;
 		}
+		public static bool FadingHolds(this IHasTimingGroup hasTimingGroup)
+		{
+			return hasTimingGroup.TimingGroup?.FadingHolds ?? false;
+		}
 	}
 	public interface ISetableTimingGroup
 	{

@@ -107,7 +107,21 @@ namespace Arcade.Gameplay
 				}
 				else
 				{
-					alpha = t.Timing + offset < ArcGameplayManager.Instance.Timing ? 0.5f : 1;
+					if (t.Timing + offset < ArcGameplayManager.Instance.Timing)
+					{
+						if (!t.FadingHolds())
+						{
+							alpha = 0.5f;
+						}
+						else
+						{
+							int firstJudge = t.JudgeTimings.Count > 0 ? t.JudgeTimings[0] : t.Timing;
+							if (firstJudge + offset < ArcGameplayManager.Instance.Timing)
+							{
+								alpha = 0.5f;
+							}
+						}
+					}
 					t.Highlight = false;
 				}
 				t.Alpha = alpha * 0.8627451f;
