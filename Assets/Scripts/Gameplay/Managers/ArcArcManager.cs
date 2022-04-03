@@ -218,11 +218,13 @@ namespace Arcade.Gameplay
 				{
 					t.Alpha = 1;
 					t.Enable = true;
+					t.UpdatePosition();
 				}
 				else if (pos > 90 && pos <= 100)
 				{
 					t.Enable = true;
 					t.Alpha = (100 - pos) / 10f;
+					t.UpdatePosition();
 				}
 				else
 				{

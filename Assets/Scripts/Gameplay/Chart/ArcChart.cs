@@ -855,13 +855,22 @@ namespace Arcade.Gameplay.Chart
 		{
 			Arc = arc;
 			Instance = UnityEngine.Object.Instantiate(ArcArcManager.Instance.ArcTapPrefab, arc.transform);
+
+			UpdatePosition();
+			SetupArcTapConnection();
+		}
+
+		public void UpdatePosition()
+		{
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			int offset = ArcAudioManager.Instance.AudioOffset;
-			float t = 1f * (Timing - arc.Timing) / (arc.EndTiming - arc.Timing);
-			LocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(arc.XStart, arc.XEnd, t, arc.LineType)),
-									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(arc.YStart, arc.YEnd, t, arc.LineType)) - 0.5f,
-									  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, Timing + offset, arc.TimingGroup) / 1000f - 0.6f);
-			SetupArcTapConnection();
+			float t = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
+			Vector3 parentLocalPosition = new Vector3(0, 0, -timingManager.CalculatePositionByTiming(Arc.Timing + offset, Arc.TimingGroup) / 1000f);
+			Vector3 baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
+									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f, 0);
+			Vector3 offsetLocalPosition = new Vector3(0, 0, -timingManager.CalculatePositionByTiming(Timing + offset, Arc.TimingGroup) / 1000f);
+			Vector3 additionalLocalPosition = new Vector3(0, 0, -0.6f);
+			LocalPosition = baseLocalPosition + offsetLocalPosition - parentLocalPosition + additionalLocalPosition;
 		}
 		/// <summary>
 		/// Please use the overload method.
@@ -1337,8 +1346,9 @@ namespace Arcade.Gameplay.Chart
 				Match matchAngleX = Regex.Match(attribute, "^anglex([0-9]+)$");
 				if (matchAngleX.Success)
 				{
-					bool result=int.TryParse(matchAngleX.Groups[1].Value,out AngleX);
-					if(!result){
+					bool result = int.TryParse(matchAngleX.Groups[1].Value, out AngleX);
+					if (!result)
+					{
 						Debug.LogWarning($"Timinggroup attribute applying failed:{attribute}");
 					}
 					continue;
@@ -1346,8 +1356,9 @@ namespace Arcade.Gameplay.Chart
 				Match matchAngleY = Regex.Match(attribute, "^angley([0-9]+)$");
 				if (matchAngleY.Success)
 				{
-					bool result=int.TryParse(matchAngleX.Groups[1].Value,out AngleY);
-					if(!result){
+					bool result = int.TryParse(matchAngleX.Groups[1].Value, out AngleY);
+					if (!result)
+					{
 						Debug.LogWarning($"Timinggroup attribute applying failed:{attribute}");
 					}
 					continue;
