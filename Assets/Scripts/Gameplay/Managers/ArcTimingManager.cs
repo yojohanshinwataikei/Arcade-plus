@@ -334,6 +334,45 @@ namespace Arcade.Gameplay
 					earliestRenderTime = Mathf.Min(earliestRenderTime, nearTime, farTime);
 					latestRenderTime = Mathf.Max(latestRenderTime, nearTime, farTime);
 				}
+
+				if (Timings[0].Bpm == 0)
+				{
+					if (allBeginPosition <= farPosition && allBeginPosition >= nearPosition)
+					{
+						earliestRenderTime = Mathf.Min(earliestRenderTime, allBeginTime, float.NegativeInfinity);
+						latestRenderTime = Mathf.Max(latestRenderTime, allBeginTime, float.NegativeInfinity);
+					}
+				}
+				else
+				{
+					float beforeAllBeginTargetPosition = Timings[0].Bpm > 0 ? nearPosition : farPosition;
+					float beforeAllBeginTime = allBeginTime + (beforeAllBeginTargetPosition - allBeginPosition) / (Timings[0].Bpm / BaseBpm * Velocity);
+					if (beforeAllBeginTime <= allBeginTime)
+					{
+						earliestRenderTime = Mathf.Min(earliestRenderTime, allBeginTime, beforeAllBeginTime);
+						latestRenderTime = Mathf.Max(latestRenderTime, allBeginTime, beforeAllBeginTime);
+					}
+				}
+
+				if (Timings[Timings.Count - 1].Bpm == 0)
+				{
+					if (allEndPosition <= farPosition && allEndPosition >= nearPosition)
+					{
+						earliestRenderTime = Mathf.Min(earliestRenderTime, allEndTime, float.PositiveInfinity);
+						latestRenderTime = Mathf.Max(latestRenderTime, allEndTime, float.PositiveInfinity);
+					}
+				}
+				else
+				{
+					float afterAllEndTargetPosition = Timings[Timings.Count - 1].Bpm > 0 ? farPosition : nearPosition;
+					float afterAllEndTime = allEndTime + (afterAllEndTargetPosition - allEndPosition) / (Timings[Timings.Count - 1].Bpm / BaseBpm * Velocity);
+					if (afterAllEndTime >= allEndTime)
+					{
+						earliestRenderTime = Mathf.Min(earliestRenderTime, allEndTime, afterAllEndTime);
+						latestRenderTime = Mathf.Max(latestRenderTime, allEndTime, afterAllEndTime);
+					}
+				}
+
 				earliestRenderTime = Mathf.Min(earliestRenderTime, currentTiming);
 				latestRenderTime = Mathf.Max(latestRenderTime, currentTiming);
 				earliestRenderTime += ArcAudioManager.Instance.AudioOffset;
