@@ -76,14 +76,12 @@ namespace Arcade.Compose
 				float rectTop = top / height;
 				float rectWidth = 1 - (left + right) / width;
 				float rectHeight = 1 - (top + bottom) / height;
-				Debug.Log($"{width * rectWidth}, {height * rectHeight}");
 				if (width * rectWidth < height * rectHeight / 0.75f)
 				{
 					float targetWidth = height * rectHeight / 0.75f / width;
 					rectLeft -= (targetWidth - rectWidth) / 2f;
 					rectWidth = targetWidth;
 				}
-				Debug.Log($"{rectLeft}, {rectTop}, {rectWidth}, {rectHeight}");
 				return new Rect(rectLeft, rectTop, rectWidth, rectHeight);
 			}
 		}
@@ -181,7 +179,7 @@ namespace Arcade.Compose
 				GameplayManager.Timingf = timing / 1000;
 				GameplayManager.ResetJudge();
 			}
-			if (EventSystem.current.currentSelectedGameObject == null && IsEditorMode)
+			if (IsEditorMode)
 			{
 				bool holding = AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.PlayWhenHolding);
 				if (holding && !GameplayManager.IsPlaying)
@@ -198,8 +196,8 @@ namespace Arcade.Compose
 			}
 			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.PlayOrPause))
 			{
-				if (GameplayManager.IsPlaying) GameplayManager.Pause();
-				else GameplayManager.Play();
+				if (IsEditorMode) Play();
+				else Pause();
 			}
 		}
 		private void OnEnable()

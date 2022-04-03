@@ -160,7 +160,6 @@ namespace Arcade.Gameplay
 
 		public void Play()
 		{
-			Debug.Log($"Play{timing}");
 			if (timing < 0)
 			{
 				ArcAudioManager.Instance.Source.Stop();
@@ -172,7 +171,6 @@ namespace Arcade.Gameplay
 				ArcAudioManager.Instance.Timing = timing;
 				ArcAudioManager.Instance.Play();
 			}
-			Debug.Log($"Play={ArcAudioManager.Instance.Timing}");
 			IsPlaying = true;
 		}
 		public void Pause()
