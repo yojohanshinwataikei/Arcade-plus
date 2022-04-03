@@ -555,7 +555,7 @@ namespace Arcade.Gameplay
 			{
 				if (s.ToTiming + offset < currentTiming)
 				{
-					if (arc.Judging || arc.IsVoid)
+					if (arc.Judging || arc.IsVoid || arc.NoInput())
 					{
 						s.Enable = false;
 						continue;
@@ -572,7 +572,7 @@ namespace Arcade.Gameplay
 					s.CurrentArcMaterial = null;
 					s.CurrentShadowMaterial = null;
 					s.Alpha = currentHighColor.a;
-					if (arc.Judging || arc.IsVoid)
+					if (arc.Judging || arc.IsVoid || arc.NoInput())
 					{
 						s.From = (z + s.FromPos.z) / (-s.ToPos.z + s.FromPos.z);
 					}
