@@ -191,6 +191,15 @@ namespace Arcade.Gameplay.Chart
 		{
 			return hasTimingGroup.TimingGroup?.GroupHide ?? false;
 		}
+		public static Vector3 FallDirection(this IHasTimingGroup hasTimingGroup)
+		{
+			int angleX = hasTimingGroup.TimingGroup?.AngleX ?? 0;
+			int angleY = hasTimingGroup.TimingGroup?.AngleY ?? 0;
+			Vector3 direction = new Vector3(0, 0, 1);
+			direction = Quaternion.AngleAxis((float)(angleX) / 10, new Vector3(1, 0, 0)) * direction;
+			direction = Quaternion.AngleAxis((float)(angleY) / 10, new Vector3(0, -1, 0)) * direction;
+			return direction;
+		}
 	}
 	public interface ISetableTimingGroup
 	{
@@ -868,7 +877,7 @@ namespace Arcade.Gameplay.Chart
 			Vector3 parentLocalPosition = new Vector3(0, 0, -timingManager.CalculatePositionByTiming(Arc.Timing + offset, Arc.TimingGroup) / 1000f);
 			Vector3 baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
 									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f, 0);
-			Vector3 offsetLocalPosition = new Vector3(0, 0, -timingManager.CalculatePositionByTiming(Timing + offset, Arc.TimingGroup) / 1000f);
+			Vector3 offsetLocalPosition = -timingManager.CalculatePositionByTiming(Timing + offset, Arc.TimingGroup) / 1000f * this.FallDirection();
 			Vector3 additionalLocalPosition = new Vector3(0, 0, -0.6f);
 			LocalPosition = baseLocalPosition + offsetLocalPosition - parentLocalPosition + additionalLocalPosition;
 		}
@@ -1356,7 +1365,7 @@ namespace Arcade.Gameplay.Chart
 				Match matchAngleY = Regex.Match(attribute, "^angley([0-9]+)$");
 				if (matchAngleY.Success)
 				{
-					bool result = int.TryParse(matchAngleX.Groups[1].Value, out AngleY);
+					bool result = int.TryParse(matchAngleY.Groups[1].Value, out AngleY);
 					if (!result)
 					{
 						Debug.LogWarning($"Timinggroup attribute applying failed:{attribute}");
