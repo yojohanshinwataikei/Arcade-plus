@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Arcade.Compose.Command
 {
 	public interface ICommand
@@ -27,7 +29,7 @@ namespace Arcade.Compose.Command
         }
         public void Undo()
         {
-            foreach (var c in commands)
+            foreach (var c in commands.Reverse())
             {
                 c.Undo();
             }

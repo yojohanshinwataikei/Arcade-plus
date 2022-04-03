@@ -152,6 +152,8 @@ namespace Arcade.Compose
 							{
 								ArcArcManager.Instance.CalculateArcRelationship();
 							}
+							(note as ArcArc)?.CalculateJudgeTimings();
+							(note as ArcHold)?.CalculateJudgeTimings();
 							break;
 						case ArcArcTap note:
 							if (note.Arc.Timing > timing + dif || note.Arc.EndTiming < timing + dif)

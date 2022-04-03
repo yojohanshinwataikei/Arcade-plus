@@ -316,30 +316,31 @@ namespace Arcade.Compose.Editing
 		}
 		public void SwitchType()
 		{
-			switch(currentArcType){
+			switch (currentArcType)
+			{
 				case ArcLineType.S:
-					currentArcType=ArcLineType.B;
+					currentArcType = ArcLineType.B;
 					break;
 				case ArcLineType.B:
-					currentArcType=ArcLineType.Si;
+					currentArcType = ArcLineType.Si;
 					break;
 				case ArcLineType.Si:
-					currentArcType=ArcLineType.So;
+					currentArcType = ArcLineType.So;
 					break;
 				case ArcLineType.So:
-					currentArcType=ArcLineType.SiSi;
+					currentArcType = ArcLineType.SiSi;
 					break;
 				case ArcLineType.SiSi:
-					currentArcType=ArcLineType.SoSo;
+					currentArcType = ArcLineType.SoSo;
 					break;
 				case ArcLineType.SoSo:
-					currentArcType=ArcLineType.SiSo;
+					currentArcType = ArcLineType.SiSo;
 					break;
 				case ArcLineType.SiSo:
-					currentArcType=ArcLineType.SoSi;
+					currentArcType = ArcLineType.SoSi;
 					break;
 				case ArcLineType.SoSi:
-					currentArcType=ArcLineType.S;
+					currentArcType = ArcLineType.S;
 					break;
 			}
 		}
@@ -376,7 +377,11 @@ namespace Arcade.Compose.Editing
 		}
 		private IEnumerator PostCreateHoldNoteCoroutine(ArcHold note)
 		{
-			AdeTimingSelector.Instance.ModifyNote(note, (a) => { note.EndTiming = a; });
+			AdeTimingSelector.Instance.ModifyNote(note, (a) =>
+			{
+				note.EndTiming = a;
+				note.CalculateJudgeTimings();
+			});
 			while (AdeTimingSelector.Instance.Enable) yield return null;
 			CommandManager.Instance.Commit();
 			pendingNote = null;
@@ -391,11 +396,29 @@ namespace Arcade.Compose.Editing
 		}
 		private IEnumerator PostCreateArcNoteCoroutine(ArcArc arc)
 		{
-			AdePositionSelector.Instance.ModifyNote(arc, (a) => { arc.XStart = arc.XEnd = a.x; arc.YStart = arc.YEnd = a.y; arc.Rebuild(); ArcArcManager.Instance.CalculateArcRelationship(); });
+			AdePositionSelector.Instance.ModifyNote(arc, (a) =>
+			{
+				arc.XStart = arc.XEnd = a.x;
+				arc.YStart = arc.YEnd = a.y;
+				arc.Rebuild();
+				ArcArcManager.Instance.CalculateArcRelationship();
+			});
 			while (AdePositionSelector.Instance.Enable) yield return null;
-			AdeTimingSelector.Instance.ModifyNote(arc, (a) => { arc.EndTiming = a; arc.Rebuild(); ArcArcManager.Instance.CalculateArcRelationship(); });
+			AdeTimingSelector.Instance.ModifyNote(arc, (a) =>
+			{
+				arc.EndTiming = a;
+				arc.Rebuild();
+				arc.CalculateJudgeTimings();
+				ArcArcManager.Instance.CalculateArcRelationship();
+			});
 			while (AdeTimingSelector.Instance.Enable) yield return null;
-			AdePositionSelector.Instance.ModifyNote(arc, (a) => { arc.XEnd = a.x; arc.YEnd = a.y; arc.Rebuild(); ArcArcManager.Instance.CalculateArcRelationship(); });
+			AdePositionSelector.Instance.ModifyNote(arc, (a) =>
+			{
+				arc.XEnd = a.x;
+				arc.YEnd = a.y;
+				arc.Rebuild();
+				ArcArcManager.Instance.CalculateArcRelationship();
+			});
 			while (AdePositionSelector.Instance.Enable) yield return null;
 			CommandManager.Instance.Commit();
 			pendingNote = null;
