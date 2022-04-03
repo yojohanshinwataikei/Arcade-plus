@@ -1,7 +1,7 @@
 0.4.1
 - 支持带有 AngleX、 AngleY、 FadingHolds 属性的 TimingGroup
-- 允许在 TimingGroup 中编写 Camera
-- 现在能正常渲染不在乐曲音频文件范围内的物件了
+- 允许在 TimingGroup 中出现 Camera
+- 现在能正常显示不在乐曲音频文件范围内的物件了
 - 修正了 NoInput 属性的 TimingGroup 中 Arc 的渲染方式
 - 修复了部分情况下长条物件判定点位置不更新的问题
 - 修复了 4 比 3 分辨率下编辑谱面时背景有黑边的问题
