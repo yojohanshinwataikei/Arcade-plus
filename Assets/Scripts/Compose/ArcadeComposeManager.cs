@@ -72,7 +72,19 @@ namespace Arcade.Compose
 				float bottom = BottomBarView.rect.height;
 				float width = Bars.rect.width;
 				float height = Bars.rect.height;
-				return new Rect(left / width, top / height, 1 - (left + right) / width, 1 - (top + bottom) / height);
+				float rectLeft = left / width;
+				float rectTop = top / height;
+				float rectWidth = 1 - (left + right) / width;
+				float rectHeight = 1 - (top + bottom) / height;
+				Debug.Log($"{width * rectWidth}, {height * rectHeight}");
+				if (width * rectWidth < height * rectHeight / 0.75f)
+				{
+					float targetWidth = height * rectHeight / 0.75f / width;
+					rectLeft -= (targetWidth - rectWidth) / 2f;
+					rectWidth = targetWidth;
+				}
+				Debug.Log($"{rectLeft}, {rectTop}, {rectWidth}, {rectHeight}");
+				return new Rect(rectLeft, rectTop, rectWidth, rectHeight);
 			}
 		}
 		public Camera GameplayCamera, EditorCamera;
