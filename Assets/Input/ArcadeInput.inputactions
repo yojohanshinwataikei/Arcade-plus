@@ -168,6 +168,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Preview When Holding",
+                    "type": "Value",
+                    "id": "e2713d72-4e9c-44ad-bd8e-488449d7d415",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Play Or Pause",
                     "type": "Value",
                     "id": "9ec2475b-e083-4ab6-9137-f1e1c2db9746",
@@ -1284,6 +1293,61 @@
                     "processors": "",
                     "groups": "",
                     "action": "Click To Create Arc Type",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "fc7bf4cf-ac7a-4c7f-aa3f-77ebad3f417f",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey(needModifier3=true)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Preview When Holding",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "3580955a-d6ad-4411-bbfe-dcdaa29cc32a",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Preview When Holding",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "a4d95d8c-c983-441f-bf17-ebd392866ae8",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Preview When Holding",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "24a54eba-0639-48d5-ac77-ebc58626f970",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Preview When Holding",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "41601974-0d06-468e-970d-c0f911708d86",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Preview When Holding",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

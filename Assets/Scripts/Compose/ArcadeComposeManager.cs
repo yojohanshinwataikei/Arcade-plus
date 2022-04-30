@@ -127,6 +127,7 @@ namespace Arcade.Compose
 
 		private bool switchingMode = false;
 		private int playShotTiming = 0;
+		private bool shouldGoBackToPlayShotTiming = false;
 
 		private void Awake()
 		{
@@ -181,7 +182,17 @@ namespace Arcade.Compose
 			}
 			if (IsEditorMode)
 			{
-				bool holding = AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.PlayWhenHolding);
+				bool playHolding = AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.PlayWhenHolding);
+				bool previewHolding = AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.PreviewWhenHolding);
+				bool holding = playHolding || previewHolding;
+				if (previewHolding)
+				{
+					shouldGoBackToPlayShotTiming = true;
+				}
+				else if (playHolding)
+				{
+					shouldGoBackToPlayShotTiming = false;
+				}
 				if (holding && !GameplayManager.IsPlaying)
 				{
 					GameplayManager.Play();
@@ -191,7 +202,10 @@ namespace Arcade.Compose
 				if (!holding && GameplayManager.IsPlaying)
 				{
 					GameplayManager.Pause();
-					GameplayManager.Timing = playShotTiming;
+					if (shouldGoBackToPlayShotTiming)
+					{
+						GameplayManager.Timing = playShotTiming;
+					}
 				}
 			}
 			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.PlayOrPause))

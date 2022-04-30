@@ -1,4 +1,5 @@
 0.4.2
+- 重新调整了播放暂停相关快捷键的设计
 - 修复 Timing 编辑需要按下回车键才能生效的问题
 - 修正了 NoInput 属性的 TimingGroup 中 ArcTap 会有与 Tap 的连接线的问题
 

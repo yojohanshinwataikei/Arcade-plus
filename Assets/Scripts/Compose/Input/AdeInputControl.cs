@@ -192,6 +192,15 @@ namespace Arcade.Compose
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Preview When Holding"",
+                    ""type"": ""Value"",
+                    ""id"": ""e2713d72-4e9c-44ad-bd8e-488449d7d415"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Play Or Pause"",
                     ""type"": ""Value"",
                     ""id"": ""9ec2475b-e083-4ab6-9137-f1e1c2db9746"",
@@ -1310,6 +1319,61 @@ namespace Arcade.Compose
                     ""action"": ""Click To Create Arc Type"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""fc7bf4cf-ac7a-4c7f-aa3f-77ebad3f417f"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey(needModifier3=true)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Preview When Holding"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""3580955a-d6ad-4411-bbfe-dcdaa29cc32a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Preview When Holding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""a4d95d8c-c983-441f-bf17-ebd392866ae8"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Preview When Holding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""24a54eba-0639-48d5-ac77-ebc58626f970"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Preview When Holding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""41601974-0d06-468e-970d-c0f911708d86"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Preview When Holding"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1404,6 +1468,7 @@ namespace Arcade.Compose
             m_ArcadeHotkey_ClickToCreateArcColor = m_ArcadeHotkey.FindAction("Click To Create Arc Color", throwIfNotFound: true);
             m_ArcadeHotkey_ClickToCreateArcType = m_ArcadeHotkey.FindAction("Click To Create Arc Type", throwIfNotFound: true);
             m_ArcadeHotkey_PlayWhenHolding = m_ArcadeHotkey.FindAction("Play When Holding", throwIfNotFound: true);
+            m_ArcadeHotkey_PreviewWhenHolding = m_ArcadeHotkey.FindAction("Preview When Holding", throwIfNotFound: true);
             m_ArcadeHotkey_PlayOrPause = m_ArcadeHotkey.FindAction("Play Or Pause", throwIfNotFound: true);
             m_ArcadeHotkey_ToggleGrid = m_ArcadeHotkey.FindAction("Toggle Grid", throwIfNotFound: true);
             // Arcade Input
@@ -1488,6 +1553,7 @@ namespace Arcade.Compose
         private readonly InputAction m_ArcadeHotkey_ClickToCreateArcColor;
         private readonly InputAction m_ArcadeHotkey_ClickToCreateArcType;
         private readonly InputAction m_ArcadeHotkey_PlayWhenHolding;
+        private readonly InputAction m_ArcadeHotkey_PreviewWhenHolding;
         private readonly InputAction m_ArcadeHotkey_PlayOrPause;
         private readonly InputAction m_ArcadeHotkey_ToggleGrid;
         public struct ArcadeHotkeyActions
@@ -1512,6 +1578,7 @@ namespace Arcade.Compose
             public InputAction @ClickToCreateArcColor => m_Wrapper.m_ArcadeHotkey_ClickToCreateArcColor;
             public InputAction @ClickToCreateArcType => m_Wrapper.m_ArcadeHotkey_ClickToCreateArcType;
             public InputAction @PlayWhenHolding => m_Wrapper.m_ArcadeHotkey_PlayWhenHolding;
+            public InputAction @PreviewWhenHolding => m_Wrapper.m_ArcadeHotkey_PreviewWhenHolding;
             public InputAction @PlayOrPause => m_Wrapper.m_ArcadeHotkey_PlayOrPause;
             public InputAction @ToggleGrid => m_Wrapper.m_ArcadeHotkey_ToggleGrid;
             public InputActionMap Get() { return m_Wrapper.m_ArcadeHotkey; }
@@ -1577,6 +1644,9 @@ namespace Arcade.Compose
                     @PlayWhenHolding.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
                     @PlayWhenHolding.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
                     @PlayWhenHolding.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayWhenHolding;
+                    @PreviewWhenHolding.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPreviewWhenHolding;
+                    @PreviewWhenHolding.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPreviewWhenHolding;
+                    @PreviewWhenHolding.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPreviewWhenHolding;
                     @PlayOrPause.started -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayOrPause;
                     @PlayOrPause.performed -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayOrPause;
                     @PlayOrPause.canceled -= m_Wrapper.m_ArcadeHotkeyActionsCallbackInterface.OnPlayOrPause;
@@ -1641,6 +1711,9 @@ namespace Arcade.Compose
                     @PlayWhenHolding.started += instance.OnPlayWhenHolding;
                     @PlayWhenHolding.performed += instance.OnPlayWhenHolding;
                     @PlayWhenHolding.canceled += instance.OnPlayWhenHolding;
+                    @PreviewWhenHolding.started += instance.OnPreviewWhenHolding;
+                    @PreviewWhenHolding.performed += instance.OnPreviewWhenHolding;
+                    @PreviewWhenHolding.canceled += instance.OnPreviewWhenHolding;
                     @PlayOrPause.started += instance.OnPlayOrPause;
                     @PlayOrPause.performed += instance.OnPlayOrPause;
                     @PlayOrPause.canceled += instance.OnPlayOrPause;
@@ -1720,6 +1793,7 @@ namespace Arcade.Compose
             void OnClickToCreateArcColor(InputAction.CallbackContext context);
             void OnClickToCreateArcType(InputAction.CallbackContext context);
             void OnPlayWhenHolding(InputAction.CallbackContext context);
+            void OnPreviewWhenHolding(InputAction.CallbackContext context);
             void OnPlayOrPause(InputAction.CallbackContext context);
             void OnToggleGrid(InputAction.CallbackContext context);
         }
