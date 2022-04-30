@@ -1,3 +1,8 @@
+0.4.2
+- 修复 Timing 编辑需要按下回车键才能生效的问题
+
+---
+
 0.4.1
 - 支持带有 AngleX、 AngleY、 FadingHolds 属性的 TimingGroup
 - 允许在 TimingGroup 中出现 Camera
