@@ -524,6 +524,7 @@ namespace Arcade.Gameplay.Chart
 			foreach (var arc in ArcArcManager.Instance.Arcs)
 			{
 				if (arc.ArcTaps == null) continue;
+				if (arc.NoInput()) continue;
 				foreach (var arctap in arc.ArcTaps)
 				{
 					if (Mathf.Abs(arctap.Timing - Timing) <= 1)
@@ -895,7 +896,7 @@ namespace Arcade.Gameplay.Chart
 
 		public void SetupArcTapConnection()
 		{
-			if (Arc == null || (Arc.EndTiming - Arc.Timing) == 0) return;
+			if (Arc == null || Arc.NoInput() || (Arc.EndTiming - Arc.Timing) == 0) return;
 			List<ArcTap> taps = ArcTapNoteManager.Instance.Taps;
 			ArcTap[] sameTimeTapNotes = taps.Where((s) => Mathf.Abs(s.Timing - Timing) <= 1).ToArray();
 			foreach (ArcTap t in sameTimeTapNotes)

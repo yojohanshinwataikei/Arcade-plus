@@ -1,6 +1,5 @@
 using Arcade.Gameplay.Chart;
 using Arcade.Gameplay;
-using Arcade.Compose.Editing;
 
 namespace Arcade.Compose.Command
 {
