@@ -87,6 +87,8 @@ namespace Arcade.Compose
 
 		public void SetHotkeyRebindingButton(AdeHotkeyRebindingButton button)
 		{
+			// clean focus so will won't restart rebinding after complete
+			eventSystem.SetSelectedGameObject(null);
 			AdeHotkeyRebindingButton nextRebindingButton = button;
 			InputAction action = null;
 			if (button != null)
