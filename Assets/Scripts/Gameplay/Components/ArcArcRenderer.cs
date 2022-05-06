@@ -553,6 +553,16 @@ namespace Arcade.Gameplay
 
 			foreach (ArcArcSegmentComponent s in segments)
 			{
+				float pos = -(z + s.FromPos.z);
+				float endPos = -(z + s.ToPos.z);
+				if (endPos > 100 && pos < 100)
+				{
+					s.To = (100 - pos) / (endPos - pos);
+				}
+				else
+				{
+					s.To = 1;
+				}
 				if (s.ToTiming + offset < currentTiming)
 				{
 					if (arc.Judging || arc.IsVoid || arc.NoInput())
@@ -582,8 +592,6 @@ namespace Arcade.Gameplay
 					}
 					continue;
 				}
-				float pos = -(z + s.FromPos.z);
-				float endPos = -(z + s.ToPos.z);
 				if (pos > 90 && pos < 100)
 				{
 					s.Enable = true;

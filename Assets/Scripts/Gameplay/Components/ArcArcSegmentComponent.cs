@@ -50,6 +50,26 @@ namespace Arcade.Gameplay
 				}
 			}
 		}
+		public float To
+		{
+			get
+			{
+				return currentTo;
+			}
+			set
+			{
+				if (currentTo != value)
+				{
+					currentTo = value;
+					SegmentRenderer.GetPropertyBlock(bodyPropertyBlock);
+					bodyPropertyBlock.SetFloat(toShaderId, value);
+					SegmentRenderer.SetPropertyBlock(bodyPropertyBlock);
+					ShadowRenderer.GetPropertyBlock(shadowPropertyBlock);
+					shadowPropertyBlock.SetFloat(toShaderId, value);
+					ShadowRenderer.SetPropertyBlock(shadowPropertyBlock);
+				}
+			}
+		}
 		public Color HighColor
 		{
 			get
@@ -215,12 +235,14 @@ namespace Arcade.Gameplay
 		private bool usingShadowInstanceMaterial = true;
 		private bool highlighted = false;
 		private int fromShaderId;
+		private int toShaderId;
 		private int colorShaderId;
 		private int highColorShaderId;
 		private int lowColorShaderId;
 		private int highlightShaderId;
 		private int mainTexShaderId;
 		private float currentFrom = 0;
+		private float currentTo = 0;
 		private Color currentHighColor;
 		private Color currentLowColor;
 
@@ -235,6 +257,7 @@ namespace Arcade.Gameplay
 			bodyPropertyBlock = new MaterialPropertyBlock();
 			shadowPropertyBlock = new MaterialPropertyBlock();
 			fromShaderId = Shader.PropertyToID("_From");
+			toShaderId = Shader.PropertyToID("_To");
 			colorShaderId = Shader.PropertyToID("_Color");
 			highColorShaderId = Shader.PropertyToID("_HighColor");
 			lowColorShaderId = Shader.PropertyToID("_LowColor");
