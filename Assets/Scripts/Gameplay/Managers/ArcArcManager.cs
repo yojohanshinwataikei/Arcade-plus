@@ -85,11 +85,13 @@ namespace Arcade.Gameplay
 							}
 							else if (a.ArcGroup != null && b.ArcGroup != null)
 							{
-								foreach (ArcArc arc in b.ArcGroup)
-								{
-									arc.ArcGroup = a.ArcGroup;
+								if(a.ArcGroup != b.ArcGroup){
+									a.ArcGroup.AddRange(b.ArcGroup);
+									foreach (ArcArc arc in b.ArcGroup)
+									{
+										arc.ArcGroup = a.ArcGroup;
+									}
 								}
-								a.ArcGroup.AddRange(b.ArcGroup);
 							}
 						}
 						if (a.IsVoid == b.IsVoid)

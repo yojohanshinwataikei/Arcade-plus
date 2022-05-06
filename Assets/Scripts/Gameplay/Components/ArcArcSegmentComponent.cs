@@ -242,7 +242,7 @@ namespace Arcade.Gameplay
 		private int highlightShaderId;
 		private int mainTexShaderId;
 		private float currentFrom = 0;
-		private float currentTo = 0;
+		private float currentTo = 1;
 		private Color currentHighColor;
 		private Color currentLowColor;
 

@@ -4,6 +4,7 @@ Shader "Arcade/Shadow"
 	{
 		[PerRendererData] _Color ("Color", Color) = (1,1,1,1)
 		[PerRendererData] _From ("From", Float) = 0
+		[PerRendererData] _To ("To", Float) = 1
 	}
 	SubShader
 	{
@@ -34,7 +35,7 @@ Shader "Arcade/Shadow"
 				float2 uv : TEXCOORD0;
 			};
 
-			float _From;
+			float _From,_To;
 			float4 _Color;
 
 			v2f vert (appdata v)
@@ -47,7 +48,7 @@ Shader "Arcade/Shadow"
 
 			half4 frag (v2f i) : SV_Target
 			{
-			    if(i.uv.y < _From) return 0;
+			    if(i.uv.y < _From || i.uv.y > _To) return 0;
 				float4 c = _Color;
 				c.rgb *= c.a;
 				return c;
