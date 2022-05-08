@@ -225,10 +225,12 @@ namespace Arcade.Compose
 		private void Start()
 		{
 			AdeMarkingMenuManager.Instance.Providers.Add(this);
+			ArcGameplayManager.Instance.OnChartLoad.AddListener(this.DeselectAllNotes);
 		}
 		private void OnDestroy()
 		{
 			AdeMarkingMenuManager.Instance.Providers.Remove(this);
+			ArcGameplayManager.Instance.OnChartLoad.RemoveListener(this.DeselectAllNotes);
 		}
 
 		private void Awake()
