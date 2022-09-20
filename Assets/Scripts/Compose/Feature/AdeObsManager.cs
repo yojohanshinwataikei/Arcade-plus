@@ -30,7 +30,7 @@ namespace Arcade.Compose.Feature
 		{
 			if (!obs.IsConnected)
 			{
-				AdeSingleDialog.Instance.Show("无法连接到OBS Studio\n请确认其已加载obs-websocket插件\n端口为4444，没有启用密码\n并启动了OBS Studio", "无法使用快速录制功能", "重试", Connect);
+				AdeSingleDialog.Instance.Show("无法连接到OBS Studio\n请确认其已加载obs-websocket插件\n端口为4455，没有启用密码\n并启动了OBS Studio", "无法使用快速录制功能", "重试", Connect);
 				return;
 			}
 			if (AdeProjectManager.Instance.CurrentProjectMetadata == null)
@@ -46,14 +46,14 @@ namespace Arcade.Compose.Feature
 			if (recording != null)
 			{
 				StopCoroutine(recording);
-				if (obs.IsConnected) obs.StopRecording();
+				if (obs.IsConnected) obs.StopRecord();
 				AdeSingleDialog.Instance.Show("录制中断", "提示");
 				recording = null;
 			}
 		}
 		private void Connect()
 		{
-			Task.Run(() => obs.Connect("ws://localhost:4444", null));
+			Task.Run(() => obs.Connect("ws://localhost:4455", null));
 		}
 
 		private Coroutine recording = null;
@@ -61,7 +61,7 @@ namespace Arcade.Compose.Feature
 		{
 			try
 			{
-				if (obs.IsConnected) obs.StartRecording();
+				if (obs.IsConnected) obs.StartRecord();
 			}
 			catch (Exception)
 			{
@@ -73,7 +73,7 @@ namespace Arcade.Compose.Feature
 			ArcGameplayManager.Instance.PlayDelayed();
 			yield return new WaitForSeconds(ArcAudioManager.Instance.Clip.length + 3);
 			yield return new WaitForSeconds(0.5f);
-			if (obs.IsConnected) obs.StopRecording();
+			if (obs.IsConnected) obs.StopRecord();
 			recording = null;
 		}
 	}

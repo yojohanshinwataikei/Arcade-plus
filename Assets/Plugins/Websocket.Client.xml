@@ -1,0 +1,1262 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Websocket.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Websocket.Client.Exceptions.WebsocketBadInputException">
+            <summary>
+            Custom exception that indicates bad user/client input
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Exceptions.WebsocketBadInputException.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:Websocket.Client.Exceptions.WebsocketBadInputException.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Websocket.Client.Exceptions.WebsocketBadInputException.#ctor(System.String,System.Exception)">
+            <inheritdoc />
+        </member>
+        <member name="T:Websocket.Client.Exceptions.WebsocketException">
+            <summary>
+            Custom exception related to WebsocketClient
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Exceptions.WebsocketException.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:Websocket.Client.Exceptions.WebsocketException.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:Websocket.Client.Exceptions.WebsocketException.#ctor(System.String,System.Exception)">
+            <inheritdoc />
+        </member>
+        <member name="T:Websocket.Client.IWebsocketClient">
+            <summary>
+            A simple websocket client with built-in reconnection and error handling
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.Url">
+            <summary>
+            Get or set target websocket url
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.MessageReceived">
+            <summary>
+            Stream with received message (raw format)
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.ReconnectionHappened">
+            <summary>
+            Stream for reconnection event (triggered after the new connection) 
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.DisconnectionHappened">
+            <summary>
+            Stream for disconnection event (triggered after the connection was lost) 
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.ReconnectTimeout">
+            <summary>
+            Time range in ms, how long to wait before reconnecting if no message comes from server.
+            Set null to disable this feature. 
+            Default: 1 minute.
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.ErrorReconnectTimeout">
+            <summary>
+            Time range in ms, how long to wait before reconnecting if last reconnection failed.
+            Set null to disable this feature. 
+            Default: 1 minute.
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.Name">
+            <summary>
+            Get or set the name of the current websocket client instance.
+            For logging purpose (in case you use more parallel websocket clients and want to distinguish between them)
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.IsStarted">
+            <summary>
+            Returns true if Start() method was called at least once. False if not started or disposed
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.IsRunning">
+            <summary>
+            Returns true if client is running and connected to the server
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.IsReconnectionEnabled">
+            <summary>
+            Enable or disable reconnection functionality (enabled by default)
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.IsTextMessageConversionEnabled">
+            <summary>
+            Enable or disable text message conversion from binary to string (via 'MessageEncoding' property).
+            Default: true
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.NativeClient">
+            <summary>
+            Returns currently used native websocket client.
+            Use with caution, on every reconnection there will be a new instance. 
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.IWebsocketClient.MessageEncoding">
+            <summary>
+            Sets used encoding for sending and receiving text messages. 
+            Default: UTF8
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.Start">
+            <summary>
+            Start listening to the websocket stream on the background thread.
+            In case of connection error it doesn't throw an exception.
+            Only streams a message via 'DisconnectionHappened' and logs it. 
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.StartOrFail">
+            <summary>
+            Start listening to the websocket stream on the background thread. 
+            In case of connection error it throws an exception.
+            Fail fast approach. 
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.Stop(System.Net.WebSockets.WebSocketCloseStatus,System.String)">
+            <summary>
+            Stop/close websocket connection with custom close code.
+            Method doesn't throw exception, only logs it and mark client as closed. 
+            </summary>
+            <returns>Returns true if close was initiated successfully</returns>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.StopOrFail(System.Net.WebSockets.WebSocketCloseStatus,System.String)">
+            <summary>
+            Stop/close websocket connection with custom close code.
+            Method could throw exceptions, but client is marked as closed anyway.
+            </summary>
+            <returns>Returns true if close was initiated successfully</returns>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.Send(System.String)">
+            <summary>
+            Send message to the websocket channel. 
+            It inserts the message to the queue and actual sending is done on an other thread
+            </summary>
+            <param name="message">Message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.Send(System.Byte[])">
+            <summary>
+            Send binary message to the websocket channel. 
+            It inserts the message to the queue and actual sending is done on an other thread
+            </summary>
+            <param name="message">Binary message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.Send(System.ArraySegment{System.Byte})">
+            <summary>
+            Send binary message to the websocket channel. 
+            It inserts the message to the queue and actual sending is done on an other thread
+            </summary>
+            <param name="message">Binary message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.SendInstant(System.String)">
+            <summary>
+            Send message to the websocket channel. 
+            It doesn't use a sending queue, 
+            beware of issue while sending two messages in the exact same time 
+            on the full .NET Framework platform
+            </summary>
+            <param name="message">Message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.SendInstant(System.Byte[])">
+            <summary>
+            Send binary message to the websocket channel. 
+            It doesn't use a sending queue, 
+            beware of issue while sending two messages in the exact same time 
+            on the full .NET Framework platform
+            </summary>
+            <param name="message">Message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.Reconnect">
+            <summary>
+            Force reconnection. 
+            Closes current websocket stream and perform a new connection to the server.
+            In case of connection error it doesn't throw an exception, but tries to reconnect indefinitely. 
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.ReconnectOrFail">
+            <summary>
+            Force reconnection. 
+            Closes current websocket stream and perform a new connection to the server.
+            In case of connection error it throws an exception and doesn't perform any other reconnection try. 
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.IWebsocketClient.StreamFakeMessage(Websocket.Client.ResponseMessage)">
+            <summary>
+            Stream/publish fake message (via 'MessageReceived' observable).
+            Use for testing purposes to simulate a server message. 
+            </summary>
+            <param name="message">Message to be stream</param>
+        </member>
+        <member name="T:Websocket.Client.DisconnectionInfo">
+            <summary>
+            Info about happened disconnection
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.DisconnectionInfo.#ctor(Websocket.Client.DisconnectionType,System.Nullable{System.Net.WebSockets.WebSocketCloseStatus},System.String,System.String,System.Exception)">
+            <inheritdoc />
+        </member>
+        <member name="P:Websocket.Client.DisconnectionInfo.Type">
+            <summary>
+            Disconnection reason
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.DisconnectionInfo.CloseStatus">
+            <summary>
+            Indicates the reason why the remote endpoint initiated the close handshake 
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.DisconnectionInfo.CloseStatusDescription">
+            <summary>
+            Allows the remote endpoint to describe the reason why the connection was closed 
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.DisconnectionInfo.SubProtocol">
+            <summary>
+            The subprotocol that was negotiated during the opening handshake
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.DisconnectionInfo.Exception">
+            <summary>
+            Exception that cause disconnection, can be null
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.DisconnectionInfo.CancelReconnection">
+            <summary>
+            Set to true if you want to cancel ongoing reconnection
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.DisconnectionInfo.CancelClosing">
+            <summary>
+            Set to true if you want to cancel ongoing connection close (only when Type = ByServer)
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.DisconnectionInfo.Create(Websocket.Client.DisconnectionType,System.Net.WebSockets.WebSocket,System.Exception)">
+            <summary>
+            Simple factory method
+            </summary>
+        </member>
+        <member name="T:Websocket.Client.DisconnectionType">
+            <summary>
+            Type that specify happened disconnection
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.DisconnectionType.Exit">
+            <summary>
+            Type used for exit event, disposing of the websocket client
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.DisconnectionType.Lost">
+            <summary>
+            Type used when connection to websocket was lost in meantime
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.DisconnectionType.NoMessageReceived">
+            <summary>
+            Type used when connection to websocket was lost by not receiving any message in given time-range
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.DisconnectionType.Error">
+            <summary>
+            Type used when connection or reconnection returned error
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.DisconnectionType.ByUser">
+            <summary>
+            Type used when disconnection was requested by user
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.DisconnectionType.ByServer">
+            <summary>
+            Type used when disconnection was requested by server
+            </summary>
+        </member>
+        <member name="T:Websocket.Client.Models.ReconnectionInfo">
+            <summary>
+            Info about happened reconnection
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Models.ReconnectionInfo.#ctor(Websocket.Client.ReconnectionType)">
+            <inheritdoc />
+        </member>
+        <member name="P:Websocket.Client.Models.ReconnectionInfo.Type">
+            <summary>
+            Reconnection reason
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Models.ReconnectionInfo.Create(Websocket.Client.ReconnectionType)">
+            <summary>
+            Simple factory method
+            </summary>
+        </member>
+        <member name="T:Websocket.Client.ReconnectionType">
+            <summary>
+            Type that specify happened reconnection
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.ReconnectionType.Initial">
+            <summary>
+            Type used for initial connection to websocket stream
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.ReconnectionType.Lost">
+            <summary>
+            Type used when connection to websocket was lost in meantime
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.ReconnectionType.NoMessageReceived">
+            <summary>
+            Type used when connection to websocket was lost by not receiving any message in given time-range
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.ReconnectionType.Error">
+            <summary>
+            Type used after unsuccessful previous reconnection
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.ReconnectionType.ByUser">
+            <summary>
+            Type used when reconnection was requested by user
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.ReconnectionType.ByServer">
+            <summary>
+            Type used when reconnection was requested by server
+            </summary>
+        </member>
+        <member name="T:Websocket.Client.ResponseMessage">
+            <summary>
+            Received message, could be Text or Binary
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.ResponseMessage.Text">
+            <summary>
+            Received text message (only if type = WebSocketMessageType.Text)
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.ResponseMessage.Binary">
+            <summary>
+            Received text message (only if type = WebSocketMessageType.Binary)
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.ResponseMessage.MessageType">
+            <summary>
+            Current message type (Text or Binary)
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.ResponseMessage.ToString">
+            <summary>
+            Return string info about the message
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.ResponseMessage.TextMessage(System.String)">
+            <summary>
+            Create text response message
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.ResponseMessage.BinaryMessage(System.Byte[])">
+            <summary>
+            Create binary response message
+            </summary>
+        </member>
+        <member name="T:Websocket.Client.Threading.WebsocketAsyncLock">
+            <summary>
+            Class that wraps SemaphoreSlim and enables to use locking inside 'using' blocks easily
+            Don't need to bother with releasing and handling SemaphoreSlim correctly
+            Example:
+            <code>
+            using(await _asyncLock.LockAsync())
+            {
+                // do your synchronized work
+            }
+            </code>
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Threading.WebsocketAsyncLock.#ctor">
+            <summary>
+            Class that wraps SemaphoreSlim and enables to use locking inside 'using' blocks easily
+            Don't need to bother with releasing and handling SemaphoreSlim correctly
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Threading.WebsocketAsyncLock.Lock">
+            <summary>
+            Use inside 'using' block
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Threading.WebsocketAsyncLock.LockAsync">
+            <summary>
+            Use inside 'using' block with await
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Validations.Validations.ValidateInput(System.String,System.String)">
+            <summary>
+            It throws <exception cref="T:Websocket.Client.Exceptions.WebsocketBadInputException"></exception> if value is null or empty/white spaces
+            </summary>
+            <param name="value">The value to be validated</param>
+            <param name="name">Input parameter name</param>
+        </member>
+        <member name="M:Websocket.Client.Validations.Validations.ValidateInput``1(``0,System.String)">
+            <summary>
+            It throws <exception cref="T:Websocket.Client.Exceptions.WebsocketBadInputException"></exception> if value is null
+            </summary>
+            <param name="value">The value to be validated</param>
+            <param name="name">Input parameter name</param>
+        </member>
+        <member name="M:Websocket.Client.Validations.Validations.ValidateInputCollection``1(System.Collections.Generic.IEnumerable{``0},System.String)">
+            <summary>
+            It throws <exception cref="T:Websocket.Client.Exceptions.WebsocketBadInputException"></exception> if collection is null or collection is empty
+            </summary>
+            <param name="collection">The collection to be validated</param>
+            <param name="name">Input parameter name</param>
+        </member>
+        <member name="M:Websocket.Client.Validations.Validations.ValidateInput(System.Int32,System.String,System.Int32,System.Int32)">
+            <summary>
+            It throws <exception cref="T:Websocket.Client.Exceptions.WebsocketBadInputException"></exception> if value is not in specified range
+            </summary>
+            <param name="value">The value to be validated</param>
+            <param name="name">Input parameter name</param>
+            <param name="minValue">Minimal value of input</param>
+            <param name="maxValue">Maximum value of input</param>
+        </member>
+        <member name="M:Websocket.Client.Validations.Validations.ValidateInput(System.Int64,System.String,System.Int64,System.Int64)">
+            <summary>
+            It throws <exception cref="T:Websocket.Client.Exceptions.WebsocketBadInputException"></exception> if value is not in specified range
+            </summary>
+            <param name="value">The value to be validated</param>
+            <param name="name">Input parameter name</param>
+            <param name="minValue">Minimal value of input</param>
+            <param name="maxValue">Maximum value of input</param>
+        </member>
+        <member name="M:Websocket.Client.Validations.Validations.ValidateInput(System.Double,System.String,System.Double,System.Double)">
+            <summary>
+            It throws <exception cref="T:Websocket.Client.Exceptions.WebsocketBadInputException"></exception> if value is not in specified range
+            </summary>
+            <param name="value">The value to be validated</param>
+            <param name="name">Input parameter name</param>
+            <param name="minValue">Minimal value of input</param>
+            <param name="maxValue">Maximum value of input</param>
+        </member>
+        <member name="T:Websocket.Client.WebsocketClient">
+            <summary>
+            A simple websocket client with built-in reconnection and error handling
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.#ctor(System.Uri,System.Func{System.Net.WebSockets.ClientWebSocket})">
+            <summary>
+            A simple websocket client with built-in reconnection and error handling
+            </summary>
+            <param name="url">Target websocket url (wss://)</param>
+            <param name="clientFactory">Optional factory for native ClientWebSocket, use it whenever you need some custom features (proxy, settings, etc)</param>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.#ctor(System.Uri,System.Func{System.Uri,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Net.WebSockets.WebSocket}})">
+            <summary>
+            A simple websocket client with built-in reconnection and error handling
+            </summary>
+            <param name="url">Target websocket url (wss://)</param>
+            <param name="connectionFactory">Optional factory for native creating and connecting to a websocket. The method should return a <see cref="T:System.Net.WebSockets.WebSocket"/> which is connected. Use it whenever you need some custom features (proxy, settings, etc)</param>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.Url">
+            <inheritdoc />
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.MessageReceived">
+            <summary>
+            Stream with received message (raw format)
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.ReconnectionHappened">
+            <summary>
+            Stream for reconnection event (triggered after the new connection) 
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.DisconnectionHappened">
+            <summary>
+            Stream for disconnection event (triggered after the connection was lost) 
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.ReconnectTimeout">
+            <summary>
+            Time range in ms, how long to wait before reconnecting if no message comes from server.
+            Set null to disable this feature. 
+            Default: 1 minute
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.ErrorReconnectTimeout">
+            <summary>
+            Time range in ms, how long to wait before reconnecting if last reconnection failed.
+            Set null to disable this feature. 
+            Default: 1 minute
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.IsReconnectionEnabled">
+            <summary>
+            Enable or disable reconnection functionality (enabled by default)
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.Name">
+            <summary>
+            Get or set the name of the current websocket client instance.
+            For logging purpose (in case you use more parallel websocket clients and want to distinguish between them)
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.IsStarted">
+            <summary>
+            Returns true if Start() method was called at least once. False if not started or disposed
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.IsRunning">
+            <summary>
+            Returns true if client is running and connected to the server
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.IsTextMessageConversionEnabled">
+            <summary>
+            Enable or disable text message conversion from binary to string (via 'MessageEncoding' property).
+            Default: true
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.MessageEncoding">
+            <inheritdoc />
+        </member>
+        <member name="P:Websocket.Client.WebsocketClient.NativeClient">
+            <inheritdoc />
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.Dispose">
+            <summary>
+            Terminate the websocket connection and cleanup everything
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.Start">
+            <summary>
+            Start listening to the websocket stream on the background thread.
+            In case of connection error it doesn't throw an exception.
+            Only streams a message via 'DisconnectionHappened' and logs it. 
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.StartOrFail">
+            <summary>
+            Start listening to the websocket stream on the background thread. 
+            In case of connection error it throws an exception.
+            Fail fast approach. 
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.Stop(System.Net.WebSockets.WebSocketCloseStatus,System.String)">
+            <summary>
+            Stop/close websocket connection with custom close code.
+            Method doesn't throw exception, only logs it and mark client as closed. 
+            </summary>
+            <returns>Returns true if close was initiated successfully</returns>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.StopOrFail(System.Net.WebSockets.WebSocketCloseStatus,System.String)">
+            <summary>
+            Stop/close websocket connection with custom close code.
+            Method could throw exceptions, but client is marked as closed anyway.
+            </summary>
+            <returns>Returns true if close was initiated successfully</returns>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.Reconnect">
+            <summary>
+            Force reconnection. 
+            Closes current websocket stream and perform a new connection to the server.
+            In case of connection error it doesn't throw an exception, but tries to reconnect indefinitely. 
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.ReconnectOrFail">
+            <summary>
+            Force reconnection. 
+            Closes current websocket stream and perform a new connection to the server.
+            In case of connection error it throws an exception and doesn't perform any other reconnection try. 
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.Send(System.String)">
+            <summary>
+            Send text message to the websocket channel. 
+            It inserts the message to the queue and actual sending is done on an other thread
+            </summary>
+            <param name="message">Text message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.Send(System.Byte[])">
+            <summary>
+            Send binary message to the websocket channel. 
+            It inserts the message to the queue and actual sending is done on an other thread
+            </summary>
+            <param name="message">Binary message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.Send(System.ArraySegment{System.Byte})">
+            <summary>
+            Send binary message to the websocket channel. 
+            It inserts the message to the queue and actual sending is done on an other thread
+            </summary>
+            <param name="message">Binary message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.SendInstant(System.String)">
+            <summary>
+            Send text message to the websocket channel. 
+            It doesn't use a sending queue, 
+            beware of issue while sending two messages in the exact same time 
+            on the full .NET Framework platform
+            </summary>
+            <param name="message">Message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.SendInstant(System.Byte[])">
+            <summary>
+            Send binary message to the websocket channel. 
+            It doesn't use a sending queue, 
+            beware of issue while sending two messages in the exact same time 
+            on the full .NET Framework platform
+            </summary>
+            <param name="message">Message to be sent</param>
+        </member>
+        <member name="M:Websocket.Client.WebsocketClient.StreamFakeMessage(Websocket.Client.ResponseMessage)">
+            <summary>
+            Stream/publish fake message (via 'MessageReceived' observable).
+            Use for testing purposes to simulate a server message. 
+            </summary>
+            <param name="message">Message to be stream</param>
+        </member>
+        <member name="T:Websocket.Client.Logging.ILog">
+            <summary>
+                Simple interface that represent a logger.
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Logging.ILog.Log(Websocket.Client.Logging.LogLevel,System.Func{System.String},System.Exception,System.Object[])">
+            <summary>
+                Log a message the specified log level.
+            </summary>
+            <param name="logLevel">The log level.</param>
+            <param name="messageFunc">The message function.</param>
+            <param name="exception">An optional exception.</param>
+            <param name="formatParameters">Optional format parameters for the message generated by the messagefunc. </param>
+            <returns>true if the message was logged. Otherwise false.</returns>
+            <remarks>
+                Note to implementers: the message func should not be called if the loglevel is not enabled
+                so as not to incur performance penalties.
+                To check IsEnabled call Log with only LogLevel and check the return value, no event will be written.
+            </remarks>
+        </member>
+        <member name="T:Websocket.Client.Logging.ILogProvider">
+            <summary>
+            Represents a way to get a <see cref="T:Websocket.Client.Logging.Logger"/>
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Logging.ILogProvider.GetLogger(System.String)">
+            <summary>
+            Gets the specified named logger.
+            </summary>
+            <param name="name">Name of the logger.</param>
+            <returns>The logger reference.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.ILogProvider.OpenNestedContext(System.String)">
+            <summary>
+            Opens a nested diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="message">The message to add to the diagnostics context.</param>
+            <returns>A disposable that when disposed removes the message from the context.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.ILogProvider.OpenMappedContext(System.String,System.Object,System.Boolean)">
+            <summary>
+            Opens a mapped diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">Determines whether to call the destructor or not.</param>
+            <returns>A disposable that when disposed removes the map from the context.</returns>
+        </member>
+        <member name="T:Websocket.Client.Logging.LogExtensions">
+            <summary>
+                Extension methods for the <see cref="T:Websocket.Client.Logging.ILog"/> interface.
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.IsDebugEnabled(Websocket.Client.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Websocket.Client.Logging.LogLevel.Debug"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.IsErrorEnabled(Websocket.Client.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Websocket.Client.Logging.LogLevel.Error"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.IsFatalEnabled(Websocket.Client.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Websocket.Client.Logging.LogLevel.Fatal"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.IsInfoEnabled(Websocket.Client.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Websocket.Client.Logging.LogLevel.Info"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.IsTraceEnabled(Websocket.Client.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Websocket.Client.Logging.LogLevel.Trace"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.IsWarnEnabled(Websocket.Client.Logging.ILog)">
+            <summary>
+                Check if the <see cref="F:Websocket.Client.Logging.LogLevel.Warn"/> log level is enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to check with.</param>
+            <returns>True if the log level is enabled; false otherwise.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Debug(Websocket.Client.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Debug(Websocket.Client.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Debug(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Debug(Websocket.Client.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.DebugFormat(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.DebugException(Websocket.Client.Logging.ILog,System.String,System.Exception)">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.DebugException(Websocket.Client.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Debug"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Error(Websocket.Client.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Error(Websocket.Client.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Error(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Error(Websocket.Client.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.ErrorFormat(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.ErrorException(Websocket.Client.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Error"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Fatal(Websocket.Client.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Fatal(Websocket.Client.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Fatal(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Fatal(Websocket.Client.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.FatalFormat(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.FatalException(Websocket.Client.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Fatal"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Info(Websocket.Client.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Info(Websocket.Client.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Info(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Info(Websocket.Client.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.InfoFormat(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.InfoException(Websocket.Client.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Info"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Trace(Websocket.Client.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Trace(Websocket.Client.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Trace(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Trace(Websocket.Client.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.TraceFormat(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.TraceException(Websocket.Client.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Trace"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Warn(Websocket.Client.Logging.ILog,System.Func{System.String})">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="messageFunc">The message function.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Warn(Websocket.Client.Logging.ILog,System.String)">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Warn(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.Warn(Websocket.Client.Logging.ILog,System.Exception,System.String,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="exception">The exception.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.WarnFormat(Websocket.Client.Logging.ILog,System.String,System.Object[])">
+            <summary>
+                Logs a message at the <see cref="F:Websocket.Client.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogExtensions.WarnException(Websocket.Client.Logging.ILog,System.String,System.Exception,System.Object[])">
+            <summary>
+                Logs an exception at the <see cref="F:Websocket.Client.Logging.LogLevel.Warn"/> log level, if enabled.
+            </summary>
+            <param name="logger">The <see cref="T:Websocket.Client.Logging.ILog"/> to use.</param>
+            <param name="message">The message.</param>
+            <param name="exception">The exception.</param>
+            <param name="args">Optional format parameters for the message.</param>
+        </member>
+        <member name="T:Websocket.Client.Logging.LogLevel">
+            <summary>
+                The log level.
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.Logging.LogLevel.Trace">
+            <summary>
+            Trace
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.Logging.LogLevel.Debug">
+            <summary>
+            Debug
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.Logging.LogLevel.Info">
+            <summary>
+            Info
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.Logging.LogLevel.Warn">
+            <summary>
+            Warn
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.Logging.LogLevel.Error">
+            <summary>
+            Error
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.Logging.LogLevel.Fatal">
+            <summary>
+            Fatal
+            </summary>
+        </member>
+        <member name="T:Websocket.Client.Logging.LogProvider">
+            <summary>
+            Provides a mechanism to set the <see cref="T:Websocket.Client.Logging.ILogProvider" />.
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProvider.SetCurrentLogProvider(Websocket.Client.Logging.ILogProvider)">
+            <summary>
+            Sets the current log provider.
+            </summary>
+            <param name="logProvider">The log provider.</param>
+        </member>
+        <member name="P:Websocket.Client.Logging.LogProvider.IsDisabled">
+            <summary>
+            Gets or sets a value indicating whether this is logging is disabled.
+            </summary>
+            <value>
+            <c>true</c> if logging is disabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Websocket.Client.Logging.LogProvider.OnCurrentLogProviderSet">
+            <summary>
+            Sets an action that is invoked when a consumer of your library has called SetCurrentLogProvider. It is 
+            important that hook into this if you are using child libraries (especially ilmerged ones) that are using
+            LibLog (or other logging abstraction) so you adapt and delegate to them.
+            <see cref="M:Websocket.Client.Logging.LogProvider.SetCurrentLogProvider(Websocket.Client.Logging.ILogProvider)"/> 
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProvider.For``1">
+            <summary>
+            Gets a logger for the specified type.
+            </summary>
+            <typeparam name="T">The type whose name will be used for the logger.</typeparam>
+            <returns>An instance of <see cref="T:Websocket.Client.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProvider.GetCurrentClassLogger">
+            <summary>
+            Gets a logger for the current class.
+            </summary>
+            <returns>An instance of <see cref="T:Websocket.Client.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProvider.GetLogger(System.Type,System.String)">
+            <summary>
+            Gets a logger for the specified type.
+            </summary>
+            <param name="type">The type whose name will be used for the logger.</param>
+            <param name="fallbackTypeName">If the type is null then this name will be used as the log name instead</param>
+            <returns>An instance of <see cref="T:Websocket.Client.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProvider.GetLogger(System.String)">
+            <summary>
+            Gets a logger with the specified name.
+            </summary>
+            <param name="name">The name.</param>
+            <returns>An instance of <see cref="T:Websocket.Client.Logging.ILog"/></returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProvider.OpenNestedContext(System.String)">
+            <summary>
+            Opens a nested diagnostics context.
+            </summary>
+            <param name="message">A message.</param>
+            <returns>An <see cref="T:System.IDisposable"/> that closes context when disposed.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProvider.OpenMappedContext(System.String,System.Object,System.Boolean)">
+            <summary>
+            Opens a mapped diagnostics context.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">A optional paramater to indicate message should be destructured.</param>
+            <returns>An <see cref="T:System.IDisposable"/> that closes context when disposed.</returns>
+        </member>
+        <member name="T:Websocket.Client.Logging.LogProviders.LibLogException">
+            <summary>
+            Exception thrown by LibLog.
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LibLogException.#ctor(System.String)">
+            <summary>
+            Initializes a new LibLogException with the specified message.
+            </summary>
+            <param name="message">The message</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LibLogException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new LibLogException with the specified message and inner exception.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="inner">The inner exception.</param>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LogMessageFormatter.SimulateStructuredLogging(System.Func{System.String},System.Object[])">
+            <summary>
+                Some logging frameworks support structured logging, such as serilog. This will allow you to add names to structured
+                data in a format string:
+                For example: Log("Log message to {user}", user). This only works with serilog, but as the user of LibLog, you don't
+                know if serilog is actually
+                used. So, this class simulates that. it will replace any text in {curly braces} with an index number.
+                "Log {message} to {user}" would turn into => "Log {0} to {1}". Then the format parameters are handled using regular
+                .net string.Format.
+            </summary>
+            <param name="messageBuilder">The message builder.</param>
+            <param name="formatParameters">The format parameters.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Websocket.Client.Logging.LogProviders.LogProviderBase">
+            <summary>
+                Base class for specific log providers.
+            </summary>
+        </member>
+        <member name="F:Websocket.Client.Logging.LogProviders.LogProviderBase.ErrorInitializingProvider">
+            <summary>
+                Error message should initializing the log provider fail.
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LogProviderBase.#ctor">
+            <summary>
+                Initialize an instance of the <see cref="T:Websocket.Client.Logging.LogProviders.LogProviderBase"/> class by initializing the references
+                to the nested and mapped diagnostics context-obtaining functions.
+            </summary>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LogProviderBase.GetLogger(System.String)">
+            <summary>
+            Gets the specified named logger.
+            </summary>
+            <param name="name">Name of the logger.</param>
+            <returns>The logger reference.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LogProviderBase.OpenNestedContext(System.String)">
+            <summary>
+            Opens a nested diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="message">The message to add to the diagnostics context.</param>
+            <returns>A disposable that when disposed removes the message from the context.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LogProviderBase.OpenMappedContext(System.String,System.Object,System.Boolean)">
+            <summary>
+            Opens a mapped diagnostics context. Not supported in EntLib logging.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">Determines whether to call the destructor or not.</param>
+            <returns>A disposable that when disposed removes the map from the context.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LogProviderBase.GetOpenNdcMethod">
+            <summary>
+                Returns the provider-specific method to open a nested diagnostics context.
+            </summary>
+            <returns>A provider-specific method to open a nested diagnostics context.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LogProviderBase.GetOpenMdcMethod">
+            <summary>
+                Returns the provider-specific method to open a mapped diagnostics context.
+            </summary>
+            <returns>A provider-specific method to open a mapped diagnostics context.</returns>
+        </member>
+        <member name="T:Websocket.Client.Logging.LogProviders.LogProviderBase.OpenNdc">
+            <summary>
+                Delegate defining the signature of the method opening a nested diagnostics context.
+            </summary>
+            <param name="message">The message to add to the diagnostics context.</param>
+            <returns>A disposable that when disposed removes the message from the context.</returns>
+        </member>
+        <member name="T:Websocket.Client.Logging.LogProviders.LogProviderBase.OpenMdc">
+            <summary>
+                Delegate defining the signature of the method opening a mapped diagnostics context.
+            </summary>
+            <param name="key">A key.</param>
+            <param name="value">A value.</param>
+            <param name="destructure">Determines whether to call the destructor or not.</param>
+            <returns>A disposable that when disposed removes the map from the context.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LogProviderBase.FindType(System.String,System.String)">
+            <summary>
+                Finds a type using a type name and assembly name.
+            </summary>
+            <param name="typeName">The name of the type.</param>
+            <param name="assemblyName">The name of the assembly.</param>
+            <returns>The requested type or null if it was not found.</returns>
+        </member>
+        <member name="M:Websocket.Client.Logging.LogProviders.LogProviderBase.FindType(System.String,System.Collections.Generic.IReadOnlyList{System.String})">
+            <summary>
+                Finds a type using a type name and a list of assembly names to search.
+            </summary>
+            <param name="typeName">The name of the type.</param>
+            <param name="assemblyNames">A list of assembly names to search.</param>
+            <returns>The request type or null if it was not found.</returns>
+        </member>
+        <member name="T:Websocket.Client.Logging.LogProviders.LoupeLogProvider.WriteDelegate">
+            <summary>
+                The form of the Loupe Log.Write method we're using
+            </summary>
+        </member>
+        <member name="P:Websocket.Client.Logging.LogProviders.LoupeLogProvider.ProviderIsAvailableOverride">
+            <summary>
+                Gets or sets a value indicating whether [provider is available override]. Used in tests.
+            </summary>
+            <value>
+                <c>true</c> if [provider is available override]; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:Websocket.Client.Logging.Logger">
+            <summary>
+            Logger delegate.
+            </summary>
+            <param name="logLevel">The log level</param>
+            <param name="messageFunc">The message function</param>
+            <param name="exception">The exception</param>
+            <param name="formatParameters">The format parameters</param>
+            <returns>A boolean.</returns>
+        </member>
+    </members>
+</doc>
