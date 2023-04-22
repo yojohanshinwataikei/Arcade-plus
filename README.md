@@ -10,9 +10,9 @@ The original commit history of Sch are not be included in this repository, since
 
 ### Arcade-plus do not work on my OS!
 
-Arcade-plus is only completely tested on Latest Windows 10. However it should works on Windows 7 or 8. Older version of Windows is not supported.
+Arcade-plus is only completely tested on Latest Windows 11. However it should works on Windows 7 or 8 or 10. Older version of Windows is not supported.
 
-Also, macOS and Linux support is experimental for now, if you find any bug that only happens on your OS, please help us by open a bug-fixing pull request.
+Also, macOS and Linux support is experimental for now, if you find any bug that only happens on your OS, please help us by opening a bug-fixing pull request.
 
 ### Why this version do not have localisation feature?
 
