@@ -233,6 +233,8 @@ namespace Arcade.Gameplay.Chart
 		TrackHide,
 		TrackShow,
 		HideGroup,
+		EnwidenCamera,
+		EnwidenLanes,
 		Unknown,
 	}
 	public abstract class ArcEvent
@@ -271,6 +273,24 @@ namespace Arcade.Gameplay.Chart
 					Enable = (RawParams[1] as RawAffInt).data > 0;
 				}
 			}
+			else if (RawType == "enwidencamera" && RawParams.Count == 2)
+			{
+				if ((RawParams[0] is RawAffFloat) && (RawParams[1] is RawAffInt))
+				{
+					Type = SceneControlType.EnwidenCamera;
+					Duration = (RawParams[0] as RawAffFloat).data;
+					Enable = (RawParams[1] as RawAffInt).data > 0;
+				}
+			}
+			else if (RawType == "enwidenlanes" && RawParams.Count == 2)
+			{
+				if ((RawParams[0] is RawAffFloat) && (RawParams[1] is RawAffInt))
+				{
+					Type = SceneControlType.EnwidenLanes;
+					Duration = (RawParams[0] as RawAffFloat).data;
+					Enable = (RawParams[1] as RawAffInt).data > 0;
+				}
+			}
 			TimingGroup = timingGroup;
 		}
 		public IRawAffItem IntoRawItem()
@@ -297,6 +317,22 @@ namespace Arcade.Gameplay.Chart
 					new RawAffInt{data=Enable?1:0},
 				};
 			}
+			else if (Type == SceneControlType.EnwidenCamera)
+			{
+				item.Type = "enwidencamera";
+				item.Params = new List<IRawAffValue>{
+					new RawAffFloat{data=Duration},
+					new RawAffInt{data=Enable?1:0},
+				};
+			}
+			else if (Type == SceneControlType.EnwidenLanes)
+			{
+				item.Type = "enwidenlanes";
+				item.Params = new List<IRawAffValue>{
+					new RawAffFloat{data=Duration},
+					new RawAffInt{data=Enable?1:0},
+				};
+			}
 			else
 			{
 				item.Type = RawType;
@@ -306,6 +342,7 @@ namespace Arcade.Gameplay.Chart
 		}
 		public SceneControlType Type = SceneControlType.Unknown;
 		public bool Enable;
+		public float Duration;
 		public ArcTimingGroup TimingGroup { get; set; }
 		public string RawType;
 		public List<IRawAffValue> RawParams;
