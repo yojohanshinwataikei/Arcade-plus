@@ -905,7 +905,7 @@ namespace Arcade.Gameplay.Chart
 				float p = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
 				Vector3 pos = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, p, Arc.LineType)),
 											 ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, p, Arc.LineType)) - 0.5f)
-											 - new Vector3(ArcArcManager.Instance.Lanes[t.Track - 1], 0);
+											 - new Vector3(ArcArcManager.Instance.Lanes[t.Track], 0);
 				l.SetPosition(1, new Vector3(pos.x, 0, pos.y));
 				l.startColor = l.endColor = ArcArcManager.Instance.ConnectionColor;
 				l.startColor = l.endColor = new Color(l.endColor.r, l.endColor.g, l.endColor.b, t.Alpha * 0.8f);

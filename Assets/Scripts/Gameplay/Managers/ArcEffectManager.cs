@@ -18,29 +18,29 @@ namespace Arcade.Gameplay
 		}
 
 		public GameObject TapNoteJudgeEffect;
-		public GameObject[] LaneHits = new GameObject[4];
-		public ParticleSystem[] HoldNoteEffects = new ParticleSystem[4];
+		public GameObject[] LaneHits = new GameObject[6];
+		public ParticleSystem[] HoldNoteEffects = new ParticleSystem[6];
 		public Transform EffectLayer;
 		public AudioClip TapAudio, ArcAudio;
 		public AudioSource Source;
 
-		private bool[] holdEffectStatus = new bool[4];
+		private bool[] holdEffectStatus = new bool[6];
 		private GameObjectPool<ArcTapNoteEffectComponent> tapNoteEffectPool;
 		public void SetHoldNoteEffect(int track, bool show)
 		{
-			if (holdEffectStatus[track - 1] != show)
+			if (holdEffectStatus[track] != show)
 			{
-				holdEffectStatus[track - 1] = show;
+				holdEffectStatus[track] = show;
 				if (show)
 				{
-					HoldNoteEffects[track - 1].Play();
+					HoldNoteEffects[track].Play();
 				}
 				else
 				{
-					HoldNoteEffects[track - 1].Stop();
-					HoldNoteEffects[track - 1].Clear();
+					HoldNoteEffects[track].Stop();
+					HoldNoteEffects[track].Clear();
 				}
-				LaneHits[track - 1].SetActive(show);
+				LaneHits[track].SetActive(show);
 			}
 		}
 		public void PlayTapNoteEffectAt(Vector2 pos, bool isArc = false)
@@ -61,7 +61,7 @@ namespace Arcade.Gameplay
 		}
 		public void ResetHoldNoteEffect()
 		{
-			for (int i = 1; i < 5; ++i) SetHoldNoteEffect(i, false);
+			for (int i = 0; i < 6; ++i) SetHoldNoteEffect(i, false);
 		}
 
 		public void SetParticleArcColor(Color particleArcStartColor, Color particleArcEndColor)

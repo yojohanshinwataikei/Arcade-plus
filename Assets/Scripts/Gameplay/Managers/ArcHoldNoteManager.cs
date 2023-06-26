@@ -15,7 +15,7 @@ namespace Arcade.Gameplay
 		[HideInInspector]
 		public List<ArcHold> Holds = new List<ArcHold>();
 		[HideInInspector]
-		public readonly float[] Lanes = { 6.375f, 2.125f, -2.125f, -6.375f };
+		public readonly float[] Lanes = { 10.625f, 6.375f, 2.125f, -2.125f, -6.375f, -10.625f };
 		public GameObject HoldNotePrefab;
 		public Transform NoteLayer;
 		public Sprite DefaultSprite, HighlightSprite;
@@ -94,7 +94,7 @@ namespace Arcade.Gameplay
 				}
 				float pos = t.Position / 1000f;
 				float length = (endPosition - t.Position) / 1000f;
-				t.transform.localPosition = new Vector3(Lanes[t.Track - 1], pos, 0);
+				t.transform.localPosition = new Vector3(Lanes[t.Track], pos, 0);
 				t.transform.localScale = new Vector3(1.53f, length / 3.79f, 1);
 				t.boxCollider.center = new Vector3(0, t.boxCollider.size.y / 2);
 

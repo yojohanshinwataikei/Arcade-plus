@@ -31,7 +31,7 @@ namespace Arcade.Gameplay
 		public Color ArcGreenHigh;
 		public Color ArcVoid;
 		public Color ShadowColor;
-		public readonly float[] Lanes = { 6.375f, 2.125f, -2.125f, -6.375f };
+		public readonly float[] Lanes = { 10.625f, 6.375f, 2.125f, -2.125f, -6.375f, -10.625f };
 
 		[HideInInspector]
 		public float ArcJudgePos;

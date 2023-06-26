@@ -155,7 +155,7 @@ namespace Arcade.Compose.Editing
 			{
 				string t = inputField.text;
 				int track = int.Parse(t);
-				if (track <= 0 || track >= 5) throw new InvalidDataException("轨道只能为 1 - 4");
+				if (track < 0 || track > 5) throw new InvalidDataException("轨道只能为 0 - 5");
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
 				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
 				{

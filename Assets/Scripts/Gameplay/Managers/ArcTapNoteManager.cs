@@ -15,7 +15,7 @@ namespace Arcade.Gameplay
 		[HideInInspector]
 		public List<ArcTap> Taps = new List<ArcTap>();
 		[HideInInspector]
-		public readonly float[] Lanes = { 6.375f, 2.125f, -2.125f, -6.375f };
+		public readonly float[] Lanes = { 10.625f, 6.375f, 2.125f, -2.125f, -6.375f, -10.625f };
 		public GameObject TapNotePrefab;
 		public Transform NoteLayer;
 		public Material ShaderdMaterial;
@@ -73,7 +73,7 @@ namespace Arcade.Gameplay
 				}
 				t.Enable = true;
 				float pos = t.Position / 1000f;
-				t.transform.localPosition = new Vector3(Lanes[t.Track - 1], pos, 0);
+				t.transform.localPosition = new Vector3(Lanes[t.Track], pos, 0);
 				if (ArcCameraManager.Instance.EditorCamera)
 					t.transform.localScale = new Vector3(1.53f, 2, 1);
 				else
@@ -96,7 +96,7 @@ namespace Arcade.Gameplay
 				if (currentTiming > t.Timing + offset && currentTiming <= t.Timing + offset + 150)
 				{
 					t.Judged = true;
-					if (ArcGameplayManager.Instance.IsPlaying) ArcEffectManager.Instance.PlayTapNoteEffectAt(new Vector2(Lanes[t.Track - 1], 0));
+					if (ArcGameplayManager.Instance.IsPlaying) ArcEffectManager.Instance.PlayTapNoteEffectAt(new Vector2(Lanes[t.Track], 0));
 				}
 				else if (currentTiming > t.Timing + offset + 150)
 				{

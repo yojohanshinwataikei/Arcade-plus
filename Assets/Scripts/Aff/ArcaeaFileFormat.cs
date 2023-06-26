@@ -463,7 +463,7 @@ namespace Arcade.Aff
 				return;
 			}
 			bool valueError = false;
-			if (track.data > 4 || track.data <= 0)
+			if (track.data > 5 || track.data < 0)
 			{
 				chart.warning.Add($"第 {context.values().value()[1].Start.Line + lineOffset} 行第 {context.values().value()[1].Start.Column + 1} 列，tap 事件的轨道参数超过范围，此 tap 将被忽略");
 				valueError = true;
@@ -496,7 +496,7 @@ namespace Arcade.Aff
 				timing = endTiming;
 				endTiming = tmp;
 			}
-			if (track.data > 4 || track.data <= 0)
+			if (track.data > 5 || track.data < 0)
 			{
 				chart.warning.Add($"第 {context.values().value()[2].Start.Line + lineOffset} 行第 {context.values().value()[2].Start.Column + 1} 列，hold 事件的轨道参数超过范围，此 hold 将被忽略");
 				valueError = true;
