@@ -18,6 +18,7 @@ public class ArcSceneControlManager : MonoBehaviour
 	public Image BackgroundDarkenLayer;
 	public SpriteRenderer TrackRenderer;
 	public SpriteRenderer[] DividerRenderers;
+	public Transform SkyInput;
 	[HideInInspector]
 	public List<ArcSceneControl> SceneControls = new List<ArcSceneControl>();
 	private bool trackVisible = true;
@@ -45,6 +46,7 @@ public class ArcSceneControlManager : MonoBehaviour
 	private void Update()
 	{
 		bool newTrackVisible = true;
+		float enwidenCameraPrecent = 0;
 		foreach (ArcTimingGroup tg in ArcTimingManager.Instance.timingGroups)
 		{
 			tg.GroupHide = false;
@@ -70,8 +72,24 @@ public class ArcSceneControlManager : MonoBehaviour
 						timingGroup.GroupHide = sc.Enable;
 					}
 					break;
+				case SceneControlType.EnwidenCamera:
+					int offset=ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing;
+					if (offset<=0)
+					{
+						enwidenCameraPrecent = sc.Enable ? 0 : 1 ;
+					}else if(offset>=sc.Duration){
+						enwidenCameraPrecent = sc.Enable ? 1 : 0 ;
+					}
+					else
+					{
+						float precent = (ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing) / sc.Duration;
+						enwidenCameraPrecent = sc.Enable ? precent : 1 - precent;
+					}
+
+					break;
 			}
 		}
+
 		if (newTrackVisible != trackVisible)
 		{
 			if (newTrackVisible)
@@ -84,6 +102,11 @@ public class ArcSceneControlManager : MonoBehaviour
 			}
 			trackVisible = newTrackVisible;
 		}
+
+		Vector3 SkyInputPosition=SkyInput.localPosition;
+		SkyInputPosition.y=5.5f + enwidenCameraPrecent * 2.745f;
+		SkyInput.localPosition=SkyInputPosition;
+		ArcCameraManager.Instance.EnwidenPrecent=enwidenCameraPrecent;
 	}
 
 	private void HideTrack()
