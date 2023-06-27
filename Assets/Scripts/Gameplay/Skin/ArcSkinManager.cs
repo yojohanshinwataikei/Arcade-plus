@@ -39,7 +39,7 @@ namespace Arcade.Gameplay
 		public SpriteRenderer SkyInputLabel;
 		public SpriteRenderer SkyInputLine;
 		[Header("Track")]
-		public SpriteRenderer Track;
+		public SpriteRenderer[] TrackComponents;
 		public SpriteRenderer[] CriticalLines;
 		public SpriteRenderer[] TrackLaneDividers;
 		public SpriteRenderer[] LaneHits;
@@ -147,7 +147,9 @@ namespace Arcade.Gameplay
 			ArcArcManager.Instance.SetArcColors(noteSideData.ArcRedLow,noteSideData.ArcBlueLow,noteSideData.ArcGreenLow,noteSideData.ArcRedHigh,noteSideData.ArcBlueHigh,noteSideData.ArcGreenHigh,noteSideData.ArcVoid);
 		}
 		public void SetThemeSideSkin(AdeSkinHost.ThemeSideData themeSideData){
-			Track.sprite = themeSideData.Track.value;
+			foreach(SpriteRenderer trackComponent in TrackComponents){
+				trackComponent.sprite=themeSideData.Track.value;
+			}
 			foreach(SpriteRenderer criticalLine in CriticalLines){
 				criticalLine.sprite=themeSideData.CriticalLine.value;
 			}

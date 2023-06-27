@@ -3,8 +3,14 @@ Shader "Arcade/Track"
 	Properties
 	{
 		[PerRendererData] _MainTex ("Texture", 2D) = "white" {}
-		_Phase ("Phase", Float) = 0
-		_Color ("Color", Color) = (1,1,1,1)
+		[PerRendererData] _Phase ("Phase", Float) = 0
+		[PerRendererData] _Color ("Color", Color) = (1,1,1,1)
+		_TextureWidth ("TextureWidth", Float) = 1024
+		_TextureHeight ("TextureHeight", Float) = 256
+		_XStart ("XStart", Float) = 36
+		_XEnd ("XEnd", Float) = 988
+		_TrackLength ("TrackLength", Float) = 153.5
+		_TrackRepeat ("TrackRepeat", Float) = 4.57142857
 	}
 	SubShader
 	{
@@ -36,6 +42,12 @@ Shader "Arcade/Track"
 			float _Phase;
 			sampler2D _MainTex;
 			float4 _Color;
+			float _TextureWidth;
+			float _TextureHeight;
+			float _XStart;
+			float _XEnd;
+			float _TrackLength;
+			float _TrackRepeat;
 
 			v2f vert (appdata v)
 			{
@@ -48,7 +60,8 @@ Shader "Arcade/Track"
 			half4 frag (v2f i) : SV_Target
 			{
 			    float2 p = i.uv;
-				p.y = (p.y + _Phase) % 1;
+				p.x = lerp(_XStart/_TextureWidth,_XEnd/_TextureWidth,p.x);
+				p.y = (p.y*_TrackLength/_TrackRepeat + _Phase) % 1;
 				float4 c= tex2D(_MainTex,p);
 				c.a = _Color.a;
 				return c;

@@ -32,8 +32,7 @@ namespace Arcade.Gameplay
 		private List<ArcTiming> timings = new List<ArcTiming>();
 		[HideInInspector]
 		public List<ArcTimingGroup> timingGroups = new List<ArcTimingGroup>();
-		public SpriteRenderer TrackRenderer;
-
+		public SpriteRenderer[] TrackComponentRenderers;
 		private List<float> beatlineTimings = new List<float>();
 		private List<SpriteRenderer> beatLineInstances = new List<SpriteRenderer>();
 		private float earliestRenderTime = 0;
@@ -72,7 +71,10 @@ namespace Arcade.Gameplay
 			Timings.Clear();
 			timingGroups.Clear();
 			AdeTimingEditor.Instance.SetCurrentTimingGroup(null);
-			TrackRenderer.sharedMaterial.SetFloat(phaseShaderId, 0);
+			foreach (var renderer in TrackComponentRenderers)
+			{
+				renderer.sharedMaterial.SetFloat(phaseShaderId, 0);
+			}
 			HideExceededBeatlineInstance(0);
 		}
 		public void Load(List<ArcTiming> arcTimings, List<ArcTimingGroup> arcTimingGroups)
@@ -417,7 +419,10 @@ namespace Arcade.Gameplay
 		{
 			phase += 3f * (ArcGameplayManager.Instance.IsPlaying ? CurrentSpeed : 0) * Time.deltaTime;
 			phase -= Mathf.Floor(phase);
-			TrackRenderer.sharedMaterial.SetFloat(phaseShaderId, phase);
+			foreach (var renderer in TrackComponentRenderers)
+			{
+				renderer.sharedMaterial.SetFloat(phaseShaderId, phase);
+			}
 		}
 
 		public void ReOrderTimingGroup(ArcTimingGroup timingGroup)
