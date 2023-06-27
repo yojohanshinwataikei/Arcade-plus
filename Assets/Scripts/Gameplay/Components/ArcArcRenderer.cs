@@ -551,7 +551,6 @@ namespace Arcade.Gameplay
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			float z = arc.transform.localPosition.z;
 
-			bool log = arc.Timing == 92137 && arc.EndTiming == 92237;
 			foreach (ArcArcSegmentComponent s in segments)
 			{
 				float pos = -(z + s.FromPos.z);
@@ -564,7 +563,7 @@ namespace Arcade.Gameplay
 				{
 					s.To = 1;
 				}
-				if (s.ToTiming + offset < currentTiming)
+				if (Mathf.Max(pos, endPos) < 0)
 				{
 					if (arc.Judging || arc.IsVoid || arc.NoInput())
 					{
@@ -577,7 +576,7 @@ namespace Arcade.Gameplay
 						continue;
 					}
 				}
-				if (s.FromTiming + offset < currentTiming && s.ToTiming + offset >= currentTiming)
+				if (Mathf.Max(pos, endPos) >= 0 && Mathf.Min(pos, endPos) < 0)
 				{
 					s.Enable = true;
 					s.CurrentArcMaterial = null;

@@ -152,7 +152,7 @@ namespace Arcade.Gameplay
 			{
 				RenderArcTaps(t);
 				int duration = t.EndTiming - t.Timing;
-				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup, duration) || t.Judged || t.GroupHide())
+				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup, duration, !t.IsVoid) || (t.Judged && !t.IsVoid) || t.GroupHide())
 				{
 					t.Enable = false;
 					continue;
