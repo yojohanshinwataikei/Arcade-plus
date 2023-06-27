@@ -129,7 +129,7 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			foreach (SpriteRenderer r in DividerRenderers)
 			{
-				r.DOFade(0, trackAnimationTime).SetEase(Ease.InCubic);
+				r.DOColor(Color.clear, trackAnimationTime).SetEase(Ease.InCubic);
 			};
 			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
 			{
@@ -165,7 +165,7 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			foreach (SpriteRenderer r in DividerRenderers)
 			{
-				r.DOFade(1, trackAnimationTime).SetEase(Ease.InCubic);
+				r.DOColor(Color.white, trackAnimationTime).SetEase(Ease.InCubic);
 			};
 			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
 			{

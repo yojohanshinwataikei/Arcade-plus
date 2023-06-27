@@ -30,12 +30,14 @@ Shader "Arcade/Track"
 			struct appdata
 			{
 				float4 vertex : POSITION;
+				float4 color    : COLOR;
 				float2 uv : TEXCOORD0;
 			};
 
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
+				fixed4 color    : COLOR;
 				float2 uv : TEXCOORD0;
 			};
 
@@ -54,6 +56,7 @@ Shader "Arcade/Track"
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv;
+				o.color = v.color*_Color;
 				return o;
 			}
 
@@ -62,8 +65,8 @@ Shader "Arcade/Track"
 			    float2 p = i.uv;
 				p.x = lerp(_XStart/_TextureWidth,_XEnd/_TextureWidth,p.x);
 				p.y = (p.y*_TrackLength/_TrackRepeat + _Phase) % 1;
-				float4 c= tex2D(_MainTex,p);
-				c.a = _Color.a;
+				float4 c= tex2D(_MainTex,p)*i.color;
+				c.rgb *= c.a;
 				return c;
 			}
 			ENDCG
