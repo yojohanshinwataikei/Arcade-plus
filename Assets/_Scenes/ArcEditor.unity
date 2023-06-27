@@ -4326,7 +4326,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackgroundDarkenLayer: {fileID: 1217107841}
-  TrackRenderer: {fileID: 0}
+  BaseTrackComponentsRenderer:
+  - {fileID: 910698453}
+  - {fileID: 90194516}
+  - {fileID: 1400013566}
   DividerRenderers:
   - {fileID: 2026685931}
   - {fileID: 1147550522}

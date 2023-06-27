@@ -16,7 +16,7 @@ public class ArcSceneControlManager : MonoBehaviour
 		Instance = this;
 	}
 	public Image BackgroundDarkenLayer;
-	public SpriteRenderer TrackRenderer;
+	public SpriteRenderer[] BaseTrackComponentsRenderer;
 	public SpriteRenderer[] DividerRenderers;
 	public Transform SkyInput;
 	[HideInInspector]
@@ -39,7 +39,10 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			r.color = Color.white;
 		}
-		TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
+		foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+		{
+			TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
+		}
 		trackVisible = true;
 	}
 
@@ -73,12 +76,14 @@ public class ArcSceneControlManager : MonoBehaviour
 					}
 					break;
 				case SceneControlType.EnwidenCamera:
-					int offset=ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing;
-					if (offset<=0)
+					int offset = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing;
+					if (offset <= 0)
 					{
-						enwidenCameraPrecent = sc.Enable ? 0 : 1 ;
-					}else if(offset>=sc.Duration){
-						enwidenCameraPrecent = sc.Enable ? 1 : 0 ;
+						enwidenCameraPrecent = sc.Enable ? 0 : 1;
+					}
+					else if (offset >= sc.Duration)
+					{
+						enwidenCameraPrecent = sc.Enable ? 1 : 0;
 					}
 					else
 					{
@@ -103,10 +108,10 @@ public class ArcSceneControlManager : MonoBehaviour
 			trackVisible = newTrackVisible;
 		}
 
-		Vector3 SkyInputPosition=SkyInput.localPosition;
-		SkyInputPosition.y=5.5f + enwidenCameraPrecent * 2.745f;
-		SkyInput.localPosition=SkyInputPosition;
-		ArcCameraManager.Instance.EnwidenPrecent=enwidenCameraPrecent;
+		Vector3 SkyInputPosition = SkyInput.localPosition;
+		SkyInputPosition.y = 5.5f + enwidenCameraPrecent * 2.745f;
+		SkyInput.localPosition = SkyInputPosition;
+		ArcCameraManager.Instance.EnwidenPrecent = enwidenCameraPrecent;
 	}
 
 	private void HideTrack()
@@ -115,7 +120,10 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			r.DOKill();
 		};
-		TrackRenderer.sharedMaterial.DOKill();
+		foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+		{
+			TrackRenderer.sharedMaterial.DOKill();
+		}
 		BackgroundDarkenLayer.DOKill();
 		if (ArcGameplayManager.Instance.IsPlaying)
 		{
@@ -123,7 +131,10 @@ public class ArcSceneControlManager : MonoBehaviour
 			{
 				r.DOFade(0, trackAnimationTime).SetEase(Ease.InCubic);
 			};
-			TrackRenderer.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
+			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+			{
+				TrackRenderer.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
+			}
 			BackgroundDarkenLayer.DOColor(Color.black, trackAnimationTime).SetEase(Ease.InCubic);
 		}
 		else
@@ -132,7 +143,10 @@ public class ArcSceneControlManager : MonoBehaviour
 			{
 				r.color = Color.clear;
 			};
-			TrackRenderer.sharedMaterial.SetColor("_Color", Color.clear);
+			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+			{
+				TrackRenderer.sharedMaterial.SetColor("_Color", Color.clear);
+			}
 			BackgroundDarkenLayer.color = Color.black;
 		}
 	}
@@ -143,14 +157,20 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			r.DOKill();
 		};
-		TrackRenderer.sharedMaterial.DOKill();
+		foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+		{
+			TrackRenderer.sharedMaterial.DOKill();
+		}
 		if (ArcGameplayManager.Instance.IsPlaying)
 		{
 			foreach (SpriteRenderer r in DividerRenderers)
 			{
 				r.DOFade(1, trackAnimationTime).SetEase(Ease.InCubic);
 			};
-			TrackRenderer.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
+			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+			{
+				TrackRenderer.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
+			}
 			BackgroundDarkenLayer.DOColor(Color.clear, trackAnimationTime).SetEase(Ease.OutCubic);
 		}
 		else
@@ -159,7 +179,10 @@ public class ArcSceneControlManager : MonoBehaviour
 			{
 				r.color = Color.white;
 			};
-			TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
+			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+			{
+				TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
+			}
 			BackgroundDarkenLayer.color = Color.clear;
 		}
 	}
