@@ -40,6 +40,7 @@ namespace Arcade.Gameplay
 		public SpriteRenderer SkyInputLine;
 		[Header("Track")]
 		public SpriteRenderer[] TrackComponents;
+		public SpriteRenderer[] TrackExtraComponents;
 		public SpriteRenderer[] CriticalLines;
 		public SpriteRenderer[] TrackLaneDividers;
 		public SpriteRenderer[] LaneHits;
@@ -149,6 +150,9 @@ namespace Arcade.Gameplay
 		public void SetThemeSideSkin(AdeSkinHost.ThemeSideData themeSideData){
 			foreach(SpriteRenderer trackComponent in TrackComponents){
 				trackComponent.sprite=themeSideData.Track.value;
+			}
+			foreach(SpriteRenderer trackExtraComponent in TrackExtraComponents){
+				trackExtraComponent.sprite=themeSideData.TrackExtra.value;
 			}
 			foreach(SpriteRenderer criticalLine in CriticalLines){
 				criticalLine.sprite=themeSideData.CriticalLine.value;

@@ -125,6 +125,7 @@ public class AdeSkinHostEditor : Editor
 	private void ShowThemeSideData(ThemeSideData data)
 	{
 		GUILayout.Label($"      Track:{data.Track.label}");
+		GUILayout.Label($"      TrackExtra:{data.TrackExtra.label}");
 		GUILayout.Label($"      CriticalLine:{data.CriticalLine.label}");
 		GUILayout.Label($"      ComboTextColor:{data.ComboTextColor}");
 		GUILayout.Label($"      ParticleNote:{data.ParticleNote.label}");

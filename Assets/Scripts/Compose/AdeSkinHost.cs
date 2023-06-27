@@ -81,6 +81,8 @@ namespace Arcade.Compose
 			public Color ArcVoid;
 			public Sprite TrackLight;
 			public Sprite TrackConflict;
+			public Sprite TrackExtraLight;
+			public Sprite TrackExtraConflict;
 			public Sprite CriticalLine;
 			public Color ComboTextColorLight;
 			public Color ComboTextColorConflict;
@@ -167,6 +169,7 @@ namespace Arcade.Compose
 		public class ThemeSideData
 		{
 			public Labelled<Sprite> Track;
+			public Labelled<Sprite> TrackExtra;
 			public Labelled<Sprite> CriticalLine;
 			public Color ComboTextColor;
 			public Labelled<Texture2D> ParticleNote;
@@ -220,6 +223,8 @@ namespace Arcade.Compose
 		public class ThemeSideDataSpec
 		{
 			public string track;
+			[JsonPropertyAttribute("track-extra")]
+			public string trackExtra;
 			[JsonPropertyAttribute("track-critical-line")]
 			public string trackCriticalLine;
 			[JsonPropertyAttribute("combo-text-color")]
@@ -683,6 +688,8 @@ namespace Arcade.Compose
 			internalDefaultThemeData.Conflict = new ThemeSideData();
 			internalDefaultThemeData.Light.Track = new Labelled<Sprite> { value = rawDefaultData.TrackLight, label = "<internal:light>" };
 			internalDefaultThemeData.Conflict.Track = new Labelled<Sprite> { value = rawDefaultData.TrackConflict, label = "<internal:conflict>" };
+			internalDefaultThemeData.Light.TrackExtra = new Labelled<Sprite> { value = rawDefaultData.TrackExtraLight, label = "<internal:light>" };
+			internalDefaultThemeData.Conflict.TrackExtra = new Labelled<Sprite> { value = rawDefaultData.TrackExtraConflict, label = "<internal:conflict>" };
 			internalDefaultThemeData.Light.CriticalLine = new Labelled<Sprite> { value = rawDefaultData.CriticalLine, label = "<internal>" };
 			internalDefaultThemeData.Conflict.CriticalLine = new Labelled<Sprite> { value = rawDefaultData.CriticalLine, label = "<internal>" };
 			internalDefaultThemeData.Light.ComboTextColor = rawDefaultData.ComboTextColorLight;
@@ -792,6 +799,10 @@ namespace Arcade.Compose
 			{
 				return LoadPivotFullRectSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.Track);
+			themeSideData.TrackExtra = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "TrackExtra"), spec.trackExtra, ".png", (path) =>
+			{
+				return LoadPivotFullRectSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
+			}, fallback.TrackExtra);
 			themeSideData.CriticalLine = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "CriticalLine"), spec.trackCriticalLine, ".png", (path) =>
 			{
 				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
