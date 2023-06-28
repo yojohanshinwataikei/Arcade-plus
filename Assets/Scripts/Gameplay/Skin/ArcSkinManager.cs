@@ -42,6 +42,7 @@ namespace Arcade.Gameplay
 		public SpriteRenderer[] TrackComponents;
 		public SpriteRenderer[] TrackExtraComponents;
 		public SpriteRenderer[] CriticalLines;
+		public SpriteRenderer[] CriticalLineExtras;
 		public SpriteRenderer[] TrackLaneDividers;
 		public SpriteRenderer[] LaneHits;
 		[Header("Particle")]
@@ -156,6 +157,9 @@ namespace Arcade.Gameplay
 			}
 			foreach(SpriteRenderer criticalLine in CriticalLines){
 				criticalLine.sprite=themeSideData.CriticalLine.value;
+			}
+			foreach(SpriteRenderer criticalLineExtra in CriticalLineExtras){
+				criticalLineExtra.sprite=themeSideData.CriticalLineExtra.value;
 			}
 			Color ComboTextColor=themeSideData.ComboTextColor;
 			ComboTextColor.a=0.75f;

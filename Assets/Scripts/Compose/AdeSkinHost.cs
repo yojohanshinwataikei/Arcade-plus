@@ -84,6 +84,8 @@ namespace Arcade.Compose
 			public Sprite TrackExtraLight;
 			public Sprite TrackExtraConflict;
 			public Sprite CriticalLine;
+			public Sprite CriticalLineExtraLight;
+			public Sprite CriticalLineExtraConflict;
 			public Color ComboTextColorLight;
 			public Color ComboTextColorConflict;
 			public Texture2D ParticleNote;
@@ -171,6 +173,7 @@ namespace Arcade.Compose
 			public Labelled<Sprite> Track;
 			public Labelled<Sprite> TrackExtra;
 			public Labelled<Sprite> CriticalLine;
+			public Labelled<Sprite> CriticalLineExtra;
 			public Color ComboTextColor;
 			public Labelled<Texture2D> ParticleNote;
 			public Color ParticleArcStartColor;
@@ -227,6 +230,8 @@ namespace Arcade.Compose
 			public string trackExtra;
 			[JsonPropertyAttribute("track-critical-line")]
 			public string trackCriticalLine;
+			[JsonPropertyAttribute("track-critical-line-extra")]
+			public string trackCriticalLineExtra;
 			[JsonPropertyAttribute("combo-text-color")]
 			public string comboTextColor;
 			[JsonPropertyAttribute("particle-note")]
@@ -302,8 +307,8 @@ namespace Arcade.Compose
 			DestroyExternalResources(externalBackgroundDataObjects);
 		}
 
-		// Note: the user generated assets will not gc by the csharp run time, so we should Destroy them mannually
-		// In our impletation, all skin assets are considered owned and managed by this class, the other references are only weak ones
+		// Note: the user generated assets will not gc by the csharp run time, so we should Destroy them manually
+		// In our implementation, all skin assets are considered owned and managed by this class, the other references are only weak ones
 		// However, after reloading of the skin, existed reference to the old assets should be replaced with the new ones to prevent crashing
 		private void DestroyExternalResources(List<UnityEngine.Object> list)
 		{
@@ -318,7 +323,7 @@ namespace Arcade.Compose
 		}
 
 		#region SkinLoading
-		// Note: the LoadSkinDatas is a long sychronized method, so the application will freeze during this processing
+		// Note: the LoadSkinDatas is a long synchronized method, so the application will freeze during this processing
 		// However, If we use the network library in unity to load things, we will handle the complex coroutine programming,
 		// and converting between uri and filepath.
 		// Maybe the best solution is running this function in another thread, but the technical detail is unknown.
@@ -692,6 +697,8 @@ namespace Arcade.Compose
 			internalDefaultThemeData.Conflict.TrackExtra = new Labelled<Sprite> { value = rawDefaultData.TrackExtraConflict, label = "<internal:conflict>" };
 			internalDefaultThemeData.Light.CriticalLine = new Labelled<Sprite> { value = rawDefaultData.CriticalLine, label = "<internal>" };
 			internalDefaultThemeData.Conflict.CriticalLine = new Labelled<Sprite> { value = rawDefaultData.CriticalLine, label = "<internal>" };
+			internalDefaultThemeData.Light.CriticalLineExtra = new Labelled<Sprite> { value = rawDefaultData.CriticalLineExtraLight, label = "<internal:light>" };
+			internalDefaultThemeData.Conflict.CriticalLineExtra = new Labelled<Sprite> { value = rawDefaultData.CriticalLineExtraConflict, label = "<internal:conflict>" };
 			internalDefaultThemeData.Light.ComboTextColor = rawDefaultData.ComboTextColorLight;
 			internalDefaultThemeData.Conflict.ComboTextColor = rawDefaultData.ComboTextColorConflict;
 			internalDefaultThemeData.Light.ParticleNote = new Labelled<Texture2D> { value = rawDefaultData.ParticleNote, label = "<internal>" };
@@ -807,6 +814,10 @@ namespace Arcade.Compose
 			{
 				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.CriticalLine);
+			themeSideData.CriticalLineExtra = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "CriticalLine"), spec.trackCriticalLineExtra, ".png", (path) =>
+			{
+				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
+			}, fallback.CriticalLineExtra);
 			themeSideData.ComboTextColor = LoadColor(spec.comboTextColor, fallback.ComboTextColor);
 			themeSideData.ParticleNote = LoadLabelledWithFallback<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Particle", "ParticleNote"), spec.particleNote, ".png", (path) =>
 			{

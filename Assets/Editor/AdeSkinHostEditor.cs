@@ -27,7 +27,7 @@ public class AdeSkinHostEditor : Editor
 			GUILayout.Label("Skin data not loaded");
 			return;
 		}
-		GUILayout.Label("Simple skinnable elements:");
+		GUILayout.Label("Simple skin-able elements:");
 		GUILayout.Label($"  SongInfo:{data.SongInfo.label}");
 		GUILayout.Label($"  ProgressGlow:{data.ProgressGlow.label}");
 		GUILayout.Label($"  UnknownCover:{data.UnknownCover.label}");
@@ -127,6 +127,7 @@ public class AdeSkinHostEditor : Editor
 		GUILayout.Label($"      Track:{data.Track.label}");
 		GUILayout.Label($"      TrackExtra:{data.TrackExtra.label}");
 		GUILayout.Label($"      CriticalLine:{data.CriticalLine.label}");
+		GUILayout.Label($"      CriticalLineExtra:{data.CriticalLineExtra.label}");
 		GUILayout.Label($"      ComboTextColor:{data.ComboTextColor}");
 		GUILayout.Label($"      ParticleNote:{data.ParticleNote.label}");
 		GUILayout.Label($"      ParticleArcStartColor:{data.ParticleArcStartColor}");
