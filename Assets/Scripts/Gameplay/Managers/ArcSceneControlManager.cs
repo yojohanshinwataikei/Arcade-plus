@@ -16,7 +16,7 @@ public class ArcSceneControlManager : MonoBehaviour
 		Instance = this;
 	}
 	public Image BackgroundDarkenLayer;
-	public SpriteRenderer[] BaseTrackComponentsRenderer;
+	public SpriteRenderer[] TrackComponentsRenderer;
 	public SpriteRenderer[] DividerRenderers;
 	public Transform SkyInput;
 	[HideInInspector]
@@ -39,7 +39,7 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			r.color = Color.white;
 		}
-		foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+		foreach (var TrackRenderer in TrackComponentsRenderer)
 		{
 			TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
 		}
@@ -118,9 +118,9 @@ public class ArcSceneControlManager : MonoBehaviour
 	{
 		foreach (SpriteRenderer r in DividerRenderers)
 		{
-			r.DOKill();
+			r.sharedMaterial.DOKill();
 		};
-		foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+		foreach (var TrackRenderer in TrackComponentsRenderer)
 		{
 			TrackRenderer.sharedMaterial.DOKill();
 		}
@@ -129,9 +129,9 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			foreach (SpriteRenderer r in DividerRenderers)
 			{
-				r.DOColor(Color.clear, trackAnimationTime).SetEase(Ease.InCubic);
+				r.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
 			};
-			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+			foreach (var TrackRenderer in TrackComponentsRenderer)
 			{
 				TrackRenderer.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
 			}
@@ -141,9 +141,9 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			foreach (SpriteRenderer r in DividerRenderers)
 			{
-				r.color = Color.clear;
+				r.sharedMaterial.SetColor("_Color", Color.clear);
 			};
-			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+			foreach (var TrackRenderer in TrackComponentsRenderer)
 			{
 				TrackRenderer.sharedMaterial.SetColor("_Color", Color.clear);
 			}
@@ -155,19 +155,20 @@ public class ArcSceneControlManager : MonoBehaviour
 	{
 		foreach (SpriteRenderer r in DividerRenderers)
 		{
-			r.DOKill();
+			r.sharedMaterial.DOKill();
 		};
-		foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+		foreach (var TrackRenderer in TrackComponentsRenderer)
 		{
 			TrackRenderer.sharedMaterial.DOKill();
 		}
+		BackgroundDarkenLayer.DOKill();
 		if (ArcGameplayManager.Instance.IsPlaying)
 		{
 			foreach (SpriteRenderer r in DividerRenderers)
 			{
-				r.DOColor(Color.white, trackAnimationTime).SetEase(Ease.InCubic);
+				r.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
 			};
-			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+			foreach (var TrackRenderer in TrackComponentsRenderer)
 			{
 				TrackRenderer.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
 			}
@@ -177,9 +178,9 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			foreach (SpriteRenderer r in DividerRenderers)
 			{
-				r.color = Color.white;
+				r.sharedMaterial.SetColor("_Color", Color.white);
 			};
-			foreach (var TrackRenderer in BaseTrackComponentsRenderer)
+			foreach (var TrackRenderer in TrackComponentsRenderer)
 			{
 				TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
 			}
