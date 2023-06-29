@@ -64,6 +64,7 @@ public class AdeSkinHostEditor : Editor
 		GUILayout.Label($"  TrackLaneDivider:{data.TrackLaneDivider.label}");
 		GUILayout.Label($"  LaneHit:{data.LaneHit.label}");
 		GUILayout.Label($"  ParticleArc:{data.ParticleArc.label}");
+		GUILayout.Label($"  ParticleArc:{data.ParticleSfxTap.label}");
 		GUILayout.Label($"  ArcCap:{data.ArcCap.label}");
 		GUILayout.Label($"  ArcTapShadow:{data.ArcTapShadow.label}");
 		GUILayout.Label($"  HeightIndicator:{data.HeightIndicator.label}");

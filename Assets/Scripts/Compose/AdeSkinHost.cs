@@ -57,6 +57,7 @@ namespace Arcade.Compose
 			public Sprite TrackLaneDivider;
 			public Sprite LaneHit;
 			public Texture2D ParticleArc;
+			public Texture2D ParticleSfxTap;
 			public Sprite ArcCap;
 			public Sprite ArcTapShadow;
 			public Sprite HeightIndicator;
@@ -138,6 +139,7 @@ namespace Arcade.Compose
 			public Labelled<Sprite> SkyInputLine;
 			public Labelled<Sprite> TrackLaneDivider;
 			public Labelled<Sprite> LaneHit;
+			public Labelled<Texture2D> ParticleSfxTap;
 			public Labelled<Texture2D> ParticleArc;
 			public Labelled<Sprite> ArcCap;
 			public Labelled<Sprite> ArcTapShadow;
@@ -481,6 +483,11 @@ namespace Arcade.Compose
 			{
 				return LoadPivotSprite(path, new Vector2(0.0f, 0.0f), externalSkinDataObjects);
 			}, rawDefaultData.LaneHit);
+
+			skinData.ParticleSfxTap = LoadLabelled<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Particle", "ParticleSfxTap.png"), (path) =>
+			{
+				return LoadTexture2D(path, externalSkinDataObjects);
+			}, rawDefaultData.ParticleSfxTap);
 
 			skinData.ParticleArc = LoadLabelled<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Particle", "ParticleArc.png"), (path) =>
 			{

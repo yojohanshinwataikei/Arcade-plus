@@ -17704,10 +17704,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.05319149
-    y: 0.060520094
-    width: 0.89361703
-    height: 0.87895983
+    x: 0.052083332
+    y: 0.05925926
+    width: 0.8958333
+    height: 0.88148147
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -41428,6 +41428,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TapNoteJudgeEffect: {fileID: 1839271255504496, guid: 3ac39123d40b2644cbd9dae7ba89884a,
     type: 3}
+  SfxTapNoteJudgeEffect: {fileID: 1839271255504496, guid: b8b1a1f9b504b9742ab37f405ff7b140,
+    type: 3}
   LaneHits:
   - {fileID: 1437671911}
   - {fileID: 832181920}
@@ -47293,6 +47295,7 @@ MonoBehaviour:
   - {fileID: 72816687}
   - {fileID: 2103494961}
   TapJudge: {fileID: 2100000, guid: 2e86479b38cbb7e4491623652a2e1c92, type: 2}
+  SfxTapJudge: {fileID: 2100000, guid: 64fecc5f41ef7ea48992ac35f1b00124, type: 2}
   HoldJudge: {fileID: 2100000, guid: bbc33c31520faa74d8194d6d8ba8d79d, type: 2}
   ComboText: {fileID: 490141569}
   TutorialBanner: {fileID: 994086310}
@@ -47351,6 +47354,7 @@ MonoBehaviour:
     TrackLaneDivider: {fileID: 21300000, guid: 4138c4e49a563ba4d86a3a950f1d6aef, type: 3}
     LaneHit: {fileID: 21300000, guid: e78dde47cd0c1e54a9b71887f89e2a51, type: 3}
     ParticleArc: {fileID: 2800000, guid: dc8e04064e5760b439e4c2970a2a9767, type: 3}
+    ParticleSfxTap: {fileID: 2800000, guid: 3b3a3e46e21294e47b2fa478639bb045, type: 3}
     ArcCap: {fileID: 21300000, guid: ee54072f1cd93974a876622462c06781, type: 3}
     ArcTapShadow: {fileID: 21300000, guid: 42f18f8ce6622044ba299422f776f0f1, type: 3}
     HeightIndicator: {fileID: 21300000, guid: 22766dc81e5f2ae40909da5b4fa9db92, type: 3}

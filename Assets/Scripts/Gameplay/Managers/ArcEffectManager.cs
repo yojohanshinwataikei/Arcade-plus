@@ -15,9 +15,11 @@ namespace Arcade.Gameplay
 		private void Start()
 		{
 			tapNoteEffectPool = new GameObjectPool<ArcTapNoteEffectComponent>(TapNoteJudgeEffect, EffectLayer, 10);
+			sfxTapNoteEffectPool = new GameObjectPool<ArcTapNoteEffectComponent>(SfxTapNoteJudgeEffect, EffectLayer, 10);
 		}
 
 		public GameObject TapNoteJudgeEffect;
+		public GameObject SfxTapNoteJudgeEffect;
 		public GameObject[] LaneHits = new GameObject[6];
 		public ParticleSystem[] HoldNoteEffects = new ParticleSystem[6];
 		public Transform EffectLayer;
@@ -28,6 +30,7 @@ namespace Arcade.Gameplay
 
 		private bool[] holdEffectStatus = new bool[6];
 		private GameObjectPool<ArcTapNoteEffectComponent> tapNoteEffectPool;
+		private GameObjectPool<ArcTapNoteEffectComponent> sfxTapNoteEffectPool;
 		public void SetHoldNoteEffect(int track, bool show)
 		{
 			if (holdEffectStatus[track] != show)
@@ -62,10 +65,20 @@ namespace Arcade.Gameplay
 
 		public void PlayTapNoteEffectAt(Vector2 pos, bool isArc = false, string arcTapEffect = "none")
 		{
-			ArcTapNoteEffectComponent a = tapNoteEffectPool.Get((effect) =>
+			if (arcTapEffect.EndsWith("_wav"))
 			{
-				effect.PlayAt(pos);
-			});
+				sfxTapNoteEffectPool.Get((effect) =>
+				{
+					effect.PlayAt(pos);
+				});
+			}
+			else
+			{
+				tapNoteEffectPool.Get((effect) =>
+				{
+					effect.PlayAt(pos);
+				});
+			}
 			if (isArc)
 			{
 				if (SpecialEffectAudios.ContainsKey(arcTapEffect))

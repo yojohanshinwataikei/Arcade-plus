@@ -47,6 +47,7 @@ namespace Arcade.Gameplay
 		public SpriteRenderer[] LaneHits;
 		[Header("Particle")]
 		public Material TapJudge;
+		public Material SfxTapJudge;
 		public Material HoldJudge;
 
 		[Header("Misc")]
@@ -131,6 +132,7 @@ namespace Arcade.Gameplay
 				laneHit.sprite=skinData.LaneHit.value;
 			}
 
+			SfxTapJudge.SetTexture(Shader.PropertyToID("_MainTex"),skinData.ParticleSfxTap.value);
 			HoldJudge.SetTexture(Shader.PropertyToID("_MainTex"),skinData.ParticleArc.value);
 
 			ArcArcManager.Instance.SetArcCapSkin(skinData.ArcCap.value);
