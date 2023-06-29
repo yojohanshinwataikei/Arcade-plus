@@ -16,8 +16,13 @@ public class ArcSceneControlManager : MonoBehaviour
 		Instance = this;
 	}
 	public Image BackgroundDarkenLayer;
-	public SpriteRenderer[] TrackComponentsRenderer;
+	public SpriteRenderer[] TrackComponentsRenderers;
 	public SpriteRenderer[] DividerRenderers;
+	public SpriteRenderer[] ExtraLaneRenderers;
+	public SpriteRenderer[] TrackBorderRenderers;
+	public SpriteRenderer[] ExtraTrackBorderRenderers;
+	public SpriteRenderer[] ExtraLaneDividerRenderers;
+	public SpriteRenderer[] ExtraLaneCriticalLineRenderers;
 	public Transform SkyInput;
 	[HideInInspector]
 	public List<ArcSceneControl> SceneControls = new List<ArcSceneControl>();
@@ -39,17 +44,20 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			r.color = Color.white;
 		}
-		foreach (var TrackRenderer in TrackComponentsRenderer)
+		foreach (var TrackRenderer in TrackComponentsRenderers)
 		{
 			TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
 		}
 		trackVisible = true;
+		SetEnwidenCameraRatio(0);
+		SetEnwidenLaneRatio(0);
 	}
 
 	private void Update()
 	{
 		bool newTrackVisible = true;
-		float enwidenCameraPrecent = 0;
+		float enwidenCameraRatio = 0;
+		float enwidenLaneRatio = 0;
 		foreach (ArcTimingGroup tg in ArcTimingManager.Instance.timingGroups)
 		{
 			tg.GroupHide = false;
@@ -76,21 +84,40 @@ public class ArcSceneControlManager : MonoBehaviour
 					}
 					break;
 				case SceneControlType.EnwidenCamera:
-					int offset = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing;
-					if (offset <= 0)
 					{
-						enwidenCameraPrecent = sc.Enable ? 0 : 1;
+						int offset = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing;
+						if (offset <= 0)
+						{
+							enwidenCameraRatio = sc.Enable ? 0 : 1;
+						}
+						else if (offset >= sc.Duration)
+						{
+							enwidenCameraRatio = sc.Enable ? 1 : 0;
+						}
+						else
+						{
+							float precent = (ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing) / sc.Duration;
+							enwidenCameraRatio = sc.Enable ? precent : 1 - precent;
+						}
 					}
-					else if (offset >= sc.Duration)
+					break;
+				case SceneControlType.EnwidenLanes:
 					{
-						enwidenCameraPrecent = sc.Enable ? 1 : 0;
+						int offset = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing;
+						if (offset <= 0)
+						{
+							enwidenLaneRatio = sc.Enable ? 0 : 1;
+						}
+						else if (offset >= sc.Duration)
+						{
+							enwidenLaneRatio = sc.Enable ? 1 : 0;
+						}
+						else
+						{
+							float precent = (ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing) / sc.Duration;
+							enwidenLaneRatio = sc.Enable ? precent : 1 - precent;
+						}
 					}
-					else
-					{
-						float precent = (ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset - sc.Timing) / sc.Duration;
-						enwidenCameraPrecent = sc.Enable ? precent : 1 - precent;
-					}
-
 					break;
 			}
 		}
@@ -108,10 +135,46 @@ public class ArcSceneControlManager : MonoBehaviour
 			trackVisible = newTrackVisible;
 		}
 
+		SetEnwidenCameraRatio(enwidenCameraRatio);
+		SetEnwidenLaneRatio(enwidenLaneRatio);
+	}
+
+	private void SetEnwidenCameraRatio(float enwidenCameraRatio)
+	{
 		Vector3 SkyInputPosition = SkyInput.localPosition;
-		SkyInputPosition.y = 5.5f + enwidenCameraPrecent * 2.745f;
+		SkyInputPosition.y = 5.5f + enwidenCameraRatio * 2.745f;
 		SkyInput.localPosition = SkyInputPosition;
-		ArcCameraManager.Instance.EnwidenPrecent = enwidenCameraPrecent;
+		ArcCameraManager.Instance.EnwidenRatio = enwidenCameraRatio;
+	}
+
+	private void SetEnwidenLaneRatio(float enwidenLaneRatio)
+	{
+		foreach (var ExtraLaneRenderer in ExtraLaneRenderers)
+		{
+			ExtraLaneRenderer.gameObject.SetActive(enwidenLaneRatio > 0);
+			ExtraLaneRenderer.size = new Vector2(ExtraLaneRenderer.size.x, 53.5f + 100 * enwidenLaneRatio);
+			ExtraLaneRenderer.color = new Color(1, 1, 1, enwidenLaneRatio);
+		}
+		foreach (var TrackBorderRenderer in TrackBorderRenderers)
+		{
+			TrackBorderRenderer.gameObject.SetActive(enwidenLaneRatio < 1);
+			TrackBorderRenderer.color = new Color(1, 1, 1, 1 - enwidenLaneRatio);
+		}
+		foreach (var ExtraTrackBorderRenderer in ExtraTrackBorderRenderers)
+		{
+			ExtraTrackBorderRenderer.gameObject.SetActive(enwidenLaneRatio > 0);
+			ExtraTrackBorderRenderer.color = new Color(1, 1, 1, enwidenLaneRatio);
+		}
+		foreach (var ExtraLaneDividerRenderer in ExtraLaneDividerRenderers)
+		{
+			ExtraLaneDividerRenderer.gameObject.SetActive(enwidenLaneRatio > 0);
+			ExtraLaneDividerRenderer.color = new Color(1, 1, 1, enwidenLaneRatio);
+		}
+		foreach (var ExtraLaneCriticalLineRenderer in ExtraLaneCriticalLineRenderers)
+		{
+			ExtraLaneCriticalLineRenderer.gameObject.SetActive(enwidenLaneRatio > 0);
+			ExtraLaneCriticalLineRenderer.color = new Color(1, 1, 1, enwidenLaneRatio);
+		}
 	}
 
 	private void HideTrack()
@@ -120,7 +183,7 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			r.sharedMaterial.DOKill();
 		};
-		foreach (var TrackRenderer in TrackComponentsRenderer)
+		foreach (var TrackRenderer in TrackComponentsRenderers)
 		{
 			TrackRenderer.sharedMaterial.DOKill();
 		}
@@ -131,7 +194,7 @@ public class ArcSceneControlManager : MonoBehaviour
 			{
 				r.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
 			};
-			foreach (var TrackRenderer in TrackComponentsRenderer)
+			foreach (var TrackRenderer in TrackComponentsRenderers)
 			{
 				TrackRenderer.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
 			}
@@ -143,7 +206,7 @@ public class ArcSceneControlManager : MonoBehaviour
 			{
 				r.sharedMaterial.SetColor("_Color", Color.clear);
 			};
-			foreach (var TrackRenderer in TrackComponentsRenderer)
+			foreach (var TrackRenderer in TrackComponentsRenderers)
 			{
 				TrackRenderer.sharedMaterial.SetColor("_Color", Color.clear);
 			}
@@ -157,7 +220,7 @@ public class ArcSceneControlManager : MonoBehaviour
 		{
 			r.sharedMaterial.DOKill();
 		};
-		foreach (var TrackRenderer in TrackComponentsRenderer)
+		foreach (var TrackRenderer in TrackComponentsRenderers)
 		{
 			TrackRenderer.sharedMaterial.DOKill();
 		}
@@ -168,7 +231,7 @@ public class ArcSceneControlManager : MonoBehaviour
 			{
 				r.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
 			};
-			foreach (var TrackRenderer in TrackComponentsRenderer)
+			foreach (var TrackRenderer in TrackComponentsRenderers)
 			{
 				TrackRenderer.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
 			}
@@ -180,7 +243,7 @@ public class ArcSceneControlManager : MonoBehaviour
 			{
 				r.sharedMaterial.SetColor("_Color", Color.white);
 			};
-			foreach (var TrackRenderer in TrackComponentsRenderer)
+			foreach (var TrackRenderer in TrackComponentsRenderers)
 			{
 				TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
 			}

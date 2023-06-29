@@ -15,7 +15,7 @@ namespace Arcade.Gameplay
 		public float CurrentTilt = 0;
 
 		[HideInInspector]
-		public float EnwidenPrecent = 0;
+		public float EnwidenRatio = 0;
 
 		[HideInInspector]
 		public List<ArcCamera> Cameras = new List<ArcCamera>();
@@ -27,7 +27,7 @@ namespace Arcade.Gameplay
 		{
 			get
 			{
-				return new Vector3(0, 9f + 4.5f * EnwidenPrecent, (Is16By9 ? 9f : 8f) + 4.5f * EnwidenPrecent);
+				return new Vector3(0, 9f + 4.5f * EnwidenRatio, (Is16By9 ? 9f : 8f) + 4.5f * EnwidenRatio);
 			}
 		}
 		public Vector3 ResetRotation
@@ -155,7 +155,7 @@ namespace Arcade.Gameplay
 			{
 				CurrentTilt = pos;
 			}
-			GameplayCamera.transform.LookAt(new Vector3(0, -5.5f + 4.5f * EnwidenPrecent, -20f + 4.5f * EnwidenPrecent), new Vector3(CurrentTilt, 1 - CurrentTilt, 0));
+			GameplayCamera.transform.LookAt(new Vector3(0, -5.5f + 4.5f * EnwidenRatio, -20f + 4.5f * EnwidenRatio), new Vector3(CurrentTilt, 1 - CurrentTilt, 0));
 		}
 	}
 }

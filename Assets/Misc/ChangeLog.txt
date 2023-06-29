@@ -2,6 +2,7 @@
 
 - 支持轨道编号为 0 与 5 的 Tap 与 Hold
 - 支持 EnwidenCamera 类型的 SceneControl
+- 支持 EnwidenLane 类型的 SceneControl
 - 修复预览含有 TrackShow/TrackHide 类型的 SceneControl 谱面时进行特定操作后， 轨道分割线会变为纯黑的问题
 - 支持 OBS v28 中的新版 websocket 控制协议
 - 再度修复了 macOS 支持

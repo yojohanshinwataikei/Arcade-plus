@@ -4328,7 +4328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackgroundDarkenLayer: {fileID: 1217107841}
-  TrackComponentsRenderer:
+  TrackComponentsRenderers:
   - {fileID: 910698453}
   - {fileID: 90194516}
   - {fileID: 1400013566}
@@ -4347,6 +4347,23 @@ MonoBehaviour:
   - {fileID: 1179785109}
   - {fileID: 1231564566}
   - {fileID: 875512364}
+  ExtraLaneRenderers:
+  - {fileID: 1448202006}
+  - {fileID: 917882136}
+  TrackBorderRenderers:
+  - {fileID: 90194516}
+  - {fileID: 1400013566}
+  ExtraTrackBorderRenderers:
+  - {fileID: 418977840}
+  - {fileID: 1027423977}
+  ExtraLaneDividerRenderers:
+  - {fileID: 1418397531}
+  - {fileID: 317854336}
+  - {fileID: 691425712}
+  - {fileID: 875512364}
+  ExtraLaneCriticalLineRenderers:
+  - {fileID: 774364519}
+  - {fileID: 627894574}
   SkyInput: {fileID: 195782543}
 --- !u!1 &128076247
 GameObject:
@@ -17665,10 +17682,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.05319149
+    y: 0.060520094
+    width: 0.89361703
+    height: 0.87895983
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -43165,7 +43182,7 @@ MonoBehaviour:
   GameplayCamera: {fileID: 534669904}
   SkyInputLabel: {fileID: 89880145}
   CurrentTilt: 0
-  EnwidenPrecent: 0
+  EnwidenRatio: 0
   IsReset: 1
 --- !u!1 &1244924062
 GameObject:
