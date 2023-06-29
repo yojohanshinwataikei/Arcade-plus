@@ -1060,6 +1060,7 @@ namespace Arcade.Gameplay.Chart
 		public float YStart;
 		public float YEnd;
 		public int Color;
+		public string Effect;
 		public bool IsVoid;
 		public List<ArcArcTap> ArcTaps = new List<ArcArcTap>();
 
@@ -1075,6 +1076,7 @@ namespace Arcade.Gameplay.Chart
 				YStart = YStart,
 				YEnd = YEnd,
 				Color = Color,
+				Effect = Effect,
 				IsVoid = IsVoid,
 				TimingGroup = TimingGroup,
 			};
@@ -1091,6 +1093,7 @@ namespace Arcade.Gameplay.Chart
 			YStart = n.YStart;
 			YEnd = n.YEnd;
 			Color = n.Color;
+			Effect = n.Effect;
 			IsVoid = n.IsVoid;
 			TimingGroup = n.TimingGroup;
 		}
@@ -1247,6 +1250,7 @@ namespace Arcade.Gameplay.Chart
 			YStart = rawAffArc.YStart;
 			YEnd = rawAffArc.YEnd;
 			Color = rawAffArc.Color;
+			Effect = rawAffArc.Effect;
 			IsVoid = rawAffArc.IsVoid;
 			if (rawAffArc.ArcTaps.Count > 0)
 			{
@@ -1270,6 +1274,7 @@ namespace Arcade.Gameplay.Chart
 				YStart = YStart,
 				YEnd = YEnd,
 				Color = Color,
+				Effect = Effect,
 				IsVoid = IsVoid,
 				ArcTaps = ArcTaps.Select((arctap) => new RawAffArctap() { Timing = arctap.Timing, }).ToList(),
 			};

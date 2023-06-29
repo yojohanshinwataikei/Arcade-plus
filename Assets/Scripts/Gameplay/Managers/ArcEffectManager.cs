@@ -24,6 +24,8 @@ namespace Arcade.Gameplay
 		public AudioClip TapAudio, ArcAudio;
 		public AudioSource Source;
 
+		public Dictionary<string, AudioClip> SpecialEffectAudios = new Dictionary<string, AudioClip>();
+
 		private bool[] holdEffectStatus = new bool[6];
 		private GameObjectPool<ArcTapNoteEffectComponent> tapNoteEffectPool;
 		public void SetHoldNoteEffect(int track, bool show)
@@ -43,13 +45,43 @@ namespace Arcade.Gameplay
 				LaneHits[track].SetActive(show);
 			}
 		}
-		public void PlayTapNoteEffectAt(Vector2 pos, bool isArc = false)
+
+		public void AddSpecialEffectAudio(string effect, AudioClip audio)
+		{
+			SpecialEffectAudios.Add(effect, audio);
+		}
+
+		public void CleanSpecialEffectAudios()
+		{
+			foreach (var audio in SpecialEffectAudios.Values)
+			{
+				Destroy(audio);
+			}
+			SpecialEffectAudios.Clear();
+		}
+
+		public void PlayTapNoteEffectAt(Vector2 pos, bool isArc = false, string arcTapEffect = "none")
 		{
 			ArcTapNoteEffectComponent a = tapNoteEffectPool.Get((effect) =>
 			{
 				effect.PlayAt(pos);
 			});
-			Source.PlayOneShot(isArc ? ArcAudio : TapAudio);
+			if (isArc)
+			{
+				if (SpecialEffectAudios.ContainsKey(arcTapEffect))
+				{
+					Debug.Log(arcTapEffect);
+					ArcAudioManager.Instance.Source.PlayOneShot(SpecialEffectAudios[arcTapEffect]);
+				}
+				else
+				{
+					Source.PlayOneShot(ArcAudio);
+				}
+			}
+			else
+			{
+				Source.PlayOneShot(ArcAudio);
+			}
 		}
 		public void PlayTapSound()
 		{

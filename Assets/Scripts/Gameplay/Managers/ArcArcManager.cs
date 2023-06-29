@@ -282,7 +282,7 @@ namespace Arcade.Gameplay
 				if (currentTiming > t.Timing + offset && currentTiming <= t.Timing + offset + 150)
 				{
 					t.Judged = true;
-					if (ArcGameplayManager.Instance.IsPlaying) ArcEffectManager.Instance.PlayTapNoteEffectAt(new Vector2(t.LocalPosition.x, t.LocalPosition.y + 0.5f), true);
+					if (ArcGameplayManager.Instance.IsPlaying) ArcEffectManager.Instance.PlayTapNoteEffectAt(new Vector2(t.LocalPosition.x, t.LocalPosition.y + 0.5f), true, arc.Effect);
 				}
 				else if (currentTiming > t.Timing + offset + 150)
 				{

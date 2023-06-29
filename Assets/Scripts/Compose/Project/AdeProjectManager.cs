@@ -12,6 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Compose.Command;
 using Arcade.Util.Loader;
+using System.Collections.Generic;
 
 namespace Arcade.Compose
 {
@@ -161,6 +162,7 @@ namespace Arcade.Compose
 			CurrentTimingGroup.interactable = false;
 			watcher.EnableRaisingEvents = false;
 			FileWatchEnableImage.color = DisableColor;
+			ArcEffectManager.Instance.CleanSpecialEffectAudios();
 			ArcGameplayManager.Instance.Clean();
 		}
 		public void OpenProject()
@@ -299,6 +301,7 @@ namespace Arcade.Compose
 				SetTutorialMessage("无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹");
 				return;
 			}
+			LoadSpecialEffectAudio();
 			SetTutorialMessage(null);
 		}
 
@@ -423,6 +426,26 @@ namespace Arcade.Compose
 			watcher.Path = CurrentProjectFolder;
 			watcher.Filter = $"{difficulty}.aff";
 			ArcGameplayManager.Instance.Timing = CurrentProjectMetadata.LastWorkingTiming;
+		}
+
+		private void LoadSpecialEffectAudio()
+		{
+			var effects=new HashSet<string>();
+			foreach(var arc in ArcGameplayManager.Instance.Chart.Arcs){
+				effects.Add(arc.Effect);
+			}
+			foreach(var effect in effects){
+				if(effect.EndsWith("_wav")){
+					string effectAudioFilename=effect.Substring(0,effect.Length-4);
+					string effectAudioPath=Path.Combine(CurrentProjectFolder, $"{effectAudioFilename}.wav");
+					AudioClip clip = Loader.LoadAudioFile(effectAudioPath);
+					if(clip!=null){
+						ArcEffectManager.Instance.AddSpecialEffectAudio(effect,clip);
+					}else{
+						Debug.LogWarning($"SpecialEffectAudio for effect '{effect}' load fail");
+					}
+				}
+			}
 		}
 
 		private void SetTutorialMessage(string message)
