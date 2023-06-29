@@ -54,6 +54,7 @@ namespace Arcade.Aff
 		public float YStart;
 		public float YEnd;
 		public int Color;
+		public string Effect;
 		public bool IsVoid;
 		public List<RawAffArctap> ArcTaps;
 	}
@@ -260,7 +261,7 @@ namespace Arcade.Aff
 					arc.IsVoid = true;
 				}
 				writer.WriteLine($"{intent}arc({arc.Timing},{arc.EndTiming},{arc.XStart.ToString("f2")},{arc.XEnd.ToString("f2")}" +
-					$",{ArcLineTypeStrings[arc.LineType]},{arc.YStart.ToString("f2")},{arc.YEnd.ToString("f2")},{arc.Color},none,{arc.IsVoid.ToString().ToLower()})" +
+					$",{ArcLineTypeStrings[arc.LineType]},{arc.YStart.ToString("f2")},{arc.YEnd.ToString("f2")},{arc.Color},{arc.Effect},{arc.IsVoid.ToString().ToLower()})" +
 					(arc.ArcTaps.Count > 0 ? $"[{string.Join(",", arc.ArcTaps.Select(e => $"arctap({e.Timing})"))}]" : "") +
 					";");
 			}
@@ -607,6 +608,7 @@ namespace Arcade.Aff
 					YStart = yStart.data,
 					YEnd = yEnd.data,
 					Color = color.data,
+					Effect = effect.data,
 					IsVoid = isVoid.Value,
 					ArcTaps = arctaps,
 				};
