@@ -154,12 +154,12 @@ namespace Arcade.Util.Loader
 			{
 				return clip;
 			}
-			clip = LoadMp3AudioFile(path);
+			clip = LoadWavOrMp3AudioFile(path);
 			if (clip != null)
 			{
 				return clip;
 			}
-			clip = LoadWavOrMp3AudioFile(path);
+			clip = LoadMp3AudioFile(path);
 			if (clip != null)
 			{
 				return clip;

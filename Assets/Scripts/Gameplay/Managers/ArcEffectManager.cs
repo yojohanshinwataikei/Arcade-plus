@@ -70,7 +70,6 @@ namespace Arcade.Gameplay
 			{
 				if (SpecialEffectAudios.ContainsKey(arcTapEffect))
 				{
-					Debug.Log(arcTapEffect);
 					ArcAudioManager.Instance.Source.PlayOneShot(SpecialEffectAudios[arcTapEffect]);
 				}
 				else
