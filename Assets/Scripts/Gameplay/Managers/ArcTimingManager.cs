@@ -26,6 +26,7 @@ namespace Arcade.Gameplay
 		public GameObject BeatlinePrefab;
 
 		public const int LostDelay = 120;
+		public float BeatlineEnwidenRatio = 0;
 
 		// Note: This should be ordered!
 		[HideInInspector]
@@ -410,7 +411,7 @@ namespace Arcade.Gameplay
 				s.enabled = true;
 				float z = pos / 1000f;
 				s.transform.localPosition = new Vector3(0, 0, -z);
-				s.transform.localScale = new Vector3(1700, 20 + z);
+				s.transform.localScale = new Vector3(1700 * (1 + BeatlineEnwidenRatio * 0.5f), 20 + z);
 				index++;
 			}
 			HideExceededBeatlineInstance(index);

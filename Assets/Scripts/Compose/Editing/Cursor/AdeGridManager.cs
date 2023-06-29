@@ -68,7 +68,8 @@ namespace Arcade.Compose
 		}
 		private void Update()
 		{
-			if(AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ToggleGrid)){
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ToggleGrid))
+			{
 				SwitchGridStatus();
 			}
 			if (!ArcGameplayManager.Instance.IsLoaded)
@@ -258,6 +259,7 @@ namespace Arcade.Compose
 		{
 
 			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
+			float xEdgePos = 8.5f * (1 + ArcTimingManager.Instance.BeatlineEnwidenRatio * 0.5f);
 			beatlineInUse = 0;
 			if (EnableBeatline)
 			{
@@ -276,7 +278,7 @@ namespace Arcade.Compose
 					float z = pos / 1000f;
 					LineRenderer l = GetBeatlineInstance();
 					l.enabled = true;
-					l.DrawLine(new Vector3(-8.5f, -z), new Vector3(8.5f, -z));
+					l.DrawLine(new Vector3(-xEdgePos, -z), new Vector3(xEdgePos, -z));
 					l.endColor = l.startColor = BeatlineColors[t.Importance];
 					l.endWidth = l.startWidth = 0.2f - 0.021f * t.Importance;
 				}
@@ -286,19 +288,21 @@ namespace Arcade.Compose
 		private void UpdateVertical()
 		{
 			verticalInUse = 0;
+			float xEdgePos = 8.5f * (1 + ArcTimingManager.Instance.BeatlineEnwidenRatio * 0.5f);
+			float yEdgePos = 5.5f + ArcCameraManager.Instance.EnwidenRatio * 2.745f;
 			if (EnableVertical && AdeCursorManager.Instance.EnableVerticalPanel)
 			{
 				foreach (var t in verticalXTimings)
 				{
 					LineRenderer l = GetVerticalInstance();
-					l.DrawLine(new Vector3(ArcAlgorithm.ArcXToWorld(t), 0), new Vector3(ArcAlgorithm.ArcXToWorld(t), 5.5f));
+					l.DrawLine(new Vector3(ArcAlgorithm.ArcXToWorld(t), 0), new Vector3(ArcAlgorithm.ArcXToWorld(t), yEdgePos));
 					l.endColor = l.startColor = VerticalXColor;
 					l.enabled = true;
 				}
 				foreach (var t in verticalYTimings)
 				{
 					LineRenderer l = GetVerticalInstance();
-					l.DrawLine(new Vector3(-8.5f, ArcAlgorithm.ArcYToWorld(t)), new Vector3(8.5f, ArcAlgorithm.ArcYToWorld(t)));
+					l.DrawLine(new Vector3(-xEdgePos, ArcAlgorithm.ArcYToWorld(t)), new Vector3(xEdgePos, ArcAlgorithm.ArcYToWorld(t)));
 					l.endColor = l.startColor = VerticalYColor;
 					l.enabled = true;
 				}

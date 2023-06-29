@@ -35,6 +35,7 @@ namespace Arcade.Compose
 
 		public Camera GameplayCamera;
 		public MeshCollider HorizontalCollider, VerticalCollider;
+		public GameObject VerticalPanel;
 		public LineRenderer HorizontalX, HorizontalY, VerticalX, VerticalY;
 		public MeshRenderer VerticalRenderer;
 
@@ -248,6 +249,8 @@ namespace Arcade.Compose
 
 		private void UpdateHorizontal()
 		{
+			float xEdgePos = 8.5f * (1 + ArcTimingManager.Instance.BeatlineEnwidenRatio * 0.5f);
+			HorizontalCollider.gameObject.transform.localScale=new Vector3(xEdgePos*2f,100f,1);
 			Ray ray = GameplayCamera.ScreenPointToRay();
 			IsHorizontalHit = HorizontalCollider.Raycast(ray, out horizontalHit, 120);
 			if (Mode != CursorMode.Horizontal) return;
@@ -255,21 +258,25 @@ namespace Arcade.Compose
 			if (IsHorizontalHit)
 			{
 				float z = AdeGridManager.Instance.AttachBeatline(horizontalHit.point.z);
-				HorizontalX.DrawLine(new Vector3(-8.5f, z), new Vector3(8.5f, z));
+				HorizontalX.DrawLine(new Vector3(-xEdgePos, z), new Vector3(xEdgePos, z));
 				HorizontalY.DrawLine(new Vector3(horizontalHit.point.x, 0), new Vector3(horizontalHit.point.x, -100));
-				VerticalCollider.transform.localPosition = new Vector3(0, 0, z);
+				VerticalPanel.transform.localPosition = new Vector3(0, 0, z);
 			}
 		}
 		private void UpdateVertical()
 		{
+			float xEdgePos = 8.5f * (1 + ArcTimingManager.Instance.BeatlineEnwidenRatio * 0.5f);
+			float yEdgePos = 5.5f + ArcCameraManager.Instance.EnwidenRatio * 2.745f;
+			VerticalCollider.gameObject.transform.localScale=new Vector3(xEdgePos*2f,yEdgePos,1);
+			VerticalCollider.gameObject.transform.localPosition=new Vector3(0,yEdgePos/2f,0);
 			Ray ray = GameplayCamera.ScreenPointToRay();
 			IsVerticalHit = VerticalCollider.Raycast(ray, out verticalHit, 120);
 			if (Mode != CursorMode.Vertical) return;
 			EnableVertical = IsVerticalHit;
 			if (IsVerticalHit)
 			{
-				VerticalX.DrawLine(new Vector3(-8.5f, AttachedVerticalPoint.y), new Vector3(8.5f, AttachedVerticalPoint.y));
-				VerticalY.DrawLine(new Vector3(AttachedVerticalPoint.x, 0), new Vector3(AttachedVerticalPoint.x, 5.5f));
+				VerticalX.DrawLine(new Vector3(-xEdgePos, AttachedVerticalPoint.y), new Vector3(xEdgePos, AttachedVerticalPoint.y));
+				VerticalY.DrawLine(new Vector3(AttachedVerticalPoint.x, 0), new Vector3(AttachedVerticalPoint.x, yEdgePos));
 			}
 		}
 

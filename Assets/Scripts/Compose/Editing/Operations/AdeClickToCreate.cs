@@ -291,7 +291,7 @@ namespace Arcade.Compose.Editing
 		}
 		private int PositionToTrack(float position)
 		{
-			return Mathf.Clamp((int)(position / -4.25f + 2) + 1, 1, 4);
+			return Mathf.Clamp((int)(position / -4.25f + 3), 0, 5);
 		}
 
 		public void CancelAddLongNote()
