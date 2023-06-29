@@ -11,7 +11,7 @@ Shader "Arcade/Arc"
 	}
 	SubShader
 	{
-		Tags { "Queue" = "Transparent"  "RenderType" = "Transparent" "CanUseSpriteAtlas"="true"  }
+		Tags { "Queue" = "Transparent"  "RenderType" = "Transparent" "CanUseSpriteAtlas"="true" "PreviewType" = "Plane"  }
 
         Cull Off
         Lighting Off

@@ -14,7 +14,7 @@ Shader "Arcade/Track"
 	}
 	SubShader
 	{
-		Tags { "Queue" = "Transparent"  "RenderType"="Transparent" "CanUseSpriteAtlas"="true"  }
+		Tags { "Queue" = "Transparent"  "RenderType"="Transparent" "CanUseSpriteAtlas"="true" "PreviewType" = "Plane" }
 		ZWrite Off
 		Cull Off
 		Blend SrcAlpha OneMinusSrcAlpha
