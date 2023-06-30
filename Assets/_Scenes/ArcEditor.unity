@@ -41180,12 +41180,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 33995218629962512, guid: d1bcec05f417133458e8c696f6edbc03,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: -2432090755550338912, guid: 116184ff4745fd847a4f127565c3fc01,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1bcec05f417133458e8c696f6edbc03, type: 3}
 --- !u!4 &1191191388 stripped
@@ -47415,6 +47409,8 @@ MonoBehaviour:
     TapNoteConflict: {fileID: 21300000, guid: 5a0b0df2150f8504c8d7f4152e30e22d, type: 3}
     ArcTapLight: {fileID: 2800000, guid: 4774c9cdcbf72374bbb1a31f99e2a0de, type: 3}
     ArcTapConflict: {fileID: 2800000, guid: e1eab9b4656650841b6a7c78c6dd24e6, type: 3}
+    SfxArcTapModel: {fileID: -2432090755550338912, guid: 116184ff4745fd847a4f127565c3fc01,
+      type: 3}
     ConnectionLineColorLight: {r: 0.47058824, g: 0.78431374, b: 0.8627451, a: 1}
     ConnectionLineColorConflict: {r: 0.6666667, g: 0.32941177, b: 0.627451, a: 1}
     HoldNoteLight: {fileID: 21300000, guid: bcf15edc8a15d004bbd5b46b8d6f72c6, type: 3}

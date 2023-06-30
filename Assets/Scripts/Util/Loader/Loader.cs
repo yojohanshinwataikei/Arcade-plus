@@ -5,6 +5,7 @@ using NAudio.Wave;
 using NVorbis;
 using NLayer;
 using UnityEngine;
+using Dummiesman;
 
 namespace Arcade.Util.Loader
 {
@@ -192,6 +193,27 @@ namespace Arcade.Util.Loader
 				UnityEngine.Object.Destroy(texture);
 				return null;
 			}
+		}
+
+		public static Mesh LoadObjMesh(string path){
+			try{
+				OBJLoader loader=new OBJLoader{
+					SplitMode = SplitMode.None
+				};
+				GameObject obj=loader.Load(path);
+				MeshRenderer renderer=obj.GetComponentInChildren<MeshRenderer>();
+				MeshFilter filter=obj.GetComponentInChildren<MeshFilter>();
+				Mesh mesh=filter.sharedMesh;
+				foreach (var material in renderer.sharedMaterials)
+				{
+					UnityEngine.Object.Destroy(material);
+				}
+				UnityEngine.Object.Destroy(obj);
+				return mesh;
+			}catch{
+				Debug.LogWarning($"Can not load obj mesh, path: {path}");
+			}
+			return null;
 		}
 	}
 }

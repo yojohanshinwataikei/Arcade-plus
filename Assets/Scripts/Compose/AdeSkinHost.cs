@@ -67,6 +67,7 @@ namespace Arcade.Compose
 			public Sprite TapNoteConflict;
 			public Texture2D ArcTapLight;
 			public Texture2D ArcTapConflict;
+			public Mesh SfxArcTapModel;
 			public Color ConnectionLineColorLight;
 			public Color ConnectionLineColorConflict;
 			public Sprite HoldNoteLight;
@@ -146,6 +147,7 @@ namespace Arcade.Compose
 			public Labelled<Sprite> HeightIndicator;
 			public Labelled<Texture2D> ArcBody;
 			public Labelled<Texture2D> ArcBodyHighlight;
+			public Labelled<Mesh> SfxArcTapModel;
 			public string DefaultNoteData;
 			public Dictionary<string, WithSideData<NoteSideData>> NoteDatas;
 			public string DefaultThemeData;
@@ -517,6 +519,11 @@ namespace Arcade.Compose
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, rawDefaultData.ArcBodyHighlight);
+
+			skinData.SfxArcTapModel = LoadLabelled<Mesh>(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap", "SfxArcTap.obj"), (path) =>
+			{
+				return LoadObjMesh(path, externalSkinDataObjects);
+			}, rawDefaultData.SfxArcTapModel);
 
 			string specData = "";
 			try
@@ -950,6 +957,16 @@ namespace Arcade.Compose
 				resourceList.Add(clip);
 			}
 			return clip;
+		}
+
+		private Mesh LoadObjMesh(string path, List<UnityEngine.Object> resourceList)
+		{
+			Mesh mesh = Loader.LoadObjMesh(path);
+			if (mesh != null)
+			{
+				resourceList.Add(mesh);
+			}
+			return mesh;
 		}
 		#endregion
 	}

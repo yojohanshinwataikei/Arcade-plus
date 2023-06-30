@@ -70,6 +70,7 @@ public class AdeSkinHostEditor : Editor
 		GUILayout.Label($"  HeightIndicator:{data.HeightIndicator.label}");
 		GUILayout.Label($"  ArcBody:{data.ArcBody.label}");
 		GUILayout.Label($"  ArcBodyHighlight:{data.ArcBodyHighlight.label}");
+		GUILayout.Label($"  SfxArcTapModel:{data.SfxArcTapModel.label}");
 		GUILayout.Label($"Default note type:{data.DefaultNoteData}");
 		GUILayout.Label("Note datas:");
 		foreach(KeyValuePair<string, WithSideData<NoteSideData>> noteData in data.NoteDatas){

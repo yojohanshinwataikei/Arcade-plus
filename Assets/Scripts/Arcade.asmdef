@@ -4,7 +4,8 @@
     "references": [
         "Demigiant.DOTween",
         "SFB.Runtime",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "OBJImport"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
