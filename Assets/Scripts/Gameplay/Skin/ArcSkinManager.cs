@@ -142,6 +142,9 @@ namespace Arcade.Gameplay
 			ArcArcManager.Instance.SetHeightIndicatorSkin(skinData.HeightIndicator.value);
 
 			ArcArcManager.Instance.SetArcBodySkin(skinData.ArcBody.value,skinData.ArcBodyHighlight.value);
+
+			ArcArcManager.Instance.SetSfxArcTapModel(skinData.SfxArcTapModel.value);
+			AdeCursorManager.Instance.SfxArcTapCursorRenderer.GetComponent<MeshFilter>().mesh=skinData.SfxArcTapModel.value;
 		}
 		public void SetNoteSideSkin(AdeSkinHost.NoteSideData noteSideData){
 			ArcTapNoteManager.Instance.SetTapNoteSkin(noteSideData.TapNote.value);

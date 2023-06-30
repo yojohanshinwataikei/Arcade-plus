@@ -955,6 +955,7 @@ namespace Arcade.Compose
 			if (clip != null)
 			{
 				resourceList.Add(clip);
+				clip.name=path;
 			}
 			return clip;
 		}
@@ -965,6 +966,7 @@ namespace Arcade.Compose
 			if (mesh != null)
 			{
 				resourceList.Add(mesh);
+				mesh.name=path;
 			}
 			return mesh;
 		}

@@ -85,7 +85,8 @@ namespace Arcade.Gameplay
 							}
 							else if (a.ArcGroup != null && b.ArcGroup != null)
 							{
-								if(a.ArcGroup != b.ArcGroup){
+								if (a.ArcGroup != b.ArcGroup)
+								{
 									a.ArcGroup.AddRange(b.ArcGroup);
 									foreach (ArcArc arc in b.ArcGroup)
 									{
@@ -377,6 +378,24 @@ namespace Arcade.Gameplay
 		{
 			ArcTapSkin = texture;
 			ArcTapMaterial.mainTexture = texture;
+		}
+
+		internal void SetSfxArcTapModel(Mesh value)
+		{
+			SfxArcTapPrefab.GetComponentInChildren<MeshFilter>().mesh = value;
+			foreach (ArcArc arc in Arcs)
+			{
+				if (arc.IsSfx)
+				{
+					foreach (ArcArcTap arcTap in arc.ArcTaps)
+					{
+						if (arcTap.Instance != null)
+						{
+							arcTap.ModelRenderer.GetComponent<MeshFilter>().mesh = value;
+						}
+					}
+				}
+			}
 		}
 	}
 }
