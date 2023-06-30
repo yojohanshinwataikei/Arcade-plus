@@ -114,6 +114,8 @@ public class AdeSkinHostEditor : Editor
 		GUILayout.Label($"      HoldNote:{data.HoldNote.label}");
 		GUILayout.Label($"      HoldNoteHighlight:{data.HoldNoteHighlight.label}");
 		GUILayout.Label($"      ArcTap:{data.ArcTap.label}");
+		GUILayout.Label($"      SfxArcTapNote:{data.SfxArcTapNote.label}");
+		GUILayout.Label($"      SfxArcTapCore:{data.SfxArcTapCore.label}");
 		GUILayout.Label($"      ConnectionLineColor:{data.ConnectionLineColor}");
 		GUILayout.Label($"      ArcRedLow:{data.ArcRedLow}");
 		GUILayout.Label($"      ArcBlueLow:{data.ArcBlueLow}");

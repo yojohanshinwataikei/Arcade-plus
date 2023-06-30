@@ -17713,10 +17713,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.052083332
-    y: 0.05925926
-    width: 0.8958333
-    height: 0.88148147
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -47413,6 +47413,14 @@ MonoBehaviour:
     TapNoteConflict: {fileID: 21300000, guid: 5a0b0df2150f8504c8d7f4152e30e22d, type: 3}
     ArcTapLight: {fileID: 2800000, guid: 4774c9cdcbf72374bbb1a31f99e2a0de, type: 3}
     ArcTapConflict: {fileID: 2800000, guid: e1eab9b4656650841b6a7c78c6dd24e6, type: 3}
+    SfxArcTapNoteLight: {fileID: 2800000, guid: 7c51aecf71d724444957e55a82bd6e23,
+      type: 3}
+    SfxArcTapNoteConflict: {fileID: 2800000, guid: 285af47ebdcc79548982133c4bfcbf36,
+      type: 3}
+    SfxArcTapCoreLight: {fileID: 2800000, guid: 1f70748a24380cf46b7e3f6fa2ddb9fa,
+      type: 3}
+    SfxArcTapCoreConflict: {fileID: 2800000, guid: d5c02c6a9b10b574a87b09388d58d651,
+      type: 3}
     SfxArcTapModel: {fileID: -2432090755550338912, guid: 116184ff4745fd847a4f127565c3fc01,
       type: 3}
     ConnectionLineColorLight: {r: 0.47058824, g: 0.78431374, b: 0.8627451, a: 1}
@@ -57829,6 +57837,12 @@ MonoBehaviour:
   ConnectionColor: {r: 0.47058824, g: 0.78431374, b: 0.8627451, a: 1}
   ArcTapSkin: {fileID: 2800000, guid: 4774c9cdcbf72374bbb1a31f99e2a0de, type: 3}
   ArcTapMaterial: {fileID: 2100000, guid: 398ea87e569dea441b35a94a2d63ca34, type: 2}
+  SfxArcTapNoteSkin: {fileID: 2800000, guid: 7c51aecf71d724444957e55a82bd6e23, type: 3}
+  SfxArcTapNoteMaterial: {fileID: 2100000, guid: 8522bb34bae79d847819262a6a31112b,
+    type: 2}
+  SfxArcTapCoreSkin: {fileID: 2800000, guid: 1f70748a24380cf46b7e3f6fa2ddb9fa, type: 3}
+  SfxArcTapCoreMaterial: {fileID: 2100000, guid: de3e3b432742eb84aa6828b396678f4e,
+    type: 2}
   ArcMaterial: {fileID: 2100000, guid: fc19cc416dce47b4ba4772e4ad59ac87, type: 2}
   ArcRedLow: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
   ArcBlueLow: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}

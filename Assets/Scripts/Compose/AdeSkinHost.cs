@@ -67,6 +67,10 @@ namespace Arcade.Compose
 			public Sprite TapNoteConflict;
 			public Texture2D ArcTapLight;
 			public Texture2D ArcTapConflict;
+			public Texture2D SfxArcTapNoteLight;
+			public Texture2D SfxArcTapNoteConflict;
+			public Texture2D SfxArcTapCoreLight;
+			public Texture2D SfxArcTapCoreConflict;
 			public Mesh SfxArcTapModel;
 			public Color ConnectionLineColorLight;
 			public Color ConnectionLineColorConflict;
@@ -160,6 +164,8 @@ namespace Arcade.Compose
 		{
 			public Labelled<Sprite> TapNote;
 			public Labelled<Texture2D> ArcTap;
+			public Labelled<Texture2D> SfxArcTapNote;
+			public Labelled<Texture2D> SfxArcTapCore;
 			public Color ConnectionLineColor;
 			public Labelled<Sprite> HoldNote;
 			public Labelled<Sprite> HoldNoteHighlight;
@@ -209,6 +215,10 @@ namespace Arcade.Compose
 			[JsonPropertyAttribute("holdnote-highlight")]
 			public string holdnoteHighlight;
 			public string arctap;
+			[JsonPropertyAttribute("sfx-arctap-note")]
+			public string sfxArctapNote;
+			[JsonPropertyAttribute("sfx-arctap-core")]
+			public string sfxArctapCore;
 			[JsonPropertyAttribute("connection-line-color")]
 			public string connectionLineColor;
 			[JsonPropertyAttribute("arc-red-low")]
@@ -679,6 +689,10 @@ namespace Arcade.Compose
 			internalDefaultNoteData.Conflict.HoldNoteHighlight = new Labelled<Sprite> { value = rawDefaultData.HoldNoteHighlightConflict, label = "<internal:conflict>" };
 			internalDefaultNoteData.Light.ArcTap = new Labelled<Texture2D> { value = rawDefaultData.ArcTapLight, label = "<internal:light>" };
 			internalDefaultNoteData.Conflict.ArcTap = new Labelled<Texture2D> { value = rawDefaultData.ArcTapConflict, label = "<internal:conflict>" };
+			internalDefaultNoteData.Light.SfxArcTapNote = new Labelled<Texture2D> { value = rawDefaultData.SfxArcTapNoteLight, label = "<internal:light>" };
+			internalDefaultNoteData.Conflict.SfxArcTapNote = new Labelled<Texture2D> { value = rawDefaultData.SfxArcTapNoteConflict, label = "<internal:conflict>" };
+			internalDefaultNoteData.Light.SfxArcTapCore = new Labelled<Texture2D> { value = rawDefaultData.SfxArcTapCoreLight, label = "<internal:light>" };
+			internalDefaultNoteData.Conflict.SfxArcTapCore = new Labelled<Texture2D> { value = rawDefaultData.SfxArcTapCoreConflict, label = "<internal:conflict>" };
 			internalDefaultNoteData.Light.ConnectionLineColor = rawDefaultData.ConnectionLineColorLight;
 			internalDefaultNoteData.Conflict.ConnectionLineColor = rawDefaultData.ConnectionLineColorConflict;
 			internalDefaultNoteData.Light.ArcRedLow = rawDefaultData.ArcRedLow;
@@ -796,6 +810,15 @@ namespace Arcade.Compose
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, fallback.ArcTap);
+			noteSideData.SfxArcTapNote = LoadLabelledWithFallback<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap"), spec.sfxArctapNote, ".jpg", (path) =>
+			{
+				Debug.Log(path);
+				return LoadTexture2D(path, externalSkinDataObjects);
+			}, fallback.SfxArcTapNote);
+			noteSideData.SfxArcTapCore = LoadLabelledWithFallback<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap"), spec.sfxArctapCore, ".jpg", (path) =>
+			{
+				return LoadTexture2D(path, externalSkinDataObjects);
+			}, fallback.SfxArcTapCore);
 			noteSideData.ConnectionLineColor = LoadColor(spec.connectionLineColor, fallback.ConnectionLineColor);
 			noteSideData.ArcRedLow = LoadColor(spec.arcRedLow, fallback.ArcRedLow);
 			noteSideData.ArcBlueLow = LoadColor(spec.arcBlueLow, fallback.ArcBlueLow);

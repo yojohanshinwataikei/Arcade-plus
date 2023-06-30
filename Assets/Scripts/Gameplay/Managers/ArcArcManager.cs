@@ -21,6 +21,10 @@ namespace Arcade.Gameplay
 		public Color ConnectionColor;
 		public Texture2D ArcTapSkin;
 		public Material ArcTapMaterial;
+		public Texture2D SfxArcTapNoteSkin;
+		public Material SfxArcTapNoteMaterial;
+		public Texture2D SfxArcTapCoreSkin;
+		public Material SfxArcTapCoreMaterial;
 		public Material ArcMaterial;
 
 		public Color ArcRedLow;
@@ -380,7 +384,7 @@ namespace Arcade.Gameplay
 			ArcTapMaterial.mainTexture = texture;
 		}
 
-		internal void SetSfxArcTapModel(Mesh value)
+		public void SetSfxArcTapModel(Mesh value)
 		{
 			SfxArcTapPrefab.GetComponentInChildren<MeshFilter>().mesh = value;
 			foreach (ArcArc arc in Arcs)
@@ -396,6 +400,14 @@ namespace Arcade.Gameplay
 					}
 				}
 			}
+		}
+
+		public void SetSfxArcTapSkin(Texture2D noteTexture, Texture2D coreTexture)
+		{
+			SfxArcTapNoteSkin = noteTexture;
+			SfxArcTapNoteMaterial.mainTexture = noteTexture;
+			SfxArcTapCoreSkin = coreTexture;
+			SfxArcTapCoreMaterial.mainTexture = coreTexture;
 		}
 	}
 }

@@ -150,6 +150,7 @@ namespace Arcade.Gameplay
 			ArcTapNoteManager.Instance.SetTapNoteSkin(noteSideData.TapNote.value);
 			ArcHoldNoteManager.Instance.SetHoldNoteSkin(noteSideData.HoldNote.value,noteSideData.HoldNoteHighlight.value);
 			ArcArcManager.Instance.SetArcTapSkin(noteSideData.ArcTap.value);
+			ArcArcManager.Instance.SetSfxArcTapSkin(noteSideData.SfxArcTapNote.value,noteSideData.SfxArcTapCore.value);
 			ArcTapNoteManager.Instance.SetConnectionLineColor(noteSideData.ConnectionLineColor);
 			ArcArcManager.Instance.SetArcColors(noteSideData.ArcRedLow,noteSideData.ArcBlueLow,noteSideData.ArcGreenLow,noteSideData.ArcRedHigh,noteSideData.ArcBlueHigh,noteSideData.ArcGreenHigh,noteSideData.ArcVoid);
 		}
