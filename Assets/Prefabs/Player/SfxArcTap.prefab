@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4169165809120514}
   m_Layer: 9
-  m_Name: ArcTap
+  m_Name: SfxArcTap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145,7 +145,7 @@ Transform:
   m_GameObject: {fileID: 1806244166516372}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 4.67, z: -0.6}
-  m_LocalScale: {x: 4.25, y: 0.6, z: -1.2}
+  m_LocalScale: {x: 3.64, y: 3, z: 6}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4169165809120514}
@@ -158,7 +158,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1806244166516372}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -2432090755550338912, guid: 116184ff4745fd847a4f127565c3fc01, type: 3}
 --- !u!23 &23347824082841986
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -179,7 +179,8 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 398ea87e569dea441b35a94a2d63ca34, type: 2}
+  - {fileID: 2100000, guid: 8522bb34bae79d847819262a6a31112b, type: 2}
+  - {fileID: 2100000, guid: de3e3b432742eb84aa6828b396678f4e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -214,4 +215,4 @@ MeshCollider:
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -2432090755550338912, guid: 116184ff4745fd847a4f127565c3fc01, type: 3}
