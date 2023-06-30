@@ -1062,7 +1062,7 @@ namespace Arcade.Gameplay.Chart
 		public float YStart;
 		public float YEnd;
 		public int Color;
-		public string Effect;
+		public string Effect = "none";
 		public bool IsVoid;
 		public List<ArcArcTap> ArcTaps = new List<ArcArcTap>();
 

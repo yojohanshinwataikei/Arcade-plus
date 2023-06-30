@@ -248,7 +248,7 @@ namespace Arcade.Compose.Editing
 					note = new ArcHold() { Timing = timing, Track = PositionToTrack(pos.x), EndTiming = timing, TimingGroup = timingGroup };
 					break;
 				case ClickToCreateMode.Arc:
-					note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, IsVoid = currentArcIsVoid, LineType = currentArcType, TimingGroup = timingGroup };
+					note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, Effect = "none", IsVoid = currentArcIsVoid, LineType = currentArcType, TimingGroup = timingGroup };
 					break;
 				case ClickToCreateMode.ArcTap:
 					note = new ArcArcTap() { Timing = timing };
