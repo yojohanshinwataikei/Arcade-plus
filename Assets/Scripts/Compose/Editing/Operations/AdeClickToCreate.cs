@@ -218,6 +218,7 @@ namespace Arcade.Compose.Editing
 			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			canAddArcTap = selectedArc.Timing <= timing && selectedArc.EndTiming >= timing;
 			AdeCursorManager.Instance.EnableArcTapCursor = canAddArcTap;
+			AdeCursorManager.Instance.ArcTapCursorIsSfx = selectedArc.IsSfx;
 			AdeCursorManager.Instance.EnableVerticalPanel = canAddArcTap;
 			if (!canAddArcTap) return;
 			ArcTimingManager timingManager = ArcTimingManager.Instance;

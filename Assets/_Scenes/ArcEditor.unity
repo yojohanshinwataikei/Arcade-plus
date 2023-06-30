@@ -9256,6 +9256,8 @@ MonoBehaviour:
   VerticalRenderer: {fileID: 1529951443}
   ArcTapCursor: {fileID: 992710262}
   ArcTapCursorRenderer: {fileID: 1458337231}
+  SfxArcTapCursor: {fileID: 1191191388}
+  SfxArcTapCursorRenderer: {fileID: 494492962}
   InfoText: {fileID: 1885746332}
   InfoGameObject: {fileID: 1349078799}
   InfoRect: {fileID: 1349078800}
@@ -16382,6 +16384,12 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!23 &494492962 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 23347824082841986, guid: d1bcec05f417133458e8c696f6edbc03,
+    type: 3}
+  m_PrefabInstance: {fileID: 1191191387}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &497667798
 GameObject:
   m_ObjectHideFlags: 0
@@ -17705,10 +17713,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.052083332
-    y: 0.05925926
-    width: 0.8958333
-    height: 0.88148147
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -41125,7 +41133,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1024612122497654, guid: d1bcec05f417133458e8c696f6edbc03, type: 3}
       propertyPath: m_Name
-      value: SfxArcTap
+      value: SfxArcTapCursor
       objectReference: {fileID: 0}
     - target: {fileID: 4169165809120514, guid: d1bcec05f417133458e8c696f6edbc03, type: 3}
       propertyPath: m_RootOrder
@@ -57816,6 +57824,8 @@ MonoBehaviour:
   ArcNotePrefab: {fileID: 1218715667678282, guid: f41e5f046f8dc8e4a95dd431ec3b9e5d,
     type: 3}
   ArcTapPrefab: {fileID: 1024612122497654, guid: 5eec15f4264ba8e40a9b892db4035cc0,
+    type: 3}
+  SfxArcTapPrefab: {fileID: 1024612122497654, guid: d1bcec05f417133458e8c696f6edbc03,
     type: 3}
   ConnectionPrefab: {fileID: 1685863836277190, guid: e01fb8f446fa1414a948ac86710032b7,
     type: 3}

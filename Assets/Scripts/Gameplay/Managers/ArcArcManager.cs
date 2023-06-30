@@ -16,7 +16,7 @@ namespace Arcade.Gameplay
 		[HideInInspector]
 		public List<ArcArc> Arcs = new List<ArcArc>();
 
-		public GameObject ArcNotePrefab, ArcTapPrefab, ConnectionPrefab;
+		public GameObject ArcNotePrefab, ArcTapPrefab, SfxArcTapPrefab, ConnectionPrefab;
 		public Transform ArcLayer;
 		public Color ConnectionColor;
 		public Texture2D ArcTapSkin;

@@ -905,7 +905,9 @@ namespace Arcade.Gameplay.Chart
 		public void Instantiate(ArcArc arc)
 		{
 			Arc = arc;
-			Instance = UnityEngine.Object.Instantiate(ArcArcManager.Instance.ArcTapPrefab, arc.transform);
+			Instance = UnityEngine.Object.Instantiate(
+				arc.IsSfx ? ArcArcManager.Instance.SfxArcTapPrefab : ArcArcManager.Instance.ArcTapPrefab, arc.transform
+			);
 
 			UpdatePosition();
 			SetupArcTapConnection();
@@ -1137,6 +1139,14 @@ namespace Arcade.Gameplay.Chart
 				arcRenderer = instance.GetComponent<ArcArcRenderer>();
 				arcRenderer.Arc = this;
 				Enable = false;
+			}
+		}
+
+		public bool IsSfx
+		{
+			get
+			{
+				return Effect.EndsWith("_wav");
 			}
 		}
 		public override void Destroy()

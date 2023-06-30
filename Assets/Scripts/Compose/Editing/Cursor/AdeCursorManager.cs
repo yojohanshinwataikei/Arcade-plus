@@ -41,6 +41,8 @@ namespace Arcade.Compose
 
 		public Transform ArcTapCursor;
 		public MeshRenderer ArcTapCursorRenderer;
+		public Transform SfxArcTapCursor;
+		public MeshRenderer SfxArcTapCursorRenderer;
 
 		public Text InfoText;
 		public GameObject InfoGameObject;
@@ -50,7 +52,7 @@ namespace Arcade.Compose
 
 		private CursorMode mode;
 		private bool enableHorizontal, enableVertical, enableVerticalPanel;
-		private bool enableArcTapCursor, enableInfo;
+		private bool enableArcTapCursor, enableInfo,arcTapCursorIsSfx;
 		private RaycastHit horizontalHit, verticalHit;
 
 		public bool EnableHorizontal
@@ -113,11 +115,22 @@ namespace Arcade.Compose
 			}
 			set
 			{
-				if (enableArcTapCursor != value)
-				{
-					ArcTapCursorRenderer.enabled = value;
-					enableArcTapCursor = value;
-				}
+				ArcTapCursorRenderer.enabled = (!arcTapCursorIsSfx)&&value;
+				SfxArcTapCursorRenderer.enabled = (arcTapCursorIsSfx)&&value;
+				enableArcTapCursor = value;
+			}
+		}
+		public bool ArcTapCursorIsSfx
+		{
+			get
+			{
+				return arcTapCursorIsSfx;
+			}
+			set
+			{
+				ArcTapCursorRenderer.enabled = (!value)&&enableArcTapCursor;
+				SfxArcTapCursorRenderer.enabled = (value)&&enableArcTapCursor;
+				arcTapCursorIsSfx = value;
 			}
 		}
 		public bool EnableInfo
@@ -144,6 +157,7 @@ namespace Arcade.Compose
 			set
 			{
 				ArcTapCursor.localPosition = value;
+				SfxArcTapCursor.localPosition = value;
 			}
 		}
 		public CursorMode Mode
