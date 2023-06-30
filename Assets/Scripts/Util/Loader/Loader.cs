@@ -210,8 +210,9 @@ namespace Arcade.Util.Loader
 				}
 				UnityEngine.Object.Destroy(obj);
 				return mesh;
-			}catch{
+			}catch(System.Exception ex){
 				Debug.LogWarning($"Can not load obj mesh, path: {path}");
+				Debug.LogException(ex);
 			}
 			return null;
 		}
