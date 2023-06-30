@@ -11,7 +11,7 @@ namespace Arcade.Compose
 {
 	public enum Side
 	{
-		Light, Conflict
+		Light, Conflict, Colorless
 	}
 
 	// This class store all skin related data read from skin folder
@@ -199,6 +199,7 @@ namespace Arcade.Compose
 		{
 			public T Light;
 			public T Conflict;
+			public T Colorless;
 		};
 		[Serializable]
 		public class SkinDataSpec
@@ -261,6 +262,7 @@ namespace Arcade.Compose
 			public string name;
 			public T light;
 			public T conflict;
+			public T colorless;
 		};
 		[Serializable]
 		public class CollectionDataSpec<T>
@@ -269,6 +271,7 @@ namespace Arcade.Compose
 			public string defaultName;
 			public T light;
 			public T conflict;
+			public T colorless;
 			public List<WithSideDataSpec<T>> additional;
 		}
 		[Serializable]
@@ -622,6 +625,12 @@ namespace Arcade.Compose
 					side = Side.Conflict,
 					theme = skinData.DefaultThemeData
 				});
+				skinData.BackgroundDatas.Add("\"DefaultColorless\"", new BackgroundData()
+				{
+					background = new Labelled<Sprite>() { value = rawDefaultData.BackgroundLight, label = "<internal:light>" },
+					side = Side.Colorless,
+					theme = skinData.DefaultThemeData
+				});
 			}
 		}
 
@@ -659,6 +668,10 @@ namespace Arcade.Compose
 			else if (spec.side == "conflict")
 			{
 				data.side = Side.Conflict;
+			}
+			else if (spec.side == "colorless")
+			{
+				data.side = Side.Colorless;
 			}
 			data.theme = null;
 			if(spec.theme!=null){
@@ -709,6 +722,7 @@ namespace Arcade.Compose
 			internalDefaultNoteData.Conflict.ArcGreenHigh = rawDefaultData.ArcGreenHigh;
 			internalDefaultNoteData.Light.ArcVoid = rawDefaultData.ArcVoid;
 			internalDefaultNoteData.Conflict.ArcVoid = rawDefaultData.ArcVoid;
+			internalDefaultNoteData.Colorless = internalDefaultNoteData.Light;
 
 			LoadCollectionData<NoteSideData, NoteSideDataSpec>(internalDefaultNoteData, skinData.NoteDatas, (name) => { skinData.DefaultNoteData = name; }, spec, LoadNoteSideData);
 		}
@@ -735,6 +749,7 @@ namespace Arcade.Compose
 			internalDefaultThemeData.Conflict.ParticleArcStartColor = rawDefaultData.ParticleArcStartColor;
 			internalDefaultThemeData.Light.ParticleArcEndColor = rawDefaultData.ParticleArcEndColor;
 			internalDefaultThemeData.Conflict.ParticleArcEndColor = rawDefaultData.ParticleArcEndColor;
+			internalDefaultThemeData.Colorless = internalDefaultThemeData.Light;
 			LoadCollectionData<ThemeSideData, ThemeSideDataSpec>(internalDefaultThemeData, skinData.ThemeDatas, (name) => { skinData.DefaultThemeData = name; }, spec, LoadThemeSideData);
 		}
 		private delegate void NameSetter(string name);
@@ -754,6 +769,7 @@ namespace Arcade.Compose
 			defaultSpec.name = defaultName;
 			defaultSpec.light = spec.light;
 			defaultSpec.conflict = spec.conflict;
+			defaultSpec.colorless = spec.colorless;
 			LoadWithSideData<T, S>(datas, defaultSpec, internalDefault, sideDataLoader);
 			WithSideData<T> defaultData = datas[defaultName];
 			if (spec.additional != null)
@@ -784,6 +800,7 @@ namespace Arcade.Compose
 			WithSideData<T> sideData = new WithSideData<T>();
 			sideData.Light = sideDataLoader(spec.light, fallback.Light);
 			sideData.Conflict = sideDataLoader(spec.conflict, fallback.Conflict);
+			sideData.Colorless = sideDataLoader(spec.colorless, fallback.Colorless);
 			datas.Add(spec.name, sideData);
 		}
 		private NoteSideData LoadNoteSideData(NoteSideDataSpec spec, NoteSideData fallback)

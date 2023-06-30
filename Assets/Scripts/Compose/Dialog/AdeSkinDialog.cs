@@ -28,12 +28,16 @@ namespace Arcade.Compose.Dialog
 				{
 					return Side.Conflict;
 				}
+				else if (SelectedSide == "Colorless")
+				{
+					return Side.Colorless;
+				}
 				SelectedSide = "Light";
 				return Side.Light;
 			}
 			set
 			{
-				SelectedSide = value == Side.Light ? "Light" : "Conflict";
+				SelectedSide = value == Side.Light ? "Light" : value == Side.Colorless ? "Colorless" : "Conflict";
 			}
 		}
 	}
@@ -211,7 +215,7 @@ namespace Arcade.Compose.Dialog
 
 		private void Initialize()
 		{
-			SideDropdown.SetValueWithoutNotify(preference.SkinSide == Side.Light ? 0 : 1);
+			SideDropdown.SetValueWithoutNotify(preference.SkinSide == Side.Light ? 0 : preference.SkinSide == Side.Colorless ? 2 : 1);
 			ThemeDropdown.SetValueWithoutNotify(ThemeIds[preference.SelectedTheme]);
 			NoteDropdown.SetValueWithoutNotify(NoteIds[preference.SelectedNote]);
 			CurrentBackgroundOption.SetSelected(true);
@@ -264,7 +268,7 @@ namespace Arcade.Compose.Dialog
 				if (BgData.side != null)
 				{
 					preference.SkinSide = BgData.side.Value;
-					SideDropdown.SetValueWithoutNotify(preference.SkinSide == Side.Light ? 0 : 1);
+					SideDropdown.SetValueWithoutNotify(preference.SkinSide == Side.Light ? 0 : preference.SkinSide == Side.Colorless ? 2 : 1);
 				}
 				SideDropdown.interactable = BgData.side == null;
 				if (BgData.theme != null)
@@ -291,7 +295,7 @@ namespace Arcade.Compose.Dialog
 
 		public void SelectSide(int id)
 		{
-			Side side = id == 0 ? Side.Light : Side.Conflict;
+			Side side = id == 0 ? Side.Light : id == 2 ? Side.Light : Side.Conflict;
 			preference.SkinSide = side;
 			ApplyThemeSideSkin();
 			ApplyNoteSideSkin();
@@ -311,7 +315,8 @@ namespace Arcade.Compose.Dialog
 			ApplyNoteSideSkin();
 		}
 
-		public void ReloadBackgroundFolder(){
+		public void ReloadBackgroundFolder()
+		{
 			CurrentBackgroundOption.SetSelected(false);
 			AdeSkinHost.Instance.LoadExternalBackground();
 			LoadExternalBackgroundOptions();
@@ -319,7 +324,8 @@ namespace Arcade.Compose.Dialog
 			Initialize();
 		}
 
-			public void ReloadSkinFolder(){
+		public void ReloadSkinFolder()
+		{
 			CurrentBackgroundOption.SetSelected(false);
 			AdeSkinHost.Instance.LoadSkinDatas();
 			LoadSkinOptions();
@@ -351,6 +357,10 @@ namespace Arcade.Compose.Dialog
 			{
 				ArcSkinManager.Instance.SetNoteSideSkin(note.Light);
 			}
+			else if (preference.SkinSide == Side.Colorless)
+			{
+				ArcSkinManager.Instance.SetNoteSideSkin(note.Colorless);
+			}
 			else
 			{
 				ArcSkinManager.Instance.SetNoteSideSkin(note.Conflict);
@@ -362,6 +372,10 @@ namespace Arcade.Compose.Dialog
 			if (preference.SkinSide == Side.Light)
 			{
 				ArcSkinManager.Instance.SetThemeSideSkin(theme.Light);
+			}
+			else if (preference.SkinSide == Side.Colorless)
+			{
+				ArcSkinManager.Instance.SetThemeSideSkin(theme.Colorless);
 			}
 			else
 			{
