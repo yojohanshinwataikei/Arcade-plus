@@ -66,7 +66,7 @@ Shader "Arcade/Track"
 				p.x = lerp(_XStart/_TextureWidth,_XEnd/_TextureWidth,p.x);
 				p.y = (p.y*_TrackLength/_TrackRepeat + _Phase) % 1;
 				float4 c= tex2D(_MainTex,p)*i.color;
-				c.rgb *= c.a;
+				// c.rgb *= c.a;
 				return c;
 			}
 			ENDCG

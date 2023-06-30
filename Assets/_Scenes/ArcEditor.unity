@@ -17713,10 +17713,10 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.052083332
+    y: 0.05925926
+    width: 0.8958333
+    height: 0.88148147
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -32177,6 +32177,8 @@ MonoBehaviour:
     - m_Text: "\u5149"
       m_Image: {fileID: 0}
     - m_Text: "\u5BF9\u7ACB"
+      m_Image: {fileID: 0}
+    - m_Text: "\u65E0\u8272"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -47444,7 +47446,7 @@ MonoBehaviour:
     TrackExtraConflict: {fileID: 21300000, guid: f6d35681c5083f044912188cfd64bf73,
       type: 3}
     CriticalLine: {fileID: 21300000, guid: 2c0f16d8eb16bd746b7f3c8da5c57684, type: 3}
-    CriticalLineExtraLight: {fileID: 21300000, guid: f9b8d28542273d14c9de296ca3c93bfb,
+    CriticalLineExtraLight: {fileID: 21300000, guid: 804393a095a9ed946a83a5565a55cae2,
       type: 3}
     CriticalLineExtraConflict: {fileID: 21300000, guid: 804393a095a9ed946a83a5565a55cae2,
       type: 3}

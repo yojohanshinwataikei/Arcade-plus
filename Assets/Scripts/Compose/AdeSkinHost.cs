@@ -829,7 +829,6 @@ namespace Arcade.Compose
 			}, fallback.ArcTap);
 			noteSideData.SfxArcTapNote = LoadLabelledWithFallback<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap"), spec.sfxArctapNote, ".jpg", (path) =>
 			{
-				Debug.Log(path);
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, fallback.SfxArcTapNote);
 			noteSideData.SfxArcTapCore = LoadLabelledWithFallback<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap"), spec.sfxArctapCore, ".jpg", (path) =>
