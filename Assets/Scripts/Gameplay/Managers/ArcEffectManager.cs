@@ -92,7 +92,7 @@ namespace Arcade.Gameplay
 			}
 			else
 			{
-				Source.PlayOneShot(ArcAudio);
+				Source.PlayOneShot(TapAudio);
 			}
 		}
 		public void PlayTapSound()
