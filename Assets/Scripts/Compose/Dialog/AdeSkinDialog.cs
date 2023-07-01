@@ -295,7 +295,7 @@ namespace Arcade.Compose.Dialog
 
 		public void SelectSide(int id)
 		{
-			Side side = id == 0 ? Side.Light : id == 2 ? Side.Light : Side.Conflict;
+			Side side = id == 0 ? Side.Light : id == 2 ? Side.Colorless : Side.Conflict;
 			preference.SkinSide = side;
 			ApplyThemeSideSkin();
 			ApplyNoteSideSkin();
