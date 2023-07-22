@@ -112,38 +112,23 @@ namespace Arcade.Compose
 				rebindingOperation = action.PerformInteractiveRebinding()
 					.WithExpectedControlType<ButtonControl>()
 					.WithControlsHavingToMatchPath("<Keyboard>")
-					// Note: this use prefix match so "leftAltKey" will also match "l",
-					// which is unacceptable
-					// TODO: replace WithMatchingEventsBeingSuppressed with this when the behaviour changes
-					// so that we can disable modifiers without disable normal keys
-					// See https://forum.unity.com/threads/binding-path-gamepad-leftstickpress-matches-control-gamepad-leftstick-with-input-system-1-3-0.1234930/
-					// See https://github.com/Unity-Technologies/InputSystem/pull/1492
-					// will comes in InputSystem 1.4.0
+					.WithControlsExcluding("<Keyboard>/leftAltKey")
+					.WithControlsExcluding("<Keyboard>/leftCtrlKey")
+					.WithControlsExcluding("<Keyboard>/leftShiftKey")
+					.WithControlsExcluding("<Keyboard>/rightAltKey")
+					.WithControlsExcluding("<Keyboard>/rightCtrlKey")
+					.WithControlsExcluding("<Keyboard>/rightShiftKey")
+					.WithControlsExcluding("<Keyboard>/altKey")
+					.WithControlsExcluding("<Keyboard>/ctrlKey")
+					.WithControlsExcluding("<Keyboard>/shiftKey")
+					.WithControlsExcluding("<Keyboard>/anyKey")
+					.WithControlsExcluding("<Keyboard>/escapeKey")
 					.WithControlsExcluding("<Pointer>")
-					// This will makes e also a cancelling key, which is unacceptable
-					// .WithCancelingThrough(Keyboard.current.escapeKey)
-					.WithCancelingThrough(null as string)
-					// Since we do not direct process keyboard event (unless by this class)
-					// it's safe to not suppress event
-					// all we need is to disable the actions
-					// However the action will be triggered when the rebinding operation finished
-					// so we need rebindFinishedThisFrame
-					.WithMatchingEventsBeingSuppressed(false)
-					// Disable auto match, only match when our OnPotentialMatch thinks it match
+					.WithCancelingThrough(Keyboard.current.escapeKey)
+					.WithMatchingEventsBeingSuppressed(true)
 					.OnMatchWaitForAnother(float.PositiveInfinity)
 					.OnPotentialMatch((operation) =>
 					{
-						operation.RemoveCandidate(Keyboard.current.leftAltKey);
-						operation.RemoveCandidate(Keyboard.current.leftCtrlKey);
-						operation.RemoveCandidate(Keyboard.current.leftShiftKey);
-						operation.RemoveCandidate(Keyboard.current.rightAltKey);
-						operation.RemoveCandidate(Keyboard.current.rightCtrlKey);
-						operation.RemoveCandidate(Keyboard.current.rightShiftKey);
-						operation.RemoveCandidate(Keyboard.current.altKey);
-						operation.RemoveCandidate(Keyboard.current.ctrlKey);
-						operation.RemoveCandidate(Keyboard.current.shiftKey);
-						operation.RemoveCandidate(Keyboard.current.anyKey);
-						operation.RemoveCandidate(Keyboard.current.escapeKey);
 						if (operation.candidates.Count > 0)
 						{
 							operation.Complete();
