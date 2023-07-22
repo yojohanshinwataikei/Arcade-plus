@@ -857,11 +857,11 @@ namespace Arcade.Compose
 
 			themeSideData.Track = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "TrackBase"), spec.track, ".png", (path) =>
 			{
-				return LoadPivotFullRectSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
+				return LoadWarpRepeatPivotFullRectSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.Track);
 			themeSideData.TrackExtra = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "TrackExtra"), spec.trackExtra, ".png", (path) =>
 			{
-				return LoadPivotFullRectSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
+				return LoadWarpRepeatPivotFullRectSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.TrackExtra);
 			themeSideData.CriticalLine = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "CriticalLine"), spec.trackCriticalLine, ".png", (path) =>
 			{
@@ -966,6 +966,19 @@ namespace Arcade.Compose
 		private Sprite LoadPivotFullRectSprite(string path, Vector2 pivot, List<UnityEngine.Object> resourceList)
 		{
 			Texture2D texture = LoadTexture2D(path, resourceList);
+			if (texture == null)
+			{
+				return null;
+			}
+			Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), pivot, 100, 1, SpriteMeshType.FullRect);
+			resourceList.Add(sprite);
+			sprite.name = path;
+			return sprite;
+		}
+		private Sprite LoadWarpRepeatPivotFullRectSprite(string path, Vector2 pivot, List<UnityEngine.Object> resourceList)
+		{
+			Texture2D texture = LoadTexture2D(path, resourceList);
+			texture.wrapMode=TextureWrapMode.Repeat;
 			if (texture == null)
 			{
 				return null;
