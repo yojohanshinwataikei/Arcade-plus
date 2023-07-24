@@ -17575,10 +17575,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.052083336
-    y: 0.05925259
-    width: 0.8958333
-    height: 0.8814948
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -26745,9 +26745,9 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!198 &785526936 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198445555897360624, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+--- !u!2083052967 &785526938 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 9221095579595227807, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
     type: 3}
   m_PrefabInstance: {fileID: 38888092}
   m_PrefabAsset: {fileID: 0}
@@ -33975,7 +33975,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 24.999908}
+  m_AnchoredPosition: {x: 0, y: 24.999878}
   m_SizeDelta: {x: 1286, y: 349}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &994086310
@@ -37298,12 +37298,6 @@ MonoBehaviour:
 --- !u!4 &1093664793 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4322389996328056, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
-    type: 3}
-  m_PrefabInstance: {fileID: 1145092763}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &1093664795 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198445555897360624, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
     type: 3}
   m_PrefabInstance: {fileID: 1145092763}
   m_PrefabAsset: {fileID: 0}
@@ -41292,12 +41286,12 @@ MonoBehaviour:
   - {fileID: 72816685}
   - {fileID: 2103494959}
   HoldNoteEffects:
-  - {fileID: 785526936}
-  - {fileID: 1233447656}
-  - {fileID: 1724085125}
-  - {fileID: 2036890596}
-  - {fileID: 1093664795}
-  - {fileID: 1303846336}
+  - {fileID: 785526938}
+  - {fileID: 1233447658}
+  - {fileID: 1724085127}
+  - {fileID: 2036890598}
+  - {fileID: 2088247652}
+  - {fileID: 1303846338}
   EffectLayer: {fileID: 1125884054}
   TapAudio: {fileID: 8300000, guid: fdffe2ec68c4c204d84ad3dee4b69fd0, type: 3}
   ArcAudio: {fileID: 8300000, guid: bdece328b6ce4a1408ee82a4eefbe5b4, type: 3}
@@ -42785,9 +42779,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1124371461}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &1233447656 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198445555897360624, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+--- !u!2083052967 &1233447658 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 9221095579595227807, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
     type: 3}
   m_PrefabInstance: {fileID: 1124371461}
   m_PrefabAsset: {fileID: 0}
@@ -44224,9 +44218,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1303846333}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &1303846336 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198445555897360624, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+--- !u!2083052967 &1303846338 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 9221095579595227807, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
     type: 3}
   m_PrefabInstance: {fileID: 1303846333}
   m_PrefabAsset: {fileID: 0}
@@ -58312,9 +58306,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 908801416}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &1724085125 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198445555897360624, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+--- !u!2083052967 &1724085127 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 9221095579595227807, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
     type: 3}
   m_PrefabInstance: {fileID: 908801416}
   m_PrefabAsset: {fileID: 0}
@@ -67450,9 +67444,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1836735464}
   m_PrefabAsset: {fileID: 0}
---- !u!198 &2036890596 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198445555897360624, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+--- !u!2083052967 &2036890598 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 9221095579595227807, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
     type: 3}
   m_PrefabInstance: {fileID: 1836735464}
   m_PrefabAsset: {fileID: 0}
@@ -69281,6 +69275,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2088040755}
   m_CullTransparentMesh: 0
+--- !u!2083052967 &2088247652 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 9221095579595227807, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+    type: 3}
+  m_PrefabInstance: {fileID: 1145092763}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2088328677
 GameObject:
   m_ObjectHideFlags: 0

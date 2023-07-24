@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Arcade.Compose;
 using Arcade.Util.Pooling;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Arcade.Gameplay
 {
@@ -22,7 +23,7 @@ namespace Arcade.Gameplay
 		public GameObject TapNoteJudgeEffect;
 		public GameObject SfxTapNoteJudgeEffect;
 		public GameObject[] LaneHits = new GameObject[6];
-		public ParticleSystem[] HoldNoteEffects = new ParticleSystem[6];
+		public VisualEffect[] HoldNoteEffects = new VisualEffect[6];
 		public Transform EffectLayer;
 		public AudioClip TapAudio, ArcAudio;
 		public AudioSource Source;
@@ -32,20 +33,35 @@ namespace Arcade.Gameplay
 		private bool[] holdEffectStatus = new bool[6];
 		private GameObjectPool<ArcTapNoteEffectComponent> tapNoteEffectPool;
 		private GameObjectPool<ArcTapNoteEffectComponent> sfxTapNoteEffectPool;
+
+		void Update()
+		{
+
+			for (int track = 0; track < 6; track++)
+			{
+				bool show = holdEffectStatus[track];
+				if (show != HoldNoteEffects[track].enabled)
+				{
+					if (show)
+					{
+						HoldNoteEffects[track].enabled = true;
+						HoldNoteEffects[track].Play();
+						HoldNoteEffects[track].Simulate(1f/60f,30);
+					}
+					else
+					{
+						HoldNoteEffects[track].Reinit();
+						HoldNoteEffects[track].Stop();
+						HoldNoteEffects[track].enabled = false;
+					}
+				}
+			}
+		}
 		public void SetHoldNoteEffect(int track, bool show)
 		{
 			if (holdEffectStatus[track] != show)
 			{
 				holdEffectStatus[track] = show;
-				if (show)
-				{
-					HoldNoteEffects[track].Play();
-				}
-				else
-				{
-					HoldNoteEffects[track].Stop();
-					HoldNoteEffects[track].Clear();
-				}
 				LaneHits[track].SetActive(show);
 			}
 		}
@@ -111,50 +127,39 @@ namespace Arcade.Gameplay
 
 		public void SetParticleArcColor(Color particleArcStartColor, Color particleArcEndColor)
 		{
-			Color startColorMin = particleArcStartColor - new Color(0.1f, 0.1f, 0.1f);
-			startColorMin.a = 0.5f;
-			Color startColorMax = particleArcStartColor + new Color(0.1f, 0.1f, 0.1f);
-			Gradient colorOverTime = new Gradient();
-			colorOverTime.SetKeys(new GradientColorKey[]{
-				new GradientColorKey(new Color(1.0f,1.0f,1.0f),0.0f),
-				new GradientColorKey(particleArcEndColor,1.0f),
-			}, new GradientAlphaKey[]{
-				new GradientAlphaKey(1.0f,0.0f),
-				new GradientAlphaKey(1.0f,1.0f),
-			});
-			ParticleSystem.MinMaxGradient startColor = new ParticleSystem.MinMaxGradient
+
+			foreach (VisualEffect holdEffect in HoldNoteEffects)
 			{
-				mode = ParticleSystemGradientMode.TwoColors,
-				colorMin = startColorMin,
-				colorMax = startColorMax
-			};
-			ParticleSystem.MinMaxGradient overTimeColor = new ParticleSystem.MinMaxGradient
-			{
-				mode = ParticleSystemGradientMode.Gradient,
-				gradient = colorOverTime
-			};
-			foreach (ParticleSystem holdEffect in HoldNoteEffects)
-			{
-				ParticleSystem.MainModule main = holdEffect.main;
-				main.startColor = startColor;
-				ParticleSystem.ColorOverLifetimeModule colorOverLifetime = holdEffect.colorOverLifetime;
-				colorOverLifetime.color = overTimeColor;
+				holdEffect.SetVector4("StartColor", particleArcStartColor);
+				holdEffect.SetVector4("EndColor", particleArcEndColor);
 			}
-			ArcArcManager.Instance.SetParticleArcColor(startColor, overTimeColor);
+			ArcArcManager.Instance.SetParticleArcColor(particleArcStartColor, particleArcEndColor);
 		}
 
 		internal void SetTapEffectTexture(Texture2D particleTap)
 		{
-			tapNoteEffectPool.Modify(effect=>{
+			tapNoteEffectPool.Modify(effect =>
+			{
 				effect.SetTexture(particleTap);
 			});
 		}
 
 		internal void SetSfxTapEffectTexture(Texture2D particleSfxTap)
 		{
-			sfxTapNoteEffectPool.Modify(effect=>{
+			sfxTapNoteEffectPool.Modify(effect =>
+			{
 				effect.SetTexture(particleSfxTap);
 			});
+		}
+
+		internal void SetParticleArcTexture(Texture2D texture)
+		{
+
+			foreach (VisualEffect holdEffect in HoldNoteEffects)
+			{
+				holdEffect.SetTexture("Texture", texture);
+			}
+			ArcArcManager.Instance.SetParticleArcTexture(texture);
 		}
 	}
 }

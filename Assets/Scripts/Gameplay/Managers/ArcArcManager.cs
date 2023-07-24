@@ -362,19 +362,15 @@ namespace Arcade.Gameplay
 			}
 		}
 
-		public void SetParticleArcColor(ParticleSystem.MinMaxGradient startColor, ParticleSystem.MinMaxGradient overTimeColor)
+		public void SetParticleArcColor(Color particleArcStartColor, Color particleArcEndColor)
 		{
 			ArcArcRenderer prefabRenderer = ArcNotePrefab.GetComponent<ArcArcRenderer>();
-			ParticleSystem.MainModule prefabMain = prefabRenderer.JudgeEffect.main;
-			prefabMain.startColor = startColor;
-			ParticleSystem.ColorOverLifetimeModule prefabColorOverLifetime = prefabRenderer.JudgeEffect.colorOverLifetime;
-			prefabColorOverLifetime.color = overTimeColor;
+			prefabRenderer.JudgeEffect.SetVector4("StartColor", particleArcStartColor);
+			prefabRenderer.JudgeEffect.SetVector4("EndColor", particleArcEndColor);
 			foreach (ArcArc arc in Arcs)
 			{
-				ParticleSystem.MainModule main = arc.arcRenderer.JudgeEffect.main;
-				main.startColor = startColor;
-				ParticleSystem.ColorOverLifetimeModule colorOverLifetime = arc.arcRenderer.JudgeEffect.colorOverLifetime;
-				colorOverLifetime.color = overTimeColor;
+				arc.arcRenderer.JudgeEffect.SetVector4("StartColor", particleArcStartColor);
+				arc.arcRenderer.JudgeEffect.SetVector4("EndColor", particleArcEndColor);
 			}
 		}
 
@@ -408,6 +404,16 @@ namespace Arcade.Gameplay
 			SfxArcTapNoteMaterial.mainTexture = noteTexture;
 			SfxArcTapCoreSkin = coreTexture;
 			SfxArcTapCoreMaterial.mainTexture = coreTexture;
+		}
+
+		internal void SetParticleArcTexture(Texture2D texture)
+		{
+			ArcArcRenderer prefabRenderer = ArcNotePrefab.GetComponent<ArcArcRenderer>();
+			prefabRenderer.JudgeEffect.SetTexture("Texture", texture);
+			foreach (ArcArc arc in Arcs)
+			{
+				arc.arcRenderer.JudgeEffect.SetTexture("Texture", texture);
+			}
 		}
 	}
 }

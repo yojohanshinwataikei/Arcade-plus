@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Arcade.Gameplay.Chart;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Arcade.Gameplay
 {
@@ -22,7 +23,8 @@ namespace Arcade.Gameplay
 		public SpriteRenderer HeightIndicatorRenderer;
 		public Transform ArcCap;
 		public SpriteRenderer ArcCapRenderer;
-		public ParticleSystem JudgeEffect;
+		public VisualEffect JudgeEffect;
+		public Transform JudgeEffectTransform;
 		public Texture2D DefaultTexture, HighlightTexture;
 
 		private MaterialPropertyBlock headPropertyBlock;
@@ -260,12 +262,15 @@ namespace Arcade.Gameplay
 					effect = value;
 					if (value)
 					{
+						JudgeEffect.enabled=true;
 						JudgeEffect.Play();
+						JudgeEffect.Simulate(1f/60f,30);
 					}
 					else
 					{
+						JudgeEffect.Reinit();
 						JudgeEffect.Stop();
-						JudgeEffect.Clear();
+						JudgeEffect.enabled=false;
 					}
 				}
 			}
@@ -739,6 +744,7 @@ namespace Arcade.Gameplay
 						float t = (s.FromPos.z - arc.Position / 1000f) / (s.FromPos.z - s.ToPos.z);
 						ArcCap.position = new Vector3(s.FromPos.x + (s.ToPos.x - s.FromPos.x) * t,
 													  s.FromPos.y + (s.ToPos.y - s.FromPos.y) * t);
+						JudgeEffectTransform.position = ArcCap.position;
 						if (!arc.IsVoid) ArcArcManager.Instance.ArcJudgePos += ArcCap.position.x;
 						break;
 					}
@@ -752,6 +758,7 @@ namespace Arcade.Gameplay
 				ArcCapRenderer.color = new Color(1, 1, 1, p);
 				ArcCap.localScale = new Vector3(scale, scale);
 				ArcCap.position = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XStart), ArcAlgorithm.ArcYToWorld(arc.YStart));
+				JudgeEffectTransform.position = ArcCap.position;
 			}
 			else
 			{

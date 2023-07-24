@@ -133,7 +133,7 @@ namespace Arcade.Gameplay
 			}
 
 			ArcEffectManager.Instance.SetSfxTapEffectTexture(skinData.ParticleSfxTap.value);
-			HoldJudge.SetTexture(Shader.PropertyToID("_MainTex"),skinData.ParticleArc.value);
+			ArcEffectManager.Instance.SetParticleArcTexture(skinData.ParticleArc.value);
 
 			ArcArcManager.Instance.SetArcCapSkin(skinData.ArcCap.value);
 
