@@ -132,7 +132,7 @@ namespace Arcade.Gameplay
 				laneHit.sprite=skinData.LaneHit.value;
 			}
 
-			SfxTapJudge.SetTexture(Shader.PropertyToID("_MainTex"),skinData.ParticleSfxTap.value);
+			ArcEffectManager.Instance.SetSfxTapEffectTexture(skinData.ParticleSfxTap.value);
 			HoldJudge.SetTexture(Shader.PropertyToID("_MainTex"),skinData.ParticleArc.value);
 
 			ArcArcManager.Instance.SetArcCapSkin(skinData.ArcCap.value);
@@ -170,7 +170,7 @@ namespace Arcade.Gameplay
 			Color ComboTextColor=themeSideData.ComboTextColor;
 			ComboTextColor.a=0.75f;
 			ComboText.color = ComboTextColor;
-			TapJudge.mainTexture=themeSideData.ParticleNote.value;
+			ArcEffectManager.Instance.SetTapEffectTexture(themeSideData.ParticleNote.value);
 			ArcEffectManager.Instance.SetParticleArcColor(themeSideData.ParticleArcStartColor,themeSideData.ParticleArcEndColor);
 		}
 

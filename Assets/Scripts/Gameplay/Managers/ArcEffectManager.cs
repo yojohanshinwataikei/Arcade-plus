@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Arcade.Compose;
 using Arcade.Util.Pooling;
 using UnityEngine;
 
@@ -140,6 +141,20 @@ namespace Arcade.Gameplay
 				colorOverLifetime.color = overTimeColor;
 			}
 			ArcArcManager.Instance.SetParticleArcColor(startColor, overTimeColor);
+		}
+
+		internal void SetTapEffectTexture(Texture2D particleTap)
+		{
+			tapNoteEffectPool.Modify(effect=>{
+				effect.SetTexture(particleTap);
+			});
+		}
+
+		internal void SetSfxTapEffectTexture(Texture2D particleSfxTap)
+		{
+			sfxTapNoteEffectPool.Modify(effect=>{
+				effect.SetTexture(particleSfxTap);
+			});
 		}
 	}
 }
