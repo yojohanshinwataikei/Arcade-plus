@@ -21,11 +21,11 @@ Shader "Arcade/Track"
 
 		Pass
 		{
-			CGPROGRAM
+			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#include "UnityCG.cginc"
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
 			struct appdata
 			{
@@ -37,7 +37,7 @@ Shader "Arcade/Track"
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
-				fixed4 color    : COLOR;
+				float4 color    : COLOR;
 				float2 uv : TEXCOORD0;
 			};
 
@@ -54,7 +54,7 @@ Shader "Arcade/Track"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = TransformObjectToHClip(v.vertex);
 				o.uv = v.uv;
 				o.color = v.color*_Color;
 				return o;
@@ -69,7 +69,7 @@ Shader "Arcade/Track"
 				c.a=1.0;
 				return c*i.color;
 			}
-			ENDCG
+			ENDHLSL
 		}
 	}
 }

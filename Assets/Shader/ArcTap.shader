@@ -14,12 +14,12 @@ Shader "Arcade/ArcTap"
 
 		Pass
 		{
-			CGPROGRAM
+			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#include "UnityCG.cginc"
-			#include "ColorSpace.cginc"
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+			#include "ColorSpace.hlsl"
 
 			struct appdata
 			{
@@ -40,7 +40,7 @@ Shader "Arcade/ArcTap"
 
 			half4 Highlight(half4 c)
 			{
-				fixed3 hsv = rgb2hsv(c.rgb);
+				half3 hsv = rgb2hsv(c.rgb);
 				hsv.r += 0.4f;
 				return half4(hsv2rgb(hsv),c.a);
 			}
@@ -48,7 +48,7 @@ Shader "Arcade/ArcTap"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = TransformObjectToHClip(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				return o;
 			}
@@ -62,7 +62,7 @@ Shader "Arcade/ArcTap"
 				}
 				return c;
 			}
-			ENDCG
+			ENDHLSL
 		}
 	}
 }

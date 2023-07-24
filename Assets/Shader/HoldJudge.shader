@@ -13,11 +13,11 @@ Shader "Arcade/HoldJudge"
 
 		Pass
 		{
-			CGPROGRAM
+			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#include "UnityCG.cginc"
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
 			struct appdata
 			{
@@ -29,7 +29,7 @@ Shader "Arcade/HoldJudge"
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
-				fixed4 color    : COLOR;
+				half4 color    : COLOR;
 				float2 uv : TEXCOORD0;
 			};
 
@@ -38,7 +38,7 @@ Shader "Arcade/HoldJudge"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = TransformObjectToHClip(v.vertex);
 				o.uv = v.uv;
 				o.color = v.color;
 				o.color.a += 0.5;
@@ -51,7 +51,7 @@ Shader "Arcade/HoldJudge"
 				c.rgb *= c.a;
 				return c;
 			}
-			ENDCG
+			ENDHLSL
 		}
 	}
 }

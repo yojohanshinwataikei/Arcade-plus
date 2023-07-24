@@ -17,11 +17,11 @@ Shader "Arcade/Shadow"
 
 		Pass
 		{
-			CGPROGRAM
+			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#include "UnityCG.cginc"
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
 			struct appdata
 			{
@@ -41,7 +41,7 @@ Shader "Arcade/Shadow"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = TransformObjectToHClip(v.vertex);
 				o.uv = v.uv;
 				return o;
 			}
@@ -53,7 +53,7 @@ Shader "Arcade/Shadow"
 				c.rgb *= c.a;
 				return c;
 			}
-			ENDCG
+			ENDHLSL
 		}
 	}
 }

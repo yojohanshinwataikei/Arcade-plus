@@ -20,12 +20,12 @@ Shader "Arcade/Arc"
 
 		Pass
 		{
-			CGPROGRAM
+			HLSLPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
 
-			#include "UnityCG.cginc"
-			#include "ColorSpace.cginc"
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+			#include "ColorSpace.hlsl"
 
 			struct appdata
 			{
@@ -38,7 +38,7 @@ Shader "Arcade/Arc"
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
-				fixed4 color    : COLOR;
+				half4 color    : COLOR;
 				float2 uv : TEXCOORD0;
 				float2 uv2 : TEXCOORD1;
 			};
@@ -53,7 +53,7 @@ Shader "Arcade/Arc"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.vertex = TransformObjectToHClip(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.color = v.color;
 				o.uv2 = v.uv2;
@@ -63,7 +63,7 @@ Shader "Arcade/Arc"
 			half4 Highlight(half4 c)
 			{
 				// TODO: highlight by outline might be better
-				fixed3 hsv = rgb2hsv(c.rgb);
+				half3 hsv = rgb2hsv(c.rgb);
 				float rate=1.75;
 				float sv=hsv.y*hsv.z*rate;
 				hsv.z+=sv*(1-rate)/2;
@@ -83,7 +83,7 @@ Shader "Arcade/Arc"
 				c *= inColor;
 				return c;
 			}
-			ENDCG
+			ENDHLSL
 		}
 	}
 }
