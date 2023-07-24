@@ -64,7 +64,7 @@ Shader "Arcade/Track"
 			{
 			    float2 p = i.uv;
 				p.x = lerp(_XStart/_TextureWidth,_XEnd/_TextureWidth,p.x);
-				p.y = fmod(p.y*_TrackLength/_TrackRepeat + _Phase,1.0);
+				p.y = (p.y*_TrackLength/_TrackRepeat + _Phase);
 				float4 c= tex2D(_MainTex,p);
 				c.a=1.0;
 				return c*i.color;
