@@ -30784,6 +30784,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aca2a0826678ec642b1d04e06effe499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SelectionLayerMask: 2
   Shaders: {fileID: 20000000, guid: 768587279ef275946b873ca6d607019b, type: 2}
   OnChartLoad:
     m_PersistentCalls:
@@ -69811,10 +69812,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1707394408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400.5, y: -71.97864}
-  m_SizeDelta: {x: 705, y: 39.97864}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2105888210
 MonoBehaviour:

@@ -507,6 +507,7 @@ namespace Arcade.Gameplay.Chart
 					spriteRenderer.GetPropertyBlock(propertyBlock);
 					propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
 					spriteRenderer.SetPropertyBlock(propertyBlock);
+					spriteRenderer.renderingLayerMask=MaskUtil.SetMask(spriteRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
 					selected = value;
 				}
 			}

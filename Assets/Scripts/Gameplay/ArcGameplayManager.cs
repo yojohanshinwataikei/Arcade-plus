@@ -15,6 +15,8 @@ namespace Arcade.Gameplay
 
 	public class ArcGameplayManager : MonoBehaviour
 	{
+		public uint SelectionLayerMask;
+
 		public static ArcGameplayManager Instance { get; private set; }
 
 		public ShaderVariantCollection Shaders;
