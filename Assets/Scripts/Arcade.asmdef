@@ -5,7 +5,9 @@
         "Demigiant.DOTween",
         "SFB.Runtime",
         "Unity.InputSystem",
-        "OBJImport"
+        "OBJImport",
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

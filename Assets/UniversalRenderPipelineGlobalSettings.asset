@@ -15,7 +15,7 @@ MonoBehaviour:
   m_AssetVersion: 3
   m_RenderingLayerNames:
   - Default
-  - Outline
+  - Selection
   m_ValidRenderingLayers: 3
   lightLayerName0: 
   lightLayerName1: 

@@ -7224,7 +7224,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 867310387
   m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &197151824
@@ -13272,35 +13272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
-  m_MoveRepeatDelay: 0.5
-  m_MoveRepeatRate: 0.1
-  m_XRTrackingOrigin: {fileID: 0}
-  m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_PointAction: {fileID: -1654692200621890270, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_MoveAction: {fileID: -8784545083839296357, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_SubmitAction: {fileID: 392368643174621059, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_CancelAction: {fileID: 7727032971491509709, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_LeftClickAction: {fileID: 3001919216989983466, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_MiddleClickAction: {fileID: -2185481485913320682, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_RightClickAction: {fileID: -4090225696740746782, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_ScrollWheelAction: {fileID: 6240969308177333660, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_TrackedDevicePositionAction: {fileID: 6564999863303420839, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018,
-    type: 3}
-  m_DeselectOnBackgroundClick: 1
-  m_PointerBehavior: 0
-  m_CursorLockBehavior: 0
 --- !u!114 &409941039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17575,10 +17546,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.052083332
-    y: 0.05927312
-    width: 0.8958333
-    height: 0.88145375
+    x: 0.05339028
+    y: 0.06074988
+    width: 0.8932194
+    height: 0.8785002
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -26437,7 +26408,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 867310387
   m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &771364937
@@ -28877,7 +28848,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 867310387
   m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &844375161
@@ -33951,7 +33922,7 @@ GameObject:
   - component: {fileID: 994086311}
   - component: {fileID: 994086310}
   - component: {fileID: 994086312}
-  m_Layer: 9
+  m_Layer: 12
   m_Name: TextArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34087,7 +34058,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 867310387
   m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &994406038
@@ -34702,7 +34673,7 @@ GameObject:
   - component: {fileID: 1006388397}
   - component: {fileID: 1006388399}
   - component: {fileID: 1006388398}
-  m_Layer: 9
+  m_Layer: 12
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -35605,7 +35576,7 @@ Camera:
   m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 5120
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -46610,7 +46581,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 867310387
   m_SortingOrder: 50
   m_TargetDisplay: 0
 --- !u!114 &1366566638
@@ -59385,7 +59356,7 @@ GameObject:
   - component: {fileID: 1748740387}
   - component: {fileID: 1748740386}
   - component: {fileID: 1748740385}
-  m_Layer: 9
+  m_Layer: 12
   m_Name: ArcaeaPlayerUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59442,7 +59413,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 534669904}
+  m_Camera: {fileID: 1049938805}
   m_PlaneDistance: 5
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -64037,7 +64008,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 867310387
   m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &1901818259
@@ -66435,7 +66406,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 867310387
   m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!114 &1973374771
@@ -69840,10 +69811,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1707394408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400.5, y: -71.97864}
+  m_SizeDelta: {x: 705, y: 39.97864}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2105888210
 MonoBehaviour:
