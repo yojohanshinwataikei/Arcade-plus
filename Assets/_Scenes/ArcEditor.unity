@@ -13272,6 +13272,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_MoveRepeatDelay: 0.5
+  m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
+  m_ActionsAsset: {fileID: 0}
+  m_PointAction: {fileID: 0}
+  m_MoveAction: {fileID: 0}
+  m_SubmitAction: {fileID: 0}
+  m_CancelAction: {fileID: 0}
+  m_LeftClickAction: {fileID: 0}
+  m_MiddleClickAction: {fileID: 0}
+  m_RightClickAction: {fileID: 0}
+  m_ScrollWheelAction: {fileID: 0}
+  m_TrackedDevicePositionAction: {fileID: 0}
+  m_TrackedDeviceOrientationAction: {fileID: 0}
+  m_DeselectOnBackgroundClick: 1
+  m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!114 &409941039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17546,10 +17564,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.05339028
-    y: 0.06074988
-    width: 0.8932194
-    height: 0.8785002
+    x: 0.052083332
+    y: 0.059262782
+    width: 0.8958333
+    height: 0.88147444
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -33947,7 +33965,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 24.999939}
+  m_AnchoredPosition: {x: 0, y: 25}
   m_SizeDelta: {x: 1286, y: 349}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &994086310
@@ -34733,7 +34751,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u6B22\u8FCE\u4F7F\u7528 Arcade-plus\uFF0C\u8BF7\u70B9\u51FB\u53F3\u4E0A\u89D2\u6B4C\u66F2\u5C01\u9762\u6253\u5F00\u8C31\u9762\u6587\u4EF6\u5939"
+  m_Text: "\u6B22\u8FCE\u4F7F\u7528 Arcade-plus\n\u8BF7\u70B9\u51FB\u53F3\u4E0A\u89D2\u6B4C\u66F2\u5C01\u9762\u6253\u5F00\u8C31\u9762\u6587\u4EF6\u5939"
 --- !u!222 &1006388399
 CanvasRenderer:
   m_ObjectHideFlags: 0
