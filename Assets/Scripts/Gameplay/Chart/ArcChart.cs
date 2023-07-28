@@ -436,7 +436,7 @@ namespace Arcade.Gameplay.Chart
 
 		private bool selected;
 		private float currentAlpha;
-		private int highlightShaderId, alphaShaderId;
+		private int alphaShaderId;
 		private MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
 		public Dictionary<ArcArcTap, LineRenderer> ConnectionLines = new Dictionary<ArcArcTap, LineRenderer>();
 		private BoxCollider boxCollider;
@@ -504,9 +504,6 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
-					spriteRenderer.GetPropertyBlock(propertyBlock);
-					propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
-					spriteRenderer.SetPropertyBlock(propertyBlock);
 					spriteRenderer.renderingLayerMask=MaskUtil.SetMask(spriteRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
 					selected = value;
 				}
@@ -546,7 +543,6 @@ namespace Arcade.Gameplay.Chart
 				if (instance != null) Destroy();
 				base.Instance = value;
 				boxCollider = instance.GetComponent<BoxCollider>();
-				highlightShaderId = Shader.PropertyToID("_Highlight");
 				alphaShaderId = Shader.PropertyToID("_Alpha");
 				Enable = false;
 			}
@@ -599,7 +595,6 @@ namespace Arcade.Gameplay.Chart
 				fromShaderId = Shader.PropertyToID("_From");
 				toShaderId = Shader.PropertyToID("_To");
 				alphaShaderId = Shader.PropertyToID("_Alpha");
-				highlightShaderId = Shader.PropertyToID("_Highlight");
 				defaultSprite = ArcHoldNoteManager.Instance.DefaultSprite;
 				highlightSprite = ArcHoldNoteManager.Instance.HighlightSprite;
 				boxCollider = instance.GetComponent<BoxCollider>();
@@ -739,9 +734,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
-					spriteRenderer.GetPropertyBlock(propertyBlock);
-					propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
-					spriteRenderer.SetPropertyBlock(propertyBlock);
+					spriteRenderer.renderingLayerMask=MaskUtil.SetMask(spriteRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
 					selected = value;
 				}
 			}
@@ -767,7 +760,7 @@ namespace Arcade.Gameplay.Chart
 
 		private bool selected;
 		private bool highlighted;
-		private int fromShaderId = 0, toShaderId = 0, alphaShaderId = 0, highlightShaderId = 0;
+		private int fromShaderId = 0, toShaderId = 0, alphaShaderId = 0;
 		private float currentFrom = 0, currentTo = 1, currentAlpha = 1;
 		private Sprite defaultSprite, highlightSprite;
 
@@ -879,7 +872,6 @@ namespace Arcade.Gameplay.Chart
 				ModelRenderer.sortingLayerName = "Arc";
 				ModelRenderer.sortingOrder = 4;
 				alphaShaderId = Shader.PropertyToID("_Alpha");
-				highlightShaderId = Shader.PropertyToID("_Highlight");
 				ArcTapCollider = instance.GetComponentInChildren<MeshCollider>();
 				Enable = false;
 			}
@@ -1033,9 +1025,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
-					ModelRenderer.GetPropertyBlock(propertyBlock);
-					propertyBlock.SetInt(highlightShaderId, value ? 1 : 0);
-					ModelRenderer.SetPropertyBlock(propertyBlock);
+					ModelRenderer.renderingLayerMask=MaskUtil.SetMask(ModelRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
 					selected = value;
 				}
 			}
@@ -1043,7 +1033,7 @@ namespace Arcade.Gameplay.Chart
 
 		private bool selected;
 		private float currentAlpha = 1f;
-		private int alphaShaderId = 0, highlightShaderId = 0;
+		private int alphaShaderId = 0;
 
 		public ArcArcTap()
 		{

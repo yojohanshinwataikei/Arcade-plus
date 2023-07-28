@@ -16,7 +16,7 @@ MonoBehaviour:
   SelectionShader: {fileID: 4800000, guid: 9612cd2f2e3ff0c4788e81213b304864, type: 3}
   SelectionBlitShader: {fileID: 4800000, guid: f0c1e2a852b32f2429c0692f3431635f, type: 3}
   OutlineColor: {r: 1, g: 0.5, b: 0, a: 1}
-  SelectionColor: {r: 1, g: 0.5019608, b: 0, a: 0.5019608}
+  SelectionColor: {r: 1, g: 0.5, b: 0, a: 0.2509804}
   SampleDistance: 4
   SampleDistanceReferenceWidth: 1280
   RenderingLayerMask: 2

@@ -285,10 +285,8 @@ namespace Arcade.Gameplay
 			{
 				if (selected != value)
 				{
-					int h = value ? 1 : 0;
-					HeadRenderer.GetPropertyBlock(headPropertyBlock);
-					headPropertyBlock.SetInt(highlightShaderId, h);
-					HeadRenderer.SetPropertyBlock(headPropertyBlock);
+					HeadRenderer.renderingLayerMask=MaskUtil.SetMask(HeadRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
+
 					foreach (var s in segments) s.Selected = value;
 					selected = value;
 				}
@@ -309,7 +307,6 @@ namespace Arcade.Gameplay
 			HeadRenderer.sortingOrder = 1;
 			highColorShaderId = Shader.PropertyToID("_HighColor");
 			lowColorShaderId = Shader.PropertyToID("_LowColor");
-			highlightShaderId = Shader.PropertyToID("_Highlight");
 			mainTexShaderId = Shader.PropertyToID("_MainTex");
 		}
 		private void OnDestroy()
@@ -319,7 +316,6 @@ namespace Arcade.Gameplay
 			Destroy(HeadFilter.sharedMesh);
 		}
 
-		private int highlightShaderId;
 		private int highColorShaderId;
 		private int lowlightShaderId;
 		private int lowColorShaderId;
