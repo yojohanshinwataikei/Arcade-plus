@@ -4,7 +4,6 @@ Shader "Arcade/TapNote"
 	{
 		[PerRendererData] _MainTex ("Texture", 2D) = "white" {}
 		[PerRendererData] _Alpha ("Alpha", Float) = 1
-		[PerRendererData] _Highlight("Highlight", Int) = 0
 	}
 	SubShader
 	{
@@ -34,16 +33,8 @@ Shader "Arcade/TapNote"
 				float2 uv : TEXCOORD0;
 			};
 
-			int _Highlight;
 			float _Alpha;
 			sampler2D _MainTex;
-
-			half4 Highlight(half4 c)
-			{
-				half3 hsv = rgb2hsv(c.rgb);
-				hsv.r += 0.4f;
-				return half4(hsv2rgb(hsv),c.a);
-			}
 
 			v2f vert (appdata v)
 			{
@@ -57,10 +48,6 @@ Shader "Arcade/TapNote"
 			{
 				half4 c = tex2D(_MainTex,i.uv);
 				c.a *= _Alpha;
-				if(_Highlight == 1)
-				{
-					c = Highlight(c);
-				}
 				return c;
 			}
 			ENDHLSL

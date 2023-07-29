@@ -23,13 +23,12 @@ public class SelectionRendering : ScriptableRendererFeature
 			};
 
 		public Material selectionBlitMaterial;
-		public Material selectionMaterial;
+
+		private static readonly ShaderTagId SelectionShaderTagId=new ShaderTagId("Selection");
 
 		public SelectionPass(SelectionRendering feature)
 		{
-
 			this.feature = feature;
-			this.selectionMaterial = CoreUtils.CreateEngineMaterial(feature.SelectionShader);
 			this.selectionBlitMaterial = CoreUtils.CreateEngineMaterial(feature.SelectionBlitShader);
 			profilingSampler = new ProfilingSampler("SelectionPass");
 		}
@@ -42,7 +41,7 @@ public class SelectionRendering : ScriptableRendererFeature
 		public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
 		{
 			RenderTextureDescriptor descriptor = renderingData.cameraData.cameraTargetDescriptor;
-			descriptor.colorFormat = RenderTextureFormat.ARGB1555;
+			descriptor.colorFormat = RenderTextureFormat.ARGB32;
 			RenderingUtils.ReAllocateIfNeeded(ref selectionDepth, descriptor, wrapMode: TextureWrapMode.Clamp, name: "_selection");
 			descriptor.depthBufferBits = 0;
 			RenderingUtils.ReAllocateIfNeeded(ref selection, descriptor, wrapMode: TextureWrapMode.Clamp, name: "_selection");
@@ -65,8 +64,8 @@ public class SelectionRendering : ScriptableRendererFeature
 			CommandBuffer cmd = CommandBufferPool.Get(name: "Selection");
 			using (new ProfilingScope(profilingSampler))
 			{
+				// TODO: Use a specific shader pass to draw selection buffer
 				DrawingSettings drawingSettings = CreateDrawingSettings(shaderTagIdList, ref renderingData, renderingData.cameraData.defaultOpaqueSortFlags);
-				drawingSettings.overrideMaterial = selectionMaterial;
 				RendererListParams rendererListParams = new RendererListParams(
 					renderingData.cullResults,
 					drawingSettings,
@@ -92,7 +91,6 @@ public class SelectionRendering : ScriptableRendererFeature
 	}
 
 	SelectionPass selectionPass;
-	public Shader SelectionShader;
 	public Shader SelectionBlitShader;
 	public Color OutlineColor;
 	public Color SelectionColor;
@@ -104,13 +102,9 @@ public class SelectionRendering : ScriptableRendererFeature
 
 	public override void Create()
 	{
-		if (SelectionShader == null)
-		{
-			SelectionShader = Shader.Find("SelectionRendering/Selection");
-		}
 		if (SelectionBlitShader == null)
 		{
-			SelectionShader = Shader.Find("SelectionRendering/SelectionBlit");
+			SelectionBlitShader = Shader.Find("SelectionRendering/SelectionBlit");
 		}
 
 		selectionPass = new SelectionPass(this);

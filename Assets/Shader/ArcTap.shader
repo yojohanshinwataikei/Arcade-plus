@@ -4,7 +4,6 @@ Shader "Arcade/ArcTap"
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		[PerRendererData] _Alpha ("Alpha", Float) = 1
-		[PerRendererData] _Highlight("Highlight", Int) = 0
 	}
 	SubShader
 	{
@@ -19,7 +18,6 @@ Shader "Arcade/ArcTap"
 			#pragma fragment frag
 
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-			#include "ColorSpace.hlsl"
 
 			struct appdata
 			{
@@ -33,17 +31,9 @@ Shader "Arcade/ArcTap"
 				float2 uv : TEXCOORD0;
 			};
 
-			int _Highlight;
 			float _Alpha;
 			sampler2D _MainTex;
             float4 _MainTex_ST;
-
-			half4 Highlight(half4 c)
-			{
-				half3 hsv = rgb2hsv(c.rgb);
-				hsv.r += 0.4f;
-				return half4(hsv2rgb(hsv),c.a);
-			}
 
 			v2f vert (appdata v)
 			{
@@ -56,10 +46,6 @@ Shader "Arcade/ArcTap"
 			half4 frag (v2f i) : SV_Target
 			{
 				half4 c = half4(tex2D(_MainTex,i.uv).rgb, _Alpha);
-				if(_Highlight == 1)
-				{
-					c = Highlight(c);
-				}
 				return c;
 			}
 			ENDHLSL

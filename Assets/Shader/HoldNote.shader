@@ -6,7 +6,6 @@ Shader "Arcade/HoldNote"
 		[PerRendererData] _From ("From", Float) = 0
 		[PerRendererData] _To ("To",Float) = 1
 		[PerRendererData] _Alpha ("Alpha", Float) = 1
-		[PerRendererData] _Highlight("Highlight", Int) = 0
 	}
 	SubShader
 	{
@@ -36,7 +35,6 @@ Shader "Arcade/HoldNote"
 				float2 uv : TEXCOORD0;
 			};
 
-			int _Highlight;
 			float _From,_To,_Alpha;
 			sampler2D _MainTex;
 
@@ -61,10 +59,6 @@ Shader "Arcade/HoldNote"
 			    if(i.uv.y > _To || i.uv.y < _From) return 0;
 				float v = 1.-(i.uv.y-_To)/(_From-_To);
 				half4 c = half4(tex2D(_MainTex,float2(i.uv.x,v)).rgb, _Alpha);
-				if(_Highlight == 1)
-				{
-					c = Highlight(c);
-				};
 				return c;
 			}
 			ENDHLSL

@@ -7,7 +7,6 @@ Shader "Arcade/Arc"
 		[PerRendererData] _LowColor ("LowColor", Color) = (1,1,1,1)
 		[PerRendererData] _From ("From", Float) = 0
 		[PerRendererData] _To ("To", Float) = 1
-		[PerRendererData] _Highlight("Highlight", Int) = 0
 	}
 	SubShader
 	{
@@ -25,7 +24,6 @@ Shader "Arcade/Arc"
 			#pragma fragment frag
 
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-			#include "ColorSpace.hlsl"
 
 			struct appdata
 			{
@@ -43,7 +41,6 @@ Shader "Arcade/Arc"
 				float2 uv2 : TEXCOORD1;
 			};
 
-			int _Highlight;
 			float _From,_To;
 			float4 _HighColor;
 			float4 _LowColor;
@@ -60,26 +57,11 @@ Shader "Arcade/Arc"
 				return o;
 			}
 
-			half4 Highlight(half4 c)
-			{
-				// TODO: highlight by outline might be better
-				half3 hsv = rgb2hsv(c.rgb);
-				float rate=1.75;
-				float sv=hsv.y*hsv.z*rate;
-				hsv.z+=sv*(1-rate)/2;
-				hsv.y=sv/hsv.z;
-				return half4(hsv2rgb(hsv),c.a);
-			}
-
 			half4 frag (v2f i) : SV_Target
 			{
 			    if(i.uv.y < _From || i.uv.y > _To) return 0;
 				float4 c = tex2D(_MainTex,i.uv) ;
 				float4 inColor = lerp(_LowColor,_HighColor,clamp(i.uv2.x,0,1));
-				if(_Highlight == 1)
-				{
-					inColor = Highlight(inColor);
-				}
 				c *= inColor;
 				return c;
 			}
