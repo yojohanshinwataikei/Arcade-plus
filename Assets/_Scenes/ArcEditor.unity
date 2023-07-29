@@ -17565,9 +17565,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0.052083332
-    y: 0.059262782
+    y: 0.059255738
     width: 0.8958333
-    height: 0.88147444
+    height: 0.8814885
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -44238,10 +44238,6 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4322389996328056, guid: 1b41ffeda4cbd5846a65ec727c0bb571, type: 3}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4322389996328056, guid: 1b41ffeda4cbd5846a65ec727c0bb571, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.625
       objectReference: {fileID: 0}
@@ -44280,11 +44276,6 @@ PrefabInstance:
     - target: {fileID: 4322389996328056, guid: 1b41ffeda4cbd5846a65ec727c0bb571, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 199917444102316408, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

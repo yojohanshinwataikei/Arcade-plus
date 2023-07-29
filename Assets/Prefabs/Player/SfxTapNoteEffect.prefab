@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b050d39fcbcace47b110ce7169ec27a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LegacyEffect: {fileID: 0}
   Effect: {fileID: 6351887981718770107}
+  Texture: {fileID: 0}
 --- !u!73398921 &4012222409807848540
 VFXRenderer:
   serializedVersion: 1

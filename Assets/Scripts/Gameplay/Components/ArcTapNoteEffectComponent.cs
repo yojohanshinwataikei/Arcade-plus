@@ -8,15 +8,15 @@ namespace Arcade.Gameplay
 	public class ArcTapNoteEffectComponent : MonoBehaviour,IPoolable
 	{
 		public bool Available { get; private set; } = true;
-		[UnityEngine.Serialization.FormerlySerializedAs("Effect")]
-		public ParticleSystem LegacyEffect;
 		public VisualEffect Effect;
+		public Texture2D Texture;
 
 		public void PlayAt(Vector2 pos)
 		{
 			Available = false;
 			transform.position = pos;
 			Effect.enabled=true;
+			Effect.SetTexture("Texture",Texture);
 			Effect.Play();
 			StartCoroutine(WaitForEnd());
 		}
@@ -31,6 +31,7 @@ namespace Arcade.Gameplay
 		}
 		public void SetTexture(Texture2D texture){
 			Effect.SetTexture("Texture",texture);
+			Texture=texture;
 		}
 	}
 }

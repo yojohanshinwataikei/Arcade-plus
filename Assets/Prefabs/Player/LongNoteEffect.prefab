@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!73398921 &8074011842090883399
 VFXRenderer:
   serializedVersion: 1
@@ -108,6 +108,9 @@ VisualEffect:
     m_Gradient:
       m_Array: []
     m_NamedObject:
-      m_Array: []
+      m_Array:
+      - m_Value: {fileID: 2800000, guid: 6dde50603e1d89f42a6db979e6bd0aaf, type: 3}
+        m_Name: Texture
+        m_Overridden: 0
     m_Bool:
       m_Array: []
