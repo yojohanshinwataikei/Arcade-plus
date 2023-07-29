@@ -10,20 +10,26 @@ namespace Arcade.Gameplay
 	public class ArcEffectManager : MonoBehaviour
 	{
 		public static ArcEffectManager Instance { get; private set; }
+
+		public ArcEffectPlane EffectPlane;
 		private void Awake()
 		{
 			Instance = this;
 		}
 		private void Start()
 		{
-			tapNoteEffectPool = new GameObjectPool<ArcTapNoteEffectComponent>(TapNoteJudgeEffect, EffectLayer, 10);
-			sfxTapNoteEffectPool = new GameObjectPool<ArcTapNoteEffectComponent>(SfxTapNoteJudgeEffect, EffectLayer, 10);
+			tapNoteEffectPool = new GameObjectPool<ArcTapNoteEffectComponent>(TapNoteJudgeEffect, EffectPlane.transform, 10);
+			sfxTapNoteEffectPool = new GameObjectPool<ArcTapNoteEffectComponent>(SfxTapNoteJudgeEffect, EffectPlane.transform, 10);
+			for (int i = 0; i < 6; ++i) {
+				HoldNoteEffectPosition[i]=HoldNoteEffects[i].transform.position;
+			};
 		}
 
 		public GameObject TapNoteJudgeEffect;
 		public GameObject SfxTapNoteJudgeEffect;
 		public GameObject[] LaneHits = new GameObject[6];
 		public VisualEffect[] HoldNoteEffects = new VisualEffect[6];
+		public Vector3[] HoldNoteEffectPosition = new Vector3[6];
 		public Transform EffectLayer;
 		public AudioClip TapAudio, ArcAudio;
 		public AudioSource Source;
@@ -39,6 +45,7 @@ namespace Arcade.Gameplay
 
 			for (int track = 0; track < 6; track++)
 			{
+				HoldNoteEffects[track].transform.position=EffectPlane.GetPositionOnPlane(HoldNoteEffectPosition[track]);
 				bool show = holdEffectStatus[track];
 				if (show != HoldNoteEffects[track].enabled)
 				{
@@ -86,14 +93,14 @@ namespace Arcade.Gameplay
 			{
 				sfxTapNoteEffectPool.Get((effect) =>
 				{
-					effect.PlayAt(pos);
+					effect.PlayAt(EffectPlane.GetPositionOnPlane(pos));
 				});
 			}
 			else
 			{
 				tapNoteEffectPool.Get((effect) =>
 				{
-					effect.PlayAt(pos);
+					effect.PlayAt(EffectPlane.GetPositionOnPlane(pos));
 				});
 			}
 			if (isArc)

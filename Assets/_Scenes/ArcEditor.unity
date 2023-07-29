@@ -1510,6 +1510,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8074011842090883399, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17564,10 +17569,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.052083332
-    y: 0.059255738
-    width: 0.8958333
-    height: 0.8814885
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -17600,7 +17605,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 9, z: 9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1347802335}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 26.565, y: 180, z: 0}
 --- !u!114 &534669906
@@ -30644,6 +30650,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8074011842090883399, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -38348,6 +38359,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8074011842090883399, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -38884,6 +38900,11 @@ PrefabInstance:
     - target: {fileID: 199917444102316408, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
         type: 3}
       propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074011842090883399, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+        type: 3}
+      propertyPath: m_CastShadows
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -41353,6 +41374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bbdc662943440d4689c44368348fda2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EffectPlane: {fileID: 1347802336}
   TapNoteJudgeEffect: {fileID: 1839271255504496, guid: 3ac39123d40b2644cbd9dae7ba89884a,
     type: 3}
   SfxTapNoteJudgeEffect: {fileID: 1839271255504496, guid: b8b1a1f9b504b9742ab37f405ff7b140,
@@ -41371,6 +41393,13 @@ MonoBehaviour:
   - {fileID: 2036890598}
   - {fileID: 2088247652}
   - {fileID: 1303846338}
+  HoldNoteEffectPosition:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   EffectLayer: {fileID: 1125884054}
   TapAudio: {fileID: 8300000, guid: fdffe2ec68c4c204d84ad3dee4b69fd0, type: 3}
   ArcAudio: {fileID: 8300000, guid: bdece328b6ce4a1408ee82a4eefbe5b4, type: 3}
@@ -44277,6 +44306,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8074011842090883399, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -45633,6 +45667,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1342601114}
   m_CullTransparentMesh: 0
+--- !u!1 &1347802334
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1347802335}
+  - component: {fileID: 1347802336}
+  m_Layer: 0
+  m_Name: EffectPlane
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1347802335
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347802334}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -4.024922, z: 12.07477}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 534669905}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1347802336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347802334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b79ab3664070e446a15b8244bcafeaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ReferenceCamera: {fileID: 534669904}
 --- !u!1 &1349078799
 GameObject:
   m_ObjectHideFlags: 0
@@ -61797,6 +61876,11 @@ PrefabInstance:
     - target: {fileID: 199917444102316408, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
         type: 3}
       propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8074011842090883399, guid: 1b41ffeda4cbd5846a65ec727c0bb571,
+        type: 3}
+      propertyPath: m_CastShadows
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

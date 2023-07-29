@@ -11,7 +11,7 @@ namespace Arcade.Gameplay
 		public VisualEffect Effect;
 		public Texture2D Texture;
 
-		public void PlayAt(Vector2 pos)
+		public void PlayAt(Vector3 pos)
 		{
 			Available = false;
 			transform.position = pos;

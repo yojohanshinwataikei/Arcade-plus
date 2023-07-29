@@ -740,7 +740,7 @@ namespace Arcade.Gameplay
 						float t = (s.FromPos.z - arc.Position / 1000f) / (s.FromPos.z - s.ToPos.z);
 						ArcCap.position = new Vector3(s.FromPos.x + (s.ToPos.x - s.FromPos.x) * t,
 													  s.FromPos.y + (s.ToPos.y - s.FromPos.y) * t);
-						JudgeEffectTransform.position = ArcCap.position;
+						JudgeEffectTransform.position = ArcEffectManager.Instance.EffectPlane.GetPositionOnPlane(ArcCap.position);
 						if (!arc.IsVoid) ArcArcManager.Instance.ArcJudgePos += ArcCap.position.x;
 						break;
 					}
