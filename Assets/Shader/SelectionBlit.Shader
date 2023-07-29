@@ -5,7 +5,7 @@ Shader "SelectionRendering/SelectionBlit"
         Tags { "RenderType"="Opaque" "RenderPipeline" = "UniversalPipeline"}
         LOD 100
         ZWrite Off Cull Off
-        Blend SrcAlpha OneMinusSrcAlpha
+        Blend One OneMinusSrcAlpha
         Pass
         {
             Name "ColorBlitPass"
@@ -29,7 +29,7 @@ Shader "SelectionRendering/SelectionBlit"
                 float4 color = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_PointClamp, input.texcoord);
 
                 if(color.a>0.1f){
-                    return _SelectionColor;
+                    return _SelectionColor*_SelectionColor.a;
                 }
 
                 int insideCount=0;
@@ -47,7 +47,7 @@ Shader "SelectionRendering/SelectionBlit"
                 }
 
                 if(insideCount>=1){
-                    return _OutlineColor;
+                    return _OutlineColor*_OutlineColor.a;
                 }
                 return float4(0, 0, 0, 0);
             }

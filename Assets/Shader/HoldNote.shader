@@ -12,7 +12,7 @@ Shader "Arcade/HoldNote"
 		Tags { "Queue" = "Transparent"  "RenderType"="Transparent" "CanUseSpriteAtlas"="true" "PreviewType" = "Plane" }
 		ZWrite Off
 		Cull Off
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend One OneMinusSrcAlpha
 
 		Pass
 		{
@@ -46,19 +46,12 @@ Shader "Arcade/HoldNote"
 				return o;
 			}
 
-			half4 Highlight(half4 c)
-			{
-				half3 hsv = rgb2hsv(c.rgb);
-				hsv.r += 0.4f;
-				hsv.b += 0.25f;
-				return half4(hsv2rgb(hsv),c.a);
-			}
-
 			half4 frag (v2f i) : SV_Target
 			{
 			    if(i.uv.y > _To || i.uv.y < _From) return 0;
 				float v = 1.-(i.uv.y-_To)/(_From-_To);
 				half4 c = half4(tex2D(_MainTex,float2(i.uv.x,v)).rgb, _Alpha);
+				c.rgb *= c.a;
 				return c;
 			}
 			ENDHLSL

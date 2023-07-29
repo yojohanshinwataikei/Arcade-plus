@@ -15,7 +15,7 @@ Shader "Arcade/Arc"
         Cull Off
         Lighting Off
 		ZWrite Off
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend One OneMinusSrcAlpha
 
 		Pass
 		{
@@ -63,6 +63,7 @@ Shader "Arcade/Arc"
 				float4 c = tex2D(_MainTex,i.uv) ;
 				float4 inColor = lerp(_LowColor,_HighColor,clamp(i.uv2.x,0,1));
 				c *= inColor;
+				c.rgb *= c.a;
 				return c;
 			}
 			ENDHLSL

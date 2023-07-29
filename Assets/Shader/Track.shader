@@ -17,7 +17,7 @@ Shader "Arcade/Track"
 		Tags { "Queue" = "Transparent"  "RenderType"="Transparent" "CanUseSpriteAtlas"="true" "PreviewType" = "Plane" }
 		ZWrite Off
 		Cull Off
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend One OneMinusSrcAlpha
 
 		Pass
 		{
@@ -67,7 +67,9 @@ Shader "Arcade/Track"
 				p.y = (p.y*_TrackLength/_TrackRepeat + _Phase);
 				float4 c= tex2D(_MainTex,p);
 				c.a=1.0;
-				return c*i.color;
+				c*=i.color;
+				c.rgb *= c.a;
+				return c;
 			}
 			ENDHLSL
 		}

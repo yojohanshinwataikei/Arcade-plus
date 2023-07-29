@@ -9,7 +9,7 @@ Shader "Arcade/ArcTap"
 	{
 		Tags { "Queue" = "Transparent"  "RenderType"="Transparent" "CanUseSpriteAtlas"="true"  }
 		Cull Off
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend One OneMinusSrcAlpha
 
 		Pass
 		{
@@ -46,6 +46,7 @@ Shader "Arcade/ArcTap"
 			half4 frag (v2f i) : SV_Target
 			{
 				half4 c = half4(tex2D(_MainTex,i.uv).rgb, _Alpha);
+				c.rgb *= c.a;
 				return c;
 			}
 			ENDHLSL

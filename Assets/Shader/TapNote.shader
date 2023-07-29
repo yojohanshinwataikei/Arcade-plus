@@ -10,7 +10,7 @@ Shader "Arcade/TapNote"
 		Tags { "Queue" = "Transparent"  "RenderType"="Transparent" "CanUseSpriteAtlas"="true" "PreviewType" = "Plane" }
 		ZWrite Off
 		Cull Off
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend One OneMinusSrcAlpha
 
 		Pass
 		{
@@ -48,6 +48,7 @@ Shader "Arcade/TapNote"
 			{
 				half4 c = tex2D(_MainTex,i.uv);
 				c.a *= _Alpha;
+				c.rgb *= c.a;
 				return c;
 			}
 			ENDHLSL
