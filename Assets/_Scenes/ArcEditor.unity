@@ -17569,10 +17569,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.052083332
+    y: 0.059255738
+    width: 0.8958333
+    height: 0.8814885
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -52839,7 +52839,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 4294967295
+  m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 59891c690a5728844b37aa08b0ffdeb3, type: 2}
