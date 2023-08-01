@@ -3,124 +3,128 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class SelectionRendering : ScriptableRendererFeature
+
+namespace Arcade.Util.Rendering
 {
-	class SelectionPass : ScriptableRenderPass
+	public class SelectionRendering : ScriptableRendererFeature
 	{
-		public static readonly int SampleDistanceShaderId = Shader.PropertyToID("_SampleDistance");
-		public static readonly int BlitTextureSizeShaderId = Shader.PropertyToID("_BlitTextureSize");
-		public static readonly int SelectionColorShaderId = Shader.PropertyToID("_SelectionColor");
-		public static readonly int OutlineShaderId = Shader.PropertyToID("_OutlineColor");
-		public SelectionRendering feature;
-		private RTHandle selection;
-		private RTHandle selectionDepth;
-		private RTHandle cameraColor;
-		private List<ShaderTagId> shaderTagIdList = new List<ShaderTagId> {
+		class SelectionPass : ScriptableRenderPass
+		{
+			public static readonly int SampleDistanceShaderId = Shader.PropertyToID("_SampleDistance");
+			public static readonly int BlitTextureSizeShaderId = Shader.PropertyToID("_BlitTextureSize");
+			public static readonly int SelectionColorShaderId = Shader.PropertyToID("_SelectionColor");
+			public static readonly int OutlineShaderId = Shader.PropertyToID("_OutlineColor");
+			public SelectionRendering feature;
+			private RTHandle selection;
+			private RTHandle selectionDepth;
+			private RTHandle cameraColor;
+			private List<ShaderTagId> shaderTagIdList = new List<ShaderTagId> {
 				new ShaderTagId("UniversalForward"),
 				new ShaderTagId("UniversalForwardOnly"),
 				new ShaderTagId("LightweightForward"),
 				new ShaderTagId("SRPDefaultUnlit")
 			};
 
-		public Material selectionBlitMaterial;
+			public Material selectionBlitMaterial;
 
-		private static readonly ShaderTagId SelectionShaderTagId=new ShaderTagId("Selection");
+			private static readonly ShaderTagId SelectionShaderTagId = new ShaderTagId("Selection");
 
-		public SelectionPass(SelectionRendering feature)
-		{
-			this.feature = feature;
-			this.selectionBlitMaterial = CoreUtils.CreateEngineMaterial(feature.SelectionBlitShader);
-			profilingSampler = new ProfilingSampler("SelectionPass");
-		}
-
-		public void SetTarget(RTHandle cameraColor)
-		{
-			this.cameraColor = cameraColor;
-		}
-
-		public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
-		{
-			RenderTextureDescriptor descriptor = renderingData.cameraData.cameraTargetDescriptor;
-			descriptor.colorFormat = RenderTextureFormat.ARGB32;
-			RenderingUtils.ReAllocateIfNeeded(ref selectionDepth, descriptor, wrapMode: TextureWrapMode.Clamp, name: "_selection");
-			descriptor.depthBufferBits = 0;
-			RenderingUtils.ReAllocateIfNeeded(ref selection, descriptor, wrapMode: TextureWrapMode.Clamp, name: "_selection");
-
-			selectionBlitMaterial.SetFloat(SampleDistanceShaderId, feature.SampleDistance * ((float)descriptor.width) / feature.SampleDistanceReferenceWidth);
-			selectionBlitMaterial.SetVector(BlitTextureSizeShaderId, new Vector4(descriptor.width, descriptor.height));
-			selectionBlitMaterial.SetColor(SelectionColorShaderId, feature.SelectionColor);
-			selectionBlitMaterial.SetColor(OutlineShaderId, feature.OutlineColor);
-
-			ConfigureTarget(selection, selectionDepth);
-			ConfigureClear(ClearFlag.All, new Color(0, 0, 0, 0));
-		}
-
-		public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-		{
-			if (renderingData.cameraData.cameraType != CameraType.Game)
+			public SelectionPass(SelectionRendering feature)
 			{
-				return;
+				this.feature = feature;
+				this.selectionBlitMaterial = CoreUtils.CreateEngineMaterial(feature.SelectionBlitShader);
+				profilingSampler = new ProfilingSampler("SelectionPass");
 			}
-			CommandBuffer cmd = CommandBufferPool.Get(name: "Selection");
-			using (new ProfilingScope(profilingSampler))
+
+			public void SetTarget(RTHandle cameraColor)
 			{
-				// TODO: Use a specific shader pass to draw selection buffer
-				DrawingSettings drawingSettings = CreateDrawingSettings(shaderTagIdList, ref renderingData, renderingData.cameraData.defaultOpaqueSortFlags);
-				RendererListParams rendererListParams = new RendererListParams(
-					renderingData.cullResults,
-					drawingSettings,
-					new FilteringSettings(RenderQueueRange.all, -1, feature.RenderingLayerMask)
-				);
-
-				RendererList rendererList = context.CreateRendererList(ref rendererListParams);
-
-				cmd.DrawRendererList(rendererList);
-				context.ExecuteCommandBuffer(cmd);
-				cmd.Clear();
-				Blitter.BlitCameraTexture(cmd, selection, cameraColor, selectionBlitMaterial, 0);
-
-				context.ExecuteCommandBuffer(cmd);
-				cmd.Clear();
+				this.cameraColor = cameraColor;
 			}
-			CommandBufferPool.Release(cmd);
+
+			public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
+			{
+				RenderTextureDescriptor descriptor = renderingData.cameraData.cameraTargetDescriptor;
+				descriptor.colorFormat = RenderTextureFormat.ARGB32;
+				RenderingUtils.ReAllocateIfNeeded(ref selectionDepth, descriptor, wrapMode: TextureWrapMode.Clamp, name: "_selection");
+				descriptor.depthBufferBits = 0;
+				RenderingUtils.ReAllocateIfNeeded(ref selection, descriptor, wrapMode: TextureWrapMode.Clamp, name: "_selection");
+
+				selectionBlitMaterial.SetFloat(SampleDistanceShaderId, feature.SampleDistance * ((float)descriptor.width) / feature.SampleDistanceReferenceWidth);
+				selectionBlitMaterial.SetVector(BlitTextureSizeShaderId, new Vector4(descriptor.width, descriptor.height));
+				selectionBlitMaterial.SetColor(SelectionColorShaderId, feature.SelectionColor);
+				selectionBlitMaterial.SetColor(OutlineShaderId, feature.OutlineColor);
+
+				ConfigureTarget(selection, selectionDepth);
+				ConfigureClear(ClearFlag.All, new Color(0, 0, 0, 0));
+			}
+
+			public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+			{
+				if (renderingData.cameraData.cameraType != CameraType.Game)
+				{
+					return;
+				}
+				CommandBuffer cmd = CommandBufferPool.Get(name: "Selection");
+				using (new ProfilingScope(profilingSampler))
+				{
+					// TODO: Use a specific shader pass to draw selection buffer
+					DrawingSettings drawingSettings = CreateDrawingSettings(shaderTagIdList, ref renderingData, renderingData.cameraData.defaultOpaqueSortFlags);
+					RendererListParams rendererListParams = new RendererListParams(
+						renderingData.cullResults,
+						drawingSettings,
+						new FilteringSettings(RenderQueueRange.all, -1, feature.RenderingLayerMask)
+					);
+
+					RendererList rendererList = context.CreateRendererList(ref rendererListParams);
+
+					cmd.DrawRendererList(rendererList);
+					context.ExecuteCommandBuffer(cmd);
+					cmd.Clear();
+					Blitter.BlitCameraTexture(cmd, selection, cameraColor, selectionBlitMaterial, 0);
+
+					context.ExecuteCommandBuffer(cmd);
+					cmd.Clear();
+				}
+				CommandBufferPool.Release(cmd);
+			}
+
+			public override void OnCameraCleanup(CommandBuffer cmd)
+			{
+			}
 		}
 
-		public override void OnCameraCleanup(CommandBuffer cmd)
+		SelectionPass selectionPass;
+		public Shader SelectionBlitShader;
+		public Color OutlineColor;
+		public Color SelectionColor;
+		public float SampleDistance;
+		public float SampleDistanceReferenceWidth;
+
+		// TODO: Good editor
+		public uint RenderingLayerMask = uint.MaxValue;
+
+		public override void Create()
 		{
+			if (SelectionBlitShader == null)
+			{
+				SelectionBlitShader = Shader.Find("SelectionRendering/SelectionBlit");
+			}
+
+			selectionPass = new SelectionPass(this);
+
+			selectionPass.renderPassEvent = RenderPassEvent.AfterRendering;
 		}
-	}
 
-	SelectionPass selectionPass;
-	public Shader SelectionBlitShader;
-	public Color OutlineColor;
-	public Color SelectionColor;
-	public float SampleDistance;
-	public float SampleDistanceReferenceWidth;
-
-	// TODO: Good editor
-	public uint RenderingLayerMask = uint.MaxValue;
-
-	public override void Create()
-	{
-		if (SelectionBlitShader == null)
+		public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
 		{
-			SelectionBlitShader = Shader.Find("SelectionRendering/SelectionBlit");
+			renderer.EnqueuePass(selectionPass);
 		}
-
-		selectionPass = new SelectionPass(this);
-
-		selectionPass.renderPassEvent = RenderPassEvent.AfterRendering;
-	}
-
-	public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
-	{
-		renderer.EnqueuePass(selectionPass);
-	}
-	public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
-	{
-		if (renderingData.cameraData.cameraType == CameraType.Game)
+		public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
 		{
-			selectionPass.SetTarget(renderer.cameraColorTargetHandle);
+			if (renderingData.cameraData.cameraType == CameraType.Game)
+			{
+				selectionPass.SetTarget(renderer.cameraColorTargetHandle);
+			}
 		}
 	}
 }

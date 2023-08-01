@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Arcade.Gameplay.Chart;
+using Arcade.Util.Misc;
 using UnityEngine;
 using UnityEngine.VFX;
 

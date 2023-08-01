@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Arcade.Aff;
+using Arcade.Util.Misc;
 using UnityEngine;
 
 namespace Arcade.Gameplay.Chart
