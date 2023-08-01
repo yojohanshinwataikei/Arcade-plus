@@ -262,15 +262,13 @@ namespace Arcade.Gameplay
 					effect = value;
 					if (value)
 					{
-						JudgeEffect.enabled=true;
 						JudgeEffect.Play();
-						JudgeEffect.Simulate(1f/60f,120);
+						JudgeEffect.Simulate(1f/60f,60);
 					}
 					else
 					{
-						JudgeEffect.Reinit();
 						JudgeEffect.Stop();
-						JudgeEffect.enabled=false;
+						JudgeEffect.Simulate(1f/60f,60);
 					}
 				}
 			}

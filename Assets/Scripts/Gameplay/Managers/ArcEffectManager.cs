@@ -51,15 +51,13 @@ namespace Arcade.Gameplay
 				{
 					if (show)
 					{
-						HoldNoteEffects[track].enabled = true;
 						HoldNoteEffects[track].Play();
-						HoldNoteEffects[track].Simulate(1f/60f,120);
+						HoldNoteEffects[track].Simulate(1f/60f,60);
 					}
 					else
 					{
-						HoldNoteEffects[track].Reinit();
 						HoldNoteEffects[track].Stop();
-						HoldNoteEffects[track].enabled = false;
+						HoldNoteEffects[track].Simulate(1f/60f,60);
 					}
 				}
 			}
