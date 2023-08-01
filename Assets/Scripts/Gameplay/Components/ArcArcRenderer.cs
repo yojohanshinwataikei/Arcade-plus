@@ -264,7 +264,7 @@ namespace Arcade.Gameplay
 					{
 						JudgeEffect.enabled=true;
 						JudgeEffect.Play();
-						JudgeEffect.Simulate(1f/60f,30);
+						JudgeEffect.Simulate(1f/60f,120);
 					}
 					else
 					{
