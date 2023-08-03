@@ -80,6 +80,7 @@ namespace Arcade.Util.Rendering
 					cmd.DrawRendererList(rendererList);
 					context.ExecuteCommandBuffer(cmd);
 					cmd.Clear();
+
 					Blitter.BlitCameraTexture(cmd, selection, cameraColor, selectionBlitMaterial, 0);
 
 					context.ExecuteCommandBuffer(cmd);
@@ -117,7 +118,10 @@ namespace Arcade.Util.Rendering
 
 		public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
 		{
-			renderer.EnqueuePass(selectionPass);
+			if (renderingData.cameraData.cameraType == CameraType.Game)
+			{
+				renderer.EnqueuePass(selectionPass);
+			}
 		}
 		public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
 		{
