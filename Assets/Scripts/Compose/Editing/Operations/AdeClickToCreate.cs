@@ -63,7 +63,7 @@ namespace Arcade.Compose.Editing
 				{
 					List<MarkingMenuItem> items = new List<MarkingMenuItem>();
 					items.AddRange(ClickToCreateItems);
-					if (AdeCursorManager.Instance.SelectedNotes.Count != 0)
+					if (AdeSelectionManager.Instance.SelectedNotes.Count != 0)
 					{
 						items.Add(Delete);
 					}
@@ -134,7 +134,7 @@ namespace Arcade.Compose.Editing
 		private void Start()
 		{
 			AdeMarkingMenuManager.Instance.Providers.Add(this);
-			AdeCursorManager.Instance.NoteEventListeners.Add(this);
+			AdeSelectionManager.Instance.NoteEventListeners.Add(this);
 		}
 		private void OnDestroy()
 		{

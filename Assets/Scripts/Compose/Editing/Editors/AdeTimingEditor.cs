@@ -322,20 +322,20 @@ namespace Arcade.Compose.Editing
 		{
 			foreach (var tap in taps)
 			{
-				AdeCursorManager.Instance.DeselectNote(tap);
+				AdeSelectionManager.Instance.DeselectNote(tap);
 				ArcTapNoteManager.Instance.Remove(tap);
 			}
 			foreach (var hold in holds)
 			{
-				AdeCursorManager.Instance.DeselectNote(hold);
+				AdeSelectionManager.Instance.DeselectNote(hold);
 				ArcHoldNoteManager.Instance.Remove(hold);
 			}
 			foreach (var arc in arcs)
 			{
-				AdeCursorManager.Instance.DeselectNote(arc);
+				AdeSelectionManager.Instance.DeselectNote(arc);
 				foreach (var arctap in arc.ArcTaps)
 				{
-					AdeCursorManager.Instance.DeselectNote(arctap);
+					AdeSelectionManager.Instance.DeselectNote(arctap);
 				}
 				ArcArcManager.Instance.Remove(arc);
 			}

@@ -27,7 +27,7 @@ namespace Arcade.Compose
 				{
 					if (!ArcGameplayManager.Instance.IsLoaded) return null;
 					if (AdeCursorManager.Instance == null) return null;
-					if (AdeCursorManager.Instance.SelectedNotes.Count == 0) return null;
+					if (AdeSelectionManager.Instance.SelectedNotes.Count == 0) return null;
 					return new MarkingMenuItem[] { CopyItem, CutItem };
 				}
 				else return CopyingItems;
@@ -76,14 +76,14 @@ namespace Arcade.Compose
 		public void CopySelectedNotes()
 		{
 			if (enable) return;
-			CopyOrCut(AdeCursorManager.Instance.SelectedNotes.ToArray(), false);
-			AdeCursorManager.Instance.DeselectAllNotes();
+			CopyOrCut(AdeSelectionManager.Instance.SelectedNotes.ToArray(), false);
+			AdeSelectionManager.Instance.DeselectAllNotes();
 		}
 		public void CutSelectedNotes()
 		{
 			if (enable) return;
-			CopyOrCut(AdeCursorManager.Instance.SelectedNotes.ToArray(), true);
-			AdeCursorManager.Instance.DeselectAllNotes();
+			CopyOrCut(AdeSelectionManager.Instance.SelectedNotes.ToArray(), true);
+			AdeSelectionManager.Instance.DeselectAllNotes();
 		}
 		public void CopyOrCut(ArcNote[] notes, bool cut)
 		{
@@ -198,7 +198,7 @@ namespace Arcade.Compose
 			{
 				foreach (var note in notes)
 				{
-					AdeCursorManager.Instance.SelectNote(note);
+					AdeSelectionManager.Instance.SelectNote(note);
 				}
 			}
 			Cleanup();

@@ -36,7 +36,7 @@ namespace Arcade.Compose.Command
 		{
 			if (note is ArcNote)
 			{
-				AdeCursorManager.Instance.DeselectNote(note as ArcNote);
+				AdeSelectionManager.Instance.DeselectNote(note as ArcNote);
 			}
 			if (note is ArcTap)
 			{
@@ -50,7 +50,7 @@ namespace Arcade.Compose.Command
 			{
 				foreach (var arctap in (note as ArcArc).ArcTaps)
 				{
-					AdeCursorManager.Instance.DeselectNote(arctap);
+					AdeSelectionManager.Instance.DeselectNote(arctap);
 				}
 				ArcArcManager.Instance.Remove(note as ArcArc);
 			}
@@ -74,7 +74,7 @@ namespace Arcade.Compose.Command
 		{
 			if (note is ArcNote)
 			{
-				AdeCursorManager.Instance.DeselectNote(note as ArcNote);
+				AdeSelectionManager.Instance.DeselectNote(note as ArcNote);
 			}
 			if (note is ArcTap)
 			{
@@ -88,7 +88,7 @@ namespace Arcade.Compose.Command
 			{
 				foreach (var arctap in (note as ArcArc).ArcTaps)
 				{
-					AdeCursorManager.Instance.DeselectNote(arctap);
+					AdeSelectionManager.Instance.DeselectNote(arctap);
 				}
 				ArcArcManager.Instance.Remove(note as ArcArc);
 			}
@@ -168,7 +168,7 @@ namespace Arcade.Compose.Command
 		}
 		public void Undo()
 		{
-			AdeCursorManager.Instance.DeselectNote(arctap);
+			AdeSelectionManager.Instance.DeselectNote(arctap);
 			arc.RemoveArcTap(arctap);
 		}
 	}
@@ -190,7 +190,7 @@ namespace Arcade.Compose.Command
 		}
 		public void Do()
 		{
-			AdeCursorManager.Instance.DeselectNote(arctap);
+			AdeSelectionManager.Instance.DeselectNote(arctap);
 			arc.RemoveArcTap(arctap);
 		}
 		public void Undo()

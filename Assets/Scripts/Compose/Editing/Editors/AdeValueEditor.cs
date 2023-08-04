@@ -35,16 +35,16 @@ namespace Arcade.Compose.Editing
 		}
 		private void Start()
 		{
-			AdeCursorManager.Instance.NoteEventListeners.Add(this);
+			AdeSelectionManager.Instance.NoteEventListeners.Add(this);
 		}
 		private void OnDestroy()
 		{
-			AdeCursorManager.Instance.NoteEventListeners.Remove(this);
+			AdeSelectionManager.Instance.NoteEventListeners.Remove(this);
 		}
 
 		private void MakeupFields()
 		{
-			List<ArcNote> selected = AdeCursorManager.Instance.SelectedNotes;
+			List<ArcNote> selected = AdeSelectionManager.Instance.SelectedNotes;
 			int count = selected.Count;
 			if (count == 0)
 			{
@@ -127,7 +127,7 @@ namespace Arcade.Compose.Editing
 				string t = inputField.text;
 				int timing = int.Parse(t);
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone();
 					ne.Timing = timing;
@@ -157,7 +157,7 @@ namespace Arcade.Compose.Editing
 				int track = int.Parse(t);
 				if (track < 0 || track > 5) throw new InvalidDataException("轨道只能为 0 - 5");
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					if (n is ArcTap)
 					{
@@ -195,7 +195,7 @@ namespace Arcade.Compose.Editing
 				string t = inputField.text;
 				int endTiming = int.Parse(t);
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcLongNote;
 					ne.EndTiming = endTiming;
@@ -226,7 +226,7 @@ namespace Arcade.Compose.Editing
 				float x = float.Parse(ts[0]);
 				float y = float.Parse(ts[1]);
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
 					ne.XStart = x;
@@ -257,7 +257,7 @@ namespace Arcade.Compose.Editing
 				float x = float.Parse(ts[0]);
 				float y = float.Parse(ts[1]);
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
 					ne.XEnd = x;
@@ -284,7 +284,7 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
 					ne.LineType = (ArcLineType)dropdown.value;
@@ -310,7 +310,7 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
 					ne.Color = dropdown.value;
@@ -336,7 +336,7 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
 					ne.IsVoid = toggle.isOn;
@@ -363,7 +363,7 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeCursorManager.Instance.SelectedNotes)
+				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ISetableTimingGroup;
 					ne.TimingGroup = dropdown.value == 0 ? null : ArcTimingManager.Instance.timingGroups[dropdown.value - 1];
@@ -387,14 +387,14 @@ namespace Arcade.Compose.Editing
 
 		public void OnSelectParent()
 		{
-			List<ArcNote> selectedNotes = AdeCursorManager.Instance.SelectedNotes;
+			List<ArcNote> selectedNotes = AdeSelectionManager.Instance.SelectedNotes;
 			if (selectedNotes.Count == 1)
 			{
 				if (selectedNotes[0] is ArcArcTap)
 				{
 					ArcArc arc = (selectedNotes[0] as ArcArcTap).Arc;
-					AdeCursorManager.Instance.DeselectAllNotes();
-					AdeCursorManager.Instance.SelectNote(arc);
+					AdeSelectionManager.Instance.DeselectAllNotes();
+					AdeSelectionManager.Instance.SelectNote(arc);
 				}
 			}
 		}
@@ -408,7 +408,7 @@ namespace Arcade.Compose.Editing
 				options.Add(new Dropdown.OptionData { text = tg.Id.ToString() });
 			}
 			TimingGroup.GetComponentInChildren<Dropdown>().options = options;
-			List<ArcNote> selected = AdeCursorManager.Instance.SelectedNotes;
+			List<ArcNote> selected = AdeSelectionManager.Instance.SelectedNotes;
 			int count = selected.Count;
 			if (TimingGroup.gameObject.activeSelf && count > 0)
 			{

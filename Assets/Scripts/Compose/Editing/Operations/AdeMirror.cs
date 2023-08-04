@@ -19,7 +19,7 @@ public class AdeMirror : MonoBehaviour, IMarkingMenuItemProvider
 		{
 			if (!ArcGameplayManager.Instance.IsLoaded) return null;
 			if (AdeCursorManager.Instance == null) return null;
-			if (AdeCursorManager.Instance.SelectedNotes.Count == 0) return null;
+			if (AdeSelectionManager.Instance.SelectedNotes.Count == 0) return null;
 			return new MarkingMenuItem[] { Entry };
 		}
 	}
@@ -39,7 +39,7 @@ public class AdeMirror : MonoBehaviour, IMarkingMenuItemProvider
 
 	public void MirrorSelectedNotes()
 	{
-		var selected = AdeCursorManager.Instance.SelectedNotes;
+		var selected = AdeSelectionManager.Instance.SelectedNotes;
 		List<ICommand> commands = new List<ICommand>();
 		foreach (var n in selected)
 		{

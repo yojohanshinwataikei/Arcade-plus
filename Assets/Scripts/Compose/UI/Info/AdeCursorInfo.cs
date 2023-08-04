@@ -56,13 +56,13 @@ namespace Arcade.Compose
 					content += $"\n{AdeClickToCreate.Instance.CurrentArcColor}/{AdeClickToCreate.Instance.CurrentArcIsVoid}/{AdeClickToCreate.Instance.CurrentArcType}";
 				}
 			}
-			if (cursor.RangeSelectPosition != null)
+			if (AdeSelectionManager.Instance.RangeSelectPosition != null)
 			{
-				content += $"\n段落选择起点: {cursor.RangeSelectPosition}";
+				content += $"\n段落选择起点: {AdeSelectionManager.Instance.RangeSelectPosition}";
 			}
-			if (cursor.SelectedNotes.Count == 1 && cursor.SelectedNotes[0] is ArcArc)
+			if (AdeSelectionManager.Instance.SelectedNotes.Count == 1 && AdeSelectionManager.Instance.SelectedNotes[0] is ArcArc)
 			{
-				ArcArc arc = cursor.SelectedNotes[0] as ArcArc;
+				ArcArc arc = AdeSelectionManager.Instance.SelectedNotes[0] as ArcArc;
 				float p = (cursor.AttachedTiming - arc.Timing) / (arc.EndTiming - arc.Timing);
 				if (p >= 0 && p <= 1)
 				{

@@ -29,7 +29,7 @@ namespace Arcade.Compose
 		void OnNoteDeselectAll();
 	}
 
-	public class AdeCursorManager : MonoBehaviour, IMarkingMenuItemProvider
+	public class AdeCursorManager : MonoBehaviour
 	{
 		public static AdeCursorManager Instance { get; private set; }
 
@@ -43,8 +43,6 @@ namespace Arcade.Compose
 		public MeshRenderer ArcTapCursorRenderer;
 		public Transform SfxArcTapCursor;
 		public MeshRenderer SfxArcTapCursorRenderer;
-
-		public MarkingMenuItem DeleteItem;
 
 		private CursorMode mode;
 		private bool enableHorizontal, enableVertical, enableVerticalPanel;
@@ -199,53 +197,22 @@ namespace Arcade.Compose
 			}
 		}
 
-		public bool IsOnly
-		{
-			get
-			{
-				return false;
-			}
-		}
-		public MarkingMenuItem[] Items
-		{
-			get
-			{
-				return SelectedNotes.Count == 0 ? new MarkingMenuItem[] { } : new MarkingMenuItem[] { DeleteItem };
-			}
-		}
-
-		public List<ArcNote> SelectedNotes = new List<ArcNote>();
-
-		public List<INoteSelectEvent> NoteEventListeners = new List<INoteSelectEvent>();
-
-		private void Start()
-		{
-			AdeMarkingMenuManager.Instance.Providers.Add(this);
-			ArcGameplayManager.Instance.OnChartLoad.AddListener(this.DeselectAllNotes);
-		}
-		private void OnDestroy()
-		{
-			AdeMarkingMenuManager.Instance.Providers.Remove(this);
-			ArcGameplayManager.Instance.OnChartLoad.RemoveListener(this.DeselectAllNotes);
-		}
-
 		private void Awake()
 		{
 			Instance = this;
 		}
+
 		private void Update()
 		{
 			UpdateHorizontal();
 			UpdateVertical();
-			Selecting();
-			DeleteListener();
 		}
 
 		private void UpdateHorizontal()
 		{
 			float xEdgePos = 8.5f * (1 + ArcTimingManager.Instance.BeatlineEnwidenRatio * 0.5f);
 			HorizontalCollider.gameObject.transform.localScale=new Vector3(xEdgePos*2f,100f,1);
-			Ray ray = GameplayCamera.ScreenPointToRay();
+			Ray ray = GameplayCamera.MousePositionToRay();
 			IsHorizontalHit = HorizontalCollider.Raycast(ray, out horizontalHit, 120);
 			if (Mode != CursorMode.Horizontal) return;
 			EnableHorizontal = IsHorizontalHit;
@@ -263,7 +230,7 @@ namespace Arcade.Compose
 			float yEdgePos = 5.5f + ArcCameraManager.Instance.EnwidenRatio * 2.745f;
 			VerticalCollider.gameObject.transform.localScale=new Vector3(xEdgePos*2f,yEdgePos,1);
 			VerticalCollider.gameObject.transform.localPosition=new Vector3(0,yEdgePos/2f,0);
-			Ray ray = GameplayCamera.ScreenPointToRay();
+			Ray ray = GameplayCamera.MousePositionToRay();
 			IsVerticalHit = VerticalCollider.Raycast(ray, out verticalHit, 120);
 			if (Mode != CursorMode.Vertical) return;
 			EnableVertical = IsVerticalHit;
@@ -272,160 +239,6 @@ namespace Arcade.Compose
 				VerticalX.DrawLine(new Vector3(-xEdgePos, AttachedVerticalPoint.y), new Vector3(xEdgePos, AttachedVerticalPoint.y));
 				VerticalY.DrawLine(new Vector3(AttachedVerticalPoint.x, 0), new Vector3(AttachedVerticalPoint.x, yEdgePos));
 			}
-		}
-
-		private float? rangeSelectPosition = null;
-		public float? RangeSelectPosition{get=>rangeSelectPosition;}
-		private void Selecting()
-		{
-			if (!AdeInputManager.Instance.Inputs.RangeSelection.IsPressed())
-			{
-				rangeSelectPosition = null;
-			}
-
-			if (Mouse.current.leftButton.wasPressedThisFrame)
-			{
-				//range selection shortcut
-				if (AdeInputManager.Instance.Inputs.RangeSelection.IsPressed())
-				{
-					if (rangeSelectPosition == null)
-					{
-						rangeSelectPosition = AttachedTiming;
-					}
-					else
-					{
-						if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
-						{
-							DeselectAllNotes();
-						}
-						RangeSelectNote(rangeSelectPosition.Value, AttachedTiming);
-						rangeSelectPosition = null;
-					}
-					return;
-				}
-
-				Ray ray = GameplayCamera.ScreenPointToRay();
-
-				RaycastHit[] hits = Physics.RaycastAll(ray, 120, 1 << 9);
-				ArcNote n = null;
-				float distance = float.MaxValue;
-				foreach (var h in hits)
-				{
-					ArcNote t = ArcGameplayManager.Instance.FindNoteByRaycastHit(h);
-					if (t != null)
-					{
-						if (h.distance < distance)
-						{
-							distance = h.distance;
-							n = t;
-						}
-					}
-				}
-				if (n != null)
-				{
-					if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
-					{
-						DeselectAllNotes();
-						SelectNote(n);
-					}
-					else
-					{
-						if (SelectedNotes.Contains(n)) DeselectNote(n);
-						else SelectNote(n);
-					}
-				}
-				else
-				{
-					if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed() && IsHorizontalHit)
-					{
-						DeselectAllNotes();
-					}
-				}
-			}
-		}
-		private void DeleteListener()
-		{
-			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Delete))
-			{
-				DeleteSelectedNotes();
-			}
-		}
-		private void UpdateInfo()
-		{
-
-		}
-
-		public void RangeSelectNote(float from, float to)
-		{
-			float start = Mathf.Min(from, to);
-			float end = Mathf.Max(from, to);
-			List<ArcNote> list = new List<ArcNote>();
-			foreach (var tap in ArcTapNoteManager.Instance.Taps)
-			{
-				if (tap.Timing >= start && tap.Timing <= end)
-				{
-					SelectNote(tap);
-				}
-			}
-			foreach (var hold in ArcHoldNoteManager.Instance.Holds)
-			{
-				if (hold.Timing >= start && hold.EndTiming <= end)
-				{
-					SelectNote(hold);
-				}
-			}
-			foreach (var arc in ArcArcManager.Instance.Arcs)
-			{
-				if (arc.Timing >= start && arc.EndTiming <= end)
-				{
-					SelectNote(arc);
-				}
-				if (arc.Timing <= end && arc.EndTiming >= start)
-				{
-					foreach (var arctap in arc.ArcTaps)
-					{
-						if (arctap.Timing >= start && arctap.Timing <= end)
-						{
-							SelectNote(arctap);
-						}
-					}
-				}
-			}
-		}
-		public void SelectNote(ArcNote note)
-		{
-			if (note.Instance != null) note.Selected = true;
-			if (!SelectedNotes.Contains(note))
-			{
-				SelectedNotes.Add(note);
-				foreach (var l in NoteEventListeners) l.OnNoteSelect(note);
-			}
-		}
-		public void DeselectNote(ArcNote note)
-		{
-			if (note.Instance != null) note.Selected = false;
-			if (SelectedNotes.Contains(note))
-			{
-				SelectedNotes.Remove(note);
-				foreach (var l in NoteEventListeners) l.OnNoteDeselect(note);
-			}
-		}
-		public void DeselectAllNotes()
-		{
-			foreach (var note in SelectedNotes) if (note.Instance != null) note.Selected = false;
-			SelectedNotes.Clear();
-			foreach (var l in NoteEventListeners) l.OnNoteDeselectAll();
-		}
-		public void DeleteSelectedNotes()
-		{
-			List<ICommand> deleteCommands = new List<ICommand>();
-			foreach (var s in SelectedNotes)
-			{
-				if (s is ArcArcTap) deleteCommands.Add(new RemoveArcTapCommand((s as ArcArcTap).Arc, s as ArcArcTap));
-				else deleteCommands.Add(new RemoveArcEventCommand(s));
-			}
-			if (deleteCommands.Count != 0) CommandManager.Instance.Add(new BatchCommand(deleteCommands.ToArray(), "删除"));
-			SelectedNotes.Clear();
 		}
 	}
 }

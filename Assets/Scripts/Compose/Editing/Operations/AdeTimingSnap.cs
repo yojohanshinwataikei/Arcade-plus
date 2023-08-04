@@ -18,7 +18,7 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 		{
 			if (!ArcGameplayManager.Instance.IsLoaded) return null;
 			if (AdeCursorManager.Instance == null) return null;
-			if (AdeCursorManager.Instance.SelectedNotes.Count == 0) return null;
+			if (AdeSelectionManager.Instance.SelectedNotes.Count == 0) return null;
 			if (!AdeGridManager.Instance.Enable) return null;
 			return new MarkingMenuItem[] { Entry };
 		}
@@ -39,7 +39,7 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 	public void SnapSelectedNotesTiming()
 	{
 		// We hide the menu when grid is not open, so we should not check here
-		var selected = AdeCursorManager.Instance.SelectedNotes;
+		var selected = AdeSelectionManager.Instance.SelectedNotes;
 		List<ICommand> commands = new List<ICommand>();
 		foreach (var note in selected)
 		{
