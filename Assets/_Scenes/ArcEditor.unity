@@ -9191,9 +9191,6 @@ MonoBehaviour:
   ArcTapCursorRenderer: {fileID: 1458337231}
   SfxArcTapCursor: {fileID: 1191191388}
   SfxArcTapCursorRenderer: {fileID: 494492962}
-  InfoText: {fileID: 1885746332}
-  InfoGameObject: {fileID: 1349078799}
-  InfoRect: {fileID: 1349078800}
   DeleteItem: {fileID: 566014231}
 --- !u!1 &275560763
 GameObject:
@@ -45721,6 +45718,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1349078800}
+  - component: {fileID: 1349078801}
   m_Layer: 10
   m_Name: CursorInfo
   m_TagString: Untagged
@@ -45748,6 +45746,20 @@ RectTransform:
   m_AnchoredPosition: {x: -432, y: -80}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 1, y: 1}
+--- !u!114 &1349078801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349078799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b738fa45fd0aaa84b8d5dd30dd3f312d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InfoText: {fileID: 1885746332}
+  InfoGameObject: {fileID: 1349078799}
 --- !u!1 &1350135927
 GameObject:
   m_ObjectHideFlags: 0

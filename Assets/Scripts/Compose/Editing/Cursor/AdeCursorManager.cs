@@ -44,15 +44,11 @@ namespace Arcade.Compose
 		public Transform SfxArcTapCursor;
 		public MeshRenderer SfxArcTapCursorRenderer;
 
-		public Text InfoText;
-		public GameObject InfoGameObject;
-		public RectTransform InfoRect;
-
 		public MarkingMenuItem DeleteItem;
 
 		private CursorMode mode;
 		private bool enableHorizontal, enableVertical, enableVerticalPanel;
-		private bool enableArcTapCursor, enableInfo,arcTapCursorIsSfx;
+		private bool enableArcTapCursor,arcTapCursorIsSfx;
 		private RaycastHit horizontalHit, verticalHit;
 
 		public bool EnableHorizontal
@@ -131,21 +127,6 @@ namespace Arcade.Compose
 				ArcTapCursorRenderer.enabled = (!value)&&enableArcTapCursor;
 				SfxArcTapCursorRenderer.enabled = (value)&&enableArcTapCursor;
 				arcTapCursorIsSfx = value;
-			}
-		}
-		public bool EnableInfo
-		{
-			get
-			{
-				return enableInfo;
-			}
-			set
-			{
-				if (enableInfo != value)
-				{
-					InfoGameObject.SetActive(value);
-					enableInfo = value;
-				}
 			}
 		}
 		public Vector2 ArcTapCursorPosition
@@ -257,7 +238,6 @@ namespace Arcade.Compose
 			UpdateHorizontal();
 			UpdateVertical();
 			Selecting();
-			UpdateInfo();
 			DeleteListener();
 		}
 
@@ -295,6 +275,7 @@ namespace Arcade.Compose
 		}
 
 		private float? rangeSelectPosition = null;
+		public float? RangeSelectPosition{get=>rangeSelectPosition;}
 		private void Selecting()
 		{
 			if (!AdeInputManager.Instance.Inputs.RangeSelection.IsPressed())
@@ -371,40 +352,7 @@ namespace Arcade.Compose
 		}
 		private void UpdateInfo()
 		{
-			EnableInfo = EnableVertical || EnableHorizontal;
-			string content = string.Empty;
-			if (!EnableInfo) return;
-			content += $"音乐时间: {AttachedTiming + ArcAudioManager.Instance.AudioOffset}\n";
-			content += $"谱面时间: {AttachedTiming}";
-			if (EnableVertical)
-			{
-				Vector3 pos = AttachedVerticalPoint;
-				content += $"\n坐标: ({ArcAlgorithm.WorldXToArc(pos.x).ToString("f2")},{ArcAlgorithm.WorldYToArc(pos.y).ToString("f2")})";
-			}
-			if (AdeClickToCreate.Instance.Enable && AdeClickToCreate.Instance.Mode != ClickToCreateMode.Idle)
-			{
-				content += $"\n点立得: {AdeClickToCreate.Instance.Mode.ToString()}";
-				if (AdeClickToCreate.Instance.Mode == ClickToCreateMode.Arc)
-				{
-					content += $"\n{AdeClickToCreate.Instance.CurrentArcColor}/{AdeClickToCreate.Instance.CurrentArcIsVoid}/{AdeClickToCreate.Instance.CurrentArcType}";
-				}
-			}
-			if (rangeSelectPosition != null)
-			{
-				content += $"\n段落选择起点: {rangeSelectPosition}";
-			}
-			if (SelectedNotes.Count == 1 && SelectedNotes[0] is ArcArc)
-			{
-				ArcArc arc = SelectedNotes[0] as ArcArc;
-				float p = (AttachedTiming - arc.Timing) / (arc.EndTiming - arc.Timing);
-				if (p >= 0 && p <= 1)
-				{
-					float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, p, arc.LineType);
-					float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, p, arc.LineType);
-					content += $"\nArc: {(p * 100).ToString("f2")}%, {x.ToString("f2")}, {y.ToString("f2")}";
-				}
-			}
-			InfoText.text = content;
+
 		}
 
 		public void RangeSelectNote(float from, float to)
