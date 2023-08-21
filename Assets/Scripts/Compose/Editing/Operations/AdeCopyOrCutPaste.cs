@@ -50,7 +50,7 @@ namespace Arcade.Compose
 		{
 			AdeMarkingMenuManager.Instance.Providers.Remove(this);
 		}
-		private void Update()
+		private void LagecyUpdate()
 		{
 			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Copy))
 			{

@@ -140,7 +140,7 @@ namespace Arcade.Compose.Editing
 		{
 			AdeMarkingMenuManager.Instance.Providers.Remove(this);
 		}
-		private void Update()
+		private void LagecyUpdate()
 		{
 			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ToggleClickToCreate))
 			{

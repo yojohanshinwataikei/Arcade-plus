@@ -2015,7 +2015,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: ReloadChart
         m_Mode: 3
@@ -2988,7 +2988,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: SaveProject
         m_Mode: 1
@@ -5631,7 +5631,7 @@ MonoBehaviour:
   m_OnDidEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnAudioOffsetEdited
         m_Mode: 1
@@ -6846,6 +6846,37 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &191995384
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 191995385}
+  m_Layer: 10
+  m_Name: EditorOperations
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &191995385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191995384}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 413236559}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &192288931
 GameObject:
   m_ObjectHideFlags: 0
@@ -11242,7 +11273,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: OnFileWatchClicked
         m_Mode: 1
@@ -13270,7 +13301,10 @@ GameObject:
   m_Component:
   - component: {fileID: 413236559}
   - component: {fileID: 413236560}
+  - component: {fileID: 413236564}
+  - component: {fileID: 413236562}
   - component: {fileID: 413236561}
+  - component: {fileID: 413236563}
   m_Layer: 10
   m_Name: EditorManagers
   m_TagString: Untagged
@@ -13291,8 +13325,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 888272483}
-  - {fileID: 1177585338}
+  - {fileID: 191995385}
   m_Father: {fileID: 990230354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &413236560
@@ -13367,6 +13400,62 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DeleteItem: {fileID: 566014231}
+--- !u!114 &413236562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413236558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37b5ab3629034074f8554ff3bf8de0df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &413236563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413236558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e5bc601c97551647929590ffe617a51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &413236564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 413236558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b187019c2130e63428842c0eb0453f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DefaultCover: {fileID: 21300000, guid: 9253f2a07c5b18f4ba4e87db8ba3d35c, type: 3}
+  CoverImage: {fileID: 2062318406}
+  DifficultyImages:
+  - {fileID: 62738625}
+  - {fileID: 1636349841}
+  - {fileID: 597009600}
+  - {fileID: 1395789076}
+  Name: {fileID: 1250795474}
+  Composer: {fileID: 1072536724}
+  Diff: {fileID: 1862513153}
+  BaseBpm: {fileID: 1191307555}
+  AudioOffset: {fileID: 163346842}
+  CurrentTimingGroup: {fileID: 291582006}
+  OpenLabel: {fileID: 1816754927}
+  SaveMode: {fileID: 26606696}
+  EnableColor: {r: 0.5707547, g: 1, b: 0.6677098, a: 1}
+  DisableColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+  FileWatchEnableImage: {fileID: 882634197}
+  TutorialCanvasGroup: {fileID: 994086312}
+  TutorialText: {fileID: 1006388398}
 --- !u!1 &414479945
 GameObject:
   m_ObjectHideFlags: 0
@@ -20221,7 +20310,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: ReloadChart
         m_Mode: 3
@@ -29070,7 +29159,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: OnSaveModeClicked
         m_Mode: 1
@@ -30073,70 +30162,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 882634195}
   m_CullTransparentMesh: 0
---- !u!1 &888272482
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 888272483}
-  - component: {fileID: 888272484}
-  m_Layer: 10
-  m_Name: AdeProjectManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &888272483
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 888272482}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 413236559}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &888272484
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 888272482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b187019c2130e63428842c0eb0453f28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DefaultCover: {fileID: 21300000, guid: 9253f2a07c5b18f4ba4e87db8ba3d35c, type: 3}
-  CoverImage: {fileID: 2062318406}
-  DifficultyImages:
-  - {fileID: 62738625}
-  - {fileID: 1636349841}
-  - {fileID: 597009600}
-  - {fileID: 1395789076}
-  Name: {fileID: 1250795474}
-  Composer: {fileID: 1072536724}
-  Diff: {fileID: 1862513153}
-  BaseBpm: {fileID: 1191307555}
-  AudioOffset: {fileID: 163346842}
-  CurrentTimingGroup: {fileID: 291582006}
-  OpenLabel: {fileID: 1816754927}
-  SaveMode: {fileID: 26606696}
-  EnableColor: {r: 0.5707547, g: 1, b: 0.6677098, a: 1}
-  DisableColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}
-  FileWatchEnableImage: {fileID: 882634197}
-  TutorialCanvasGroup: {fileID: 994086312}
-  TutorialText: {fileID: 1006388398}
 --- !u!1 &894763176
 GameObject:
   m_ObjectHideFlags: 0
@@ -36546,7 +36571,7 @@ MonoBehaviour:
   m_OnDidEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnComposerEdited
         m_Mode: 1
@@ -39738,50 +39763,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1175281921}
   m_CullTransparentMesh: 0
---- !u!1 &1177585337
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1177585338}
-  - component: {fileID: 1177585339}
-  m_Layer: 10
-  m_Name: AdeObsManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1177585338
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1177585337}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 413236559}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1177585339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1177585337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e5bc601c97551647929590ffe617a51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1177900529
 GameObject:
   m_ObjectHideFlags: 0
@@ -40963,7 +40944,7 @@ MonoBehaviour:
   m_OnDidEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnBaseBpmEdited
         m_Mode: 1
@@ -43236,7 +43217,7 @@ MonoBehaviour:
   m_OnDidEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnNameEdited
         m_Mode: 1
@@ -47728,7 +47709,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: ReloadChart
         m_Mode: 3
@@ -52728,7 +52709,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: OnOpenFolder
         m_Mode: 1
@@ -55842,7 +55823,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: ReloadChart
         m_Mode: 3
@@ -58958,7 +58939,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
-      - m_Target: {fileID: 1177585339}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: ForceClose
         m_Mode: 1
@@ -62361,7 +62342,7 @@ MonoBehaviour:
   m_OnDidEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: OnDiffEdited
         m_Mode: 1
@@ -68330,7 +68311,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 888272484}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: OpenProject
         m_Mode: 1
@@ -69044,7 +69025,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1177585339}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: Record
         m_Mode: 1
@@ -69635,10 +69616,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1707394408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400.5, y: -72.02138}
+  m_SizeDelta: {x: 705, y: 40.02138}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2105888210
 MonoBehaviour:

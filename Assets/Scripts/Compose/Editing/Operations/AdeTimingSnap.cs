@@ -136,7 +136,7 @@ public class AdeTimingSnap : MonoBehaviour, IMarkingMenuItemProvider
 		int newTiming = Mathf.FloorToInt(AdeGridManager.Instance.AttachScroll(timing, 1));
 		return newTiming;
 	}
-	private void Update()
+	private void LagecyUpdate()
 	{
 		if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.TimingSnap))
 		{

@@ -69,7 +69,7 @@ public class AdeMirror : MonoBehaviour, IMarkingMenuItemProvider
 		}
 		CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "镜像"));
 	}
-	private void Update()
+	private void LagecyUpdate()
 	{
 		if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Mirror))
 		{

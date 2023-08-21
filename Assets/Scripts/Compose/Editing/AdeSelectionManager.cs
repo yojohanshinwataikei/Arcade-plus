@@ -50,13 +50,11 @@ namespace Arcade.Compose
 			ArcGameplayManager.Instance.OnChartLoad.RemoveListener(this.DeselectAllNotes);
 		}
 
-		private void Update()
+		private void LagecyUpdate()
 		{
 			Selecting();
 			DeleteListener();
 		}
-
-
 
 		private float? rangeSelectPosition = null;
 		public float? RangeSelectPosition{get=>rangeSelectPosition;}
