@@ -9,6 +9,12 @@ using UnityEngine;
 
 namespace Arcade.Compose
 {
+	public interface INoteSelectEvent
+	{
+		void OnNoteSelect(ArcNote note);
+		void OnNoteDeselect(ArcNote note);
+		void OnNoteDeselectAll();
+	}
 	public class AdeSelectionManager : MonoBehaviour
 	{
 		public static AdeSelectionManager Instance { get; private set; }

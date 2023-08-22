@@ -18,16 +18,6 @@ namespace Arcade.Compose
 		Horizontal,
 		Vertical
 	}
-	public class OnNoteEvent : UnityEvent<ArcNote>
-	{
-
-	}
-	public interface INoteSelectEvent
-	{
-		void OnNoteSelect(ArcNote note);
-		void OnNoteDeselect(ArcNote note);
-		void OnNoteDeselectAll();
-	}
 
 	public class AdeCursorManager : MonoBehaviour
 	{
