@@ -1326,7 +1326,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: MirrorSelectedNotes
+      value: ManuallyExecuteOperation
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: AdeMirrorOperation, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
@@ -9337,7 +9342,7 @@ GameObject:
   - component: {fileID: 277583070}
   - component: {fileID: 277583071}
   m_Layer: 10
-  m_Name: AdeTimingSnap
+  m_Name: TimingSnapOperation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9351,12 +9356,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277583069}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 624532088}
+  m_Father: {fileID: 1133280787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &277583071
 MonoBehaviour:
@@ -21111,8 +21116,6 @@ Transform:
   - {fileID: 928958753}
   - {fileID: 1057236767}
   - {fileID: 723047151}
-  - {fileID: 1336006064}
-  - {fileID: 277583070}
   m_Father: {fileID: 990230354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &626806431
@@ -36866,6 +36869,7 @@ MonoBehaviour:
   operations:
   - {fileID: 191995386}
   - {fileID: 909681752}
+  - {fileID: 1336006065}
 --- !u!1 &1087227391
 GameObject:
   m_ObjectHideFlags: 0
@@ -38599,8 +38603,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1336006064}
   - {fileID: 191995385}
   - {fileID: 909681751}
+  - {fileID: 277583070}
   m_Father: {fileID: 990230354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1134318729
@@ -45456,7 +45462,7 @@ GameObject:
   - component: {fileID: 1336006064}
   - component: {fileID: 1336006065}
   m_Layer: 10
-  m_Name: AdeMirror
+  m_Name: MirrorOperation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45470,12 +45476,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1336006063}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 624532088}
+  m_Father: {fileID: 1133280787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1336006065
 MonoBehaviour:
@@ -70513,7 +70519,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SnapSelectedNotesTiming
+      value: ManuallyExecuteOperation
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Arcade.Compose.Operation.AdeTimingSnapOperation, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}

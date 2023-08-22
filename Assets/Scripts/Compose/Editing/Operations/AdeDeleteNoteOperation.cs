@@ -46,8 +46,10 @@ namespace Arcade.Compose.Operation
 			return false;
 		}
 
-		public void ManuallyExecuteOperation(){
-			AdeOperationManager.Instance.TryExecuteOperation(()=>{
+		public void ManuallyExecuteOperation()
+		{
+			AdeOperationManager.Instance.TryExecuteOperation(() =>
+			{
 				AdeSelectionManager.Instance.DeleteSelectedNotes();
 				return null;
 			});
