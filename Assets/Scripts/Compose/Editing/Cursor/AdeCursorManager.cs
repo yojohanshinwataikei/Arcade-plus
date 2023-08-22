@@ -13,13 +13,6 @@ using UnityEngine.Serialization;
 
 namespace Arcade.Compose
 {
-	public enum CursorMode
-	{
-		Idle,
-		Track,
-		Wall
-	}
-
 	public class AdeCursorManager : MonoBehaviour
 	{
 		public static AdeCursorManager Instance { get; private set; }
@@ -39,12 +32,11 @@ namespace Arcade.Compose
 		public Transform SfxArcTapCursor;
 		public MeshRenderer SfxArcTapCursorRenderer;
 
-		private CursorMode mode;
 		private bool enableTrack, enableWall, enableWallPanel;
 		private bool enableArcTapCursor, arcTapCursorIsSfx;
 		private RaycastHit trackHit, wallHit;
 
-		public bool EnableTrack
+		public bool TrackEnabled
 		{
 			get
 			{
@@ -62,7 +54,7 @@ namespace Arcade.Compose
 				}
 			}
 		}
-		public bool EnableWall
+		public bool WallEnabled
 		{
 			get
 			{
@@ -76,12 +68,12 @@ namespace Arcade.Compose
 					WallY.enabled = value;
 					WallX.positionCount = 0;
 					WallY.positionCount = 0;
-					EnableWallPanel = value;
+					WallPanelEnabled = value;
 					enableWall = value;
 				}
 			}
 		}
-		public bool EnableWallPanel
+		public bool WallPanelEnabled
 		{
 			get
 			{
@@ -96,7 +88,7 @@ namespace Arcade.Compose
 				}
 			}
 		}
-		public bool EnableArcTapCursor
+		public bool ArcTapCursorEnabled
 		{
 			get
 			{
@@ -134,22 +126,24 @@ namespace Arcade.Compose
 				SfxArcTapCursor.localPosition = value;
 			}
 		}
-		public CursorMode Mode
-		{
-			get
-			{
-				return mode;
-			}
-			private set
-			{
-				mode = value;
-				if (mode != CursorMode.Track) EnableTrack = false;
-				if (mode != CursorMode.Wall) EnableWall = false;
-			}
+
+		public bool VisibleWhenIdle=false;
+
+		private enum SelectTaskType{
+			Timing,
+			Track,
+			Coordinate,
+		}
+		private SelectTaskType? currentSelectTaskType=null;
+		private bool shouldRenderTrack{
+			get=>VisibleWhenIdle||currentSelectTaskType==SelectTaskType.Timing||currentSelectTaskType==SelectTaskType.Track;
+		}
+		private bool shouldRenderWall{
+			get=>currentSelectTaskType==SelectTaskType.Coordinate;
 		}
 
-		public bool IsTrackHit { get; set; }
-		public bool IsWallHit { get; set; }
+		public bool IsTrackHit { get; private set; }
+		public bool IsWallHit { get; private set; }
 		public Vector3 TrackPoint
 		{
 			get
@@ -209,8 +203,8 @@ namespace Arcade.Compose
 			TrackCollider.gameObject.transform.localScale = new Vector3(xEdgePos * 2f, 100f, 1);
 			Ray ray = GameplayCamera.MousePositionToRay();
 			IsTrackHit = TrackCollider.Raycast(ray, out trackHit, 120);
-			if (Mode != CursorMode.Track) return;
-			EnableTrack = IsTrackHit;
+			if (!shouldRenderTrack) return;
+			TrackEnabled = IsTrackHit;
 			if (IsTrackHit)
 			{
 				float z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
@@ -227,8 +221,8 @@ namespace Arcade.Compose
 			WallCollider.gameObject.transform.localPosition = new Vector3(0, yEdgePos / 2f, 0);
 			Ray ray = GameplayCamera.MousePositionToRay();
 			IsWallHit = WallCollider.Raycast(ray, out wallHit, 120);
-			if (Mode != CursorMode.Wall) return;
-			EnableWall = IsWallHit;
+			if (!shouldRenderWall) return;
+			WallEnabled = IsWallHit;
 			if (IsWallHit)
 			{
 				WallX.DrawLine(new Vector3(-xEdgePos, AttachedWallPoint.y), new Vector3(xEdgePos, AttachedWallPoint.y));

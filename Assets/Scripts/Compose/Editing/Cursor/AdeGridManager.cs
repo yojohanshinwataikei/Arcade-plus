@@ -290,7 +290,7 @@ namespace Arcade.Compose
 			verticalInUse = 0;
 			float xEdgePos = 8.5f * (1 + ArcTimingManager.Instance.BeatlineEnwidenRatio * 0.5f);
 			float yEdgePos = 5.5f + ArcCameraManager.Instance.EnwidenRatio * 2.745f;
-			if (EnableVertical && AdeCursorManager.Instance.EnableWallPanel)
+			if (EnableVertical && AdeCursorManager.Instance.WallPanelEnabled)
 			{
 				foreach (var t in verticalXTimings)
 				{

@@ -90,7 +90,7 @@ namespace Arcade.Compose.Editing
 				}
 				if (mode == ClickToCreateMode.Idle)
 				{
-					AdeCursorManager.Instance.EnableArcTapCursor = false;
+					AdeCursorManager.Instance.ArcTapCursorEnabled = false;
 					// AdeCursorManager.Instance.EnableWallPanel = false;
 				}
 			}
@@ -210,14 +210,14 @@ namespace Arcade.Compose.Editing
 			}
 			if (Mode != ClickToCreateMode.ArcTap || selectedArc == null)
 			{
-				AdeCursorManager.Instance.EnableArcTapCursor = false;
+				AdeCursorManager.Instance.ArcTapCursorEnabled = false;
 				// AdeCursorManager.Instance.EnableWallPanel = false;
 				return;
 			}
 			Vector3 pos = AdeCursorManager.Instance.AttachedTrackPoint;
 			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			canAddArcTap = selectedArc.Timing <= timing && selectedArc.EndTiming >= timing;
-			AdeCursorManager.Instance.EnableArcTapCursor = canAddArcTap;
+			AdeCursorManager.Instance.ArcTapCursorEnabled = canAddArcTap;
 			AdeCursorManager.Instance.ArcTapCursorIsSfx = selectedArc.IsSfx;
 			// AdeCursorManager.Instance.EnableWallPanel = canAddArcTap;
 			if (!canAddArcTap) return;

@@ -36,7 +36,7 @@ namespace Arcade.Compose
 
 		private bool enable;
 		private ArcNote[] notes = null;
-		private CursorMode cursorMode = CursorMode.Idle;
+		// private CursorMode cursorMode = CursorMode.Idle;
 
 		private void Awake()
 		{
@@ -123,7 +123,7 @@ namespace Arcade.Compose
 			CommandManager.Instance.Prepare(new BatchCommand(commands.ToArray(), "复制"));
 			this.notes = newNotes.ToArray();
 			enable = true;
-			cursorMode = AdeCursorManager.Instance.Mode;
+			// cursorMode = AdeCursorManager.Instance.Mode;
 			// AdeCursorManager.Instance.Mode = CursorMode.Track;
 		}
 		private void UpdateTiming()
