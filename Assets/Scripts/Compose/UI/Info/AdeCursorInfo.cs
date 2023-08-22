@@ -39,14 +39,14 @@ namespace Arcade.Compose
 		void Update()
 		{
             AdeCursorManager cursor=AdeCursorManager.Instance;
-			EnableInfo = cursor.EnableVertical || cursor.EnableHorizontal;
+			EnableInfo = cursor.EnableWall || cursor.EnableTrack;
 			string content = string.Empty;
 			if (!EnableInfo) return;
 			content += $"音乐时间: {cursor.AttachedTiming + ArcAudioManager.Instance.AudioOffset}\n";
 			content += $"谱面时间: {cursor.AttachedTiming}";
-			if (cursor.EnableVertical)
+			if (cursor.EnableWall)
 			{
-				Vector3 pos = cursor.AttachedVerticalPoint;
+				Vector3 pos = cursor.AttachedWallPoint;
 				content += $"\n坐标: ({ArcAlgorithm.WorldXToArc(pos.x).ToString("f2")},{ArcAlgorithm.WorldYToArc(pos.y).ToString("f2")})";
 			}
 			if (AdeClickToCreate.Instance.Enable && AdeClickToCreate.Instance.Mode != ClickToCreateMode.Idle)

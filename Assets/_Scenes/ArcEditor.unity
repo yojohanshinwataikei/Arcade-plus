@@ -8180,7 +8180,7 @@ GameObject:
   m_Component:
   - component: {fileID: 231278415}
   m_Layer: 10
-  m_Name: Vertical
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9183,14 +9183,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameplayCamera: {fileID: 534669904}
-  HorizontalCollider: {fileID: 341179935}
-  VerticalCollider: {fileID: 1529951442}
-  VerticalPanel: {fileID: 231278414}
-  HorizontalX: {fileID: 930414884}
-  HorizontalY: {fileID: 2063252317}
-  VerticalX: {fileID: 2063745827}
-  VerticalY: {fileID: 51568701}
-  VerticalRenderer: {fileID: 1529951443}
+  TrackCollider: {fileID: 341179935}
+  WallCollider: {fileID: 1529951442}
+  WallPanel: {fileID: 231278414}
+  TrackX: {fileID: 930414884}
+  TrackY: {fileID: 2063252317}
+  WallX: {fileID: 2063745827}
+  WallY: {fileID: 51568701}
+  WallRenderer: {fileID: 1529951443}
   ArcTapCursor: {fileID: 992710262}
   ArcTapCursorRenderer: {fileID: 1458337231}
   SfxArcTapCursor: {fileID: 1191191388}
@@ -11652,7 +11652,7 @@ GameObject:
   - component: {fileID: 341179936}
   - component: {fileID: 341179935}
   m_Layer: 11
-  m_Name: HorizontalPanel
+  m_Name: TrackPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13351,7 +13351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4a2d91917ed663468bf3b7492129b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  eventSystem: {fileID: 409941036}
+  EventSystem: {fileID: 409941036}
   Dialog: {fileID: 1507527910}
 --- !u!1 &413236558
 GameObject:
@@ -17585,10 +17585,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.052083332
-    y: 0.059273362
-    width: 0.8958333
-    height: 0.8814533
+    x: 0.05353319
+    y: 0.06092337
+    width: 0.8929336
+    height: 0.87815326
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -29620,6 +29620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3f1292a1fbbdcf4b90d904145662dde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Enable>k__BackingField: 0
 --- !u!1 &873519169
 GameObject:
   m_ObjectHideFlags: 0
@@ -34000,8 +34001,8 @@ CanvasGroup:
   m_GameObject: {fileID: 994086308}
   m_Enabled: 1
   m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
 --- !u!1 &994406035
 GameObject:
@@ -39761,6 +39762,7 @@ GameObject:
   - component: {fileID: 1173507488}
   - component: {fileID: 1173507487}
   - component: {fileID: 1173507489}
+  - component: {fileID: 1173507490}
   m_Layer: 10
   m_Name: GameplayContent
   m_TagString: Untagged
@@ -39837,6 +39839,18 @@ MonoBehaviour:
   GameplayRenderTexture: {fileID: 8400000, guid: f8b4997696043774b9d46abd1954f789,
     type: 2}
   EditorCamera: {fileID: 1049938805}
+--- !u!114 &1173507490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173507485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11f1e9fcebd2d7d419e24707e0bf7449, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1173716074
 GameObject:
   m_ObjectHideFlags: 0
@@ -52748,7 +52762,7 @@ GameObject:
   - component: {fileID: 1529951443}
   - component: {fileID: 1529951445}
   m_Layer: 11
-  m_Name: VerticalPanel
+  m_Name: WallPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57198,6 +57212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd73554f78f655246a2417f0846c1f50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Enable>k__BackingField: 0
+  lastMode: 1
 --- !u!1 &1669833491
 GameObject:
   m_ObjectHideFlags: 0
@@ -57783,7 +57799,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1694434543}
   m_Layer: 10
-  m_Name: Horizontal
+  m_Name: Track
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69844,10 +69860,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1707394408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400.5, y: -72.08565}
+  m_SizeDelta: {x: 705, y: 40.08565}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2105888210
 MonoBehaviour:

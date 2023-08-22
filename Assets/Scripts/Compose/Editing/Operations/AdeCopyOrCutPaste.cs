@@ -124,12 +124,12 @@ namespace Arcade.Compose
 			this.notes = newNotes.ToArray();
 			enable = true;
 			cursorMode = AdeCursorManager.Instance.Mode;
-			AdeCursorManager.Instance.Mode = CursorMode.Horizontal;
+			// AdeCursorManager.Instance.Mode = CursorMode.Track;
 		}
 		private void UpdateTiming()
 		{
-			if (!AdeCursorManager.Instance.IsHorizontalHit) return;
-			Vector3 pos = AdeCursorManager.Instance.AttachedHorizontalPoint;
+			if (!AdeCursorManager.Instance.IsTrackHit) return;
+			Vector3 pos = AdeCursorManager.Instance.AttachedTrackPoint;
 			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
 			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			bool hasIllegalArcTap = true;
@@ -209,7 +209,7 @@ namespace Arcade.Compose
 			{
 				enable = false;
 				notes = null;
-				AdeCursorManager.Instance.Mode = cursorMode;
+				// AdeCursorManager.Instance.Mode = cursorMode;
 			});
 
 		}

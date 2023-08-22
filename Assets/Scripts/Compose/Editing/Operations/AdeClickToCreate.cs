@@ -43,7 +43,7 @@ namespace Arcade.Compose.Editing
 				if (enable != value)
 				{
 					CancelAddLongNote();
-					AdeCursorManager.Instance.Mode = value ? CursorMode.Horizontal : CursorMode.Idle;
+					// AdeCursorManager.Instance.Mode = value ? CursorMode.Track : CursorMode.Idle;
 					if (!value)
 					{
 						selectedArc = null;
@@ -91,7 +91,7 @@ namespace Arcade.Compose.Editing
 				if (mode == ClickToCreateMode.Idle)
 				{
 					AdeCursorManager.Instance.EnableArcTapCursor = false;
-					AdeCursorManager.Instance.EnableVerticalPanel = false;
+					// AdeCursorManager.Instance.EnableWallPanel = false;
 				}
 			}
 		}
@@ -211,15 +211,15 @@ namespace Arcade.Compose.Editing
 			if (Mode != ClickToCreateMode.ArcTap || selectedArc == null)
 			{
 				AdeCursorManager.Instance.EnableArcTapCursor = false;
-				AdeCursorManager.Instance.EnableVerticalPanel = false;
+				// AdeCursorManager.Instance.EnableWallPanel = false;
 				return;
 			}
-			Vector3 pos = AdeCursorManager.Instance.AttachedHorizontalPoint;
+			Vector3 pos = AdeCursorManager.Instance.AttachedTrackPoint;
 			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			canAddArcTap = selectedArc.Timing <= timing && selectedArc.EndTiming >= timing;
 			AdeCursorManager.Instance.EnableArcTapCursor = canAddArcTap;
 			AdeCursorManager.Instance.ArcTapCursorIsSfx = selectedArc.IsSfx;
-			AdeCursorManager.Instance.EnableVerticalPanel = canAddArcTap;
+			// AdeCursorManager.Instance.EnableWallPanel = canAddArcTap;
 			if (!canAddArcTap) return;
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			float t = 1f * (timing - selectedArc.Timing) / (selectedArc.EndTiming - selectedArc.Timing);
@@ -230,13 +230,13 @@ namespace Arcade.Compose.Editing
 		private void AddNoteHandler()
 		{
 			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
-			if (!AdeCursorManager.Instance.IsHorizontalHit) return;
+			if (!AdeCursorManager.Instance.IsTrackHit) return;
 			if (skipNextClick)
 			{
 				skipNextClick = false;
 				return;
 			}
-			Vector3 pos = AdeCursorManager.Instance.AttachedHorizontalPoint;
+			Vector3 pos = AdeCursorManager.Instance.AttachedTrackPoint;
 			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			ArcNote note = null;
 			switch (Mode)

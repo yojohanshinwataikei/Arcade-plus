@@ -9,14 +9,15 @@ using Arcade.Compose.Command;
 using Arcade.Compose.Editing;
 using Arcade.Compose.MarkingMenu;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Arcade.Compose
 {
 	public enum CursorMode
 	{
 		Idle,
-		Horizontal,
-		Vertical
+		Track,
+		Wall
 	}
 
 	public class AdeCursorManager : MonoBehaviour
@@ -24,10 +25,14 @@ namespace Arcade.Compose
 		public static AdeCursorManager Instance { get; private set; }
 
 		public Camera GameplayCamera;
-		public MeshCollider HorizontalCollider, VerticalCollider;
-		public GameObject VerticalPanel;
-		public LineRenderer HorizontalX, HorizontalY, VerticalX, VerticalY;
-		public MeshRenderer VerticalRenderer;
+		public MeshCollider TrackCollider;
+		public MeshCollider WallCollider;
+		public GameObject WallPanel;
+		public LineRenderer TrackX;
+		public LineRenderer TrackY;
+		public LineRenderer WallX;
+		public LineRenderer WallY;
+		public MeshRenderer WallRenderer;
 
 		public Transform ArcTapCursor;
 		public MeshRenderer ArcTapCursorRenderer;
@@ -35,59 +40,59 @@ namespace Arcade.Compose
 		public MeshRenderer SfxArcTapCursorRenderer;
 
 		private CursorMode mode;
-		private bool enableHorizontal, enableVertical, enableVerticalPanel;
-		private bool enableArcTapCursor,arcTapCursorIsSfx;
-		private RaycastHit horizontalHit, verticalHit;
+		private bool enableTrack, enableWall, enableWallPanel;
+		private bool enableArcTapCursor, arcTapCursorIsSfx;
+		private RaycastHit trackHit, wallHit;
 
-		public bool EnableHorizontal
+		public bool EnableTrack
 		{
 			get
 			{
-				return enableHorizontal;
+				return enableTrack;
 			}
 			private set
 			{
-				if (enableHorizontal != value)
+				if (enableTrack != value)
 				{
-					HorizontalX.enabled = value;
-					HorizontalY.enabled = value;
-					HorizontalX.positionCount = 0;
-					HorizontalY.positionCount = 0;
-					enableHorizontal = value;
+					TrackX.enabled = value;
+					TrackY.enabled = value;
+					TrackX.positionCount = 0;
+					TrackY.positionCount = 0;
+					enableTrack = value;
 				}
 			}
 		}
-		public bool EnableVertical
+		public bool EnableWall
 		{
 			get
 			{
-				return enableVertical;
+				return enableWall;
 			}
 			private set
 			{
-				if (enableVertical != value)
+				if (enableWall != value)
 				{
-					VerticalX.enabled = value;
-					VerticalY.enabled = value;
-					VerticalX.positionCount = 0;
-					VerticalY.positionCount = 0;
-					EnableVerticalPanel = value;
-					enableVertical = value;
+					WallX.enabled = value;
+					WallY.enabled = value;
+					WallX.positionCount = 0;
+					WallY.positionCount = 0;
+					EnableWallPanel = value;
+					enableWall = value;
 				}
 			}
 		}
-		public bool EnableVerticalPanel
+		public bool EnableWallPanel
 		{
 			get
 			{
-				return enableVerticalPanel;
+				return enableWallPanel;
 			}
-			set
+			private set
 			{
-				if (enableVerticalPanel != value)
+				if (enableWallPanel != value)
 				{
-					VerticalRenderer.enabled = value;
-					enableVerticalPanel = value;
+					WallRenderer.enabled = value;
+					enableWallPanel = value;
 				}
 			}
 		}
@@ -99,8 +104,8 @@ namespace Arcade.Compose
 			}
 			set
 			{
-				ArcTapCursorRenderer.enabled = (!arcTapCursorIsSfx)&&value;
-				SfxArcTapCursorRenderer.enabled = (arcTapCursorIsSfx)&&value;
+				ArcTapCursorRenderer.enabled = (!arcTapCursorIsSfx) && value;
+				SfxArcTapCursorRenderer.enabled = (arcTapCursorIsSfx) && value;
 				enableArcTapCursor = value;
 			}
 		}
@@ -112,8 +117,8 @@ namespace Arcade.Compose
 			}
 			set
 			{
-				ArcTapCursorRenderer.enabled = (!value)&&enableArcTapCursor;
-				SfxArcTapCursorRenderer.enabled = (value)&&enableArcTapCursor;
+				ArcTapCursorRenderer.enabled = (!value) && enableArcTapCursor;
+				SfxArcTapCursorRenderer.enabled = (value) && enableArcTapCursor;
 				arcTapCursorIsSfx = value;
 			}
 		}
@@ -135,44 +140,44 @@ namespace Arcade.Compose
 			{
 				return mode;
 			}
-			set
+			private set
 			{
 				mode = value;
-				if (mode != CursorMode.Horizontal) EnableHorizontal = false;
-				if (mode != CursorMode.Vertical) EnableVertical = false;
+				if (mode != CursorMode.Track) EnableTrack = false;
+				if (mode != CursorMode.Wall) EnableWall = false;
 			}
 		}
 
-		public bool IsHorizontalHit { get; set; }
-		public bool IsVerticalHit { get; set; }
-		public Vector3 HorizontalPoint
+		public bool IsTrackHit { get; set; }
+		public bool IsWallHit { get; set; }
+		public Vector3 TrackPoint
 		{
 			get
 			{
-				return horizontalHit.point;
+				return trackHit.point;
 			}
 		}
-		public Vector3 VerticalPoint
+		public Vector3 WallPoint
 		{
 			get
 			{
-				return verticalHit.point;
+				return wallHit.point;
 			}
 		}
-		public Vector3 AttachedHorizontalPoint
+		public Vector3 AttachedTrackPoint
 		{
 			get
 			{
-				float z = AdeGridManager.Instance.AttachBeatline(horizontalHit.point.z);
-				return new Vector3(horizontalHit.point.x, horizontalHit.point.y, z);
+				float z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
+				return new Vector3(trackHit.point.x, trackHit.point.y, z);
 			}
 		}
-		public Vector3 AttachedVerticalPoint
+		public Vector3 AttachedWallPoint
 		{
 			get
 			{
-				return new Vector3(ArcAlgorithm.ArcXToWorld(AdeGridManager.Instance.AttachVerticalX(ArcAlgorithm.WorldXToArc(VerticalPoint.x))),
-				   ArcAlgorithm.ArcYToWorld(AdeGridManager.Instance.AttachVerticalY(ArcAlgorithm.WorldYToArc(VerticalPoint.y))));
+				return new Vector3(ArcAlgorithm.ArcXToWorld(AdeGridManager.Instance.AttachVerticalX(ArcAlgorithm.WorldXToArc(WallPoint.x))),
+				   ArcAlgorithm.ArcYToWorld(AdeGridManager.Instance.AttachVerticalY(ArcAlgorithm.WorldYToArc(WallPoint.y))));
 			}
 		}
 
@@ -181,7 +186,7 @@ namespace Arcade.Compose
 			get
 			{
 				if (!ArcGameplayManager.Instance.IsLoaded) return 0;
-				Vector3 pos = AttachedHorizontalPoint;
+				Vector3 pos = AttachedTrackPoint;
 				var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
 				return ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
 			}
@@ -194,40 +199,40 @@ namespace Arcade.Compose
 
 		private void Update()
 		{
-			UpdateHorizontal();
-			UpdateVertical();
+			UpdateTrackCursor();
+			UpdateWallCursor();
 		}
 
-		private void UpdateHorizontal()
+		private void UpdateTrackCursor()
 		{
 			float xEdgePos = 8.5f * (1 + ArcTimingManager.Instance.BeatlineEnwidenRatio * 0.5f);
-			HorizontalCollider.gameObject.transform.localScale=new Vector3(xEdgePos*2f,100f,1);
+			TrackCollider.gameObject.transform.localScale = new Vector3(xEdgePos * 2f, 100f, 1);
 			Ray ray = GameplayCamera.MousePositionToRay();
-			IsHorizontalHit = HorizontalCollider.Raycast(ray, out horizontalHit, 120);
-			if (Mode != CursorMode.Horizontal) return;
-			EnableHorizontal = IsHorizontalHit;
-			if (IsHorizontalHit)
+			IsTrackHit = TrackCollider.Raycast(ray, out trackHit, 120);
+			if (Mode != CursorMode.Track) return;
+			EnableTrack = IsTrackHit;
+			if (IsTrackHit)
 			{
-				float z = AdeGridManager.Instance.AttachBeatline(horizontalHit.point.z);
-				HorizontalX.DrawLine(new Vector3(-xEdgePos, z), new Vector3(xEdgePos, z));
-				HorizontalY.DrawLine(new Vector3(horizontalHit.point.x, 0), new Vector3(horizontalHit.point.x, -100));
-				VerticalPanel.transform.localPosition = new Vector3(0, 0, z);
+				float z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
+				TrackX.DrawLine(new Vector3(-xEdgePos, z), new Vector3(xEdgePos, z));
+				TrackY.DrawLine(new Vector3(trackHit.point.x, 0), new Vector3(trackHit.point.x, -100));
+				WallPanel.transform.localPosition = new Vector3(0, 0, z);
 			}
 		}
-		private void UpdateVertical()
+		private void UpdateWallCursor()
 		{
 			float xEdgePos = 8.5f * (1 + ArcTimingManager.Instance.BeatlineEnwidenRatio * 0.5f);
 			float yEdgePos = 5.5f + ArcCameraManager.Instance.EnwidenRatio * 2.745f;
-			VerticalCollider.gameObject.transform.localScale=new Vector3(xEdgePos*2f,yEdgePos,1);
-			VerticalCollider.gameObject.transform.localPosition=new Vector3(0,yEdgePos/2f,0);
+			WallCollider.gameObject.transform.localScale = new Vector3(xEdgePos * 2f, yEdgePos, 1);
+			WallCollider.gameObject.transform.localPosition = new Vector3(0, yEdgePos / 2f, 0);
 			Ray ray = GameplayCamera.MousePositionToRay();
-			IsVerticalHit = VerticalCollider.Raycast(ray, out verticalHit, 120);
-			if (Mode != CursorMode.Vertical) return;
-			EnableVertical = IsVerticalHit;
-			if (IsVerticalHit)
+			IsWallHit = WallCollider.Raycast(ray, out wallHit, 120);
+			if (Mode != CursorMode.Wall) return;
+			EnableWall = IsWallHit;
+			if (IsWallHit)
 			{
-				VerticalX.DrawLine(new Vector3(-xEdgePos, AttachedVerticalPoint.y), new Vector3(xEdgePos, AttachedVerticalPoint.y));
-				VerticalY.DrawLine(new Vector3(AttachedVerticalPoint.x, 0), new Vector3(AttachedVerticalPoint.x, yEdgePos));
+				WallX.DrawLine(new Vector3(-xEdgePos, AttachedWallPoint.y), new Vector3(xEdgePos, AttachedWallPoint.y));
+				WallY.DrawLine(new Vector3(AttachedWallPoint.x, 0), new Vector3(AttachedWallPoint.x, yEdgePos));
 			}
 		}
 	}
