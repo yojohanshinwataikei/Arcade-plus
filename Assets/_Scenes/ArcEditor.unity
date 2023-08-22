@@ -17585,10 +17585,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.05353319
-    y: 0.06092337
-    width: 0.8929336
-    height: 0.87815326
+    x: 0.052083332
+    y: 0.059273362
+    width: 0.8958333
+    height: 0.8814533
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -36870,6 +36870,7 @@ MonoBehaviour:
   - {fileID: 191995386}
   - {fileID: 909681752}
   - {fileID: 1336006065}
+  - {fileID: 277583071}
 --- !u!1 &1087227391
 GameObject:
   m_ObjectHideFlags: 0
@@ -69843,10 +69844,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1707394408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400.5, y: -72.08565}
-  m_SizeDelta: {x: 705, y: 40.08565}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2105888210
 MonoBehaviour:

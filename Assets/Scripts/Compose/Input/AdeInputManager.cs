@@ -14,7 +14,7 @@ namespace Arcade.Compose
 		public AdeInputControl Controls;
 		public AdeInputControl.ArcadeHotkeyActions Hotkeys { get => Controls.ArcadeHotkey; }
 		public AdeInputControl.ArcadeInputActions Inputs { get => Controls.ArcadeInput; }
-		public EventSystem eventSystem;
+		public EventSystem EventSystem;
 		public AdeHotkeyDialog Dialog;
 
 		public static AdeInputManager Instance { get; private set; }
@@ -44,11 +44,11 @@ namespace Arcade.Compose
 
 		private bool IsFocusingOnTextField()
 		{
-			GameObject selected=eventSystem.currentSelectedGameObject;
+			GameObject selected=EventSystem.currentSelectedGameObject;
 			if(selected == null){
 				return false;
 			}
-			InputField inputField = eventSystem.currentSelectedGameObject.GetComponent<InputField>();
+			InputField inputField = EventSystem.currentSelectedGameObject.GetComponent<InputField>();
 			if (inputField != null)
 			{
 				if (inputField.isFocused)
@@ -88,7 +88,7 @@ namespace Arcade.Compose
 		public void SetHotkeyRebindingButton(AdeHotkeyRebindingButton button)
 		{
 			// clean focus so will won't restart rebinding after complete
-			eventSystem.SetSelectedGameObject(null);
+			EventSystem.SetSelectedGameObject(null);
 			AdeHotkeyRebindingButton nextRebindingButton = button;
 			InputAction action = null;
 			if (button != null)
@@ -401,7 +401,7 @@ namespace Arcade.Compose
 				rebindFinishedThisFrame = false;
 			}
 		}
-	}
 
+	}
 
 }

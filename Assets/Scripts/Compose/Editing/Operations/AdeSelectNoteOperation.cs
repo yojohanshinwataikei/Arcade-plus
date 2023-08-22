@@ -27,6 +27,11 @@ namespace Arcade.Compose.Operation
                 rangeSelectPosition = null;
             }
 
+            if (!AdeGameplayContentInputHandler.InputActive)
+            {
+                return false;
+            }
+
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 //range selection shortcut
