@@ -87,7 +87,7 @@ namespace Arcade.Compose.Operation
                 }
                 else
                 {
-                    if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed() && AdeCursorManager.Instance.IsHorizontalHit)
+                    if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
                     {
                         AdeSelectionManager.Instance.DeselectAllNotes();
                         return true;
