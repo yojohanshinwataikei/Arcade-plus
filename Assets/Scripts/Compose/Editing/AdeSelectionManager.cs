@@ -9,26 +9,9 @@ using UnityEngine;
 
 namespace Arcade.Compose
 {
-	public class AdeSelectionManager : MonoBehaviour, IMarkingMenuItemProvider
+	public class AdeSelectionManager : MonoBehaviour
 	{
 		public static AdeSelectionManager Instance { get; private set; }
-
-		public MarkingMenuItem DeleteItem;
-		public MarkingMenuItem[] Items
-		{
-			get
-			{
-				return SelectedNotes.Count == 0 ? new MarkingMenuItem[] { } : new MarkingMenuItem[] { DeleteItem };
-			}
-		}
-
-		public bool IsOnly
-		{
-			get
-			{
-				return false;
-			}
-		}
 
 		public List<ArcNote> SelectedNotes = new List<ArcNote>();
 
@@ -40,12 +23,10 @@ namespace Arcade.Compose
 		}
 		private void Start()
 		{
-			AdeMarkingMenuManager.Instance.Providers.Add(this);
 			ArcGameplayManager.Instance.OnChartLoad.AddListener(this.DeselectAllNotes);
 		}
 		private void OnDestroy()
 		{
-			AdeMarkingMenuManager.Instance.Providers.Remove(this);
 			ArcGameplayManager.Instance.OnChartLoad.RemoveListener(this.DeselectAllNotes);
 		}
 
