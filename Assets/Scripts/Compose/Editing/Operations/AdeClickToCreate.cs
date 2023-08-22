@@ -57,7 +57,7 @@ namespace Arcade.Compose.Editing
 		{
 			get
 			{
-				if (AdeTimingSelector.Instance.Enable || AdePositionSelector.Instance.Enable) return SelectingValueItems;
+				if (!AdeOperationManager.Instance.HasOngoingOperation) return SelectingValueItems;
 				if (!enable) return Entry;
 				else
 				{
@@ -77,8 +77,8 @@ namespace Arcade.Compose.Editing
 			get
 			{
 				if (!ArcGameplayManager.Instance.IsLoaded) return ClickToCreateMode.Idle;
-				if (AdeTimingSelector.Instance.Enable) return ClickToCreateMode.Idle;
-				if (AdePositionSelector.Instance.Enable) return ClickToCreateMode.Idle;
+				// if (AdeTimingSelector.Instance.Enable) return ClickToCreateMode.Idle;
+				// if (AdePositionSelector.Instance.Enable) return ClickToCreateMode.Idle;
 				return mode;
 			}
 			set
@@ -301,8 +301,8 @@ namespace Arcade.Compose.Editing
 			{
 				StopCoroutine(postHoldCoroutine ?? postArcCoroutine);
 				postHoldCoroutine = postArcCoroutine = null;
-				AdePositionSelector.Instance.EndModify();
-				AdeTimingSelector.Instance.EndModify();
+				// AdePositionSelector.Instance.EndModify();
+				// AdeTimingSelector.Instance.EndModify();
 				CommandManager.Instance.Cancel();
 				selectedArc = null;
 			}
@@ -378,12 +378,13 @@ namespace Arcade.Compose.Editing
 		}
 		private IEnumerator PostCreateHoldNoteCoroutine(ArcHold note)
 		{
-			AdeTimingSelector.Instance.ModifyNote(note, (a) =>
-			{
-				note.EndTiming = a;
-				note.CalculateJudgeTimings();
-			});
-			while (AdeTimingSelector.Instance.Enable) yield return null;
+			// AdeTimingSelector.Instance.ModifyNote(note, (a) =>
+			// {
+			// 	note.EndTiming = a;
+			// 	note.CalculateJudgeTimings();
+			// });
+			// while (AdeTimingSelector.Instance.Enable) yield return null;
+			yield return null;
 			CommandManager.Instance.Commit();
 			pendingNote = null;
 			postHoldCoroutine = null;
@@ -397,30 +398,31 @@ namespace Arcade.Compose.Editing
 		}
 		private IEnumerator PostCreateArcNoteCoroutine(ArcArc arc)
 		{
-			AdePositionSelector.Instance.ModifyNote(arc, (a) =>
-			{
-				arc.XStart = arc.XEnd = a.x;
-				arc.YStart = arc.YEnd = a.y;
-				arc.Rebuild();
-				ArcArcManager.Instance.CalculateArcRelationship();
-			});
-			while (AdePositionSelector.Instance.Enable) yield return null;
-			AdeTimingSelector.Instance.ModifyNote(arc, (a) =>
-			{
-				arc.EndTiming = a;
-				arc.Rebuild();
-				arc.CalculateJudgeTimings();
-				ArcArcManager.Instance.CalculateArcRelationship();
-			});
-			while (AdeTimingSelector.Instance.Enable) yield return null;
-			AdePositionSelector.Instance.ModifyNote(arc, (a) =>
-			{
-				arc.XEnd = a.x;
-				arc.YEnd = a.y;
-				arc.Rebuild();
-				ArcArcManager.Instance.CalculateArcRelationship();
-			});
-			while (AdePositionSelector.Instance.Enable) yield return null;
+			// AdePositionSelector.Instance.ModifyNote(arc, (a) =>
+			// {
+			// 	arc.XStart = arc.XEnd = a.x;
+			// 	arc.YStart = arc.YEnd = a.y;
+			// 	arc.Rebuild();
+			// 	ArcArcManager.Instance.CalculateArcRelationship();
+			// });
+			// while (AdePositionSelector.Instance.Enable) yield return null;
+			// AdeTimingSelector.Instance.ModifyNote(arc, (a) =>
+			// {
+			// 	arc.EndTiming = a;
+			// 	arc.Rebuild();
+			// 	arc.CalculateJudgeTimings();
+			// 	ArcArcManager.Instance.CalculateArcRelationship();
+			// });
+			// while (AdeTimingSelector.Instance.Enable) yield return null;
+			// AdePositionSelector.Instance.ModifyNote(arc, (a) =>
+			// {
+			// 	arc.XEnd = a.x;
+			// 	arc.YEnd = a.y;
+			// 	arc.Rebuild();
+			// 	ArcArcManager.Instance.CalculateArcRelationship();
+			// });
+			// while (AdePositionSelector.Instance.Enable) yield return null;
+			yield return null;
 			CommandManager.Instance.Commit();
 			pendingNote = null;
 			postArcCoroutine = null;

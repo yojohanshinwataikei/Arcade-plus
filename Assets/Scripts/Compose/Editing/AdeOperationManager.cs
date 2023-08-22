@@ -26,6 +26,7 @@ namespace Arcade.Compose
 	{
 		public static AdeOperationManager Instance { get; private set; }
 		private IAdeOngoingOperation ongoingOperation;
+		public bool HasOngoingOperation{get=>ongoingOperation!=null;}
 		public AdeOperation[] operations;
 		private void Awake()
 		{

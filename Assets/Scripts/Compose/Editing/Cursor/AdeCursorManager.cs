@@ -45,7 +45,7 @@ namespace Arcade.Compose
 			{
 				return enableHorizontal;
 			}
-			set
+			private set
 			{
 				if (enableHorizontal != value)
 				{
@@ -63,7 +63,7 @@ namespace Arcade.Compose
 			{
 				return enableVertical;
 			}
-			set
+			private set
 			{
 				if (enableVertical != value)
 				{

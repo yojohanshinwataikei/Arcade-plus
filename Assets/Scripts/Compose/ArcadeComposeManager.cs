@@ -169,7 +169,7 @@ namespace Arcade.Compose
 		}
 		private void Update()
 		{
-			if (Mouse.current.scroll.ReadValue().y != 0 && !AdePositionSelector.Instance.Enable && AdeCursorManager.Instance.IsHorizontalHit)
+			if (Mouse.current.scroll.ReadValue().y != 0 && AdeCursorManager.Instance.IsHorizontalHit)
 			{
 				float timing = GameplayManager.Timingf * 1000;
 				int offset = ArcAudioManager.Instance.AudioOffset;
