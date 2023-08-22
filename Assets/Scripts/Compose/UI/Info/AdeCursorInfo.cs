@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Arcade.Compose.Editing;
+using Arcade.Compose.Operation;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
 using UnityEngine;
@@ -56,9 +57,9 @@ namespace Arcade.Compose
 					content += $"\n{AdeClickToCreate.Instance.CurrentArcColor}/{AdeClickToCreate.Instance.CurrentArcIsVoid}/{AdeClickToCreate.Instance.CurrentArcType}";
 				}
 			}
-			if (AdeSelectionManager.Instance.RangeSelectPosition != null)
+			if (AdeSelectNoteOperation.Instance.RangeSelectPosition != null)
 			{
-				content += $"\n段落选择起点: {AdeSelectionManager.Instance.RangeSelectPosition}";
+				content += $"\n段落选择起点: {AdeSelectNoteOperation.Instance.RangeSelectPosition}";
 			}
 			if (AdeSelectionManager.Instance.SelectedNotes.Count == 1 && AdeSelectionManager.Instance.SelectedNotes[0] is ArcArc)
 			{

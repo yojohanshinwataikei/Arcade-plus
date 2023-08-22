@@ -6,7 +6,6 @@ using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
 using Arcade.Util.UnityExtension;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Arcade.Compose
 {
@@ -48,89 +47,6 @@ namespace Arcade.Compose
 		{
 			AdeMarkingMenuManager.Instance.Providers.Remove(this);
 			ArcGameplayManager.Instance.OnChartLoad.RemoveListener(this.DeselectAllNotes);
-		}
-
-		private void LagecyUpdate()
-		{
-			Selecting();
-			DeleteListener();
-		}
-
-		private float? rangeSelectPosition = null;
-		public float? RangeSelectPosition{get=>rangeSelectPosition;}
-		private void Selecting()
-		{
-			if (!AdeInputManager.Instance.Inputs.RangeSelection.IsPressed())
-			{
-				rangeSelectPosition = null;
-			}
-
-			if (Mouse.current.leftButton.wasPressedThisFrame)
-			{
-				//range selection shortcut
-				if (AdeInputManager.Instance.Inputs.RangeSelection.IsPressed())
-				{
-					if (rangeSelectPosition == null)
-					{
-						rangeSelectPosition = AdeCursorManager.Instance.AttachedTiming;
-					}
-					else
-					{
-						if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
-						{
-							DeselectAllNotes();
-						}
-						RangeSelectNote(rangeSelectPosition.Value, AdeCursorManager.Instance.AttachedTiming);
-						rangeSelectPosition = null;
-					}
-					return;
-				}
-
-				Ray ray = AdeCursorManager.Instance.GameplayCamera.MousePositionToRay();
-
-				RaycastHit[] hits = Physics.RaycastAll(ray, 120, 1 << 9);
-				ArcNote n = null;
-				float distance = float.MaxValue;
-				foreach (var h in hits)
-				{
-					ArcNote t = ArcGameplayManager.Instance.FindNoteByRaycastHit(h);
-					if (t != null)
-					{
-						if (h.distance < distance)
-						{
-							distance = h.distance;
-							n = t;
-						}
-					}
-				}
-				if (n != null)
-				{
-					if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
-					{
-						DeselectAllNotes();
-						SelectNote(n);
-					}
-					else
-					{
-						if (SelectedNotes.Contains(n)) DeselectNote(n);
-						else SelectNote(n);
-					}
-				}
-				else
-				{
-					if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed() && AdeCursorManager.Instance.IsHorizontalHit)
-					{
-						DeselectAllNotes();
-					}
-				}
-			}
-		}
-		private void DeleteListener()
-		{
-			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Delete))
-			{
-				DeleteSelectedNotes();
-			}
 		}
 
 		public void RangeSelectNote(float from, float to)

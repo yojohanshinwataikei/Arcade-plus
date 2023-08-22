@@ -1,12 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Arcade.Compose.Command;
-using Arcade.Compose.MarkingMenu;
-using Arcade.Gameplay;
-using Arcade.Gameplay.Chart;
-using Arcade.Util.UnityExtension;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Arcade.Compose
 {
@@ -19,22 +13,27 @@ namespace Arcade.Compose
 	{
 		public bool operationExecuted;
 		public IAdeOngoingOperation startedOperation;
+		public static implicit operator AdeOperationResult(bool operationExecuted) => new AdeOperationResult { operationExecuted = operationExecuted };
 	}
-	public interface IAdeOperation
+	public abstract class AdeOperation: MonoBehaviour
 	{
-		public AdeOperationResult TryExecuteOperation();
+		public abstract AdeOperationResult TryExecuteOperation();
+		public virtual void Reset() { }
 	}
 	public class AdeOperationManager : MonoBehaviour
 	{
 		private IAdeOngoingOperation ongoingOperation;
-		public IAdeOperation[] operations;
+		public AdeOperation[] operations;
 		void Update()
 		{
 			if (ongoingOperation != null)
 			{
-				if(ongoingOperation.Update()){
-					ongoingOperation=null;
-				}else{
+				if (ongoingOperation.Update())
+				{
+					ongoingOperation = null;
+				}
+				else
+				{
 					return;
 				}
 			}
@@ -43,10 +42,23 @@ namespace Arcade.Compose
 				var result = operation.TryExecuteOperation();
 				if (result.operationExecuted)
 				{
-					ongoingOperation = result.startedOperation;
+					SetOngoingOperation(result.startedOperation);
 					return;
 				}
 			}
+		}
+
+		private void SetOngoingOperation(IAdeOngoingOperation ongoingOperation)
+		{
+			if (ongoingOperation != null)
+			{
+				foreach (var operation in operations)
+				{
+					operation.Reset();
+				}
+				AdeSelectionManager.Instance.DeselectAllNotes();
+			}
+			this.ongoingOperation = ongoingOperation;
 		}
 	}
 }
