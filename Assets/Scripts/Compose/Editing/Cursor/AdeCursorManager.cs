@@ -10,6 +10,9 @@ using Arcade.Compose.Editing;
 using Arcade.Compose.MarkingMenu;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using System;
 
 namespace Arcade.Compose
 {
@@ -127,19 +130,22 @@ namespace Arcade.Compose
 			}
 		}
 
-		public bool VisibleWhenIdle=false;
+		public bool VisibleWhenIdle = false;
 
-		private enum SelectTaskType{
+		private enum SelectTaskType
+		{
 			Timing,
 			Track,
 			Coordinate,
 		}
-		private SelectTaskType? currentSelectTaskType=null;
-		private bool shouldRenderTrack{
-			get=>VisibleWhenIdle||currentSelectTaskType==SelectTaskType.Timing||currentSelectTaskType==SelectTaskType.Track;
+		private SelectTaskType? currentSelectTaskType = null;
+		private bool shouldRenderTrack
+		{
+			get => VisibleWhenIdle || currentSelectTaskType == SelectTaskType.Timing || currentSelectTaskType == SelectTaskType.Track;
 		}
-		private bool shouldRenderWall{
-			get=>currentSelectTaskType==SelectTaskType.Coordinate;
+		private bool shouldRenderWall
+		{
+			get => currentSelectTaskType == SelectTaskType.Coordinate;
 		}
 
 		public bool IsTrackHit { get; private set; }
@@ -175,7 +181,7 @@ namespace Arcade.Compose
 			}
 		}
 
-		public float AttachedTiming
+		public int AttachedTiming
 		{
 			get
 			{
@@ -227,6 +233,38 @@ namespace Arcade.Compose
 			{
 				WallX.DrawLine(new Vector3(-xEdgePos, AttachedWallPoint.y), new Vector3(xEdgePos, AttachedWallPoint.y));
 				WallY.DrawLine(new Vector3(AttachedWallPoint.x, 0), new Vector3(AttachedWallPoint.x, yEdgePos));
+			}
+		}
+
+		public async UniTask<int> SelectTiming(IProgress<int> progress, CancellationToken cancellationToken)
+		{
+			if (currentSelectTaskType != null)
+			{
+				throw new Exception("Cannot select two thing at the same time");
+			}
+
+			currentSelectTaskType = SelectTaskType.Timing;
+			try
+			{
+				while (true)
+				{
+					await UniTask.NextFrame(cancellationToken);
+					if (AdeGameplayContentInputHandler.InputActive && IsTrackHit)
+					{
+						if (Mouse.current.leftButton.wasPressedThisFrame)
+						{
+							return AttachedTiming;
+						}
+						else
+						{
+							progress.Report(AttachedTiming);
+						}
+					}
+				}
+			}
+			finally
+			{
+				currentSelectTaskType = null;
 			}
 		}
 	}
