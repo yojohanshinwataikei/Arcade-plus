@@ -209,9 +209,8 @@ namespace Arcade.Compose
 			TrackCollider.gameObject.transform.localScale = new Vector3(xEdgePos * 2f, 100f, 1);
 			Ray ray = GameplayCamera.MousePositionToRay();
 			IsTrackHit = TrackCollider.Raycast(ray, out trackHit, 120);
-			if (!shouldRenderTrack) return;
-			TrackEnabled = IsTrackHit;
-			if (IsTrackHit)
+			TrackEnabled = IsTrackHit && shouldRenderTrack;
+			if (TrackEnabled)
 			{
 				float z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
 				TrackX.DrawLine(new Vector3(-xEdgePos, z), new Vector3(xEdgePos, z));
@@ -227,9 +226,8 @@ namespace Arcade.Compose
 			WallCollider.gameObject.transform.localPosition = new Vector3(0, yEdgePos / 2f, 0);
 			Ray ray = GameplayCamera.MousePositionToRay();
 			IsWallHit = WallCollider.Raycast(ray, out wallHit, 120);
-			if (!shouldRenderWall) return;
-			WallEnabled = IsWallHit;
-			if (IsWallHit)
+			WallEnabled = IsWallHit && shouldRenderWall;
+			if (WallEnabled)
 			{
 				WallX.DrawLine(new Vector3(-xEdgePos, AttachedWallPoint.y), new Vector3(xEdgePos, AttachedWallPoint.y));
 				WallY.DrawLine(new Vector3(AttachedWallPoint.x, 0), new Vector3(AttachedWallPoint.x, yEdgePos));
@@ -251,13 +249,10 @@ namespace Arcade.Compose
 					await UniTask.NextFrame(cancellationToken);
 					if (AdeGameplayContentInputHandler.InputActive && IsTrackHit)
 					{
+						progress.Report(AttachedTiming);
 						if (Mouse.current.leftButton.wasPressedThisFrame)
 						{
 							return AttachedTiming;
-						}
-						else
-						{
-							progress.Report(AttachedTiming);
 						}
 					}
 				}

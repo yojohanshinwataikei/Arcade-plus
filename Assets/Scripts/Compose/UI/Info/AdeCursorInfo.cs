@@ -64,12 +64,14 @@ namespace Arcade.Compose
 			if (AdeSelectionManager.Instance.SelectedNotes.Count == 1 && AdeSelectionManager.Instance.SelectedNotes[0] is ArcArc)
 			{
 				ArcArc arc = AdeSelectionManager.Instance.SelectedNotes[0] as ArcArc;
-				float p = (cursor.AttachedTiming - arc.Timing) / (arc.EndTiming - arc.Timing);
-				if (p >= 0 && p <= 1)
-				{
-					float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, p, arc.LineType);
-					float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, p, arc.LineType);
-					content += $"\nArc: {(p * 100).ToString("f2")}%, {x.ToString("f2")}, {y.ToString("f2")}";
+				if(arc.EndTiming - arc.Timing!=0){
+					float p = (cursor.AttachedTiming - arc.Timing) / (arc.EndTiming - arc.Timing);
+					if (p >= 0 && p <= 1)
+					{
+						float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, p, arc.LineType);
+						float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, p, arc.LineType);
+						content += $"\nArc: {(p * 100).ToString("f2")}%, {x.ToString("f2")}, {y.ToString("f2")}";
+					}
 				}
 			}
 			InfoText.text = content;

@@ -1,21 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Arcade.Compose
 {
-	public interface IAdeOngoingOperation
+	public struct AdeOngoingOperation
 	{
-		/// <returns>True if the operation is finished</returns>
-		public bool Update();
-		public void Cancel();
+		public UniTask task;
+		public CancellationTokenSource cancellation;
 	}
 	public struct AdeOperationResult
 	{
 		public bool operationExecuted;
-		public IAdeOngoingOperation startedOperation;
-		public static implicit operator AdeOperationResult(bool operationExecuted) => new AdeOperationResult { operationExecuted = operationExecuted };
-		public static AdeOperationResult FromOngoingOperation(IAdeOngoingOperation startedOperation) => new AdeOperationResult { operationExecuted = true, startedOperation = startedOperation };
+		public AdeOngoingOperation? startedOperation;
+		public static implicit operator AdeOperationResult(bool operationExecuted) => new AdeOperationResult { operationExecuted = operationExecuted, startedOperation = null };
+		public static AdeOperationResult FromOngoingOperation(AdeOngoingOperation startedOperation) => new AdeOperationResult { operationExecuted = true, startedOperation = startedOperation };
 	}
 	public abstract class AdeOperation : MonoBehaviour
 	{
@@ -25,8 +26,8 @@ namespace Arcade.Compose
 	public class AdeOperationManager : MonoBehaviour
 	{
 		public static AdeOperationManager Instance { get; private set; }
-		private IAdeOngoingOperation ongoingOperation;
-		public bool HasOngoingOperation{get=>ongoingOperation!=null;}
+		private AdeOngoingOperation? ongoingOperation = null;
+		public bool HasOngoingOperation { get => ongoingOperation != null; }
 		public AdeOperation[] operations;
 		private void Awake()
 		{
@@ -36,7 +37,7 @@ namespace Arcade.Compose
 		{
 			if (ongoingOperation != null)
 			{
-				if (ongoingOperation.Update())
+				if (ongoingOperation.Value.task.Status != UniTaskStatus.Pending)
 				{
 					ongoingOperation = null;
 				}
@@ -56,7 +57,7 @@ namespace Arcade.Compose
 			}
 		}
 
-		private void SetOngoingOperation(IAdeOngoingOperation ongoingOperation)
+		private void SetOngoingOperation(AdeOngoingOperation? ongoingOperation)
 		{
 			if (ongoingOperation != null)
 			{
@@ -69,7 +70,7 @@ namespace Arcade.Compose
 			this.ongoingOperation = ongoingOperation;
 		}
 
-		public delegate IAdeOngoingOperation OperationExecutor();
+		public delegate AdeOngoingOperation? OperationExecutor();
 		public void TryExecuteOperation(OperationExecutor executor)
 		{
 			if (ongoingOperation != null)

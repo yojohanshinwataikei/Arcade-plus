@@ -24,7 +24,6 @@ namespace Arcade.Compose.Editing
 		public MarkingMenuItem Delete;
 		public MarkingMenuItem[] Entry;
 		public MarkingMenuItem[] ClickToCreateItems;
-		public MarkingMenuItem[] SelectingValueItems;
 
 		public bool IsOnly => enable;
 		public bool Enable
@@ -57,7 +56,7 @@ namespace Arcade.Compose.Editing
 		{
 			get
 			{
-				if (!AdeOperationManager.Instance.HasOngoingOperation) return SelectingValueItems;
+				// if (!AdeOperationManager.Instance.HasOngoingOperation) return SelectingValueItems;
 				if (!enable) return Entry;
 				else
 				{
@@ -118,7 +117,7 @@ namespace Arcade.Compose.Editing
 			}
 		}
 
-		private bool enable;
+		private bool enable=false;
 		private bool skipNextClick;
 		private bool canAddArcTap;
 		private ArcLongNote pendingNote;

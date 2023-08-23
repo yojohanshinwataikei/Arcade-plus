@@ -19,12 +19,10 @@ namespace Arcade.Compose
         }
         public void OnPointerEnter(PointerEventData data)
         {
-            Debug.Log("enter");
             active = true;
         }
         public void OnPointerExit(PointerEventData data)
         {
-            Debug.Log("exit");
             active = false;
         }
     }
