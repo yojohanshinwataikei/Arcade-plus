@@ -24,7 +24,7 @@ namespace Arcade.Compose
 		public int Importance;
 	}
 
-	public class AdeGridManager : MonoBehaviour, IMarkingMenuItemProvider
+	public class AdeGridManager : AdeMarkingMenuItemProvider
 	{
 		public static AdeGridManager Instance { get; private set; }
 
@@ -64,7 +64,6 @@ namespace Arcade.Compose
 		private void Start()
 		{
 			ArcGameplayManager.Instance.OnChartLoad.AddListener(ReBuildBeatline);
-			AdeMarkingMenuManager.Instance.Providers.Add(this);
 		}
 		private void Update()
 		{
@@ -86,7 +85,6 @@ namespace Arcade.Compose
 		private void OnDestroy()
 		{
 			ArcGameplayManager.Instance.OnChartLoad.RemoveListener(ReBuildBeatline);
-			AdeMarkingMenuManager.Instance.Providers.Remove(this);
 			SaveCustomGrids();
 		}
 
@@ -105,14 +103,14 @@ namespace Arcade.Compose
 		public bool EnableBeatline { get; set; }
 		public bool EnableVertical { get; set; }
 
-		public bool IsOnly
+		public override bool IsOnlyMarkingMenu
 		{
 			get
 			{
 				return false;
 			}
 		}
-		public MarkingMenuItem[] Items
+		public override MarkingMenuItem[] MarkingMenuItems
 		{
 			get
 			{

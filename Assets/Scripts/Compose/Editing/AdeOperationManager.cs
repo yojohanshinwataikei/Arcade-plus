@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Arcade.Compose.MarkingMenu;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -18,17 +19,36 @@ namespace Arcade.Compose
 		public static implicit operator AdeOperationResult(bool operationExecuted) => new AdeOperationResult { operationExecuted = operationExecuted, startedOperation = null };
 		public static AdeOperationResult FromOngoingOperation(AdeOngoingOperation startedOperation) => new AdeOperationResult { operationExecuted = true, startedOperation = startedOperation };
 	}
-	public abstract class AdeOperation : MonoBehaviour
+	public abstract class AdeOperation : AdeMarkingMenuItemProvider
 	{
 		public abstract AdeOperationResult TryExecuteOperation();
 		public virtual void Reset() { }
 	}
-	public class AdeOperationManager : MonoBehaviour
+	public class AdeOperationManager : AdeMarkingMenuItemProvider
 	{
 		public static AdeOperationManager Instance { get; private set; }
 		private AdeOngoingOperation? ongoingOperation = null;
 		public bool HasOngoingOperation { get => ongoingOperation != null; }
 		public AdeOperation[] operations;
+
+
+		public MarkingMenuItem CancelMenuEntry;
+		public override bool IsOnlyMarkingMenu => HasOngoingOperation;
+		public override MarkingMenuItem[] MarkingMenuItems
+		{
+			get
+			{
+				if (HasOngoingOperation) {
+					List<MarkingMenuItem> items = new List<MarkingMenuItem>
+                    {
+                        CancelMenuEntry
+                    };
+					items.AddRange(AdeGridManager.Instance.MarkingMenuItems);
+					return items.ToArray();
+				};
+				return null;
+			}
+		}
 		private void Awake()
 		{
 			Instance = this;
@@ -81,6 +101,16 @@ namespace Arcade.Compose
 			{
 				var ongoingOperation = executor();
 				this.ongoingOperation = ongoingOperation;
+			}
+		}
+		public void CancelOngoingOperation(){
+			if (ongoingOperation != null)
+			{
+				if (ongoingOperation.Value.task.Status == UniTaskStatus.Pending)
+				{
+					ongoingOperation.Value.cancellation.Cancel();
+				}
+				ongoingOperation = null;
 			}
 		}
 	}

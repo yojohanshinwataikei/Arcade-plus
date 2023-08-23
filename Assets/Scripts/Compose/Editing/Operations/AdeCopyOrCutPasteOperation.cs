@@ -13,15 +13,15 @@ using System;
 
 namespace Arcade.Compose.Operation
 {
-	public class AdeCopyOrCutPasteOperation : AdeOperation, IMarkingMenuItemProvider
+	public class AdeCopyOrCutPasteOperation : AdeOperation
 	{
 		public static AdeCopyOrCutPasteOperation Instance { get; private set; }
 
 		public MarkingMenuItem CopyItem;
 		public MarkingMenuItem CutItem;
 
-		public bool IsOnly => false;
-		public MarkingMenuItem[] Items
+		public override bool IsOnlyMarkingMenu => false;
+		public override MarkingMenuItem[] MarkingMenuItems
 		{
 			get
 			{
@@ -35,14 +35,6 @@ namespace Arcade.Compose.Operation
 		private void Awake()
 		{
 			Instance = this;
-		}
-		private void Start()
-		{
-			AdeMarkingMenuManager.Instance.Providers.Add(this);
-		}
-		private void OnDestroy()
-		{
-			AdeMarkingMenuManager.Instance.Providers.Remove(this);
 		}
 
 		private async UniTask ExecuteCopyOrCut(bool isCut, CancellationToken cancellationToken)

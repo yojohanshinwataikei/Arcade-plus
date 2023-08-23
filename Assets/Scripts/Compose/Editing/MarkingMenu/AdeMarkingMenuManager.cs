@@ -7,17 +7,17 @@ using UnityEngine.InputSystem;
 
 namespace Arcade.Compose
 {
-	public interface IMarkingMenuItemProvider
+	public abstract class AdeMarkingMenuItemProvider:MonoBehaviour
 	{
-		bool IsOnly { get; }
-		MarkingMenuItem[] Items { get; }
+		public virtual bool IsOnlyMarkingMenu { get=>false; }
+		public virtual MarkingMenuItem[] MarkingMenuItems { get=>null; }
 	}
 	public class AdeMarkingMenuManager : MonoBehaviour
 	{
 		public static AdeMarkingMenuManager Instance { get; private set; }
 
 		public MarkingMenuLine Line;
-		public List<IMarkingMenuItemProvider> Providers = new List<IMarkingMenuItemProvider>();
+		public List<AdeMarkingMenuItemProvider> Providers = new List<AdeMarkingMenuItemProvider>();
 
 		private Stack<MarkingMenuItem[]> shownItems = new Stack<MarkingMenuItem[]>();
 
@@ -88,9 +88,9 @@ namespace Arcade.Compose
 			List<MarkingMenuItem> items = new List<MarkingMenuItem>();
 			foreach (var provider in Providers)
 			{
-				var it = provider.Items;
+				var it = provider.MarkingMenuItems;
 				if (it == null) continue;
-				if (provider.IsOnly)
+				if (provider.IsOnlyMarkingMenu)
 				{
 					return it;
 				}

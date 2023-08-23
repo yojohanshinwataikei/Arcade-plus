@@ -17,7 +17,7 @@ namespace Arcade.Compose.Editing
 		Arc = 3,
 		ArcTap = 4
 	}
-	public class AdeClickToCreate : MonoBehaviour, IMarkingMenuItemProvider, INoteSelectEvent
+	public class AdeClickToCreate : AdeMarkingMenuItemProvider, INoteSelectEvent
 	{
 		public static AdeClickToCreate Instance { get; private set; }
 
@@ -25,7 +25,7 @@ namespace Arcade.Compose.Editing
 		public MarkingMenuItem[] Entry;
 		public MarkingMenuItem[] ClickToCreateItems;
 
-		public bool IsOnly => enable;
+		public override bool IsOnlyMarkingMenu => enable;
 		public bool Enable
 		{
 			get
@@ -52,7 +52,7 @@ namespace Arcade.Compose.Editing
 				}
 			}
 		}
-		public MarkingMenuItem[] Items
+		public override MarkingMenuItem[] MarkingMenuItems
 		{
 			get
 			{
@@ -132,14 +132,8 @@ namespace Arcade.Compose.Editing
 		}
 		private void Start()
 		{
-			AdeMarkingMenuManager.Instance.Providers.Add(this);
 			AdeSelectionManager.Instance.NoteEventListeners.Add(this);
-		}
-		private void OnDestroy()
-		{
-			AdeMarkingMenuManager.Instance.Providers.Remove(this);
-		}
-		private void LagecyUpdate()
+		}		private void LagecyUpdate()
 		{
 			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ToggleClickToCreate))
 			{

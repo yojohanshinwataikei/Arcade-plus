@@ -8,14 +8,14 @@ using Arcade.Gameplay;
 
 namespace Arcade.Compose.Operation
 {
-	public class AdeMirrorOperation : AdeOperation, IMarkingMenuItemProvider
+	public class AdeMirrorOperation : AdeOperation
 	{
 		public static AdeMirrorOperation Instance { get; private set; }
 
 		public MarkingMenuItem Entry;
 
-		public bool IsOnly => false;
-		public MarkingMenuItem[] Items
+		public override bool IsOnlyMarkingMenu => false;
+		public override MarkingMenuItem[] MarkingMenuItems
 		{
 			get
 			{
@@ -29,14 +29,6 @@ namespace Arcade.Compose.Operation
 		private void Awake()
 		{
 			Instance = this;
-		}
-		private void Start()
-		{
-			AdeMarkingMenuManager.Instance.Providers.Add(this);
-		}
-		private void OnDestroy()
-		{
-			AdeMarkingMenuManager.Instance.Providers.Remove(this);
 		}
 
 		private void MirrorSelectedNotes()

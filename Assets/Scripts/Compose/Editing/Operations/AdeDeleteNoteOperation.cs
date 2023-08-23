@@ -9,10 +9,10 @@ using UnityEngine.InputSystem;
 
 namespace Arcade.Compose.Operation
 {
-	public class AdeDeleteNoteOperation : AdeOperation, IMarkingMenuItemProvider
+	public class AdeDeleteNoteOperation : AdeOperation
 	{
 		public MarkingMenuItem DeleteItem;
-		public MarkingMenuItem[] Items
+		public override MarkingMenuItem[] MarkingMenuItems
 		{
 			get
 			{
@@ -20,21 +20,12 @@ namespace Arcade.Compose.Operation
 			}
 		}
 
-		public bool IsOnly
+		public override bool IsOnlyMarkingMenu
 		{
 			get
 			{
 				return false;
 			}
-		}
-		private void Start()
-		{
-			AdeMarkingMenuManager.Instance.Providers.Add(this);
-
-		}
-		private void OnDestroy()
-		{
-			AdeMarkingMenuManager.Instance.Providers.Remove(this);
 		}
 		public override AdeOperationResult TryExecuteOperation()
 		{
