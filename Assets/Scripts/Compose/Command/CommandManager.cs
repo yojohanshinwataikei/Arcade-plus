@@ -82,6 +82,10 @@ namespace Arcade.Compose.Command
 		}
 		public void Undo()
 		{
+			if(AdeOperationManager.Instance.HasOngoingOperation){
+				AdeOperationManager.Instance.CancelOngoingOperation();
+				return;
+			}
 			if (preparing != null)
 			{
 				AdeToast.Instance.Show("有正在进行的命令，暂时不能撤销");
