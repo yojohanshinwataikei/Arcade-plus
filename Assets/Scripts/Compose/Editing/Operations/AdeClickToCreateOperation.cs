@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Arcade.Compose.Command;
+using Arcade.Compose.Editing;
 using Arcade.Compose.MarkingMenu;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
@@ -10,7 +11,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Arcade.Compose.Editing
+namespace Arcade.Compose.Operation
 {
 	public enum ClickToCreateMode
 	{
