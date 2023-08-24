@@ -61,10 +61,7 @@ namespace Arcade.Compose
 				{
 					ongoingOperation = null;
 				}
-				else
-				{
-					return;
-				}
+				return;
 			}
 			foreach (var operation in operations)
 			{

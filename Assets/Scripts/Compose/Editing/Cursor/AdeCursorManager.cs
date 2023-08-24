@@ -196,6 +196,21 @@ namespace Arcade.Compose
 			}
 		}
 
+		private int PositionToTrack(float position)
+		{
+			return Mathf.Clamp((int)(position / -4.25f + 3), 0, 5);
+		}
+
+		public int AttachedTrack
+		{
+			get
+			{
+				if (!ArcGameplayManager.Instance.IsLoaded) return 0;
+				Vector3 pos = AttachedTrackPoint;
+				return PositionToTrack(pos.x);
+			}
+		}
+
 		private void Awake()
 		{
 			Instance = this;

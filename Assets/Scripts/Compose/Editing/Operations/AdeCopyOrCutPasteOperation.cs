@@ -76,49 +76,48 @@ namespace Arcade.Compose.Operation
 			}
 			CommandManager.Instance.Prepare(new BatchCommand(commands.ToArray(), isCut ? "剪切" : "复制"));
 
-			Action<int> updateTiming = (int timing) =>
-			{
-				int beginTiming = newNotes.Min((n) => n.Timing);
-				if (beginTiming != timing)
-				{
-					foreach (var n in newNotes)
-					{
-						n.Judged = false;
-						int diff = n.Timing - beginTiming;
-						switch (n)
-						{
-							case ArcLongNote note:
-								int duration = note.EndTiming - note.Timing;
-								note.Timing = timing + diff;
-								note.EndTiming = timing + duration + diff;
-								note.Judging = false;
-								(note as ArcArc)?.Rebuild();
-								if (note is ArcArc)
-								{
-									ArcArcManager.Instance.CalculateArcRelationship();
-								}
-								(note as ArcArc)?.CalculateJudgeTimings();
-								(note as ArcHold)?.CalculateJudgeTimings();
-								break;
-							case ArcArcTap note:
-								note.RemoveArcTapConnection();
-								note.Timing = timing + diff;
-								note.Relocate();
-								break;
-							case ArcTap note:
-								note.Timing = timing + diff;
-								note.SetupArcTapConnection();
-								break;
-							default:
-								n.Timing = timing + diff;
-								break;
-						}
-					}
-				}
-			};
-
 			try
 			{
+				Action<int> updateTiming = (int timing) =>
+				{
+					int beginTiming = newNotes.Min((n) => n.Timing);
+					if (beginTiming != timing)
+					{
+						foreach (var n in newNotes)
+						{
+							n.Judged = false;
+							int diff = n.Timing - beginTiming;
+							switch (n)
+							{
+								case ArcLongNote note:
+									int duration = note.EndTiming - note.Timing;
+									note.Timing = timing + diff;
+									note.EndTiming = timing + duration + diff;
+									note.Judging = false;
+									(note as ArcArc)?.Rebuild();
+									if (note is ArcArc)
+									{
+										ArcArcManager.Instance.CalculateArcRelationship();
+									}
+									(note as ArcArc)?.CalculateJudgeTimings();
+									(note as ArcHold)?.CalculateJudgeTimings();
+									break;
+								case ArcArcTap note:
+									note.RemoveArcTapConnection();
+									note.Timing = timing + diff;
+									note.Relocate();
+									break;
+								case ArcTap note:
+									note.Timing = timing + diff;
+									note.SetupArcTapConnection();
+									break;
+								default:
+									n.Timing = timing + diff;
+									break;
+							}
+						}
+					}
+				};
 				while (true)
 				{
 					var newTiming = await AdeCursorManager.Instance.SelectTiming(Progress.Create(updateTiming), cancellationToken);

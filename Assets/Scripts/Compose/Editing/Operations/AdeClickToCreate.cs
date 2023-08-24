@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Arcade.Compose.Command;
 using Arcade.Compose.MarkingMenu;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -189,7 +192,7 @@ namespace Arcade.Compose.Editing
 				return;
 			}
 			int timing = AdeCursorManager.Instance.AttachedTiming;
-			bool canAddArcTap = currentArc.Timing <= timing && currentArc.EndTiming >= timing  && currentArc.Timing < currentArc.EndTiming;
+			bool canAddArcTap = currentArc.Timing <= timing && currentArc.EndTiming >= timing && currentArc.Timing < currentArc.EndTiming;
 			AdeCursorManager.Instance.ArcTapCursorEnabled = canAddArcTap;
 			AdeCursorManager.Instance.ArcTapCursorIsSfx = currentArc.IsSfx;
 			if (!canAddArcTap) return;
@@ -213,10 +216,10 @@ namespace Arcade.Compose.Editing
 			switch (Mode)
 			{
 				case ClickToCreateMode.Tap:
-					note = new ArcTap() { Timing = timing, Track = PositionToTrack(pos.x), TimingGroup = timingGroup };
+					// note = new ArcTap() { Timing = timing, Track = PositionToTrack(pos.x), TimingGroup = timingGroup };
 					break;
 				case ClickToCreateMode.Hold:
-					note = new ArcHold() { Timing = timing, Track = PositionToTrack(pos.x), EndTiming = timing, TimingGroup = timingGroup };
+					// note = new ArcHold() { Timing = timing, Track = PositionToTrack(pos.x), EndTiming = timing, TimingGroup = timingGroup };
 					break;
 				case ClickToCreateMode.Arc:
 					note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, Effect = "none", IsVoid = currentArcIsVoid, LineType = currentArcType, TimingGroup = timingGroup };
@@ -260,10 +263,6 @@ namespace Arcade.Compose.Editing
 					PostCreateArcNote(note as ArcArc);
 					break;
 			}
-		}
-		private int PositionToTrack(float position)
-		{
-			return Mathf.Clamp((int)(position / -4.25f + 3), 0, 5);
 		}
 
 		public void CancelAddLongNote()
@@ -406,7 +405,8 @@ namespace Arcade.Compose.Editing
 			return null;
 		}
 
-		public bool MayAddArctap(){
+		public bool MayAddArctap()
+		{
 			ArcArc currentArc = GetCurrentArc();
 			if (currentArc != null)
 			{
@@ -417,6 +417,41 @@ namespace Arcade.Compose.Editing
 				}
 			}
 			return false;
+		}
+
+		private async UniTask ExecuteAddHold(CancellationToken cancellationToken)
+		{
+			int track = AdeCursorManager.Instance.AttachedTrack;
+			int timing = AdeCursorManager.Instance.AttachedTiming;
+			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
+			ArcHold note = new ArcHold() { Timing = timing, Track = track, EndTiming = timing, TimingGroup = timingGroup };
+			CommandManager.Instance.Prepare(new AddArcEventCommand(note));
+
+			try
+			{
+				Action<int> updateEndTiming = (int timing) =>
+				{
+					if (timing > note.Timing)
+					{
+						note.EndTiming = timing;
+					}
+				};
+				while (true)
+				{
+					var endTiming = await AdeCursorManager.Instance.SelectTiming(Progress.Create(updateEndTiming), cancellationToken);
+					if (endTiming > note.Timing)
+					{
+						updateEndTiming(endTiming);
+						break;
+					}
+				}
+			}
+			catch (OperationCanceledException ex)
+			{
+				CommandManager.Instance.Cancel();
+				throw ex;
+			}
+			CommandManager.Instance.Commit();
 		}
 
 		public override AdeOperationResult TryExecuteOperation()
@@ -433,10 +468,10 @@ namespace Arcade.Compose.Editing
 			{
 				if (mode == ClickToCreateMode.Tap)
 				{
-					Vector3 pos = AdeCursorManager.Instance.AttachedTrackPoint;
+					int track = AdeCursorManager.Instance.AttachedTrack;
 					int timing = AdeCursorManager.Instance.AttachedTiming;
 					var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
-					ArcTap note = new ArcTap() { Timing = timing, Track = PositionToTrack(pos.x), TimingGroup = timingGroup };
+					ArcTap note = new ArcTap() { Timing = timing, Track = track, TimingGroup = timingGroup };
 					CommandManager.Instance.Add(new AddArcEventCommand(note));
 					return true;
 				}
@@ -453,6 +488,15 @@ namespace Arcade.Compose.Editing
 							return true;
 						}
 					}
+				}
+				else if (mode == ClickToCreateMode.Hold)
+				{
+					var cancellation = new CancellationTokenSource();
+					return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+					{
+						task = ExecuteAddHold(cancellation.Token),
+						cancellation = cancellation,
+					});
 				}
 			}
 			return false;
