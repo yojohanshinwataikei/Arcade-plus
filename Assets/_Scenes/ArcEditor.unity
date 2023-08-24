@@ -21105,7 +21105,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 642534624}
   - {fileID: 928958753}
   - {fileID: 1057236767}
   m_Father: {fileID: 990230354}
@@ -21675,7 +21674,7 @@ GameObject:
   - component: {fileID: 642534624}
   - component: {fileID: 642534625}
   m_Layer: 10
-  m_Name: AdeClickToCreate
+  m_Name: ClickToCreateOperation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21694,7 +21693,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 624532088}
+  m_Father: {fileID: 1133280787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &642534625
 MonoBehaviour:
@@ -36447,6 +36446,7 @@ MonoBehaviour:
   - {fileID: 1336006065}
   - {fileID: 277583071}
   - {fileID: 723047152}
+  - {fileID: 642534625}
   CancelMenuEntry: {fileID: 1514369260}
 --- !u!1 &1087227391
 GameObject:
@@ -38186,6 +38186,7 @@ Transform:
   - {fileID: 909681751}
   - {fileID: 277583070}
   - {fileID: 723047151}
+  - {fileID: 642534624}
   m_Father: {fileID: 990230354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1134318729

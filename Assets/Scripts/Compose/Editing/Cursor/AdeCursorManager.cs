@@ -35,25 +35,25 @@ namespace Arcade.Compose
 		public Transform SfxArcTapCursor;
 		public MeshRenderer SfxArcTapCursorRenderer;
 
-		private bool enableTrack, enableWall, enableWallPanel;
-		private bool enableArcTapCursor, arcTapCursorIsSfx;
+		private bool trackEnabled, wallEnabled, wallPanelEnabled;
+		private bool arcTapCursorEnable, arcTapCursorIsSfx;
 		private RaycastHit trackHit, wallHit;
 
 		public bool TrackEnabled
 		{
 			get
 			{
-				return enableTrack;
+				return trackEnabled;
 			}
 			private set
 			{
-				if (enableTrack != value)
+				if (trackEnabled != value)
 				{
 					TrackX.enabled = value;
 					TrackY.enabled = value;
 					TrackX.positionCount = 0;
 					TrackY.positionCount = 0;
-					enableTrack = value;
+					trackEnabled = value;
 				}
 			}
 		}
@@ -61,18 +61,18 @@ namespace Arcade.Compose
 		{
 			get
 			{
-				return enableWall;
+				return wallEnabled;
 			}
 			private set
 			{
-				if (enableWall != value)
+				if (wallEnabled != value)
 				{
 					WallX.enabled = value;
 					WallY.enabled = value;
 					WallX.positionCount = 0;
 					WallY.positionCount = 0;
 					WallPanelEnabled = value;
-					enableWall = value;
+					wallEnabled = value;
 				}
 			}
 		}
@@ -80,14 +80,14 @@ namespace Arcade.Compose
 		{
 			get
 			{
-				return enableWallPanel;
+				return wallPanelEnabled;
 			}
 			private set
 			{
-				if (enableWallPanel != value)
+				if (wallPanelEnabled != value)
 				{
 					WallRenderer.enabled = value;
-					enableWallPanel = value;
+					wallPanelEnabled = value;
 				}
 			}
 		}
@@ -95,13 +95,13 @@ namespace Arcade.Compose
 		{
 			get
 			{
-				return enableArcTapCursor;
+				return arcTapCursorEnable;
 			}
 			set
 			{
 				ArcTapCursorRenderer.enabled = (!arcTapCursorIsSfx) && value;
 				SfxArcTapCursorRenderer.enabled = (arcTapCursorIsSfx) && value;
-				enableArcTapCursor = value;
+				arcTapCursorEnable = value;
 			}
 		}
 		public bool ArcTapCursorIsSfx
@@ -112,8 +112,8 @@ namespace Arcade.Compose
 			}
 			set
 			{
-				ArcTapCursorRenderer.enabled = (!value) && enableArcTapCursor;
-				SfxArcTapCursorRenderer.enabled = (value) && enableArcTapCursor;
+				ArcTapCursorRenderer.enabled = (!value) && arcTapCursorEnable;
+				SfxArcTapCursorRenderer.enabled = (value) && arcTapCursorEnable;
 				arcTapCursorIsSfx = value;
 			}
 		}
@@ -146,6 +146,10 @@ namespace Arcade.Compose
 		private bool shouldRenderWall
 		{
 			get => currentSelectTaskType == SelectTaskType.Coordinate;
+		}
+		private bool shouldRenderWallPanel
+		{
+			get => ArcTapCursorEnabled;
 		}
 
 		public bool IsTrackHit { get; private set; }
@@ -232,6 +236,7 @@ namespace Arcade.Compose
 				WallX.DrawLine(new Vector3(-xEdgePos, AttachedWallPoint.y), new Vector3(xEdgePos, AttachedWallPoint.y));
 				WallY.DrawLine(new Vector3(AttachedWallPoint.x, 0), new Vector3(AttachedWallPoint.x, yEdgePos));
 			}
+			WallPanelEnabled=shouldRenderWallPanel;
 		}
 
 		public async UniTask<int> SelectTiming(IProgress<int> progress, CancellationToken cancellationToken)

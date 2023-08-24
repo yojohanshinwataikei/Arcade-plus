@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Arcade.Compose.Editing;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
 using Arcade.Util.UnityExtension;
@@ -87,10 +88,9 @@ namespace Arcade.Compose.Operation
                 }
                 else
                 {
-                    if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
+                    if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed() && !AdeClickToCreate.Instance.MayAddArctap())
                     {
                         AdeSelectionManager.Instance.DeselectAllNotes();
-                        return true;
                     }
                 }
             }
