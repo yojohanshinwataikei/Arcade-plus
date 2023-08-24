@@ -38,11 +38,12 @@ namespace Arcade.Compose
 		{
 			get
 			{
-				if (HasOngoingOperation) {
+				if (HasOngoingOperation)
+				{
 					List<MarkingMenuItem> items = new List<MarkingMenuItem>
-                    {
-                        CancelMenuEntry
-                    };
+					{
+						CancelMenuEntry
+					};
 					items.AddRange(AdeGridManager.Instance.MarkingMenuItems);
 					return items.ToArray();
 				};
@@ -57,6 +58,10 @@ namespace Arcade.Compose
 		{
 			if (ongoingOperation != null)
 			{
+				if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Inputs.Cancel))
+				{
+					CancelOngoingOperation();
+				}
 				if (ongoingOperation.Value.task.Status != UniTaskStatus.Pending)
 				{
 					ongoingOperation = null;
@@ -100,7 +105,8 @@ namespace Arcade.Compose
 				this.ongoingOperation = ongoingOperation;
 			}
 		}
-		public void CancelOngoingOperation(){
+		public void CancelOngoingOperation()
+		{
 			if (ongoingOperation != null)
 			{
 				if (ongoingOperation.Value.task.Status == UniTaskStatus.Pending)

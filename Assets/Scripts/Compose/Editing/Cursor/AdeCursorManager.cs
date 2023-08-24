@@ -132,24 +132,31 @@ namespace Arcade.Compose
 
 		public bool VisibleWhenIdle = false;
 
+		private int? overriddenCursorTiming = null;
+
 		private enum SelectTaskType
 		{
 			Timing,
+			TimingForArc,
 			Track,
 			Coordinate,
 		}
 		private SelectTaskType? currentSelectTaskType = null;
 		private bool shouldRenderTrack
 		{
-			get => VisibleWhenIdle || currentSelectTaskType == SelectTaskType.Timing || currentSelectTaskType == SelectTaskType.Track;
+			get => (VisibleWhenIdle && currentSelectTaskType == null)
+			|| currentSelectTaskType == SelectTaskType.Timing
+			|| currentSelectTaskType == SelectTaskType.TimingForArc
+			|| currentSelectTaskType == SelectTaskType.Track;
 		}
 		private bool shouldRenderWall
 		{
-			get => currentSelectTaskType == SelectTaskType.Coordinate;
+			get => currentSelectTaskType == SelectTaskType.Coordinate
+			|| currentSelectTaskType == SelectTaskType.TimingForArc;
 		}
 		private bool shouldRenderWallPanel
 		{
-			get => ArcTapCursorEnabled;
+			get => ArcTapCursorEnabled || shouldRenderWall;
 		}
 
 		public bool IsTrackHit { get; private set; }
@@ -172,16 +179,35 @@ namespace Arcade.Compose
 		{
 			get
 			{
-				float z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
+				float z;
+				if (overriddenCursorTiming != null)
+				{
+					z = ArcTimingManager.Instance.CalculatePositionByTiming(
+						overriddenCursorTiming.Value + ArcAudioManager.Instance.AudioOffset,
+						AdeTimingEditor.Instance.currentTimingGroup
+					) / -1000f;
+				}
+				else
+				{
+					z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
+				}
 				return new Vector3(trackHit.point.x, trackHit.point.y, z);
+			}
+		}
+		public Vector3 AttachedCoordinate
+		{
+			get
+			{
+				return new Vector2(AdeGridManager.Instance.AttachVerticalX(ArcAlgorithm.WorldXToArc(WallPoint.x)),
+				   AdeGridManager.Instance.AttachVerticalY(ArcAlgorithm.WorldYToArc(WallPoint.y)));
 			}
 		}
 		public Vector3 AttachedWallPoint
 		{
 			get
 			{
-				return new Vector3(ArcAlgorithm.ArcXToWorld(AdeGridManager.Instance.AttachVerticalX(ArcAlgorithm.WorldXToArc(WallPoint.x))),
-				   ArcAlgorithm.ArcYToWorld(AdeGridManager.Instance.AttachVerticalY(ArcAlgorithm.WorldYToArc(WallPoint.y))));
+				Vector2 coordinate = AttachedCoordinate;
+				return new Vector3(ArcAlgorithm.ArcXToWorld(coordinate.x), ArcAlgorithm.ArcYToWorld(coordinate.y));
 			}
 		}
 
@@ -190,6 +216,10 @@ namespace Arcade.Compose
 			get
 			{
 				if (!ArcGameplayManager.Instance.IsLoaded) return 0;
+				if (overriddenCursorTiming != null)
+				{
+					return overriddenCursorTiming.Value;
+				}
 				Vector3 pos = AttachedTrackPoint;
 				var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
 				return ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
@@ -229,11 +259,25 @@ namespace Arcade.Compose
 			Ray ray = GameplayCamera.MousePositionToRay();
 			IsTrackHit = TrackCollider.Raycast(ray, out trackHit, 120);
 			TrackEnabled = IsTrackHit && shouldRenderTrack;
-			if (TrackEnabled)
+			if (IsTrackHit || overriddenCursorTiming != null)
 			{
-				float z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
-				TrackX.DrawLine(new Vector3(-xEdgePos, z), new Vector3(xEdgePos, z));
-				TrackY.DrawLine(new Vector3(trackHit.point.x, 0), new Vector3(trackHit.point.x, -100));
+				float z;
+				if (overriddenCursorTiming != null)
+				{
+					z = ArcTimingManager.Instance.CalculatePositionByTiming(
+						overriddenCursorTiming.Value + ArcAudioManager.Instance.AudioOffset,
+						AdeTimingEditor.Instance.currentTimingGroup
+					) / -1000f;
+				}
+				else
+				{
+					z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
+				}
+				if (TrackEnabled)
+				{
+					TrackX.DrawLine(new Vector3(-xEdgePos, z), new Vector3(xEdgePos, z));
+					TrackY.DrawLine(new Vector3(trackHit.point.x, 0), new Vector3(trackHit.point.x, -100));
+				}
 				WallPanel.transform.localPosition = new Vector3(0, 0, z);
 			}
 		}
@@ -251,17 +295,17 @@ namespace Arcade.Compose
 				WallX.DrawLine(new Vector3(-xEdgePos, AttachedWallPoint.y), new Vector3(xEdgePos, AttachedWallPoint.y));
 				WallY.DrawLine(new Vector3(AttachedWallPoint.x, 0), new Vector3(AttachedWallPoint.x, yEdgePos));
 			}
-			WallPanelEnabled=shouldRenderWallPanel;
+			WallPanelEnabled = shouldRenderWallPanel;
 		}
 
-		public async UniTask<int> SelectTiming(IProgress<int> progress, CancellationToken cancellationToken)
+		public async UniTask<int> SelectTiming(IProgress<int> progress, CancellationToken cancellationToken, bool timingForArc = false)
 		{
 			if (currentSelectTaskType != null)
 			{
 				throw new Exception("Cannot select two thing at the same time");
 			}
 
-			currentSelectTaskType = SelectTaskType.Timing;
+			currentSelectTaskType = timingForArc ? SelectTaskType.TimingForArc : SelectTaskType.Timing;
 			try
 			{
 				while (true)
@@ -280,6 +324,37 @@ namespace Arcade.Compose
 			finally
 			{
 				currentSelectTaskType = null;
+			}
+		}
+
+		public async UniTask<Vector2> SelectCoordinate(int overriddenCursorTiming, IProgress<Vector2> progress, CancellationToken cancellationToken)
+		{
+			if (currentSelectTaskType != null)
+			{
+				throw new Exception("Cannot select two thing at the same time");
+			}
+
+			currentSelectTaskType = SelectTaskType.Coordinate;
+			this.overriddenCursorTiming = overriddenCursorTiming;
+			try
+			{
+				while (true)
+				{
+					await UniTask.NextFrame(cancellationToken);
+					if (AdeGameplayContentInputHandler.InputActive && IsWallHit)
+					{
+						progress.Report(AttachedCoordinate);
+						if (Mouse.current.leftButton.wasPressedThisFrame)
+						{
+							return AttachedCoordinate;
+						}
+					}
+				}
+			}
+			finally
+			{
+				currentSelectTaskType = null;
+				this.overriddenCursorTiming = null;
 			}
 		}
 	}

@@ -278,7 +278,7 @@ namespace Arcade.Compose
 
 			TimingSliderHandle.sprite = GlowSliderSprite;
 
-			AdeClickToCreate.Instance.CancelAddLongNote();
+			AdeOperationManager.Instance.CancelOngoingOperation();
 			AdeClickToCreate.Instance.Mode = ClickToCreateMode.Idle;
 
 			IsEditorMode = false;

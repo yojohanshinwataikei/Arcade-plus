@@ -44,8 +44,6 @@ namespace Arcade.Compose.Editing
 				}
 				if (enable != value)
 				{
-
-					CancelAddLongNote();
 					AdeCursorManager.Instance.VisibleWhenIdle = value;
 					Mode = ClickToCreateMode.Idle;
 					enable = value;
@@ -56,7 +54,6 @@ namespace Arcade.Compose.Editing
 		{
 			get
 			{
-				// if (!AdeOperationManager.Instance.HasOngoingOperation) return SelectingValueItems;
 				if (!enable) return Entry;
 				else
 				{
@@ -76,21 +73,17 @@ namespace Arcade.Compose.Editing
 			get
 			{
 				if (!ArcGameplayManager.Instance.IsLoaded) return ClickToCreateMode.Idle;
-				// if (AdeTimingSelector.Instance.Enable) return ClickToCreateMode.Idle;
-				// if (AdePositionSelector.Instance.Enable) return ClickToCreateMode.Idle;
 				return mode;
 			}
 			set
 			{
 				if (mode != value)
 				{
-					CancelAddLongNote();
 					mode = value;
 				}
 				if (mode == ClickToCreateMode.Idle)
 				{
 					AdeCursorManager.Instance.ArcTapCursorEnabled = false;
-					// AdeCursorManager.Instance.EnableWallPanel = false;
 				}
 			}
 		}
@@ -118,8 +111,6 @@ namespace Arcade.Compose.Editing
 		}
 
 		private bool enable = false;
-		private bool skipNextClick;
-		private ArcLongNote pendingNote;
 		private int currentArcColor;
 		private bool currentArcIsVoid;
 		private ArcLineType currentArcType = ArcLineType.S;
@@ -157,14 +148,9 @@ namespace Arcade.Compose.Editing
 				SetClickToCreateMode(ClickToCreateMode.ArcTap);
 			}
 
-			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Inputs.Cancel))
-			{
-				CancelAddLongNote();
-			}
-
 			if (Mode == ClickToCreateMode.Idle) return;
 
-			if (Mode == ClickToCreateMode.Arc && postArcCoroutine == null)
+			if (Mode == ClickToCreateMode.Arc)
 			{
 				if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ClickToCreateArcVoid))
 				{
@@ -201,117 +187,52 @@ namespace Arcade.Compose.Editing
 									   ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(currentArc.YStart, currentArc.YEnd, t, currentArc.LineType)) - 0.5f);
 			AdeCursorManager.Instance.ArcTapCursorPosition = gizmo;
 		}
-		private void AddNoteHandler()
-		{
-			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
-			if (!AdeCursorManager.Instance.IsTrackHit) return;
-			if (skipNextClick)
-			{
-				skipNextClick = false;
-				return;
-			}
-			Vector3 pos = AdeCursorManager.Instance.AttachedTrackPoint;
-			int timing = ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
-			ArcNote note = null;
-			switch (Mode)
-			{
-				case ClickToCreateMode.Tap:
-					// note = new ArcTap() { Timing = timing, Track = PositionToTrack(pos.x), TimingGroup = timingGroup };
-					break;
-				case ClickToCreateMode.Hold:
-					// note = new ArcHold() { Timing = timing, Track = PositionToTrack(pos.x), EndTiming = timing, TimingGroup = timingGroup };
-					break;
-				case ClickToCreateMode.Arc:
-					note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, Effect = "none", IsVoid = currentArcIsVoid, LineType = currentArcType, TimingGroup = timingGroup };
-					break;
-				case ClickToCreateMode.ArcTap:
-					note = new ArcArcTap() { Timing = timing };
-					break;
-			}
-			if (note == null) return;
-			switch (Mode)
-			{
-				case ClickToCreateMode.Tap:
-					CommandManager.Instance.Add(new AddArcEventCommand(note));
-					break;
-				case ClickToCreateMode.Hold:
-				case ClickToCreateMode.Arc:
-					CommandManager.Instance.Prepare(new AddArcEventCommand(note));
-					break;
-				case ClickToCreateMode.ArcTap:
-					// if (canAddArcTap)
-					// {
-					// 	CommandManager.Instance.Add(new AddArcTapCommand(selectedArc, note as ArcArcTap));
-					// }
-					// else
-					// {
-					// 	if (selectedArc != null)
-					// 	{
-					// 		selectedArc = null;
-					// 		Mode = ClickToCreateMode.Idle;
-					// 	}
-					// }
-					break;
-			}
-			if (note is ArcLongNote) pendingNote = note as ArcLongNote;
-			switch (Mode)
-			{
-				case ClickToCreateMode.Hold:
-					PostCreateHoldNote(note as ArcHold);
-					break;
-				case ClickToCreateMode.Arc:
-					PostCreateArcNote(note as ArcArc);
-					break;
-			}
-		}
-
-		public void CancelAddLongNote()
-		{
-			if (postHoldCoroutine != null || postArcCoroutine != null)
-			{
-				StopCoroutine(postHoldCoroutine ?? postArcCoroutine);
-				postHoldCoroutine = postArcCoroutine = null;
-				// AdePositionSelector.Instance.EndModify();
-				// AdeTimingSelector.Instance.EndModify();
-				CommandManager.Instance.Cancel();
-			}
-		}
 		public void SwitchColor()
 		{
-			currentArcColor = currentArcColor == 0 ? 1 : 0;
+			if (!AdeOperationManager.Instance.HasOngoingOperation)
+			{
+				currentArcColor = currentArcColor == 0 ? 1 : 0;
+			}
 		}
 		public void SwitchIsVoid()
 		{
-			currentArcIsVoid = !currentArcIsVoid;
+
+			if (!AdeOperationManager.Instance.HasOngoingOperation)
+			{
+				currentArcIsVoid = !currentArcIsVoid;
+			}
 		}
 		public void SwitchType()
 		{
-			switch (currentArcType)
+			if (!AdeOperationManager.Instance.HasOngoingOperation)
 			{
-				case ArcLineType.S:
-					currentArcType = ArcLineType.B;
-					break;
-				case ArcLineType.B:
-					currentArcType = ArcLineType.Si;
-					break;
-				case ArcLineType.Si:
-					currentArcType = ArcLineType.So;
-					break;
-				case ArcLineType.So:
-					currentArcType = ArcLineType.SiSi;
-					break;
-				case ArcLineType.SiSi:
-					currentArcType = ArcLineType.SoSo;
-					break;
-				case ArcLineType.SoSo:
-					currentArcType = ArcLineType.SiSo;
-					break;
-				case ArcLineType.SiSo:
-					currentArcType = ArcLineType.SoSi;
-					break;
-				case ArcLineType.SoSi:
-					currentArcType = ArcLineType.S;
-					break;
+				switch (currentArcType)
+				{
+					case ArcLineType.S:
+						currentArcType = ArcLineType.B;
+						break;
+					case ArcLineType.B:
+						currentArcType = ArcLineType.Si;
+						break;
+					case ArcLineType.Si:
+						currentArcType = ArcLineType.So;
+						break;
+					case ArcLineType.So:
+						currentArcType = ArcLineType.SiSi;
+						break;
+					case ArcLineType.SiSi:
+						currentArcType = ArcLineType.SoSo;
+						break;
+					case ArcLineType.SoSo:
+						currentArcType = ArcLineType.SiSo;
+						break;
+					case ArcLineType.SiSo:
+						currentArcType = ArcLineType.SoSi;
+						break;
+					case ArcLineType.SoSi:
+						currentArcType = ArcLineType.S;
+						break;
+				}
 			}
 		}
 		public void SetClickToCreateMode(int mode)
@@ -321,69 +242,17 @@ namespace Arcade.Compose.Editing
 		}
 		public void SetClickToCreateMode(ClickToCreateMode newMode)
 		{
-			Mode = newMode;
+			if (!AdeOperationManager.Instance.HasOngoingOperation)
+			{
+				Mode = newMode;
+			}
 		}
 		public void SetArcTypeMode(int type)
 		{
-			currentArcType = (ArcLineType)type;
-		}
-
-		private Coroutine postHoldCoroutine = null;
-		private void PostCreateHoldNote(ArcHold note)
-		{
-			if (postHoldCoroutine != null) StopCoroutine(postHoldCoroutine);
-			postHoldCoroutine = StartCoroutine(PostCreateHoldNoteCoroutine(note));
-		}
-		private IEnumerator PostCreateHoldNoteCoroutine(ArcHold note)
-		{
-			// AdeTimingSelector.Instance.ModifyNote(note, (a) =>
-			// {
-			// 	note.EndTiming = a;
-			// 	note.CalculateJudgeTimings();
-			// });
-			// while (AdeTimingSelector.Instance.Enable) yield return null;
-			yield return null;
-			CommandManager.Instance.Commit();
-			pendingNote = null;
-			postHoldCoroutine = null;
-		}
-
-		private Coroutine postArcCoroutine = null;
-		private void PostCreateArcNote(ArcArc arc)
-		{
-			if (postArcCoroutine != null) StopCoroutine(postArcCoroutine);
-			postArcCoroutine = StartCoroutine(PostCreateArcNoteCoroutine(arc));
-		}
-		private IEnumerator PostCreateArcNoteCoroutine(ArcArc arc)
-		{
-			// AdePositionSelector.Instance.ModifyNote(arc, (a) =>
-			// {
-			// 	arc.XStart = arc.XEnd = a.x;
-			// 	arc.YStart = arc.YEnd = a.y;
-			// 	arc.Rebuild();
-			// 	ArcArcManager.Instance.CalculateArcRelationship();
-			// });
-			// while (AdePositionSelector.Instance.Enable) yield return null;
-			// AdeTimingSelector.Instance.ModifyNote(arc, (a) =>
-			// {
-			// 	arc.EndTiming = a;
-			// 	arc.Rebuild();
-			// 	arc.CalculateJudgeTimings();
-			// 	ArcArcManager.Instance.CalculateArcRelationship();
-			// });
-			// while (AdeTimingSelector.Instance.Enable) yield return null;
-			// AdePositionSelector.Instance.ModifyNote(arc, (a) =>
-			// {
-			// 	arc.XEnd = a.x;
-			// 	arc.YEnd = a.y;
-			// 	arc.Rebuild();
-			// 	ArcArcManager.Instance.CalculateArcRelationship();
-			// });
-			// while (AdePositionSelector.Instance.Enable) yield return null;
-			yield return null;
-			CommandManager.Instance.Commit();
-			pendingNote = null;
-			postArcCoroutine = null;
+			if (!AdeOperationManager.Instance.HasOngoingOperation)
+			{
+				currentArcType = (ArcLineType)type;
+			}
 		}
 
 		private ArcArc GetCurrentArc()
@@ -405,7 +274,7 @@ namespace Arcade.Compose.Editing
 			return null;
 		}
 
-		public bool MayAddArctap()
+		public bool MayAddArcTap()
 		{
 			ArcArc currentArc = GetCurrentArc();
 			if (currentArc != null)
@@ -445,6 +314,66 @@ namespace Arcade.Compose.Editing
 						break;
 					}
 				}
+			}
+			catch (OperationCanceledException ex)
+			{
+				CommandManager.Instance.Cancel();
+				throw ex;
+			}
+			CommandManager.Instance.Commit();
+		}
+
+		private async UniTask ExecuteAddArc(CancellationToken cancellationToken)
+		{
+			int track = AdeCursorManager.Instance.AttachedTrack;
+			int timing = AdeCursorManager.Instance.AttachedTiming;
+			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
+			ArcArc note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, Effect = "none", IsVoid = currentArcIsVoid, LineType = currentArcType, TimingGroup = timingGroup };
+			CommandManager.Instance.Prepare(new AddArcEventCommand(note));
+
+			try
+			{
+				Action<Vector2> updateStartCoordinate = (coord) =>
+				{
+					note.XStart = coord.x;
+					note.YStart = coord.y;
+					note.XEnd = coord.x;
+					note.YEnd = coord.y;
+					note.Rebuild();
+					ArcArcManager.Instance.CalculateArcRelationship();
+				};
+				var startCoord = await AdeCursorManager.Instance.SelectCoordinate(note.Timing, Progress.Create(updateStartCoordinate), cancellationToken);
+				updateStartCoordinate(startCoord);
+
+				Action<int> updateEndTiming = (int timing) =>
+				{
+					if (timing >= note.Timing)
+					{
+						note.EndTiming = timing;
+						note.Rebuild();
+						note.CalculateJudgeTimings();
+						ArcArcManager.Instance.CalculateArcRelationship();
+					}
+				};
+				while (true)
+				{
+					var endTiming = await AdeCursorManager.Instance.SelectTiming(Progress.Create(updateEndTiming), cancellationToken, true);
+					if (endTiming >= note.Timing)
+					{
+						updateEndTiming(endTiming);
+						break;
+					}
+				}
+
+				Action<Vector2> updateEndCoordinate = (coord) =>
+				{
+					note.XEnd = coord.x;
+					note.YEnd = coord.y;
+					note.Rebuild();
+					ArcArcManager.Instance.CalculateArcRelationship();
+				};
+				var endCoord = await AdeCursorManager.Instance.SelectCoordinate(note.EndTiming, Progress.Create(updateEndCoordinate), cancellationToken);
+				updateEndCoordinate(endCoord);
 			}
 			catch (OperationCanceledException ex)
 			{
@@ -495,6 +424,15 @@ namespace Arcade.Compose.Editing
 					return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
 					{
 						task = ExecuteAddHold(cancellation.Token),
+						cancellation = cancellation,
+					});
+				}
+				else if (mode == ClickToCreateMode.Arc)
+				{
+					var cancellation = new CancellationTokenSource();
+					return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+					{
+						task = ExecuteAddArc(cancellation.Token),
 						cancellation = cancellation,
 					});
 				}
