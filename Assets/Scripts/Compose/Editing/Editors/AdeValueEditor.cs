@@ -604,6 +604,92 @@ namespace Arcade.Compose.Editing
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
+		private async UniTask ReselectStartCoordinate(CancellationToken cancellationToken)
+		{
+			var selected = AdeSelectionManager.Instance.SelectedNotes;
+			if (selected.Count != 1)
+			{
+				return;
+			}
+			if (!(selected[0] is ArcArc))
+			{
+				return;
+			}
+			ArcArc note = selected[0] as ArcArc;
+			ArcArc newNote = note.Clone() as ArcArc;
+			AdeSelectionManager.Instance.DeselectAllNotes();
+
+			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
+
+			CommandManager.Instance.Prepare(command);
+			try
+			{
+				Action<Vector2> updateStartCoordinate = (Vector2 coordinate) =>
+				{
+					note.XStart = coordinate.x;
+					newNote.XStart = coordinate.x;
+					note.YStart = coordinate.y;
+					newNote.YStart = coordinate.y;
+					note.Rebuild();
+					note.CalculateJudgeTimings();
+					ArcArcManager.Instance.CalculateArcRelationship();
+				};
+				var newCoordinate = await AdeCursorManager.Instance.SelectCoordinate(note.Timing,Progress.Create(updateStartCoordinate), cancellationToken);
+				updateStartCoordinate(newCoordinate);
+			}
+			catch (OperationCanceledException ex)
+			{
+				CommandManager.Instance.Cancel();
+				AdeSelectionManager.Instance.SelectNote(note);
+				throw ex;
+			}
+			CommandManager.Instance.Commit();
+			AdeSelectionManager.Instance.SelectNote(note);
+		}
+
+		private async UniTask ReselectEndCoordinate(CancellationToken cancellationToken)
+		{
+			var selected = AdeSelectionManager.Instance.SelectedNotes;
+			if (selected.Count != 1)
+			{
+				return;
+			}
+			if (!(selected[0] is ArcArc))
+			{
+				return;
+			}
+			ArcArc note = selected[0] as ArcArc;
+			ArcArc newNote = note.Clone() as ArcArc;
+			AdeSelectionManager.Instance.DeselectAllNotes();
+
+			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
+
+			CommandManager.Instance.Prepare(command);
+			try
+			{
+				Action<Vector2> updateEndCoordinate = (Vector2 coordinate) =>
+				{
+					note.XEnd = coordinate.x;
+					newNote.XEnd = coordinate.x;
+					note.YEnd = coordinate.y;
+					newNote.YEnd = coordinate.y;
+					note.Rebuild();
+					note.CalculateJudgeTimings();
+					ArcArcManager.Instance.CalculateArcRelationship();
+				};
+				var newCoordinate = await AdeCursorManager.Instance.SelectCoordinate(note.EndTiming,Progress.Create(updateEndCoordinate), cancellationToken);
+				updateEndCoordinate(newCoordinate);
+			}
+			catch (OperationCanceledException ex)
+			{
+				CommandManager.Instance.Cancel();
+				AdeSelectionManager.Instance.SelectNote(note);
+				throw ex;
+			}
+			CommandManager.Instance.Commit();
+			AdeSelectionManager.Instance.SelectNote(note);
+		}
+
 		public void OnReselectTiming()
 		{
 			AdeOperationManager.Instance.TryExecuteOperation(() =>
@@ -625,6 +711,32 @@ namespace Arcade.Compose.Editing
 				return new AdeOngoingOperation
 				{
 					task = ReselectEndTiming(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				};
+			});
+		}
+
+		public void OnReselectStartCoordinate()
+		{
+			AdeOperationManager.Instance.TryExecuteOperation(() =>
+			{
+				var cancellation = new CancellationTokenSource();
+				return new AdeOngoingOperation
+				{
+					task = ReselectStartCoordinate(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				};
+			});
+		}
+
+		public void OnReselectEndCoordinate()
+		{
+			AdeOperationManager.Instance.TryExecuteOperation(() =>
+			{
+				var cancellation = new CancellationTokenSource();
+				return new AdeOngoingOperation
+				{
+					task = ReselectEndCoordinate(cancellation.Token).WithExceptionLogger(),
 					cancellation = cancellation,
 				};
 			});
