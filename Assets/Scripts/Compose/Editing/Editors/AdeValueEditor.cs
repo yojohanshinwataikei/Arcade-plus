@@ -12,7 +12,7 @@ using Arcade.Util.UniTaskHelper;
 
 namespace Arcade.Compose.Editing
 {
-	public class AdeValueEditor : MonoBehaviour, INoteSelectEvent
+	public class AdeValueEditor : AdeOperation, INoteSelectEvent
 	{
 		public static AdeValueEditor Instance { get; private set; }
 
@@ -812,5 +812,55 @@ namespace Arcade.Compose.Editing
 				};
 			});
 		}
-	}
+
+        public override AdeOperationResult TryExecuteOperation()
+        {
+            if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ReselectTiming))
+			{
+				var cancellation = new CancellationTokenSource();
+				return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+				{
+					task = ReselectTiming(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				});
+			}
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ReselectEndTiming))
+			{
+				var cancellation = new CancellationTokenSource();
+				return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+				{
+					task = ReselectEndTiming(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				});
+			}
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ReselectStartCoordinate))
+			{
+				var cancellation = new CancellationTokenSource();
+				return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+				{
+					task = ReselectStartCoordinate(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				});
+			}
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ReselectEndCoordinate))
+			{
+				var cancellation = new CancellationTokenSource();
+				return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+				{
+					task = ReselectEndCoordinate(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				});
+			}
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ReselectTrack))
+			{
+				var cancellation = new CancellationTokenSource();
+				return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+				{
+					task = ReselectTrack(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				});
+			}
+			return false;
+        }
+    }
 }

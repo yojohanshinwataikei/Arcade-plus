@@ -193,6 +193,51 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Reselect Timing",
+                    "type": "Value",
+                    "id": "b4c311c7-fc74-4daf-a6ca-1a0731f25b2a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Reselect EndTiming",
+                    "type": "Value",
+                    "id": "03c56155-5d34-4f26-884a-d166cfc5dcb0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Reselect StartCoordinate",
+                    "type": "Value",
+                    "id": "51ae1d54-a007-4e54-963f-e9560db14a30",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Reselect EndCoordinate",
+                    "type": "Value",
+                    "id": "f9b203f5-fc6c-4bdd-a556-6751af629651",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Reselect Track",
+                    "type": "Value",
+                    "id": "7d98a73c-b64e-4ac3-864a-80436eede04c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -1348,6 +1393,281 @@
                     "processors": "",
                     "groups": "",
                     "action": "Preview When Holding",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "0c3bf0e1-74ba-4d76-994e-99324954d4c6",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Timing",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "d34ffe41-f8b0-4a71-a739-e9c9e88cd823",
+                    "path": "<Keyboard>/f1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Timing",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "bd58fa16-a41f-466a-a322-101fa729d772",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Timing",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "5b36ffe9-c775-4aa3-9593-b7e027966e71",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Timing",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "012c635c-8b34-4dac-b025-842188549f11",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Timing",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "5ab21a9d-1454-48ca-a79b-d5d75f4b9e2d",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndTiming",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "9fb3c490-70ff-4802-bf96-715dddc893f8",
+                    "path": "<Keyboard>/f2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndTiming",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "4b1e57a5-41e2-401a-b2d5-1e809aea6cec",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndTiming",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "83125429-30e6-4621-861e-92c91437d55f",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndTiming",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "56e1c667-7258-475b-adf2-d530494eb2c6",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndTiming",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "c7268702-1c18-4a03-9dfb-e06146aa7d11",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect StartCoordinate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "885db38d-34d4-426e-8c22-fa8dcb6a853b",
+                    "path": "<Keyboard>/f3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect StartCoordinate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "c946075c-8fd1-4c61-a518-dd99556526dd",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect StartCoordinate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "ba28b7c9-0929-42cd-98d7-3cc8633a7c58",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect StartCoordinate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "a5466675-c46a-4f96-ab9a-b28a3ece5e9a",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect StartCoordinate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "a6755eb7-2952-43fe-9597-bb57ba065f96",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndCoordinate",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "80463c0c-0205-4ad7-9055-847ae470ca75",
+                    "path": "<Keyboard>/f4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndCoordinate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "195e6185-5e10-4360-9f19-086b20481507",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndCoordinate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "cfc3097e-f5a4-4114-a34b-223923d8efa4",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndCoordinate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "531afec5-e636-4c63-9a11-e4231b4e9fdb",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect EndCoordinate",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "1cdd05ac-5775-4f83-bcae-a25d07c1498b",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Track",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "e28e28d9-620b-4bdc-9271-80a2ec9c3745",
+                    "path": "<Keyboard>/f5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Track",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "4536a0d0-21f9-4190-8204-ce3a7501df69",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Track",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "65b319d8-105c-484c-9d3c-ea1a8d2044fe",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Track",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "1377d680-58fd-4375-911d-dbfc7e564575",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reselect Track",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }
