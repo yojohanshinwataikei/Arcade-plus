@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
+using Arcade.Util.UniTaskHelper;
 
 namespace Arcade.Compose.Operation
 {
@@ -170,7 +171,7 @@ namespace Arcade.Compose.Operation
 				var cancellation = new CancellationTokenSource();
 				return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
 				{
-					task = ExecuteCopyOrCut(false, cancellation.Token),
+					task = ExecuteCopyOrCut(false, cancellation.Token).WithExceptionLogger(),
 					cancellation = cancellation,
 				});
 			}
@@ -179,7 +180,7 @@ namespace Arcade.Compose.Operation
 				var cancellation = new CancellationTokenSource();
 				return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
 				{
-					task = ExecuteCopyOrCut(true, cancellation.Token),
+					task = ExecuteCopyOrCut(true, cancellation.Token).WithExceptionLogger(),
 					cancellation = cancellation,
 				});
 			}
@@ -193,7 +194,7 @@ namespace Arcade.Compose.Operation
 				var cancellation = new CancellationTokenSource();
 				return new AdeOngoingOperation
 				{
-					task = ExecuteCopyOrCut(false, cancellation.Token),
+					task = ExecuteCopyOrCut(false, cancellation.Token).WithExceptionLogger(),
 					cancellation = cancellation,
 				};
 			});
@@ -206,7 +207,7 @@ namespace Arcade.Compose.Operation
 				var cancellation = new CancellationTokenSource();
 				return new AdeOngoingOperation
 				{
-					task = ExecuteCopyOrCut(true, cancellation.Token),
+					task = ExecuteCopyOrCut(true, cancellation.Token).WithExceptionLogger(),
 					cancellation = cancellation,
 				};
 			});

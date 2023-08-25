@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace Arcade.Util.Shell
 {
-	public class FileBrowser
+	public static class FileBrowser
 	{
 		public static string OpenFolderDialog(string Title = "", string InitPath = "")
 		{

@@ -7,6 +7,7 @@ using Arcade.Compose.Editing;
 using Arcade.Compose.MarkingMenu;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
+using Arcade.Util.UniTaskHelper;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -424,7 +425,7 @@ namespace Arcade.Compose.Operation
 					var cancellation = new CancellationTokenSource();
 					return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
 					{
-						task = ExecuteAddHold(cancellation.Token),
+						task = ExecuteAddHold(cancellation.Token).WithExceptionLogger(),
 						cancellation = cancellation,
 					});
 				}
@@ -433,7 +434,7 @@ namespace Arcade.Compose.Operation
 					var cancellation = new CancellationTokenSource();
 					return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
 					{
-						task = ExecuteAddArc(cancellation.Token),
+						task = ExecuteAddArc(cancellation.Token).WithExceptionLogger(),
 						cancellation = cancellation,
 					});
 				}

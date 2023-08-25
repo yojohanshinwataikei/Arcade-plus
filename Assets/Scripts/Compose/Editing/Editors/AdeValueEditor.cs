@@ -6,6 +6,9 @@ using UnityEngine.UI;
 using Arcade.Gameplay.Chart;
 using Arcade.Compose.Command;
 using Arcade.Gameplay;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using Arcade.Util.UniTaskHelper;
 
 namespace Arcade.Compose.Editing
 {
@@ -15,6 +18,7 @@ namespace Arcade.Compose.Editing
 
 		public RectTransform Panel;
 		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, LineType, Color, IsVoid, SelectParent, TimingGroup;
+		public RectTransform MoveTiming, MoveTrack, MoveEndTiming, MoveStartPos, MoveEndPos;
 
 		public void OnNoteSelect(ArcNote note)
 		{
@@ -61,6 +65,11 @@ namespace Arcade.Compose.Editing
 						SelectParent.gameObject.SetActive(true);
 					}
 				}
+				MoveTiming.gameObject.SetActive(count == 1);
+				MoveTrack.gameObject.SetActive(count == 1);
+				MoveEndTiming.gameObject.SetActive(count == 1);
+				MoveStartPos.gameObject.SetActive(count == 1);
+				MoveEndPos.gameObject.SetActive(count == 1);
 				Timing.gameObject.SetActive(true);
 				Track.gameObject.SetActive(true);
 				EndTiming.gameObject.SetActive(true);
@@ -416,6 +425,209 @@ namespace Arcade.Compose.Editing
 				ArcNote note = selected[0];
 				TimingGroup.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : ((note as IHasTimingGroup).TimingGroup?.Id ?? 0));
 			}
+		}
+
+		private bool IsValidTiming(ArcNote note, int timing)
+		{
+			if (note is ArcArc)
+			{
+				var arc = note as ArcArc;
+				if (timing > arc.EndTiming)
+				{
+					return false;
+				}
+				foreach (ArcArcTap arctap in arc.ArcTaps)
+				{
+					if (timing > arctap.Timing)
+					{
+						return false;
+					}
+				}
+			}
+			else
+			if (note is ArcHold)
+			{
+				var hold = note as ArcHold;
+				if (timing >= hold.EndTiming)
+				{
+					return false;
+				}
+			}
+			else
+			if (note is ArcArcTap)
+			{
+				var arcTap = note as ArcArcTap;
+				if (timing > arcTap.Arc.EndTiming || timing < arcTap.Arc.Timing)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+		private async UniTask ReselectTiming(CancellationToken cancellationToken)
+		{
+			var selected = AdeSelectionManager.Instance.SelectedNotes;
+			if (selected.Count != 1)
+			{
+				return;
+			}
+			ArcNote note = selected[0];
+			ArcNote newNote = note.Clone() as ArcNote;
+			AdeSelectionManager.Instance.DeselectAllNotes();
+
+			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
+
+			CommandManager.Instance.Prepare(command);
+			try
+			{
+				while (true)
+				{
+					Action<int> updateTiming = (int timing) =>
+					{
+						if (IsValidTiming(note, timing))
+						{
+							(note as ArcArcTap)?.RemoveArcTapConnection();
+							note.Timing = timing;
+							newNote.Timing = timing;
+							(note as ArcArcTap)?.Relocate();
+							(note as ArcArc)?.Rebuild();
+							(note as ArcTap)?.SetupArcTapConnection();
+							(note as ArcArc)?.CalculateJudgeTimings();
+							(note as ArcHold)?.CalculateJudgeTimings();
+							if (note is ArcArc) ArcArcManager.Instance.CalculateArcRelationship();
+						}
+					};
+					var newTiming = await AdeCursorManager.Instance.SelectTiming(Progress.Create(updateTiming), cancellationToken);
+					updateTiming(newTiming);
+					if (IsValidTiming(note, newTiming))
+					{
+						break;
+					}
+				}
+			}
+			catch (OperationCanceledException ex)
+			{
+				CommandManager.Instance.Cancel();
+				AdeSelectionManager.Instance.SelectNote(note);
+				throw ex;
+			}
+			CommandManager.Instance.Commit();
+			AdeSelectionManager.Instance.SelectNote(note);
+		}
+
+		private bool IsValidEndTiming(ArcNote note, int timing)
+		{
+			if (note is ArcArc)
+			{
+				var arc = note as ArcArc;
+				if (timing < arc.Timing)
+				{
+					return false;
+				}
+				foreach (ArcArcTap arctap in arc.ArcTaps)
+				{
+					if (timing < arctap.Timing)
+					{
+						return false;
+					}
+				}
+			}
+			else
+			if (note is ArcHold)
+			{
+				var hold = note as ArcHold;
+				if (timing <= hold.Timing)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private async UniTask ReselectEndTiming(CancellationToken cancellationToken)
+		{
+			var selected = AdeSelectionManager.Instance.SelectedNotes;
+			if (selected.Count != 1)
+			{
+				return;
+			}
+			ArcNote note = selected[0];
+			if (!(note is ArcArc || note is ArcHold))
+			{
+				return;
+			}
+			ArcNote newNote = note.Clone() as ArcNote;
+			AdeSelectionManager.Instance.DeselectAllNotes();
+
+			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
+
+			CommandManager.Instance.Prepare(command);
+			try
+			{
+				while (true)
+				{
+					Action<int> updateEndTiming = (int endTiming) =>
+					{
+						if (IsValidEndTiming(note, endTiming))
+						{
+							if (note is ArcArc)
+							{
+								(note as ArcArc).EndTiming = endTiming;
+								(newNote as ArcArc).EndTiming = endTiming;
+							}
+							else if (note is ArcHold)
+							{
+								(note as ArcHold).EndTiming = endTiming;
+								(newNote as ArcHold).EndTiming = endTiming;
+							}
+							(note as ArcArc)?.Rebuild();
+							(note as ArcArc)?.CalculateJudgeTimings();
+							(note as ArcHold)?.CalculateJudgeTimings();
+							if (note is ArcArc) ArcArcManager.Instance.CalculateArcRelationship();
+						}
+					};
+					var newEndTiming = await AdeCursorManager.Instance.SelectTiming(Progress.Create(updateEndTiming), cancellationToken);
+					updateEndTiming(newEndTiming);
+					if (IsValidEndTiming(note, newEndTiming))
+					{
+						break;
+					}
+				}
+			}
+			catch (OperationCanceledException ex)
+			{
+				CommandManager.Instance.Cancel();
+				AdeSelectionManager.Instance.SelectNote(note);
+				throw ex;
+			}
+			CommandManager.Instance.Commit();
+			AdeSelectionManager.Instance.SelectNote(note);
+		}
+
+		public void OnReselectTiming()
+		{
+			AdeOperationManager.Instance.TryExecuteOperation(() =>
+			{
+				var cancellation = new CancellationTokenSource();
+				return new AdeOngoingOperation
+				{
+					task = ReselectTiming(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				};
+			});
+		}
+
+		public void OnReselectEndTiming()
+		{
+			AdeOperationManager.Instance.TryExecuteOperation(() =>
+			{
+				var cancellation = new CancellationTokenSource();
+				return new AdeOngoingOperation
+				{
+					task = ReselectEndTiming(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				};
+			});
 		}
 	}
 }
