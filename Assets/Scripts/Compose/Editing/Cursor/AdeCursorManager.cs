@@ -357,5 +357,34 @@ namespace Arcade.Compose
 				this.overriddenCursorTiming = null;
 			}
 		}
+
+		public async UniTask<int> SelectTrack(IProgress<int> progress, CancellationToken cancellationToken, bool timingForArc = false)
+		{
+			if (currentSelectTaskType != null)
+			{
+				throw new Exception("Cannot select two thing at the same time");
+			}
+
+			currentSelectTaskType = SelectTaskType.Track;
+			try
+			{
+				while (true)
+				{
+					await UniTask.NextFrame(cancellationToken);
+					if (AdeGameplayContentInputHandler.InputActive && IsTrackHit)
+					{
+						progress.Report(AttachedTrack);
+						if (Mouse.current.leftButton.wasPressedThisFrame)
+						{
+							return AttachedTrack;
+						}
+					}
+				}
+			}
+			finally
+			{
+				currentSelectTaskType = null;
+			}
+		}
 	}
 }

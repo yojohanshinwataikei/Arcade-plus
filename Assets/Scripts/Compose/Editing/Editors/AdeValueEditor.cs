@@ -690,6 +690,64 @@ namespace Arcade.Compose.Editing
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
+		private async UniTask ReselectTrack(CancellationToken cancellationToken)
+		{
+			var selected = AdeSelectionManager.Instance.SelectedNotes;
+			if (selected.Count != 1)
+			{
+				return;
+			}
+			ArcNote note = selected[0];
+			if (!(note is ArcTap || note is ArcHold))
+			{
+				return;
+			}
+			ArcNote newNote = note.Clone() as ArcNote;
+			AdeSelectionManager.Instance.DeselectAllNotes();
+
+			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
+
+			CommandManager.Instance.Prepare(command);
+			try
+			{
+				while (true)
+				{
+					Action<int> updateTrack = (int track) =>
+					{
+						if (IsValidTiming(note, track))
+						{
+							if (note is ArcTap)
+							{
+								(note as ArcTap).Track = track;
+								(newNote as ArcTap).Track = track;
+							}
+							else if (note is ArcHold)
+							{
+								(note as ArcHold).Track = track;
+								(newNote as ArcHold).Track = track;
+							}
+							(note as ArcTap)?.SetupArcTapConnection();
+							(note as ArcHold)?.CalculateJudgeTimings();
+						}
+					};
+					var newTrack = await AdeCursorManager.Instance.SelectTrack(Progress.Create(updateTrack), cancellationToken);
+					updateTrack(newTrack);
+					if (IsValidTiming(note, newTrack))
+					{
+						break;
+					}
+				}
+			}
+			catch (OperationCanceledException ex)
+			{
+				CommandManager.Instance.Cancel();
+				AdeSelectionManager.Instance.SelectNote(note);
+				throw ex;
+			}
+			CommandManager.Instance.Commit();
+			AdeSelectionManager.Instance.SelectNote(note);
+		}
+
 		public void OnReselectTiming()
 		{
 			AdeOperationManager.Instance.TryExecuteOperation(() =>
@@ -737,6 +795,19 @@ namespace Arcade.Compose.Editing
 				return new AdeOngoingOperation
 				{
 					task = ReselectEndCoordinate(cancellation.Token).WithExceptionLogger(),
+					cancellation = cancellation,
+				};
+			});
+		}
+
+		public void OnReselectTrack()
+		{
+			AdeOperationManager.Instance.TryExecuteOperation(() =>
+			{
+				var cancellation = new CancellationTokenSource();
+				return new AdeOngoingOperation
+				{
+					task = ReselectTrack(cancellation.Token).WithExceptionLogger(),
 					cancellation = cancellation,
 				};
 			});
