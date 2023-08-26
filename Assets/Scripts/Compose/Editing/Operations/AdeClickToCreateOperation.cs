@@ -327,6 +327,7 @@ namespace Arcade.Compose.Operation
 				throw ex;
 			}
 			CommandManager.Instance.Commit();
+			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
 		private async UniTask ExecuteAddArc(CancellationToken cancellationToken)
@@ -387,6 +388,7 @@ namespace Arcade.Compose.Operation
 				throw ex;
 			}
 			CommandManager.Instance.Commit();
+			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
 		public override AdeOperationResult TryExecuteOperation()
