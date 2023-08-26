@@ -151,12 +151,13 @@ namespace Arcade.Compose
 		}
 		private bool shouldRenderWall
 		{
-			get => currentSelectTaskType == SelectTaskType.Coordinate
-			|| currentSelectTaskType == SelectTaskType.TimingForArc;
+			get => currentSelectTaskType == SelectTaskType.Coordinate;
 		}
 		private bool shouldRenderWallPanel
 		{
-			get => ArcTapCursorEnabled || shouldRenderWall;
+			get => ArcTapCursorEnabled
+			|| currentSelectTaskType == SelectTaskType.TimingForArc
+			|| shouldRenderWall ;
 		}
 
 		public bool IsTrackHit { get; private set; }
