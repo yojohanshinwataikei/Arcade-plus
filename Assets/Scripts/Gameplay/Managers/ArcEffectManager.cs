@@ -37,18 +37,19 @@ namespace Arcade.Gameplay
 		public Dictionary<string, AudioClip> SpecialEffectAudios = new Dictionary<string, AudioClip>();
 
 		private bool[] holdEffectStatus = new bool[6];
+		private bool[] holdEffectPlaying = new bool[6];
 		private GameObjectPool<ArcTapNoteEffectComponent> tapNoteEffectPool;
 		private GameObjectPool<ArcTapNoteEffectComponent> sfxTapNoteEffectPool;
 
 		void Update()
 		{
-
 			for (int track = 0; track < 6; track++)
 			{
 				HoldNoteEffects[track].transform.position=EffectPlane.GetPositionOnPlane(HoldNoteEffectPosition[track]);
 				bool show = holdEffectStatus[track];
-				if (show != HoldNoteEffects[track].enabled)
+				if (show != holdEffectPlaying[track])
 				{
+					holdEffectPlaying[track]=show;
 					if (show)
 					{
 						HoldNoteEffects[track].Play();
@@ -67,7 +68,6 @@ namespace Arcade.Gameplay
 			if (holdEffectStatus[track] != show)
 			{
 				holdEffectStatus[track] = show;
-				LaneHits[track].SetActive(show);
 			}
 		}
 
