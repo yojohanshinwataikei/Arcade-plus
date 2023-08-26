@@ -278,6 +278,10 @@ namespace Arcade.Compose.Operation
 
 		public bool MayAddArcTap()
 		{
+			if (Mode != ClickToCreateMode.ArcTap)
+			{
+				return false;
+			}
 			ArcArc currentArc = GetCurrentArc();
 			if (currentArc != null)
 			{
