@@ -317,6 +317,8 @@ namespace Arcade.Compose.Operation
 					if (endTiming > note.Timing)
 					{
 						updateEndTiming(endTiming);
+						note.CalculateJudgeTimings();
+						ArcGameplayManager.Instance.ResetJudge();
 						break;
 					}
 				}
@@ -359,6 +361,7 @@ namespace Arcade.Compose.Operation
 						note.EndTiming = timing;
 						note.Rebuild();
 						note.CalculateJudgeTimings();
+						ArcGameplayManager.Instance.ResetJudge();
 						ArcArcManager.Instance.CalculateArcRelationship();
 					}
 				};

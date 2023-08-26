@@ -495,6 +495,7 @@ namespace Arcade.Compose.Editing
 							(note as ArcArc)?.CalculateJudgeTimings();
 							(note as ArcHold)?.CalculateJudgeTimings();
 							if (note is ArcArc) ArcArcManager.Instance.CalculateArcRelationship();
+							ArcGameplayManager.Instance.ResetJudge();
 						}
 					};
 					var newTiming = await AdeCursorManager.Instance.SelectTiming(Progress.Create(updateTiming), cancellationToken);
@@ -584,6 +585,7 @@ namespace Arcade.Compose.Editing
 							(note as ArcArc)?.CalculateJudgeTimings();
 							(note as ArcHold)?.CalculateJudgeTimings();
 							if (note is ArcArc) ArcArcManager.Instance.CalculateArcRelationship();
+							ArcGameplayManager.Instance.ResetJudge();
 						}
 					};
 					var newEndTiming = await AdeCursorManager.Instance.SelectTiming(Progress.Create(updateEndTiming), cancellationToken);
