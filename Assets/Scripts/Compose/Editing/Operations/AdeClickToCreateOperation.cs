@@ -403,46 +403,48 @@ namespace Arcade.Compose.Operation
 			}
 			if (Mouse.current.leftButton.wasPressedThisFrame)
 			{
-				if (mode == ClickToCreateMode.Tap)
-				{
-					int track = AdeCursorManager.Instance.AttachedTrack;
-					int timing = AdeCursorManager.Instance.AttachedTiming;
-					var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
-					ArcTap note = new ArcTap() { Timing = timing, Track = track, TimingGroup = timingGroup };
-					CommandManager.Instance.Add(new AddArcEventCommand(note));
-					return true;
-				}
-				else if (mode == ClickToCreateMode.ArcTap)
-				{
-					ArcArc currentArc = GetCurrentArc();
-					if (currentArc != null)
+				if(AdeCursorManager.Instance.IsTrackHit){
+					if (mode == ClickToCreateMode.Tap)
 					{
+						int track = AdeCursorManager.Instance.AttachedTrack;
 						int timing = AdeCursorManager.Instance.AttachedTiming;
-						if (currentArc.Timing <= timing && currentArc.EndTiming >= timing && currentArc.Timing < currentArc.EndTiming)
+						var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
+						ArcTap note = new ArcTap() { Timing = timing, Track = track, TimingGroup = timingGroup };
+						CommandManager.Instance.Add(new AddArcEventCommand(note));
+						return true;
+					}
+					else if (mode == ClickToCreateMode.ArcTap)
+					{
+						ArcArc currentArc = GetCurrentArc();
+						if (currentArc != null)
 						{
-							ArcArcTap note = new ArcArcTap() { Timing = timing };
-							CommandManager.Instance.Add(new AddArcTapCommand(currentArc, note));
-							return true;
+							int timing = AdeCursorManager.Instance.AttachedTiming;
+							if (currentArc.Timing <= timing && currentArc.EndTiming >= timing && currentArc.Timing < currentArc.EndTiming)
+							{
+								ArcArcTap note = new ArcArcTap() { Timing = timing };
+								CommandManager.Instance.Add(new AddArcTapCommand(currentArc, note));
+								return true;
+							}
 						}
 					}
-				}
-				else if (mode == ClickToCreateMode.Hold)
-				{
-					var cancellation = new CancellationTokenSource();
-					return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+					else if (mode == ClickToCreateMode.Hold)
 					{
-						task = ExecuteAddHold(cancellation.Token).WithExceptionLogger(),
-						cancellation = cancellation,
-					});
-				}
-				else if (mode == ClickToCreateMode.Arc)
-				{
-					var cancellation = new CancellationTokenSource();
-					return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+						var cancellation = new CancellationTokenSource();
+						return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+						{
+							task = ExecuteAddHold(cancellation.Token).WithExceptionLogger(),
+							cancellation = cancellation,
+						});
+					}
+					else if (mode == ClickToCreateMode.Arc)
 					{
-						task = ExecuteAddArc(cancellation.Token).WithExceptionLogger(),
-						cancellation = cancellation,
-					});
+						var cancellation = new CancellationTokenSource();
+						return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+						{
+							task = ExecuteAddArc(cancellation.Token).WithExceptionLogger(),
+							cancellation = cancellation,
+						});
+					}
 				}
 			}
 			return false;
