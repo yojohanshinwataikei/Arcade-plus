@@ -23,12 +23,12 @@ namespace Arcade.Compose.UI
 
 		public void UpdateVelocity(int value)
 		{
-			speed.SetValueWithoutNotify(ArcTimingManager.Instance.Velocity/3);
+			speed.SetValueWithoutNotify(ArcTimingManager.Instance.SettingVelocity/3);
 			Value.text = ((float)(speed.value)/10).ToString("f1");
 		}
 		public void OnPointerUp(PointerEventData eventData)
 		{
-			ArcTimingManager.Instance.Velocity = (int)speed.value*3;
+			ArcTimingManager.Instance.SettingVelocity = (int)speed.value*3;
 		}
 	}
 }

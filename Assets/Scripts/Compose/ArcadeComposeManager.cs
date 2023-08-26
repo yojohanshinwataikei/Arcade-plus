@@ -357,7 +357,7 @@ namespace Arcade.Compose
 				{
 					ArcadePreference.Velocity = 195;
 				}
-				ArcTimingManager.Instance.Velocity = ArcadePreference.Velocity;
+				ArcTimingManager.Instance.SettingVelocity = ArcadePreference.Velocity;
 				ArcGameplayManager.Instance.Auto = ArcadePreference.Auto;
 				AdeProjectManager.Instance.SaveMode.text = ArcadePreference.ChartSortMode == Gameplay.Chart.ChartSortMode.Timing ? "按时间" : "按类别";
 				AutoButton.image.color = ArcGameplayManager.Instance.Auto ? new Color(0.59f, 0.55f, 0.65f, 1f) : new Color(0.9f, 0.9f, 0.9f, 1);
@@ -409,7 +409,7 @@ namespace Arcade.Compose
 		}
 		public void SavePreferences()
 		{
-			ArcadePreference.Velocity = ArcTimingManager.Instance.Velocity;
+			ArcadePreference.Velocity = ArcTimingManager.Instance.SettingVelocity;
 			ArcadePreference.Auto = ArcGameplayManager.Instance.Auto;
 			PlayerPrefs.SetString("ArcadeComposeManagerPreference", JsonConvert.SerializeObject(ArcadePreference));
 		}

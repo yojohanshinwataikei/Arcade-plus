@@ -20,7 +20,7 @@ namespace Arcade.Gameplay
 			phaseShaderId = Shader.PropertyToID("_Phase");
 		}
 
-		private int velocity = 30;
+		private int settingVelocity = 30;
 		public float BaseBpm = 100;
 		public Transform BeatlineLayer;
 		public GameObject BeatlinePrefab;
@@ -42,11 +42,15 @@ namespace Arcade.Gameplay
 		private float phase = 0;
 		public float CurrentSpeed { get; set; }
 		public List<ArcTiming> Timings { get => timings; }
-		public int Velocity
+		private float Velocity
 		{
-			get => velocity; set
+			get => settingVelocity/3*2.65f;
+		}
+
+		public int SettingVelocity{
+			get => settingVelocity; set
 			{
-				velocity = value;
+				settingVelocity = value;
 				ArcArcManager.Instance.Rebuild();
 				AdeSpeedSlider.Instance.UpdateVelocity(value);
 			}
