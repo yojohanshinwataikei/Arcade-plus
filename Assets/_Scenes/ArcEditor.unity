@@ -2020,8 +2020,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 721496753}
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: ReloadChart
         m_Mode: 3
         m_Arguments:
@@ -20709,8 +20709,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 721496753}
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: ReloadChart
         m_Mode: 3
         m_Arguments:
@@ -49971,8 +49971,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 721496753}
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: ReloadChart
         m_Mode: 3
         m_Arguments:
@@ -58767,8 +58767,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 721496753}
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeProjectManager, Arcade
         m_MethodName: ReloadChart
         m_Mode: 3
         m_Arguments:
