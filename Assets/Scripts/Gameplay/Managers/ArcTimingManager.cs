@@ -44,10 +44,11 @@ namespace Arcade.Gameplay
 		public List<ArcTiming> Timings { get => timings; }
 		private float Velocity
 		{
-			get => settingVelocity/3*2.65f;
+			get => settingVelocity / 3 * 2.65f;
 		}
 
-		public int SettingVelocity{
+		public int SettingVelocity
+		{
 			get => settingVelocity; set
 			{
 				settingVelocity = value;
@@ -251,6 +252,11 @@ namespace Arcade.Gameplay
 			{
 				return 0;
 			}
+			if (timing < Timings[0].Timing)
+			{
+				return Timings[0].Bpm;
+			}
+
 			return Timings.Last(timingEvent => timingEvent.Timing <= timing).Bpm;
 		}
 
