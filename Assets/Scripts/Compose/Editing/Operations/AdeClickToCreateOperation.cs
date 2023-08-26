@@ -180,7 +180,7 @@ namespace Arcade.Compose.Operation
 				return;
 			}
 			int timing = AdeCursorManager.Instance.AttachedTiming;
-			bool canAddArcTap = currentArc.Timing <= timing && currentArc.EndTiming >= timing && currentArc.Timing < currentArc.EndTiming;
+			bool canAddArcTap = MayAddArcTap();
 			AdeCursorManager.Instance.ArcTapCursorEnabled = canAddArcTap;
 			AdeCursorManager.Instance.ArcTapCursorIsSfx = currentArc.IsSfx;
 			if (!canAddArcTap) return;
@@ -280,6 +280,9 @@ namespace Arcade.Compose.Operation
 		{
 			if (Mode != ClickToCreateMode.ArcTap)
 			{
+				return false;
+			}
+			if(!AdeCursorManager.Instance.IsTrackHit){
 				return false;
 			}
 			ArcArc currentArc = GetCurrentArc();
