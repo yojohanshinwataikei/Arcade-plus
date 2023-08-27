@@ -11,7 +11,7 @@ namespace Arcade.Compose
 {
 	public class AdeCursorInfo : MonoBehaviour
 	{
-        private bool enableInfo;
+		private bool enableInfo;
 
 		public Text InfoText;
 		public GameObject InfoGameObject;
@@ -38,7 +38,7 @@ namespace Arcade.Compose
 
 		void Update()
 		{
-            AdeCursorManager cursor=AdeCursorManager.Instance;
+			AdeCursorManager cursor = AdeCursorManager.Instance;
 			EnableInfo = cursor.WallEnabled || cursor.TrackEnabled;
 			string content = string.Empty;
 			if (!EnableInfo) return;
@@ -64,8 +64,9 @@ namespace Arcade.Compose
 			if (AdeSelectionManager.Instance.SelectedNotes.Count == 1 && AdeSelectionManager.Instance.SelectedNotes[0] is ArcArc)
 			{
 				ArcArc arc = AdeSelectionManager.Instance.SelectedNotes[0] as ArcArc;
-				if(arc.EndTiming - arc.Timing!=0){
-					float p = (cursor.AttachedTiming - arc.Timing) / (arc.EndTiming - arc.Timing);
+				if (arc.EndTiming - arc.Timing != 0)
+				{
+					float p = ((float)(cursor.AttachedTiming - arc.Timing)) / ((float)(arc.EndTiming - arc.Timing));
 					if (p >= 0 && p <= 1)
 					{
 						float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, p, arc.LineType);
