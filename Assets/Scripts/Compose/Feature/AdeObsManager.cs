@@ -5,76 +5,130 @@ using OBSWebsocketDotNet;
 using Arcade.Gameplay;
 using System.Threading.Tasks;
 using Arcade.Compose.Dialog;
+using Newtonsoft.Json;
+using System.IO;
+using UnityEngine.UI;
 
 namespace Arcade.Compose.Feature
 {
+	[Serializable]
+	public class OBSPreferences
+	{
+		public string ip = "127.0.0.1";
+		public int port = 4455;
+		public bool usePassword = false;
+		public string password = "";
+	}
 	public class AdeObsManager : MonoBehaviour
 	{
 		private OBSWebsocket obs = new OBSWebsocket();
 		public static AdeObsManager Instance { get; private set; }
+		private OBSPreferences preference;
 
+		public string PreferencesSavePath
+		{
+			get
+			{
+				return ArcadeComposeManager.ArcadePersistentFolder + "/OBS.json";
+			}
+		}
+		public InputField ObsServerIpInput;
+		public InputField ObsServerPortInput;
+		public InputField ObsServerPasswordInput;
+		public Toggle ObsServerUsePasswordToggle;
+		public Text ConnectButtonLabel;
+		public Button StartRecordButton;
 		private void Awake()
 		{
 			Instance = this;
 		}
 		private void Start()
 		{
-			Connect();
-		}
-		private void OnDestroy()
-		{
-			if (obs.IsConnected) obs.Disconnect();
-		}
-
-		public void Record()
-		{
-			if (!obs.IsConnected)
-			{
-				AdeSingleDialog.Instance.Show("无法连接到OBS Studio\n请确认其已加载obs-websocket插件\n端口为4455，没有启用密码\n并启动了OBS Studio", "无法使用快速录制功能", "重试", Connect);
-				return;
-			}
-			if (AdeProjectManager.Instance.CurrentProjectMetadata == null)
-			{
-				AdeSingleDialog.Instance.Show("未加载谱面", "错误");
-				return;
-			}
-			if (recording != null) StopCoroutine(recording);
-			recording = StartCoroutine(RecordCoroutine());
-		}
-		public void ForceClose()
-		{
-			if (recording != null)
-			{
-				StopCoroutine(recording);
-				if (obs.IsConnected) obs.StopRecord();
-				AdeSingleDialog.Instance.Show("录制中断", "提示");
-				recording = null;
-			}
-		}
-		private void Connect()
-		{
-			Task.Run(() => obs.Connect("ws://localhost:4455", null));
+			LoadPreferences();
+			UpdatePreferencesInput();
+			ObsServerIpInput.onEndEdit.AddListener(OnOBSServerIpChange);
+			ObsServerPortInput.onEndEdit.AddListener(OnOBSServerPortChange);
+			ObsServerPasswordInput.onEndEdit.AddListener(OnOBSServerPasswordChange);
+			ObsServerUsePasswordToggle.onValueChanged.AddListener(OnOBSServerUsePasswordChange);
 		}
 
-		private Coroutine recording = null;
-		private IEnumerator RecordCoroutine()
+        private void UpdatePreferencesInput()
+        {
+            ObsServerIpInput.SetTextWithoutNotify(preference.ip);
+            ObsServerPortInput.SetTextWithoutNotify(preference.port.ToString());
+            ObsServerPasswordInput.SetTextWithoutNotify(preference.password);
+            ObsServerUsePasswordToggle.SetIsOnWithoutNotify(preference.usePassword);
+			UpdateFieldsState();
+        }
+
+        private void LoadPreferences()
 		{
 			try
 			{
-				if (obs.IsConnected) obs.StartRecord();
+				if (File.Exists(PreferencesSavePath))
+				{
+					PlayerPrefs.SetString("AdeOBSDialog", File.ReadAllText(PreferencesSavePath));
+					File.Delete(PreferencesSavePath);
+				}
+				preference = JsonConvert.DeserializeObject<OBSPreferences>(PlayerPrefs.GetString("AdeSkinDialog", ""));
+				if (preference == null) preference = new OBSPreferences();
+			}
+			catch (Exception Ex)
+			{
+				preference = new OBSPreferences();
+				Debug.Log(Ex);
+			}
+		}
+
+		public void SavePreferences()
+		{
+			PlayerPrefs.SetString("AdeOBSDialog", JsonConvert.SerializeObject(preference));
+		}
+		private void OnApplicationQuit()
+		{
+			SavePreferences();
+		}
+
+		public void OpenOBSWebsite()
+		{
+			Application.OpenURL("https://obsproject.com/");
+		}
+
+		public void OnOBSServerIpChange(string text)
+		{
+			preference.ip = ObsServerIpInput.text;
+		}
+
+		public void OnOBSServerPortChange(string text)
+		{
+			try
+			{
+				preference.port = int.Parse(ObsServerPortInput.text);
 			}
 			catch (Exception)
 			{
-				AdeSingleDialog.Instance.Show("启动录制时发生异常\nOBS是否处于录制状态？", "错误");
-				yield break;
+				ObsServerPortInput.SetTextWithoutNotify(preference.port.ToString());
 			}
-			yield return new WaitForSeconds(0.5f);
-			ArcadeComposeManager.Instance.Play();
-			ArcGameplayManager.Instance.PlayDelayed();
-			yield return new WaitForSeconds(ArcAudioManager.Instance.Clip.length + 3);
-			yield return new WaitForSeconds(0.5f);
-			if (obs.IsConnected) obs.StopRecord();
-			recording = null;
+		}
+
+		public void OnOBSServerPasswordChange(string text)
+		{
+			preference.password = ObsServerPasswordInput.text;
+		}
+
+		public void OnOBSServerUsePasswordChange(bool value)
+		{
+			preference.usePassword = ObsServerUsePasswordToggle.isOn;
+			UpdateFieldsState();
+		}
+
+		public void UpdateFieldsState()
+		{
+			ObsServerPasswordInput.interactable = preference.usePassword;
+		}
+
+		public void ForceClose()
+		{
 		}
 	}
 }
