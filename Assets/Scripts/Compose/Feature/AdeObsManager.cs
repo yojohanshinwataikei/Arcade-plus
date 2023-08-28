@@ -10,6 +10,8 @@ using System.IO;
 using UnityEngine.UI;
 using OBSWebsocketDotNet.Communication;
 using System.Threading.Channels;
+using OBSWebsocketDotNet.Types;
+using OBSWebsocketDotNet.Types.Events;
 
 namespace Arcade.Compose.Feature
 {
@@ -43,6 +45,7 @@ namespace Arcade.Compose.Feature
 		public Button StartRecordButton;
 
 		private bool hasOngoingConnectionTask = false;
+		private bool obsIsRecording = false;
 		private void Awake()
 		{
 			Instance = this;
@@ -51,12 +54,14 @@ namespace Arcade.Compose.Feature
 		{
 			obs.Connected += this.OnConnect;
 			obs.Disconnected += this.OnDisconnect;
+			obs.RecordStateChanged += this.OnRecordStateChanged;
 			LoadPreferences();
 			UpdatePreferencesInput();
 			ObsServerIpInput.onEndEdit.AddListener(OnOBSServerIpChange);
 			ObsServerPortInput.onEndEdit.AddListener(OnOBSServerPortChange);
 			ObsServerPasswordInput.onEndEdit.AddListener(OnOBSServerPasswordChange);
 			ObsServerUsePasswordToggle.onValueChanged.AddListener(OnOBSServerUsePasswordChange);
+			ArcGameplayManager.Instance.OnChartLoad.AddListener(UpdateFieldsState);
 		}
 
 		private void UpdatePreferencesInput()
@@ -169,6 +174,7 @@ namespace Arcade.Compose.Feature
 					ConnectionButtonLabel.text = "连接到 OBS";
 				}
 			}
+			StartRecordButton.interactable=obs.IsConnected && ArcGameplayManager.Instance.IsLoaded && !obsIsRecording;
 		}
 
 		// OBS event handlers are not executed in main unity thread,
@@ -197,6 +203,7 @@ namespace Arcade.Compose.Feature
 			{
 				Debug.Log("[====]OnConnect");
 				hasOngoingConnectionTask = false;
+				obsIsRecording = obs.GetRecordStatus().IsRecording;
 				UpdateFieldsState();
 				AdeToast.Instance.Show($"OBS 已连接");
 			});
@@ -207,8 +214,18 @@ namespace Arcade.Compose.Feature
 			eventActionChannel.Writer.TryWrite(() =>
 			{
 				hasOngoingConnectionTask = false;
+				obsIsRecording = false;
 				UpdateFieldsState();
 				AdeToast.Instance.Show($"OBS 连接已断开");
+			});
+		}
+		public void OnRecordStateChanged(object sender, RecordStateChangedEventArgs e)
+		{
+			eventActionChannel.Writer.TryWrite(() =>
+			{
+				obsIsRecording = e.OutputState.IsActive;
+				Debug.Log($"[====]obsIsRecording {obsIsRecording}");
+				UpdateFieldsState();
 			});
 		}
 
