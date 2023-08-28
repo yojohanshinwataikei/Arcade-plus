@@ -8,6 +8,8 @@ using Arcade.Compose.Dialog;
 using Newtonsoft.Json;
 using System.IO;
 using UnityEngine.UI;
+using OBSWebsocketDotNet.Communication;
+using System.Threading.Channels;
 
 namespace Arcade.Compose.Feature
 {
@@ -36,14 +38,19 @@ namespace Arcade.Compose.Feature
 		public InputField ObsServerPortInput;
 		public InputField ObsServerPasswordInput;
 		public Toggle ObsServerUsePasswordToggle;
-		public Text ConnectButtonLabel;
+		public Button ConnectionButton;
+		public Text ConnectionButtonLabel;
 		public Button StartRecordButton;
+
+		private bool hasOngoingConnectionTask = false;
 		private void Awake()
 		{
 			Instance = this;
 		}
 		private void Start()
 		{
+			obs.Connected += this.OnConnect;
+			obs.Disconnected += this.OnDisconnect;
 			LoadPreferences();
 			UpdatePreferencesInput();
 			ObsServerIpInput.onEndEdit.AddListener(OnOBSServerIpChange);
@@ -52,16 +59,16 @@ namespace Arcade.Compose.Feature
 			ObsServerUsePasswordToggle.onValueChanged.AddListener(OnOBSServerUsePasswordChange);
 		}
 
-        private void UpdatePreferencesInput()
-        {
-            ObsServerIpInput.SetTextWithoutNotify(preference.ip);
-            ObsServerPortInput.SetTextWithoutNotify(preference.port.ToString());
-            ObsServerPasswordInput.SetTextWithoutNotify(preference.password);
-            ObsServerUsePasswordToggle.SetIsOnWithoutNotify(preference.usePassword);
+		private void UpdatePreferencesInput()
+		{
+			ObsServerIpInput.SetTextWithoutNotify(preference.ip);
+			ObsServerPortInput.SetTextWithoutNotify(preference.port.ToString());
+			ObsServerPasswordInput.SetTextWithoutNotify(preference.password);
+			ObsServerUsePasswordToggle.SetIsOnWithoutNotify(preference.usePassword);
 			UpdateFieldsState();
-        }
+		}
 
-        private void LoadPreferences()
+		private void LoadPreferences()
 		{
 			try
 			{
@@ -124,7 +131,107 @@ namespace Arcade.Compose.Feature
 
 		public void UpdateFieldsState()
 		{
-			ObsServerPasswordInput.interactable = preference.usePassword;
+			Debug.Log($"[====]UpdateFieldsState {obs.IsConnected} {hasOngoingConnectionTask}");
+			if (obs.IsConnected || hasOngoingConnectionTask)
+			{
+				ObsServerIpInput.interactable = false;
+				ObsServerPortInput.interactable = false;
+				ObsServerPasswordInput.interactable = false;
+				ObsServerUsePasswordToggle.interactable = false;
+			}
+			else
+			{
+				ObsServerIpInput.interactable = true;
+				ObsServerPortInput.interactable = true;
+				ObsServerPasswordInput.interactable = preference.usePassword;
+				ObsServerUsePasswordToggle.interactable = true;
+			}
+			ConnectionButton.interactable = !hasOngoingConnectionTask;
+			if (hasOngoingConnectionTask)
+			{
+				if (obs.IsConnected)
+				{
+					ConnectionButtonLabel.text = "正在断开 OBS……";
+				}
+				else
+				{
+					ConnectionButtonLabel.text = "正在连接 OBS……";
+				}
+			}
+			else
+			{
+				if (obs.IsConnected)
+				{
+					ConnectionButtonLabel.text = "断开 OBS";
+				}
+				else
+				{
+					ConnectionButtonLabel.text = "连接到 OBS";
+				}
+			}
+		}
+
+		// OBS event handlers are not executed in main unity thread,
+		// so move them to main unity thread by a channel
+		Channel<Action> eventActionChannel=Channel.CreateUnbounded<Action>();
+
+		public void Update()
+		{
+			while (true)
+			{
+				Action action;
+				if (eventActionChannel.Reader.TryRead(out action))
+				{
+					action();
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+
+		public void OnConnect(object sender, EventArgs e)
+		{
+			eventActionChannel.Writer.TryWrite(() =>
+			{
+				Debug.Log("[====]OnConnect");
+				hasOngoingConnectionTask = false;
+				UpdateFieldsState();
+				AdeToast.Instance.Show($"OBS 已连接");
+			});
+		}
+
+		public void OnDisconnect(object sender, ObsDisconnectionInfo e)
+		{
+			eventActionChannel.Writer.TryWrite(() =>
+			{
+				hasOngoingConnectionTask = false;
+				UpdateFieldsState();
+				AdeToast.Instance.Show($"OBS 连接已断开");
+			});
+		}
+
+		public void OnConnectionButton()
+		{
+			if (hasOngoingConnectionTask)
+			{
+				return;
+			}
+			hasOngoingConnectionTask = true;
+			if (obs.IsConnected)
+			{
+				obs.Disconnect();
+			}
+			else
+			{
+				UriBuilder uriBuilder = new UriBuilder();
+				uriBuilder.Scheme = "ws";
+				uriBuilder.Host = preference.ip;
+				uriBuilder.Port = preference.port;
+				obs.ConnectAsync(uriBuilder.ToString(), preference.usePassword ? preference.password : null);
+			}
+			UpdateFieldsState();
 		}
 
 		public void ForceClose()

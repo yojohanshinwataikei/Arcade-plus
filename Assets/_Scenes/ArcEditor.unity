@@ -13860,7 +13860,8 @@ MonoBehaviour:
   ObsServerPortInput: {fileID: 849140361}
   ObsServerPasswordInput: {fileID: 1611081633}
   ObsServerUsePasswordToggle: {fileID: 834147580}
-  ConnectButtonLabel: {fileID: 1510064304}
+  ConnectionButton: {fileID: 1114326732}
+  ConnectionButtonLabel: {fileID: 1510064304}
   StartRecordButton: {fileID: 479787147}
 --- !u!1 &398971544
 GameObject:
@@ -18860,10 +18861,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.05353319
-    y: 0.06092337
-    width: 0.8929336
-    height: 0.87815326
+    x: 0.052083332
+    y: 0.059273362
+    width: 0.8958333
+    height: 0.8814533
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -41276,7 +41277,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1114326733}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 396507447}
+        m_TargetAssemblyTypeName: Arcade.Compose.Feature.AdeObsManager, Arcade
+        m_MethodName: OnConnectionButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1114326733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42455,7 +42468,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -11
   m_TargetDisplay: 0
 --- !u!1 &1147550520
 GameObject:
@@ -65763,7 +65776,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: -1125730451
-  m_SortingOrder: 2
+  m_SortingOrder: -10
   m_TargetDisplay: 0
 --- !u!224 &1748740388
 RectTransform:
@@ -67638,7 +67651,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 867310387
   m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!114 &1804021338
@@ -77408,10 +77421,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1707394408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400.5, y: -72.08565}
-  m_SizeDelta: {x: 705, y: 40.08565}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2105888210
 MonoBehaviour:
