@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using Arcade.Gameplay;
+using System.Text.RegularExpressions;
 
 namespace Arcade.Compose.Dialog
 {
@@ -47,6 +48,9 @@ namespace Arcade.Compose.Dialog
 		public static AdeSkinDialog Instance { get; private set; }
 
 		public GameObject BackgroundOptionPrefab;
+		public GameObject DialogView;
+
+		public InputField BackgroundSearchInput;
 
 		public Dropdown SideDropdown;
 		public Dropdown ThemeDropdown;
@@ -55,6 +59,7 @@ namespace Arcade.Compose.Dialog
 		public RectTransform InternalBackgroundContainer;
 		public RectTransform ExternalBackgroundContainer;
 
+		public Text InternalBackgroundLabel;
 		public Text ExternalBackgroundLabel;
 
 		private Dictionary<string, int> ThemeIds;
@@ -79,6 +84,7 @@ namespace Arcade.Compose.Dialog
 			SideDropdown.onValueChanged.AddListener(SelectSide);
 			NoteDropdown.onValueChanged.AddListener(SelectNote);
 			ThemeDropdown.onValueChanged.AddListener(SelectTheme);
+			BackgroundSearchInput.onValueChanged.AddListener(UpdateBackgroundFilterResult);
 			LoadPreferences();
 			LoadSkinOptions();
 			VerifySkinOptions();
@@ -142,6 +148,7 @@ namespace Arcade.Compose.Dialog
 				option.Initialize(bg, false, AdeSkinHost.Instance.skinData.BackgroundDatas[bg].background.value);
 				InternalBackgroundButtons.Add(bg, option);
 			}
+			InternalBackgroundLabel.text = "皮肤内置背景";
 		}
 
 		private void LoadExternalBackgroundOptions()
@@ -190,7 +197,6 @@ namespace Arcade.Compose.Dialog
 				preference.SelectedNote = AdeSkinHost.Instance.skinData.DefaultNoteData;
 			}
 		}
-
 
 		private void VerifyExternalBackgroundOptions()
 		{
@@ -317,6 +323,7 @@ namespace Arcade.Compose.Dialog
 
 		public void ReloadBackgroundFolder()
 		{
+			BackgroundSearchInput.text = "";
 			CurrentBackgroundOption.SetSelected(false);
 			AdeSkinHost.Instance.LoadExternalBackground();
 			LoadExternalBackgroundOptions();
@@ -326,11 +333,18 @@ namespace Arcade.Compose.Dialog
 
 		public void ReloadSkinFolder()
 		{
+			BackgroundSearchInput.text = "";
 			CurrentBackgroundOption.SetSelected(false);
 			AdeSkinHost.Instance.LoadSkinDatas();
 			LoadSkinOptions();
 			VerifySkinOptions();
 			Initialize();
+		}
+
+		public void CloseDialog()
+		{
+			BackgroundSearchInput.text = "";
+			DialogView.SetActive(false);
 		}
 
 		private AdeSkinBackgroundOption CurrentBackgroundOption => (preference.IsExternalBackground ? ExternalBackgroundButtons : InternalBackgroundButtons)[preference.SelectedBackground];
@@ -390,6 +404,52 @@ namespace Arcade.Compose.Dialog
 		private void OnApplicationQuit()
 		{
 			SavePreferences();
+		}
+
+		public void UpdateBackgroundFilterResult(string pattern)
+		{
+			bool isClear = string.IsNullOrWhiteSpace(pattern);
+			bool isRegexPattern = pattern.Contains("*") || pattern.Contains("?") || (pattern.Contains("[") && pattern.Contains("]"));
+			Regex regex = null;
+			if (isRegexPattern)
+			{
+				pattern = Regex.Escape(pattern);
+				pattern = pattern.Replace("\\*", ".*");
+				pattern = pattern.Replace("\\?", ".");
+				pattern = pattern.Replace("\\[", "[");
+				pattern = pattern.Replace("\\]", "]");
+				try
+				{
+					regex = new Regex(pattern, RegexOptions.IgnoreCase);
+				}
+				catch
+				{
+					isRegexPattern = false;
+					regex = null;
+				}
+			}
+			int internalMatchedBgCount = 0;
+			foreach (var bgPair in InternalBackgroundButtons)
+			{
+				bool show = isClear || (isRegexPattern ? regex.IsMatch(bgPair.Key) : bgPair.Key.Contains(pattern));
+				bgPair.Value.gameObject.SetActive(show);
+				if (show)
+				{
+					internalMatchedBgCount += 1;
+				}
+			}
+			int externalMatchedBgCount = 0;
+			foreach (var bgPair in ExternalBackgroundButtons)
+			{
+				bool show = isClear || (isRegexPattern ? regex.IsMatch(bgPair.Key) : bgPair.Key.Contains(pattern));
+				bgPair.Value.gameObject.SetActive(show);
+				if (show)
+				{
+					externalMatchedBgCount += 1;
+				}
+			}
+			InternalBackgroundLabel.text = internalMatchedBgCount > 0 ? "皮肤内置背景" : "没有匹配的皮肤内置背景";
+			ExternalBackgroundLabel.text = AdeSkinHost.Instance.ExternalBackgrounds.Count > 0 ? externalMatchedBgCount > 0 ? "自定义背景" : "没有匹配的自定义背景" : "没有可用的自定义背景";
 		}
 	}
 }
