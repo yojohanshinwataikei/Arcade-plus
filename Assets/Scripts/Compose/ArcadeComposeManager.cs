@@ -173,6 +173,10 @@ namespace Arcade.Compose
 		{
 			ScrollForward,
 			ScrollBackward,
+			ScrollToNextBeat,
+			ScrollToPreviousBeat,
+			ScrollToNextMeasure,
+			ScrollToPreviousMeasure,
 
 		}
 
@@ -215,10 +219,38 @@ namespace Arcade.Compose
 
 		private void CheckScroll()
 		{
-			float timing = GameplayManager.Timingf * 1000;
+			float timing = GameplayManager.Timing;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
-			if (AdeInputManager.Instance.Hotkeys.ScrollForward.IsPressed())
+			if (AdeInputManager.Instance.Hotkeys.ScrollToNextMeasure.IsPressed())
+			{
+				if (CheckScrollingOperation(ScrollingOperation.ScrollToNextMeasure, 0.5f, 0.05f))
+				{
+					timing = AdeGridManager.Instance.AttachMeasureScroll(timing - offset, 1) + offset;
+				}
+			}
+			else if (AdeInputManager.Instance.Hotkeys.ScrollToPreviousMeasure.IsPressed())
+			{
+				if (CheckScrollingOperation(ScrollingOperation.ScrollToPreviousBeat, 0.5f, 0.05f))
+				{
+					timing = AdeGridManager.Instance.AttachMeasureScroll(timing - offset, -1) + offset;
+				}
+			}
+			else if (AdeInputManager.Instance.Hotkeys.ScrollToNextBeat.IsPressed())
+			{
+				if (CheckScrollingOperation(ScrollingOperation.ScrollToNextBeat, 0.5f, 0.05f))
+				{
+					timing = AdeGridManager.Instance.AttachBeatScroll(timing - offset, 1) + offset;
+				}
+			}
+			else if (AdeInputManager.Instance.Hotkeys.ScrollToPreviousBeat.IsPressed())
+			{
+				if (CheckScrollingOperation(ScrollingOperation.ScrollToPreviousBeat, 0.5f, 0.05f))
+				{
+					timing = AdeGridManager.Instance.AttachBeatScroll(timing - offset, -1) + offset;
+				}
+			}
+			else if (AdeInputManager.Instance.Hotkeys.ScrollForward.IsPressed())
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollForward, 0.05f, 0.05f))
 				{
@@ -245,9 +277,9 @@ namespace Arcade.Compose
 			if (timing > GameplayManager.Length) timing = GameplayManager.Length;
 			if (timing < 0) timing = 0;
 
-			if (GameplayManager.Timingf != timing / 1000)
+			if (GameplayManager.Timing != Mathf.RoundToInt(timing) )
 			{
-				GameplayManager.Timingf = timing / 1000;
+				GameplayManager.Timing = Mathf.RoundToInt(timing);
 				GameplayManager.ResetJudge();
 			}
 		}

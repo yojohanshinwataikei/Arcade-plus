@@ -90,7 +90,7 @@ namespace Arcade.Compose.Operation
 							}
 							if (needAvoidZeroLength)
 							{
-								newEndTiming = GetNextSnapedTiming(newTiming);
+								newEndTiming = GetNextSnappedTiming(newTiming);
 							}
 						}
 						(newNote as ArcLongNote).EndTiming = newEndTiming;
@@ -125,7 +125,7 @@ namespace Arcade.Compose.Operation
 			int newTiming = Mathf.FloorToInt(AdeGridManager.Instance.AttachTiming(timing));
 			return newTiming;
 		}
-		public int GetNextSnapedTiming(int timing)
+		public int GetNextSnappedTiming(int timing)
 		{
 			int newTiming = Mathf.FloorToInt(AdeGridManager.Instance.AttachScroll(timing, 1));
 			return newTiming;

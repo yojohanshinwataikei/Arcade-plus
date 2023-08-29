@@ -36,23 +36,11 @@ namespace Arcade.Gameplay
 		{
 			get
 			{
-				return (int)(timing * 1000);
+				return Mathf.RoundToInt(timing * 1000);
 			}
 			set
 			{
 				timing = value / 1000f;
-				ArcAudioManager.Instance.Timing = Mathf.Max(0, timing);
-			}
-		}
-		public float Timingf
-		{
-			get
-			{
-				return timing;
-			}
-			set
-			{
-				timing = value;
 				ArcAudioManager.Instance.Timing = Mathf.Max(0, timing);
 			}
 		}

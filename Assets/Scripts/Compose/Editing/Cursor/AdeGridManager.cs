@@ -48,6 +48,8 @@ namespace Arcade.Compose
 		private int verticalInUse;
 
 		private List<BeatlineProperty> beatlineTimings = new List<BeatlineProperty>();
+		private List<float> beatTimings = new List<float>();
+		private List<float> measureTimings = new List<float>();
 		private List<float> verticalXTimings = new List<float>();
 		private List<float> verticalYTimings = new List<float>();
 
@@ -154,18 +156,6 @@ namespace Arcade.Compose
 			return verticalInstances[verticalInUse++];
 		}
 
-		private void AddBeatlineTiming(float timing, int importance)
-		{
-			var query = beatlineTimings.Where((b) => b.Timing == timing).ToArray();
-			if (query.Length != 0)
-			{
-				query[0].Importance = Mathf.Min(query[0].Importance, importance);
-			}
-			else
-			{
-				beatlineTimings.Add(new BeatlineProperty() { Timing = timing, Importance = importance });
-			}
-		}
 		private void CalculateBeatlineTimes()
 		{
 			beatlineTimings.Clear();
@@ -176,7 +166,7 @@ namespace Arcade.Compose
 			{
 				int nextTiming = i + 1 >= Timings.Count ? ArcGameplayManager.Instance.Length : Timings[i + 1].Timing;
 				float segment = Timings[i].Bpm == 0 ? (nextTiming - Timings[i].Timing) : (60000 / Mathf.Abs(Timings[i].Bpm) / BeatlineDensity);
-				if (segment == 0) continue;
+				if (segment < 1 || float.IsNaN(segment)) segment = Math.Max(nextTiming - Timings[i].Timing, 1);
 				int primaryCount = 0;
 				while (true)
 				{
@@ -184,11 +174,155 @@ namespace Arcade.Compose
 					// Unlike timing line, we plus one here to avoid the 1ms time error
 					if (j + 1 >= nextTiming)
 						break;
-					AddBeatlineTiming(j, CalculateImportance(primaryCount, BeatlineDensity));
+					int importance = CalculateImportance(primaryCount, BeatlineDensity);
 					primaryCount++;
+					if (beatlineTimings.Count > 0)
+					{
+						var last = beatlineTimings[beatlineTimings.Count - 1];
+						if (last.Timing == j)
+						{
+							last.Importance = Mathf.Min(last.Importance, importance);
+							continue;
+						}
+					}
+					beatlineTimings.Add(new BeatlineProperty() { Timing = j, Importance = importance });
+				}
+			}
+			if (Timings.Count > 0)
+			{
+				var firstTiming = Timings[0];
+				int primaryCount = 1;
+				float segment = firstTiming.Bpm == 0 ? (firstTiming.Timing) : (60000 / Mathf.Abs(firstTiming.Bpm) / BeatlineDensity);
+				if (segment < 1 || float.IsNaN(segment)) segment = Math.Max(firstTiming.Timing, 1);
+				while (true)
+				{
+					float j = firstTiming.Timing - primaryCount * segment;
+					if (j < 0)
+						break;
+					int importance = CalculateImportance(primaryCount, BeatlineDensity);
+					primaryCount++;
+					if (beatlineTimings.Count > 0)
+					{
+						var first = beatlineTimings[0];
+						if (first.Timing == j)
+						{
+							first.Importance = Mathf.Min(first.Importance, importance);
+							continue;
+						}
+					}
+					beatlineTimings.Insert(0, new BeatlineProperty() { Timing = j, Importance = importance });
 				}
 			}
 		}
+
+		private void CalculateBeatTimes()
+		{
+			beatTimings.Clear();
+			var Timings = ArcTimingManager.Instance.GetTiming(AdeTimingEditor.Instance.currentTimingGroup);
+
+			for (int i = 0; i < Timings.Count; ++i)
+			{
+				int nextTiming = i + 1 >= Timings.Count ? ArcGameplayManager.Instance.Length : Timings[i + 1].Timing;
+				float segment = Timings[i].Bpm == 0 ? (nextTiming - Timings[i].Timing) : (60000 / Mathf.Abs(Timings[i].Bpm));
+				if (segment < 1 || float.IsNaN(segment)) segment = Math.Max(nextTiming - Timings[i].Timing, 1);
+				int primaryCount = 0;
+				while (true)
+				{
+					float j = Timings[i].Timing + primaryCount * segment;
+					// Unlike timing line, we plus one here to avoid the 1ms time error
+					if (j + 1 >= nextTiming)
+						break;
+					primaryCount++;
+					if (beatTimings.Count > 0)
+					{
+						var last = beatTimings[beatTimings.Count - 1];
+						if (last == j)
+						{
+							continue;
+						}
+					}
+					beatTimings.Add(j);
+				}
+			}
+			if (Timings.Count > 0)
+			{
+				var firstTiming = Timings[0];
+				int primaryCount = 1;
+				float segment = firstTiming.Bpm == 0 ? (firstTiming.Timing) : (60000 / Mathf.Abs(firstTiming.Bpm));
+				if (segment < 1 || float.IsNaN(segment)) segment = Math.Max(firstTiming.Timing, 1);
+				while (true)
+				{
+					float j = firstTiming.Timing - primaryCount * segment;
+					if (j < 0)
+						break;
+					primaryCount++;
+					if (beatTimings.Count > 0)
+					{
+						var first = beatTimings[0];
+						if (first == j)
+						{
+							continue;
+						}
+					}
+					beatTimings.Insert(0, j);
+				}
+			}
+		}
+
+		private void CalculateMeasureTimes()
+		{
+			measureTimings.Clear();
+			var Timings = ArcTimingManager.Instance.GetTiming(AdeTimingEditor.Instance.currentTimingGroup);
+
+			for (int i = 0; i < Timings.Count; ++i)
+			{
+				int nextTiming = i + 1 >= Timings.Count ? ArcGameplayManager.Instance.Length : Timings[i + 1].Timing;
+				float segment = Timings[i].Bpm == 0 ? (nextTiming - Timings[i].Timing) : (60000 / Mathf.Abs(Timings[i].Bpm)*Timings[i].BeatsPerLine);
+				if (segment < 1 || float.IsNaN(segment)) segment = Math.Max(nextTiming - Timings[i].Timing, 1);
+				int primaryCount = 0;
+				while (true)
+				{
+					float j = Timings[i].Timing + primaryCount * segment;
+					// Unlike timing line, we plus one here to avoid the 1ms time error
+					if (j + 1 >= nextTiming)
+						break;
+					primaryCount++;
+					if (measureTimings.Count > 0)
+					{
+						var last = measureTimings[measureTimings.Count - 1];
+						if (last == j)
+						{
+							continue;
+						}
+					}
+					measureTimings.Add(j);
+				}
+			}
+			if (Timings.Count > 0)
+			{
+				var firstTiming = Timings[0];
+				int primaryCount = 1;
+				float segment = firstTiming.Bpm == 0 ? (firstTiming.Timing) : (60000 / Mathf.Abs(firstTiming.Bpm)*firstTiming.BeatsPerLine);
+				if (segment < 1 || float.IsNaN(segment)) segment = Math.Max(firstTiming.Timing, 1);
+				while (true)
+				{
+					float j = firstTiming.Timing - primaryCount * segment;
+					if (j < 0)
+						break;
+					primaryCount++;
+					if (measureTimings.Count > 0)
+					{
+						var first = measureTimings[0];
+						if (first == j)
+						{
+							continue;
+						}
+					}
+					measureTimings.Insert(0, j);
+				}
+			}
+		}
+
 		private int CalculateImportance(int primaryCount, float BeatlineDensity)
 		{
 
@@ -362,10 +496,56 @@ namespace Arcade.Compose
 				deltas.Add(Mathf.Abs(beatlineTimings[i].Timing - t));
 			}
 			int index = deltas.IndexOf(deltas.Min());
-			index += (scroll > 0 ? 1 : -1);
-			if (index >= deltas.Count) index = 0;
-			else if (index < 0) index = deltas.Count - 1;
+			if(deltas[index]<=1f){
+				index += (scroll > 0 ? 1 : -1);
+			}else if(t>beatlineTimings[index].Timing){
+				index += (scroll > 0 ? 1 : 0);
+			}else{
+				index += (scroll > 0 ? 0 : -1);
+			}
+			if (index >= deltas.Count) return Mathf.Max(t,beatlineTimings[deltas.Count-1].Timing);
+			else if (index < 0) return Mathf.Min(t,beatlineTimings[0].Timing);
 			return beatlineTimings[index].Timing;
+		}
+		public float AttachBeatScroll(float t, float scroll)
+		{
+			if (beatTimings.Count == 0) return t + 200 * scroll;
+			List<float> deltas = new List<float>();
+			for (int i = 0; i < beatTimings.Count; ++i)
+			{
+				deltas.Add(Mathf.Abs(beatTimings[i] - t));
+			}
+			int index = deltas.IndexOf(deltas.Min());
+			if(deltas[index]<=1f){
+				index += (scroll > 0 ? 1 : -1);
+			}else if(t>beatTimings[index]){
+				index += (scroll > 0 ? 1 : 0);
+			}else{
+				index += (scroll > 0 ? 0 : -1);
+			}
+			if (index >= deltas.Count) return Mathf.Max(t,beatTimings[deltas.Count-1]);
+			else if (index < 0) return Mathf.Min(t,beatTimings[0]);
+			return beatTimings[index];
+		}
+		public float AttachMeasureScroll(float t, float scroll)
+		{
+			if (measureTimings.Count == 0) return t + 800 * scroll;
+			List<float> deltas = new List<float>();
+			for (int i = 0; i < measureTimings.Count; ++i)
+			{
+				deltas.Add(Mathf.Abs(measureTimings[i] - t));
+			}
+			int index = deltas.IndexOf(deltas.Min());
+			if(deltas[index]<=1f){
+				index += (scroll > 0 ? 1 : -1);
+			}else if(t>measureTimings[index]){
+				index += (scroll > 0 ? 1 : 0);
+			}else{
+				index += (scroll > 0 ? 0 : -1);
+			}
+			if (index >= deltas.Count) return Mathf.Max(t,measureTimings[deltas.Count-1]);
+			else if (index < 0) return Mathf.Min(t,measureTimings[0]);
+			return measureTimings[index];
 		}
 		public float AttachTiming(float t)
 		{
@@ -382,8 +562,9 @@ namespace Arcade.Compose
 		public void ReBuildBeatline()
 		{
 			CalculateBeatlineTimes();
+			CalculateBeatTimes();
+			CalculateMeasureTimes();
 		}
-
 		private void LoadCustomGrids()
 		{
 			try
