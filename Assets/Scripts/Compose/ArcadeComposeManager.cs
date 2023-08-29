@@ -222,7 +222,17 @@ namespace Arcade.Compose
 			float timing = GameplayManager.Timing;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
-			if (AdeInputManager.Instance.Hotkeys.ScrollToNextMeasure.IsPressed())
+			if (AdeInputManager.Instance.Hotkeys.ScrollToStart.WasPressedThisFrame())
+			{
+				CheckScrollingOperation(null, 0f, 0f);
+				timing = 0;
+			}
+			else if (AdeInputManager.Instance.Hotkeys.ScrollToEnd.WasPressedThisFrame())
+			{
+				CheckScrollingOperation(null, 0f, 0f);
+				timing = GameplayManager.Length;
+			}
+			else if (AdeInputManager.Instance.Hotkeys.ScrollToNextMeasure.IsPressed())
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollToNextMeasure, 0.5f, 0.05f))
 				{
