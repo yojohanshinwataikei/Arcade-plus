@@ -12,6 +12,9 @@ using OBSWebsocketDotNet.Communication;
 using System.Threading.Channels;
 using OBSWebsocketDotNet.Types;
 using OBSWebsocketDotNet.Types.Events;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Arcade.Util.UniTaskHelper;
 
 namespace Arcade.Compose.Feature
 {
@@ -43,6 +46,7 @@ namespace Arcade.Compose.Feature
 		public Button ConnectionButton;
 		public Text ConnectionButtonLabel;
 		public Button StartRecordButton;
+		public GameObject OBSDialogView;
 
 		private bool hasOngoingConnectionTask = false;
 		private bool obsIsRecording = false;
@@ -136,7 +140,6 @@ namespace Arcade.Compose.Feature
 
 		public void UpdateFieldsState()
 		{
-			Debug.Log($"[====]UpdateFieldsState {obs.IsConnected} {hasOngoingConnectionTask}");
 			if (obs.IsConnected || hasOngoingConnectionTask)
 			{
 				ObsServerIpInput.interactable = false;
@@ -174,12 +177,12 @@ namespace Arcade.Compose.Feature
 					ConnectionButtonLabel.text = "连接到 OBS";
 				}
 			}
-			StartRecordButton.interactable=obs.IsConnected && ArcGameplayManager.Instance.IsLoaded && !obsIsRecording;
+			StartRecordButton.interactable = obs.IsConnected && ArcGameplayManager.Instance.IsLoaded && !obsIsRecording && RecordingCancellation == null;
 		}
 
 		// OBS event handlers are not executed in main unity thread,
 		// so move them to main unity thread by a channel
-		Channel<Action> eventActionChannel=Channel.CreateUnbounded<Action>();
+		System.Threading.Channels.Channel<Action> eventActionChannel = System.Threading.Channels.Channel.CreateUnbounded<Action>();
 
 		public void Update()
 		{
@@ -201,7 +204,6 @@ namespace Arcade.Compose.Feature
 		{
 			eventActionChannel.Writer.TryWrite(() =>
 			{
-				Debug.Log("[====]OnConnect");
 				hasOngoingConnectionTask = false;
 				obsIsRecording = obs.GetRecordStatus().IsRecording;
 				UpdateFieldsState();
@@ -215,6 +217,7 @@ namespace Arcade.Compose.Feature
 			{
 				hasOngoingConnectionTask = false;
 				obsIsRecording = false;
+				StopRecord();
 				UpdateFieldsState();
 				AdeToast.Instance.Show($"OBS 连接已断开");
 			});
@@ -223,8 +226,12 @@ namespace Arcade.Compose.Feature
 		{
 			eventActionChannel.Writer.TryWrite(() =>
 			{
-				obsIsRecording = e.OutputState.IsActive;
-				Debug.Log($"[====]obsIsRecording {obsIsRecording}");
+				obsIsRecording = e.OutputState.State == OutputState.OBS_WEBSOCKET_OUTPUT_STARTED || e.OutputState.State == OutputState.OBS_WEBSOCKET_OUTPUT_STARTING;
+				Debug.Log($"[====]{e.OutputState.State}");
+				if (!obsIsRecording)
+				{
+					StopRecord();
+				}
 				UpdateFieldsState();
 			});
 		}
@@ -251,8 +258,55 @@ namespace Arcade.Compose.Feature
 			UpdateFieldsState();
 		}
 
-		public void ForceClose()
+		public CancellationTokenSource RecordingCancellation;
+
+		private async UniTask Record(CancellationToken cancellationToken)
 		{
+			try
+			{
+				obs.StartRecord();
+				await UniTask.Delay(TimeSpan.FromSeconds(0.5f), cancellationToken: cancellationToken);
+				ArcadeComposeManager.Instance.Play();
+				ArcGameplayManager.Instance.PlayDelayed();
+				await UniTask.Delay(TimeSpan.FromSeconds(ArcAudioManager.Instance.Clip.length + 3f), cancellationToken: cancellationToken);
+				await UniTask.Delay(TimeSpan.FromSeconds(0.5f), cancellationToken: cancellationToken);
+			}
+			finally
+			{
+				if (obs.IsConnected) obs.StopRecord();
+				if (RecordingCancellation?.Token == cancellationToken)
+				{
+					RecordingCancellation = null;
+				}
+				ArcadeComposeManager.Instance.Pause();
+				ArcGameplayManager.Instance.Pause();
+				AdeToast.Instance.Show($"OBS 快速录制已结束");
+				UpdateFieldsState();
+			}
+		}
+
+		public void StartRecord()
+		{
+			OBSDialogView.SetActive(false);
+			UpdateFieldsState();
+			RecordingCancellation = new CancellationTokenSource();
+			Record(RecordingCancellation.Token).WithExceptionLogger().Forget();
+		}
+
+		private void StopRecord()
+		{
+			Debug.Log("[====]Stop");
+			RecordingCancellation?.Cancel();
+			RecordingCancellation = null;
+		}
+
+		public void ForceStopRecording()
+		{
+			if (RecordingCancellation != null)
+			{
+				AdeSingleDialog.Instance.Show("OBS 快速录制被手动中断", "提示");
+				StopRecord();
+			}
 		}
 	}
 }

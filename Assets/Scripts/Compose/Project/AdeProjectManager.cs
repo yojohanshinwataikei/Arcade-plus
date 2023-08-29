@@ -384,7 +384,7 @@ namespace Arcade.Compose
 				File.WriteAllText(chartPath, "AudioOffset:0\n-\ntiming(0,100.00,4.00);");
 			}
 			ArcadeComposeManager.Instance.Pause();
-			AdeObsManager.Instance.ForceClose();
+			AdeObsManager.Instance.ForceStopRecording();
 			CommandManager.Instance.Clear();
 			Aff.RawAffChart raw = null;
 			try

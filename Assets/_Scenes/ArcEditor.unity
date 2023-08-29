@@ -13863,6 +13863,7 @@ MonoBehaviour:
   ConnectionButton: {fileID: 1114326732}
   ConnectionButtonLabel: {fileID: 1510064304}
   StartRecordButton: {fileID: 479787147}
+  OBSDialogView: {fileID: 2132021276}
 --- !u!1 &398971544
 GameObject:
   m_ObjectHideFlags: 0
@@ -16974,9 +16975,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: Hide
+      - m_Target: {fileID: 396507447}
+        m_TargetAssemblyTypeName: Arcade.Compose.Feature.AdeObsManager, Arcade
+        m_MethodName: StartRecord
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -51181,11 +51182,11 @@ RectTransform:
   - {fileID: 1507527911}
   - {fileID: 1404327476}
   - {fileID: 1942666784}
-  - {fileID: 188793503}
-  - {fileID: 1556943920}
   - {fileID: 1455809563}
   - {fileID: 1091359559}
   - {fileID: 2040257212}
+  - {fileID: 1556943920}
+  - {fileID: 188793503}
   m_Father: {fileID: 771364933}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
