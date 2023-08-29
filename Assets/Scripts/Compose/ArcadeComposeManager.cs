@@ -168,19 +168,93 @@ namespace Arcade.Compose
 			SavePreferences();
 			Pause();
 		}
-		private void Update()
+
+		private enum ScrollingOperation
 		{
-			if (Mouse.current.scroll.ReadValue().y != 0 && AdeGameplayContentInputHandler.InputActive)
+			ScrollForward,
+			ScrollBackward,
+
+		}
+
+		private ScrollingOperation? currentScrollingOperation = null;
+		private bool isFirstScrollInterval = true;
+		private float timeFromLastScroll = float.PositiveInfinity;
+
+		private bool CheckScrollingOperation(ScrollingOperation? operation, float firstInterval, float thenInterval)
+		{
+			timeFromLastScroll += Time.deltaTime;
+			if (operation != currentScrollingOperation)
 			{
-				float timing = GameplayManager.Timingf * 1000;
-				int offset = ArcAudioManager.Instance.AudioOffset;
+				currentScrollingOperation = operation;
+				isFirstScrollInterval = true;
+				timeFromLastScroll = operation == null ? float.PositiveInfinity : 0f;
+				return true;
+			}
+			else
+			{
+				if (operation == null)
+				{
+					timeFromLastScroll = 0f;
+					return true;
+				}
+				else if (isFirstScrollInterval && timeFromLastScroll > firstInterval)
+				{
+					isFirstScrollInterval = false;
+					timeFromLastScroll = 0f;
+					return true;
+				}
+				else if (!isFirstScrollInterval && timeFromLastScroll > thenInterval)
+				{
+					isFirstScrollInterval = false;
+					timeFromLastScroll = 0f;
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private void CheckScroll()
+		{
+			float timing = GameplayManager.Timingf * 1000;
+			int offset = ArcAudioManager.Instance.AudioOffset;
+
+			if (AdeInputManager.Instance.Hotkeys.ScrollForward.IsPressed())
+			{
+				if (CheckScrollingOperation(ScrollingOperation.ScrollForward, 0.05f, 0.05f))
+				{
+					timing = AdeGridManager.Instance.AttachScroll(timing - offset, 1) + offset;
+				}
+			}
+			else if (AdeInputManager.Instance.Hotkeys.ScrollBackward.IsPressed())
+			{
+				if (CheckScrollingOperation(ScrollingOperation.ScrollBackward, 0.05f, 0.05f))
+				{
+					timing = AdeGridManager.Instance.AttachScroll(timing - offset, -1) + offset;
+				}
+			}
+			else if (Mouse.current.scroll.ReadValue().y != 0 && AdeGameplayContentInputHandler.InputActive)
+			{
+				CheckScrollingOperation(null, 0f, 0f);
 				timing = AdeGridManager.Instance.AttachScroll(timing - offset, Mouse.current.scroll.ReadValue().y) + offset;
-				if (timing < 0) timing += GameplayManager.Length;
-				if (timing > GameplayManager.Length) timing -= GameplayManager.Length;
-				if (timing < 0 || timing > GameplayManager.Length) timing = 0;
+			}
+			else
+			{
+				CheckScrollingOperation(null, 0f, 0f);
+			}
+
+			if (timing > GameplayManager.Length) timing = GameplayManager.Length;
+			if (timing < 0) timing = 0;
+
+			if (GameplayManager.Timingf != timing / 1000)
+			{
 				GameplayManager.Timingf = timing / 1000;
 				GameplayManager.ResetJudge();
 			}
+		}
+
+		private void Update()
+		{
+			CheckScroll();
 			if (IsEditorMode)
 			{
 				bool playHolding = AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.PlayWhenHolding);

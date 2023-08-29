@@ -262,6 +262,42 @@ namespace Arcade.Compose
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Scroll Forward"",
+                    ""type"": ""Value"",
+                    ""id"": ""16b016a1-928c-427f-974a-d68d0411b91d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Scroll Backward"",
+                    ""type"": ""Value"",
+                    ""id"": ""510874b6-de1a-4b3c-8b84-3e1954d57cd4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Scroll To Next Beat"",
+                    ""type"": ""Value"",
+                    ""id"": ""16319526-02b8-4700-b1d7-092aeb87f569"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Scroll To Previous Beat"",
+                    ""type"": ""Value"",
+                    ""id"": ""98092e25-0ab7-4867-b92f-095a982b5c84"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1694,6 +1730,226 @@ namespace Arcade.Compose
                     ""action"": ""Reselect Track"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""23a39e7e-f436-4c9d-8e08-5c6329852f65"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Forward"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""64a7da39-1f22-47ee-a7fd-d2f84ef8a548"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Forward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""2b25ebaa-5bf6-473e-a5e6-57b72155a987"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Forward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""31a4ae32-7539-4df0-a933-5f28d25a1fca"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Forward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""e63b4aa1-452b-43e2-8c25-193d4f0b79f6"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Forward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""a20561e0-db67-4d3e-91fb-46758294d143"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Backward"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""5b04cb2f-7a09-45d6-86e4-6f3707d2f410"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Backward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""61ac67a6-185f-468b-aaae-cab0ef2b0ee5"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Backward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""281f4c4f-bd23-463f-b063-7238e19ef9ab"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Backward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""82901c24-b994-4645-9472-ae86190171ee"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll Backward"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""87331bd7-2f2d-437c-adfa-5b307588543e"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Next Beat"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""b76f8cad-9f05-4d1d-b20f-114828f56279"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Next Beat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""4ba4db51-791f-4146-9fd7-3c0dd3c40e07"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Next Beat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""7567375b-3dee-43b6-8593-7db97fbc0c9e"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Next Beat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""4ddbc41d-84bc-46cb-85e4-ff035cd0b96b"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Next Beat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
+                    ""id"": ""1976ecf2-4c14-4ae8-86d7-13fff704f771"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Previous Beat"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""8b7026a7-de36-465f-890e-6e51a9d3fc2a"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Previous Beat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""71aafbaf-41d5-435b-8c66-a2deaae19915"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Previous Beat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""a5a8e31d-5627-4890-a6ec-f9764f619288"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Previous Beat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""7e67a4b2-a2cb-43a7-bf0d-67d6930b95b5"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scroll To Previous Beat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1796,6 +2052,10 @@ namespace Arcade.Compose
             m_ArcadeHotkey_ReselectStartCoordinate = m_ArcadeHotkey.FindAction("Reselect StartCoordinate", throwIfNotFound: true);
             m_ArcadeHotkey_ReselectEndCoordinate = m_ArcadeHotkey.FindAction("Reselect EndCoordinate", throwIfNotFound: true);
             m_ArcadeHotkey_ReselectTrack = m_ArcadeHotkey.FindAction("Reselect Track", throwIfNotFound: true);
+            m_ArcadeHotkey_ScrollForward = m_ArcadeHotkey.FindAction("Scroll Forward", throwIfNotFound: true);
+            m_ArcadeHotkey_ScrollBackward = m_ArcadeHotkey.FindAction("Scroll Backward", throwIfNotFound: true);
+            m_ArcadeHotkey_ScrollToNextBeat = m_ArcadeHotkey.FindAction("Scroll To Next Beat", throwIfNotFound: true);
+            m_ArcadeHotkey_ScrollToPreviousBeat = m_ArcadeHotkey.FindAction("Scroll To Previous Beat", throwIfNotFound: true);
             // Arcade Input
             m_ArcadeInput = asset.FindActionMap("Arcade Input", throwIfNotFound: true);
             m_ArcadeInput_MultipleSelection = m_ArcadeInput.FindAction("Multiple Selection", throwIfNotFound: true);
@@ -1888,6 +2148,10 @@ namespace Arcade.Compose
         private readonly InputAction m_ArcadeHotkey_ReselectStartCoordinate;
         private readonly InputAction m_ArcadeHotkey_ReselectEndCoordinate;
         private readonly InputAction m_ArcadeHotkey_ReselectTrack;
+        private readonly InputAction m_ArcadeHotkey_ScrollForward;
+        private readonly InputAction m_ArcadeHotkey_ScrollBackward;
+        private readonly InputAction m_ArcadeHotkey_ScrollToNextBeat;
+        private readonly InputAction m_ArcadeHotkey_ScrollToPreviousBeat;
         public struct ArcadeHotkeyActions
         {
             private @AdeInputControl m_Wrapper;
@@ -1918,6 +2182,10 @@ namespace Arcade.Compose
             public InputAction @ReselectStartCoordinate => m_Wrapper.m_ArcadeHotkey_ReselectStartCoordinate;
             public InputAction @ReselectEndCoordinate => m_Wrapper.m_ArcadeHotkey_ReselectEndCoordinate;
             public InputAction @ReselectTrack => m_Wrapper.m_ArcadeHotkey_ReselectTrack;
+            public InputAction @ScrollForward => m_Wrapper.m_ArcadeHotkey_ScrollForward;
+            public InputAction @ScrollBackward => m_Wrapper.m_ArcadeHotkey_ScrollBackward;
+            public InputAction @ScrollToNextBeat => m_Wrapper.m_ArcadeHotkey_ScrollToNextBeat;
+            public InputAction @ScrollToPreviousBeat => m_Wrapper.m_ArcadeHotkey_ScrollToPreviousBeat;
             public InputActionMap Get() { return m_Wrapper.m_ArcadeHotkey; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -2005,6 +2273,18 @@ namespace Arcade.Compose
                 @ReselectTrack.started += instance.OnReselectTrack;
                 @ReselectTrack.performed += instance.OnReselectTrack;
                 @ReselectTrack.canceled += instance.OnReselectTrack;
+                @ScrollForward.started += instance.OnScrollForward;
+                @ScrollForward.performed += instance.OnScrollForward;
+                @ScrollForward.canceled += instance.OnScrollForward;
+                @ScrollBackward.started += instance.OnScrollBackward;
+                @ScrollBackward.performed += instance.OnScrollBackward;
+                @ScrollBackward.canceled += instance.OnScrollBackward;
+                @ScrollToNextBeat.started += instance.OnScrollToNextBeat;
+                @ScrollToNextBeat.performed += instance.OnScrollToNextBeat;
+                @ScrollToNextBeat.canceled += instance.OnScrollToNextBeat;
+                @ScrollToPreviousBeat.started += instance.OnScrollToPreviousBeat;
+                @ScrollToPreviousBeat.performed += instance.OnScrollToPreviousBeat;
+                @ScrollToPreviousBeat.canceled += instance.OnScrollToPreviousBeat;
             }
 
             private void UnregisterCallbacks(IArcadeHotkeyActions instance)
@@ -2087,6 +2367,18 @@ namespace Arcade.Compose
                 @ReselectTrack.started -= instance.OnReselectTrack;
                 @ReselectTrack.performed -= instance.OnReselectTrack;
                 @ReselectTrack.canceled -= instance.OnReselectTrack;
+                @ScrollForward.started -= instance.OnScrollForward;
+                @ScrollForward.performed -= instance.OnScrollForward;
+                @ScrollForward.canceled -= instance.OnScrollForward;
+                @ScrollBackward.started -= instance.OnScrollBackward;
+                @ScrollBackward.performed -= instance.OnScrollBackward;
+                @ScrollBackward.canceled -= instance.OnScrollBackward;
+                @ScrollToNextBeat.started -= instance.OnScrollToNextBeat;
+                @ScrollToNextBeat.performed -= instance.OnScrollToNextBeat;
+                @ScrollToNextBeat.canceled -= instance.OnScrollToNextBeat;
+                @ScrollToPreviousBeat.started -= instance.OnScrollToPreviousBeat;
+                @ScrollToPreviousBeat.performed -= instance.OnScrollToPreviousBeat;
+                @ScrollToPreviousBeat.canceled -= instance.OnScrollToPreviousBeat;
             }
 
             public void RemoveCallbacks(IArcadeHotkeyActions instance)
@@ -2194,6 +2486,10 @@ namespace Arcade.Compose
             void OnReselectStartCoordinate(InputAction.CallbackContext context);
             void OnReselectEndCoordinate(InputAction.CallbackContext context);
             void OnReselectTrack(InputAction.CallbackContext context);
+            void OnScrollForward(InputAction.CallbackContext context);
+            void OnScrollBackward(InputAction.CallbackContext context);
+            void OnScrollToNextBeat(InputAction.CallbackContext context);
+            void OnScrollToPreviousBeat(InputAction.CallbackContext context);
         }
         public interface IArcadeInputActions
         {
