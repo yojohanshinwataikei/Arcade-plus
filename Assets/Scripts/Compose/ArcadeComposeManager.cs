@@ -282,6 +282,7 @@ namespace Arcade.Compose
 			else
 			{
 				CheckScrollingOperation(null, 0f, 0f);
+				return;
 			}
 
 			if (timing > GameplayManager.Length) timing = GameplayManager.Length;
