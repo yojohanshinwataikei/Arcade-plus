@@ -288,7 +288,7 @@ namespace Arcade.Compose
 			if (timing > GameplayManager.Length) timing = GameplayManager.Length;
 			if (timing < 0) timing = 0;
 
-			if (GameplayManager.Timing != Mathf.RoundToInt(timing) )
+			if (GameplayManager.Timing != Mathf.RoundToInt(timing))
 			{
 				GameplayManager.Timing = Mathf.RoundToInt(timing);
 				GameplayManager.ResetJudge();
@@ -361,10 +361,16 @@ namespace Arcade.Compose
 				Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
 				return;
 			}
+			Debug.Log($"[dpi]{Screen.dpi}");
+			float scaleRatio = Screen.dpi / 96f;
+			if (scaleRatio <= 0.01f)
+			{
+				scaleRatio = 1f;
+			}
 			// here we do not check format of string
 			string[] dimensions = resolution.Split('x');
-			int width = int.Parse(dimensions[0]);
-			int height = int.Parse(dimensions[1]);
+			int width = Mathf.RoundToInt(int.Parse(dimensions[0]) * scaleRatio);
+			int height = Mathf.RoundToInt(int.Parse(dimensions[1]) * scaleRatio);
 			Screen.SetResolution(width, height, FullScreenMode.Windowed);
 		}
 		public void SetTargetFramerate(int fps)
