@@ -86,7 +86,7 @@ namespace Arcade.Compose.Feature
 					PlayerPrefs.SetString("AdeOBSDialog", File.ReadAllText(PreferencesSavePath));
 					File.Delete(PreferencesSavePath);
 				}
-				preference = JsonConvert.DeserializeObject<OBSPreferences>(PlayerPrefs.GetString("AdeSkinDialog", ""));
+				preference = JsonConvert.DeserializeObject<OBSPreferences>(PlayerPrefs.GetString("AdeOBSDialog", ""));
 				if (preference == null) preference = new OBSPreferences();
 			}
 			catch (Exception Ex)
