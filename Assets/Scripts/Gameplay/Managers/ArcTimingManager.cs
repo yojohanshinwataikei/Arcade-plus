@@ -428,7 +428,7 @@ namespace Arcade.Gameplay
 		}
 		private void UpdateTrackSpeed()
 		{
-			phase += 3f * (ArcGameplayManager.Instance.IsPlaying ? CurrentSpeed : 0) * Time.deltaTime;
+			phase += Velocity / 172.25f * 10.5f * (ArcGameplayManager.Instance.IsPlaying ? CurrentSpeed : 0) * Time.deltaTime;
 			phase -= Mathf.Floor(phase);
 			foreach (var renderer in TrackComponentRenderers)
 			{
