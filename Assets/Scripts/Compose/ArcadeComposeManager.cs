@@ -232,42 +232,42 @@ namespace Arcade.Compose
 				CheckScrollingOperation(null, 0f, 0f);
 				timing = GameplayManager.Length;
 			}
-			else if (AdeInputManager.Instance.Hotkeys.ScrollToNextMeasure.IsPressed())
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollToNextMeasure))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollToNextMeasure, 0.5f, 0.05f))
 				{
 					timing = AdeGridManager.Instance.AttachMeasureScroll(timing - offset, 1) + offset;
 				}
 			}
-			else if (AdeInputManager.Instance.Hotkeys.ScrollToPreviousMeasure.IsPressed())
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollToPreviousMeasure))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollToPreviousBeat, 0.5f, 0.05f))
 				{
 					timing = AdeGridManager.Instance.AttachMeasureScroll(timing - offset, -1) + offset;
 				}
 			}
-			else if (AdeInputManager.Instance.Hotkeys.ScrollToNextBeat.IsPressed())
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollToNextBeat))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollToNextBeat, 0.5f, 0.05f))
 				{
 					timing = AdeGridManager.Instance.AttachBeatScroll(timing - offset, 1) + offset;
 				}
 			}
-			else if (AdeInputManager.Instance.Hotkeys.ScrollToPreviousBeat.IsPressed())
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollToPreviousBeat))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollToPreviousBeat, 0.5f, 0.05f))
 				{
 					timing = AdeGridManager.Instance.AttachBeatScroll(timing - offset, -1) + offset;
 				}
 			}
-			else if (AdeInputManager.Instance.Hotkeys.ScrollForward.IsPressed())
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollForward))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollForward, 0.05f, 0.05f))
 				{
 					timing = AdeGridManager.Instance.AttachScroll(timing - offset, 1) + offset;
 				}
 			}
-			else if (AdeInputManager.Instance.Hotkeys.ScrollBackward.IsPressed())
+			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollBackward))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollBackward, 0.05f, 0.05f))
 				{
