@@ -496,7 +496,7 @@ namespace Arcade.Compose
 				deltas.Add(Mathf.Abs(beatlineTimings[i].Timing - t));
 			}
 			int index = deltas.IndexOf(deltas.Min());
-			if(deltas[index]<=1f){
+			if(deltas[index]<=1f || ArcGameplayManager.Instance.IsPlaying){
 				index += (scroll > 0 ? 1 : -1);
 			}else if(t>beatlineTimings[index].Timing){
 				index += (scroll > 0 ? 1 : 0);
@@ -516,7 +516,7 @@ namespace Arcade.Compose
 				deltas.Add(Mathf.Abs(beatTimings[i] - t));
 			}
 			int index = deltas.IndexOf(deltas.Min());
-			if(deltas[index]<=1f){
+			if(deltas[index]<=1f || ArcGameplayManager.Instance.IsPlaying){
 				index += (scroll > 0 ? 1 : -1);
 			}else if(t>beatTimings[index]){
 				index += (scroll > 0 ? 1 : 0);
@@ -536,7 +536,7 @@ namespace Arcade.Compose
 				deltas.Add(Mathf.Abs(measureTimings[i] - t));
 			}
 			int index = deltas.IndexOf(deltas.Min());
-			if(deltas[index]<=1f){
+			if(deltas[index]<=1f || ArcGameplayManager.Instance.IsPlaying){
 				index += (scroll > 0 ? 1 : -1);
 			}else if(t>measureTimings[index]){
 				index += (scroll > 0 ? 1 : 0);
