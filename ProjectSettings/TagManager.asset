@@ -48,6 +48,9 @@ TagManager:
   - name: Note
     uniqueID: 847068993
     locked: 0
+  - name: TrackEditorUI
+    uniqueID: 2045660985
+    locked: 0
   - name: Arc
     uniqueID: 1689115309
     locked: 0
