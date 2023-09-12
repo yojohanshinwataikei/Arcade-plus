@@ -423,8 +423,11 @@ namespace Arcade.Compose
 			CurrentTimingGroup.interactable = true;
 			AudioOffset.text = ArcAudioManager.Instance.AudioOffset.ToString();
 
+			bool watching = watcher.EnableRaisingEvents;
+			watcher.EnableRaisingEvents =false;
 			watcher.Path = CurrentProjectFolder;
 			watcher.Filter = $"{difficulty}.aff";
+			watcher.EnableRaisingEvents=watching;
 			ArcGameplayManager.Instance.Timing = CurrentProjectMetadata.LastWorkingTiming;
 		}
 
