@@ -20,7 +20,7 @@ namespace Arcade.Compose
 	}
 	public struct BeatlineProperty
 	{
-		public float Timing;
+		public int Timing;
 		public int Importance;
 	}
 
@@ -48,10 +48,10 @@ namespace Arcade.Compose
 		private int verticalInUse;
 
 		private List<BeatlineProperty> beatlineTimings = new List<BeatlineProperty>();
-		private List<float> beatTimings = new List<float>();
-		private List<float> measureTimings = new List<float>();
-		private List<float> verticalXTimings = new List<float>();
-		private List<float> verticalYTimings = new List<float>();
+		private List<int> beatTimings = new List<int>();
+		private List<int> measureTimings = new List<int>();
+		private List<float> verticalXPositions = new List<float>();
+		private List<float> verticalYPositions = new List<float>();
 
 		private List<LineRenderer> beatlineInstances = new List<LineRenderer>();
 		private List<LineRenderer> verticalInstances = new List<LineRenderer>();
@@ -185,7 +185,7 @@ namespace Arcade.Compose
 							continue;
 						}
 					}
-					beatlineTimings.Add(new BeatlineProperty() { Timing = j, Importance = importance });
+					beatlineTimings.Add(new BeatlineProperty() { Timing = Mathf.RoundToInt(j), Importance = importance });
 				}
 			}
 			if (Timings.Count > 0)
@@ -210,7 +210,7 @@ namespace Arcade.Compose
 							continue;
 						}
 					}
-					beatlineTimings.Insert(0, new BeatlineProperty() { Timing = j, Importance = importance });
+					beatlineTimings.Insert(0, new BeatlineProperty() { Timing = Mathf.RoundToInt(j), Importance = importance });
 				}
 			}
 		}
@@ -241,7 +241,7 @@ namespace Arcade.Compose
 							continue;
 						}
 					}
-					beatTimings.Add(j);
+					beatTimings.Add(Mathf.RoundToInt(j));
 				}
 			}
 			if (Timings.Count > 0)
@@ -264,7 +264,7 @@ namespace Arcade.Compose
 							continue;
 						}
 					}
-					beatTimings.Insert(0, j);
+					beatTimings.Insert(0, Mathf.RoundToInt(j));
 				}
 			}
 		}
@@ -295,7 +295,7 @@ namespace Arcade.Compose
 							continue;
 						}
 					}
-					measureTimings.Add(j);
+					measureTimings.Add(Mathf.RoundToInt(j));
 				}
 			}
 			if (Timings.Count > 0)
@@ -318,7 +318,7 @@ namespace Arcade.Compose
 							continue;
 						}
 					}
-					measureTimings.Insert(0, j);
+					measureTimings.Insert(0, Mathf.RoundToInt(j));
 				}
 			}
 		}
@@ -351,8 +351,8 @@ namespace Arcade.Compose
 
 		private void ParseVerticals()
 		{
-			verticalXTimings = Parse(customGrid.X);
-			verticalYTimings = Parse(customGrid.Y);
+			verticalXPositions = Parse(customGrid.X);
+			verticalYPositions = Parse(customGrid.Y);
 		}
 		private List<float> Parse(string str)
 		{
@@ -424,14 +424,14 @@ namespace Arcade.Compose
 			float yEdgePos = 5.5f + ArcCameraManager.Instance.EnwidenRatio * 2.745f;
 			if (EnableVertical && AdeCursorManager.Instance.WallPanelEnabled)
 			{
-				foreach (var t in verticalXTimings)
+				foreach (var t in verticalXPositions)
 				{
 					LineRenderer l = GetVerticalInstance();
 					l.DrawLine(new Vector3(ArcAlgorithm.ArcXToWorld(t), 0), new Vector3(ArcAlgorithm.ArcXToWorld(t), yEdgePos));
 					l.endColor = l.startColor = VerticalXColor;
 					l.enabled = true;
 				}
-				foreach (var t in verticalYTimings)
+				foreach (var t in verticalYPositions)
 				{
 					LineRenderer l = GetVerticalInstance();
 					l.DrawLine(new Vector3(-xEdgePos, ArcAlgorithm.ArcYToWorld(t)), new Vector3(xEdgePos, ArcAlgorithm.ArcYToWorld(t)));
@@ -464,33 +464,33 @@ namespace Arcade.Compose
 		public float AttachVerticalX(float x)
 		{
 			if (verticalInUse == 0) return x;
-			if (verticalXTimings.Count == 0) return x;
+			if (verticalXPositions.Count == 0) return x;
 			List<float> deltas = new List<float>();
-			for (int i = 0; i < verticalXTimings.Count; ++i)
+			for (int i = 0; i < verticalXPositions.Count; ++i)
 			{
-				deltas.Add(Mathf.Abs(verticalXTimings[i] - x));
+				deltas.Add(Mathf.Abs(verticalXPositions[i] - x));
 			}
 			int index = deltas.IndexOf(deltas.Min());
-			if (deltas[index] < 0.3f) return verticalXTimings[index];
+			if (deltas[index] < 0.3f) return verticalXPositions[index];
 			else return x;
 		}
 		public float AttachVerticalY(float y)
 		{
 			if (verticalInUse == 0) return y;
-			if (verticalYTimings.Count == 0) return y;
+			if (verticalYPositions.Count == 0) return y;
 			List<float> deltas = new List<float>();
-			for (int i = 0; i < verticalYTimings.Count; ++i)
+			for (int i = 0; i < verticalYPositions.Count; ++i)
 			{
-				deltas.Add(Mathf.Abs(verticalYTimings[i] - y));
+				deltas.Add(Mathf.Abs(verticalYPositions[i] - y));
 			}
 			int index = deltas.IndexOf(deltas.Min());
-			if (deltas[index] < 0.3f) return verticalYTimings[index];
+			if (deltas[index] < 0.3f) return verticalYPositions[index];
 			else return y;
 		}
-		public float AttachScroll(float t, float scroll)
+		public int AttachScroll(int t, float scroll)
 		{
-			if (beatlineTimings.Count == 0) return t + 50 * scroll;
-			List<float> deltas = new List<float>();
+			if (beatlineTimings.Count == 0) return Mathf.RoundToInt(t + 50 * scroll);
+			List<int> deltas = new List<int>();
 			for (int i = 0; i < beatlineTimings.Count; ++i)
 			{
 				deltas.Add(Mathf.Abs(beatlineTimings[i].Timing - t));
@@ -507,10 +507,10 @@ namespace Arcade.Compose
 			else if (index < 0) return Mathf.Min(t,beatlineTimings[0].Timing);
 			return beatlineTimings[index].Timing;
 		}
-		public float AttachBeatScroll(float t, float scroll)
+		public int AttachBeatScroll(int t, float scroll)
 		{
-			if (beatTimings.Count == 0) return t + 200 * scroll;
-			List<float> deltas = new List<float>();
+			if (beatTimings.Count == 0) return Mathf.RoundToInt(t + 200 * scroll);
+			List<int> deltas = new List<int>();
 			for (int i = 0; i < beatTimings.Count; ++i)
 			{
 				deltas.Add(Mathf.Abs(beatTimings[i] - t));
@@ -527,10 +527,10 @@ namespace Arcade.Compose
 			else if (index < 0) return Mathf.Min(t,beatTimings[0]);
 			return beatTimings[index];
 		}
-		public float AttachMeasureScroll(float t, float scroll)
+		public int AttachMeasureScroll(int t, float scroll)
 		{
-			if (measureTimings.Count == 0) return t + 800 * scroll;
-			List<float> deltas = new List<float>();
+			if (measureTimings.Count == 0) return Mathf.RoundToInt(t + 800 * scroll);
+			List<int> deltas = new List<int>();
 			for (int i = 0; i < measureTimings.Count; ++i)
 			{
 				deltas.Add(Mathf.Abs(measureTimings[i] - t));
@@ -547,10 +547,10 @@ namespace Arcade.Compose
 			else if (index < 0) return Mathf.Min(t,measureTimings[0]);
 			return measureTimings[index];
 		}
-		public float AttachTiming(float t)
+		public int AttachTiming(int t)
 		{
 			if (beatlineTimings.Count == 0) return t;
-			List<float> deltas = new List<float>();
+			List<int> deltas = new List<int>();
 			for (int i = 0; i < beatlineTimings.Count; ++i)
 			{
 				deltas.Add(Mathf.Abs(beatlineTimings[i].Timing - t));
@@ -613,7 +613,7 @@ namespace Arcade.Compose
 				VerticalXInputField.text = customGrid.X;
 				return;
 			}
-			verticalXTimings = ret;
+			verticalXPositions = ret;
 			customGrid.X = VerticalXInputField.text;
 			SaveCustomGrids();
 		}
@@ -625,7 +625,7 @@ namespace Arcade.Compose
 				VerticalYInputField.text = customGrid.Y;
 				return;
 			}
-			verticalYTimings = ret;
+			verticalYPositions = ret;
 			customGrid.Y = VerticalYInputField.text;
 			SaveCustomGrids();
 		}

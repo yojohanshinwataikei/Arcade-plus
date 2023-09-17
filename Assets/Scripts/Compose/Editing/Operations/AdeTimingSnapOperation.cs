@@ -122,12 +122,12 @@ namespace Arcade.Compose.Operation
 
 		public int GetSnappedTiming(int timing)
 		{
-			int newTiming = Mathf.FloorToInt(AdeGridManager.Instance.AttachTiming(timing));
+			int newTiming = AdeGridManager.Instance.AttachTiming(timing);
 			return newTiming;
 		}
 		public int GetNextSnappedTiming(int timing)
 		{
-			int newTiming = Mathf.FloorToInt(AdeGridManager.Instance.AttachScroll(timing, 1));
+			int newTiming = AdeGridManager.Instance.AttachScroll(timing, 1);
 			return newTiming;
 		}
 

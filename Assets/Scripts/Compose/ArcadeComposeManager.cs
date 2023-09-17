@@ -219,7 +219,7 @@ namespace Arcade.Compose
 
 		private void CheckScroll()
 		{
-			float timing = GameplayManager.Timing;
+			int timing = GameplayManager.Timing;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
 			if (AdeInputManager.Instance.Hotkeys.ScrollToStart.WasPressedThisFrame())
