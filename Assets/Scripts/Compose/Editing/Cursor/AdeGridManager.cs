@@ -53,7 +53,12 @@ namespace Arcade.Compose
 		private List<float> verticalXPositions = new List<float>();
 		private List<float> verticalYPositions = new List<float>();
 
-		private List<LineRenderer> beatlineInstances = new List<LineRenderer>();
+		private struct RenderingBeatlineInfo{
+			public LineRenderer renderer;
+			public int timing;
+		};
+
+		private List<RenderingBeatlineInfo> beatlineInstances = new List<RenderingBeatlineInfo>();
 		private List<LineRenderer> verticalInstances = new List<LineRenderer>();
 
 		private CustomGrid customGrid;
@@ -125,7 +130,7 @@ namespace Arcade.Compose
 			int count = beatlineInstances.Count;
 			while (count > beatlineInUse)
 			{
-				beatlineInstances[count - 1].enabled = false;
+				beatlineInstances[count - 1].renderer.enabled = false;
 				count--;
 			}
 		}
@@ -139,13 +144,16 @@ namespace Arcade.Compose
 			}
 		}
 
-		private LineRenderer GetBeatlineInstance()
+		private LineRenderer GetBeatlineInstance(int timing)
 		{
 			while (beatlineInstances.Count < beatlineInUse + 1)
 			{
-				beatlineInstances.Add(Instantiate(BeatlinePrefab, transform).GetComponent<LineRenderer>());
+				beatlineInstances.Add(new RenderingBeatlineInfo{
+					renderer=Instantiate(BeatlinePrefab, transform).GetComponent<LineRenderer>(),
+					timing=timing,
+				});
 			}
-			return beatlineInstances[beatlineInUse++];
+			return beatlineInstances[beatlineInUse++].renderer;
 		}
 		private LineRenderer GetVerticalInstance()
 		{
@@ -408,7 +416,7 @@ namespace Arcade.Compose
 						continue;
 					}
 					float z = pos / 1000f;
-					LineRenderer l = GetBeatlineInstance();
+					LineRenderer l = GetBeatlineInstance(t.Timing);
 					l.enabled = true;
 					l.DrawLine(new Vector3(-xEdgePos, -z), new Vector3(xEdgePos, -z));
 					l.endColor = l.startColor = BeatlineColors[t.Importance];
@@ -442,24 +450,27 @@ namespace Arcade.Compose
 			HideExceededVerticalInstance();
 		}
 
-		public float AttachBeatline(float z)
+		public int AttachBeatlineTimingFromFos(float z)
 		{
-			if (!EnableBeatline) return z;
-			if (beatlineInUse == 0) return z;
+			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
+			int defaultTiming=ArcTimingManager.Instance.CalculateTimingByPosition(-z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
+			if (!EnableBeatline) return defaultTiming;
+			if (beatlineInUse == 0) return defaultTiming;
 			List<float> deltas = new List<float>();
 			for (int i = 0; i < beatlineInUse; ++i)
 			{
-				float lz = beatlineInstances[i].GetPosition(0).y;
+				float lz = beatlineInstances[i].renderer.GetPosition(0).y;
 				deltas.Add(Mathf.Abs(lz - z));
 			}
 			int index = deltas.IndexOf(deltas.Min());
 			if (index < 0)
 			{
-				return z;
+				return defaultTiming;
 			}
-			float tz = beatlineInstances[index].GetPosition(0).y;
-			if (Mathf.Abs(tz - z) < 5f) return tz;
-			return z;
+			float tz = beatlineInstances[index].renderer.GetPosition(0).y;
+			int t = beatlineInstances[index].timing;
+			if (Mathf.Abs(tz - z) < 5f) return t;
+			return defaultTiming;
 		}
 		public float AttachVerticalX(float x)
 		{

@@ -190,7 +190,10 @@ namespace Arcade.Compose
 				}
 				else
 				{
-					z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
+					z = ArcTimingManager.Instance.CalculatePositionByTiming(
+						AttachedTiming + ArcAudioManager.Instance.AudioOffset,
+						AdeTimingEditor.Instance.currentTimingGroup
+					) / -1000f;
 				}
 				return new Vector3(trackHit.point.x, trackHit.point.y, z);
 			}
@@ -221,9 +224,7 @@ namespace Arcade.Compose
 				{
 					return overriddenCursorTiming.Value;
 				}
-				Vector3 pos = AttachedTrackPoint;
-				var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
-				return ArcTimingManager.Instance.CalculateTimingByPosition(-pos.z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
+				return AdeGridManager.Instance.AttachBeatlineTimingFromFos(trackHit.point.z);
 			}
 		}
 
@@ -272,7 +273,10 @@ namespace Arcade.Compose
 				}
 				else
 				{
-					z = AdeGridManager.Instance.AttachBeatline(trackHit.point.z);
+					z = ArcTimingManager.Instance.CalculatePositionByTiming(
+						AttachedTiming + ArcAudioManager.Instance.AudioOffset,
+						AdeTimingEditor.Instance.currentTimingGroup
+					) / -1000f;;
 				}
 				if (TrackEnabled)
 				{
