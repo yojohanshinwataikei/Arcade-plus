@@ -26,6 +26,7 @@ namespace Arcade.Compose
 		public int TargetFrameRate = -1;
 		public int Velocity = 30;
 		public uint UndoBufferSize = 200;
+		public bool PlaybackSync = false;
 		public bool Auto;
 		public Arcade.Gameplay.Chart.ChartSortMode ChartSortMode;
 	}
@@ -122,6 +123,7 @@ namespace Arcade.Compose
 		public Toggle FullscreenToggle;
 		public Dropdown TargetFramerateDropdown;
 		public InputField UndoBufferSizeInput;
+		public Toggle PlaybackSyncToggle;
 
 		public TextAsset ChangeLog;
 		public TextAsset BuildTimestampText;
@@ -164,6 +166,12 @@ namespace Arcade.Compose
 				SavePreferences();
 			});
 			UndoBufferSizeInput.onEndEdit.AddListener(SetUndoBufferSize);
+			PlaybackSyncToggle.onValueChanged.AddListener((bool value) =>
+			{
+				ArcadePreference.PlaybackSync = value;
+				ArcGameplayManager.Instance.EnablePlaybackSync = value;
+				SavePreferences();
+			});
 			LoadPreferences();
 			SavePreferences();
 			Pause();
@@ -528,6 +536,8 @@ namespace Arcade.Compose
 					ArcadePreference.TargetFrameRate = -1;
 				}
 				SetTargetFramerate(ArcadePreference.TargetFrameRate);
+				PlaybackSyncToggle.SetIsOnWithoutNotify(ArcadePreference.PlaybackSync);
+				ArcGameplayManager.Instance.EnablePlaybackSync = ArcadePreference.PlaybackSync;
 			}
 		}
 		public void SavePreferences()

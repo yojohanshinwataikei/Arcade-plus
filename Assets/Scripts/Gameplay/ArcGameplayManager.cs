@@ -65,6 +65,8 @@ namespace Arcade.Gameplay
 			}
 		}
 
+		public bool EnablePlaybackSync = false;
+
 		private double lastDspTime = 0;
 		private double deltaDspTime = 0;
 
@@ -76,17 +78,20 @@ namespace Arcade.Gameplay
 			{
 				float playBackSpeed = ArcAudioManager.Instance.PlayBackSpeed;
 				timing += Time.deltaTime * playBackSpeed;
-				float t = ArcAudioManager.Instance.Timing;
-				if (deltaDspTime > 0f && (timing >= 0 || ArcAudioManager.Instance.Timing > 0))
-				{
-					float delta = timing - t;
-					int bufferLength;
-					int numBuffers;
-					AudioSettings.GetDSPBufferSize(out bufferLength, out numBuffers);
-					float maxDelta = 2 * (float)bufferLength / (float)AudioSettings.outputSampleRate;
-					if (Mathf.Abs(delta) > maxDelta)
+				Debug.Log(EnablePlaybackSync);
+				if(EnablePlaybackSync){
+					float t = ArcAudioManager.Instance.Timing;
+					if (deltaDspTime > 0f && (timing >= 0 || ArcAudioManager.Instance.Timing > 0))
 					{
-						timing = t;
+						float delta = timing - t;
+						int bufferLength;
+						int numBuffers;
+						AudioSettings.GetDSPBufferSize(out bufferLength, out numBuffers);
+						float maxDelta = 2 * (float)bufferLength / (float)AudioSettings.outputSampleRate;
+						if (Mathf.Abs(delta) > maxDelta)
+						{
+							timing = t;
+						}
 					}
 				}
 			}
