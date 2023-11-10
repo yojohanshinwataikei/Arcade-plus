@@ -62,7 +62,7 @@ namespace Arcade.Compose
 				{
 					CancelOngoingOperation();
 				}
-				if (ongoingOperation.Value.task.Status != UniTaskStatus.Pending)
+				if (ongoingOperation?.task.Status != UniTaskStatus.Pending)
 				{
 					ongoingOperation = null;
 				}
