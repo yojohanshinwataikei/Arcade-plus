@@ -650,7 +650,7 @@ namespace Arcade.Gameplay
 				headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
 				headPropertyBlock.SetColor(lowColorShaderId, currentLowColor);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
-				if (arc.Judging || arc.IsVoid)
+				if (arc.Judging || arc.IsVoid || arc.NoInput())
 				{
 					if (segmentCount >= 1)
 					{
@@ -709,7 +709,7 @@ namespace Arcade.Gameplay
 			{
 				int currentTiming = ArcGameplayManager.Instance.Timing;
 				int offset = ArcAudioManager.Instance.AudioOffset;
-				if (arc.Judging && arc.Timing + offset < currentTiming) EnableHeightIndicator = false;
+				if ((arc.Judging || arc.NoInput()) && arc.Timing + offset < currentTiming) EnableHeightIndicator = false;
 				else EnableHeightIndicator = true;
 				HeightIndicatorRenderer.color = Color.Lerp(currentLowColor, currentHighColor, arc.YStart);
 			}
