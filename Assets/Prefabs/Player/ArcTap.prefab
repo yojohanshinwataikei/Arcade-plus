@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 33995218629962512}
   - component: {fileID: 23347824082841986}
   - component: {fileID: 64965817012413448}
+  - component: {fileID: 7312062431978747579}
   m_Layer: 9
   m_Name: Model
   m_TagString: ArcaeaNote
@@ -223,3 +224,15 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!210 &7312062431978747579
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806244166516372}
+  m_Enabled: 1
+  m_SortingLayerID: -720081997
+  m_SortingLayer: 5
+  m_SortingOrder: 0
+  m_SortAtRoot: 1

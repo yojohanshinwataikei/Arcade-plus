@@ -54,6 +54,9 @@ TagManager:
   - name: Arc
     uniqueID: 1689115309
     locked: 0
+  - name: ArcTap
+    uniqueID: 3574885299
+    locked: 0
   - name: Effect
     uniqueID: 3236498083
     locked: 0

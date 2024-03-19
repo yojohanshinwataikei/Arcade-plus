@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 114398547210063500}
   - component: {fileID: 33265351138527094}
   - component: {fileID: 23579284449909004}
+  - component: {fileID: 6749029186860714826}
   m_Layer: 9
   m_Name: Segment
   m_TagString: Untagged
@@ -110,6 +111,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!210 &6749029186860714826
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374156918699440}
+  m_Enabled: 1
+  m_SortingLayerID: 1689115309
+  m_SortingLayer: 4
+  m_SortingOrder: 0
+  m_SortAtRoot: 1
 --- !u!1 &1470676867051008
 GameObject:
   m_ObjectHideFlags: 0
