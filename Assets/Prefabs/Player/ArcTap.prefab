@@ -103,8 +103,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1689115309
-  m_SortingLayer: 4
+  m_SortingLayerID: 570120507
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 0}
   m_Color: {r: 0.49019608, g: 0.49019608, b: 0.49019608, a: 0.49019608}
@@ -233,6 +233,6 @@ SortingGroup:
   m_GameObject: {fileID: 1806244166516372}
   m_Enabled: 1
   m_SortingLayerID: -720081997
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_SortAtRoot: 1
