@@ -919,7 +919,7 @@ namespace Arcade.Gameplay.Chart
 			Vector3 baseLocalPosition = new Vector3();
 			if (IsConvertedVariousSizedArctap)
 			{
-				baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld((Arc.XStart + Arc.XEnd) / 2f), ArcAlgorithm.ArcYToWorld(Arc.YStart), 0);
+				baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld((Arc.XStart + Arc.XEnd) / 2f), ArcAlgorithm.ArcYToWorld(Arc.YStart) - 0.5f, 0);
 			}
 			else
 			{
@@ -1048,7 +1048,7 @@ namespace Arcade.Gameplay.Chart
 			set
 			{
 				Model.localScale = new Vector3(value, Model.localScale.y, Model.localScale.z);
-				Shadow.localScale = new Vector3(value / 3.25f, 1f, 1f);
+				Shadow.localScale = new Vector3(value / 4.25f, 1f, 1f);
 			}
 		}
 		public override bool Selected
