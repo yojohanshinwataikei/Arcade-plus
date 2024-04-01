@@ -832,7 +832,7 @@ namespace Arcade.Gameplay.Chart
 		public ArcArc Arc;
 		public ArcTimingGroup TimingGroup { get => Arc.TimingGroup; }
 
-		public bool IsConvertedVariousSizedArctap=false;
+		public bool IsConvertedVariousSizedArctap = false;
 
 		public Transform Model;
 		public Transform Shadow;
@@ -906,6 +906,7 @@ namespace Arcade.Gameplay.Chart
 			);
 
 			UpdatePosition();
+			UpdateScale();
 			SetupArcTapConnection();
 		}
 
@@ -916,16 +917,32 @@ namespace Arcade.Gameplay.Chart
 			float t = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
 			Vector3 parentLocalPosition = new Vector3(0, 0, -timingManager.CalculatePositionByTiming(Arc.Timing + offset, Arc.TimingGroup) / 1000f);
 			Vector3 baseLocalPosition = new Vector3();
-			if(IsConvertedVariousSizedArctap){
-				baseLocalPosition=new Vector3(ArcAlgorithm.ArcXToWorld((Arc.XStart+Arc.XEnd)/2f),ArcAlgorithm.ArcYToWorld(Arc.YStart),0);
-			}else{
-				baseLocalPosition=new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
+			if (IsConvertedVariousSizedArctap)
+			{
+				baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld((Arc.XStart + Arc.XEnd) / 2f), ArcAlgorithm.ArcYToWorld(Arc.YStart), 0);
+			}
+			else
+			{
+				baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
 										ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f, 0);
 			}
 			Vector3 offsetLocalPosition = -timingManager.CalculatePositionByTiming(Timing + offset, Arc.TimingGroup) / 1000f * this.FallDirection();
 			Vector3 additionalLocalPosition = new Vector3(0, 0, -0.6f);
 			LocalPosition = baseLocalPosition + offsetLocalPosition - parentLocalPosition + additionalLocalPosition;
 		}
+
+		public void UpdateScale()
+		{
+			if (IsConvertedVariousSizedArctap)
+			{
+				LocalScale = Mathf.Abs(ArcAlgorithm.ArcXToWorld(Arc.XEnd) - ArcAlgorithm.ArcXToWorld(Arc.XStart));
+			}
+			else
+			{
+				LocalScale = 4.25f;
+			}
+		}
+
 		/// <summary>
 		/// Please use the overload method.
 		/// </summary>
@@ -1020,6 +1037,18 @@ namespace Arcade.Gameplay.Chart
 				Vector3 p = value;
 				p.y = 0;
 				Shadow.localPosition = p;
+			}
+		}
+		public float LocalScale
+		{
+			get
+			{
+				return Model.localScale.x;
+			}
+			set
+			{
+				Model.localScale = new Vector3(value, Model.localScale.y, Model.localScale.z);
+				Shadow.localScale = new Vector3(value / 3.25f, 1f, 1f);
 			}
 		}
 		public override bool Selected
@@ -1219,11 +1248,13 @@ namespace Arcade.Gameplay.Chart
 			{
 				tap.Instantiate(this);
 			}
-			if (IsVariousSizedArctap){
-				ConvertedVariousSizedArctap=new ArcArcTap{
-					Timing=Timing,
-					Arc=this,
-					IsConvertedVariousSizedArctap=true,
+			if (IsVariousSizedArctap)
+			{
+				ConvertedVariousSizedArctap = new ArcArcTap
+				{
+					Timing = Timing,
+					Arc = this,
+					IsConvertedVariousSizedArctap = true,
 				};
 				ConvertedVariousSizedArctap.Instantiate(this);
 			}
@@ -1235,7 +1266,7 @@ namespace Arcade.Gameplay.Chart
 				at.Destroy();
 			}
 			ConvertedVariousSizedArctap?.Destroy();
-			ConvertedVariousSizedArctap=null;
+			ConvertedVariousSizedArctap = null;
 		}
 		public void AddArcTap(ArcArcTap arctap)
 		{

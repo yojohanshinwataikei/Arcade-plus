@@ -51,6 +51,10 @@ namespace Arcade.Gameplay
 				}
 				total += arc.JudgeTimings.Count;
 				total += arc.ArcTaps.Count;
+				if (arc.IsVariousSizedArctap)
+				{
+					total += 1;
+				}
 			}
 			if (total == 0) return 0;
 			return 10000000d / total;
@@ -103,6 +107,13 @@ namespace Arcade.Gameplay
 				foreach (var arctap in arc.ArcTaps)
 				{
 					if (arctap.Timing <= timing)
+					{
+						note++;
+					}
+				}
+				if (arc.IsVariousSizedArctap)
+				{
+					if (arc.Timing <= timing)
 					{
 						note++;
 					}
