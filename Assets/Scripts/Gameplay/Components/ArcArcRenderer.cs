@@ -563,7 +563,8 @@ namespace Arcade.Gameplay
 				{
 					s.To = 1;
 				}
-				if ((endPos >= pos && Mathf.Max(pos, endPos) < 0) || (endPos < pos && Mathf.Max(pos, endPos) > 0))
+
+				if ((s.ToTiming + offset < currentTiming && s.ToTiming != s.FromTiming) || (Mathf.Max(pos, endPos) < 0 && s.ToTiming == s.FromTiming))
 				{
 					if (arc.Judging || arc.IsVoid || arc.NoInput())
 					{
@@ -576,7 +577,7 @@ namespace Arcade.Gameplay
 						continue;
 					}
 				}
-				if (Mathf.Max(pos, endPos) >= 0 && Mathf.Min(pos, endPos) < 0)
+				if (s.FromTiming + offset < currentTiming && s.ToTiming + offset >= currentTiming)
 				{
 					s.Enable = true;
 					s.CurrentArcMaterial = null;
