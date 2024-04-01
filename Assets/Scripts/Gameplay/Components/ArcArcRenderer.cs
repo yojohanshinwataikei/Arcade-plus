@@ -324,7 +324,6 @@ namespace Arcade.Gameplay
 		}
 
 		private int highColorShaderId;
-		private int lowlightShaderId;
 		private int lowColorShaderId;
 		private int mainTexShaderId;
 		private int segmentCount = 0;
@@ -380,7 +379,7 @@ namespace Arcade.Gameplay
 		}
 		public void BuildHeightIndicator()
 		{
-			if (arc.IsVoid)
+			if (arc.IsVoid || arc.IsVariousSizedArctap)
 			{
 				EnableHeightIndicator = false;
 				return;
@@ -564,6 +563,11 @@ namespace Arcade.Gameplay
 
 			foreach (ArcArcSegmentComponent s in segments)
 			{
+				if (arc.IsVariousSizedArctap)
+				{
+					s.Enable = false;
+					continue;
+				}
 				float pos = -(z + s.FromPos.z);
 				float endPos = -(z + s.ToPos.z);
 				if (endPos > 100 && pos < 100)
@@ -628,7 +632,7 @@ namespace Arcade.Gameplay
 		}
 		private void UpdateHead()
 		{
-			if (!IsHead)
+			if (!IsHead || arc.IsVariousSizedArctap)
 			{
 				EnableHead = false;
 				return;
@@ -699,7 +703,7 @@ namespace Arcade.Gameplay
 		}
 		private void UpdateHeightIndicator()
 		{
-			if (arc.IsVoid || (arc.YEnd == arc.YStart && !IsHead))
+			if (arc.IsVoid || (arc.YEnd == arc.YStart && !IsHead) || arc.IsVariousSizedArctap)
 			{
 				EnableHeightIndicator = false;
 				return;
@@ -732,7 +736,7 @@ namespace Arcade.Gameplay
 			int duration = arc.EndTiming - arc.Timing;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
-			if (duration == 0)
+			if (duration == 0 || arc.IsVariousSizedArctap)
 			{
 				EnableArcCap = false;
 				return;
