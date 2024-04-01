@@ -45,10 +45,6 @@ namespace Arcade.Gameplay
 		public SpriteRenderer[] CriticalLineExtras;
 		public SpriteRenderer[] TrackLaneDividers;
 		public SpriteRenderer[] LaneHits;
-		[Header("Particle")]
-		public Material TapJudge;
-		public Material SfxTapJudge;
-		public Material HoldJudge;
 
 		[Header("Misc")]
 		public Text ComboText;
@@ -152,7 +148,10 @@ namespace Arcade.Gameplay
 			ArcArcManager.Instance.SetArcTapSkin(noteSideData.ArcTap.value);
 			ArcArcManager.Instance.SetSfxArcTapSkin(noteSideData.SfxArcTapNote.value,noteSideData.SfxArcTapCore.value);
 			ArcTapNoteManager.Instance.SetConnectionLineColor(noteSideData.ConnectionLineColor);
-			ArcArcManager.Instance.SetArcColors(noteSideData.ArcRedLow,noteSideData.ArcBlueLow,noteSideData.ArcGreenLow,noteSideData.ArcRedHigh,noteSideData.ArcBlueHigh,noteSideData.ArcGreenHigh,noteSideData.ArcVoid);
+			ArcArcManager.Instance.SetArcColors(
+				noteSideData.ArcRedLow,noteSideData.ArcBlueLow,noteSideData.ArcGreenLow,noteSideData.ArcUnknownLow,
+				noteSideData.ArcRedHigh,noteSideData.ArcBlueHigh,noteSideData.ArcGreenHigh,noteSideData.ArcUnknownHigh,
+				noteSideData.ArcVoid);
 		}
 		public void SetThemeSideSkin(AdeSkinHost.ThemeSideData themeSideData){
 			foreach(SpriteRenderer trackComponent in TrackComponents){

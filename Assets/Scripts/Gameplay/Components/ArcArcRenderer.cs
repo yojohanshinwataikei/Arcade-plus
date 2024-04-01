@@ -42,6 +42,10 @@ namespace Arcade.Gameplay
 		{
 			get { return ArcArcManager.Instance.ArcGreenHigh; }
 		}
+		private Color ArcUnknownHigh
+		{
+			get { return ArcArcManager.Instance.ArcUnknownHigh; }
+		}
 		private Color ArcRedLow
 		{
 			get { return ArcArcManager.Instance.ArcRedLow; }
@@ -53,6 +57,10 @@ namespace Arcade.Gameplay
 		private Color ArcGreenLow
 		{
 			get { return ArcArcManager.Instance.ArcGreenLow; }
+		}
+		private Color ArcUnknownLow
+		{
+			get { return ArcArcManager.Instance.ArcUnknownLow; }
 		}
 		private Color ArcVoid
 		{
@@ -245,8 +253,8 @@ namespace Arcade.Gameplay
 			float alpha = Alpha;
 			if (arc != null)
 			{
-				HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : ArcGreenHigh));
-				LowColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : ArcGreenLow));
+				HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : arc.Color == 2 ? ArcGreenHigh : ArcUnknownHigh));
+				LowColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : arc.Color == 2 ? ArcGreenLow : ArcUnknownLow));
 			}
 			Alpha = alpha;
 		}
@@ -379,7 +387,10 @@ namespace Arcade.Gameplay
 			}
 			HeightIndicatorRenderer.transform.localPosition = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XStart), 0, 0);
 			HeightIndicatorRenderer.transform.localScale = new Vector3(2.34f, 100 * (ArcAlgorithm.ArcYToWorld(arc.YStart) - OffsetNormal / 2), 1);
-			HeightIndicatorRenderer.color = Color.Lerp(arc.Color == 1 ? ArcRedLow : arc.Color == 0 ? ArcBlueLow : ArcGreenLow, arc.Color == 1 ? ArcRedHigh : arc.Color == 0 ? ArcBlueHigh : ArcGreenHigh, arc.YStart);
+			HeightIndicatorRenderer.color = Color.Lerp(
+				arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : arc.Color == 2 ? ArcGreenLow : ArcUnknownLow,
+				arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : arc.Color == 2 ? ArcGreenHigh : ArcUnknownHigh,
+				arc.YStart);
 		}
 		public void BuildSegments()
 		{
@@ -429,8 +440,8 @@ namespace Arcade.Gameplay
 								  -timingManager.CalculatePositionByTimingAndStart(arc.Timing + offset, arc.EndTiming + offset, arc.TimingGroup) / 1000f);
 				segments[segmentCount - 1].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * (segmentCount - 1), arc.EndTiming, startHeight, endHeight);
 			}
-			HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : ArcGreenHigh));
-			LowColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : ArcGreenLow));
+			HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : arc.Color == 2 ? ArcGreenHigh : ArcUnknownHigh));
+			LowColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : arc.Color == 2 ? ArcGreenLow : ArcUnknownLow));
 		}
 
 		public void BuildHead()

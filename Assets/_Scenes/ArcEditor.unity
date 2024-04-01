@@ -20214,10 +20214,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.052083332
-    y: 0.059245102
-    width: 0.8958333
-    height: 0.8815098
+    x: 0
+    y: 0
+    width: 1
+    height: 1
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -54625,9 +54625,6 @@ MonoBehaviour:
   - {fileID: 939299267}
   - {fileID: 72816687}
   - {fileID: 2103494961}
-  TapJudge: {fileID: 2100000, guid: 2e86479b38cbb7e4491623652a2e1c92, type: 2}
-  SfxTapJudge: {fileID: 2100000, guid: 64fecc5f41ef7ea48992ac35f1b00124, type: 2}
-  HoldJudge: {fileID: 2100000, guid: bbc33c31520faa74d8194d6d8ba8d79d, type: 2}
   ComboText: {fileID: 490141569}
   TutorialBanner: {fileID: 994086310}
 --- !u!114 &1378078349
@@ -54716,9 +54713,11 @@ MonoBehaviour:
     ArcRedLow: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
     ArcBlueLow: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}
     ArcGreenLow: {r: 0, g: 1, b: 0.47592807, a: 1}
+    ArcUnknownLow: {r: 0.6666667, g: 0.6666667, b: 0.6666667, a: 1}
     ArcRedHigh: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
     ArcBlueHigh: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}
     ArcGreenHigh: {r: 0, g: 1, b: 0.47592807, a: 1}
+    ArcUnknownHigh: {r: 0.8627451, g: 0.8627451, b: 0.8627451, a: 1}
     ArcVoid: {r: 0.5686275, g: 0.4705882, b: 0.6666667, a: 1}
     TrackLight: {fileID: 21300000, guid: 5ff43f330b63ad246963a3aea13bd701, type: 3}
     TrackConflict: {fileID: 21300000, guid: 4793403f4bea26d4193833982b6ae424, type: 3}

@@ -120,9 +120,11 @@ public class AdeSkinHostEditor : Editor
 		GUILayout.Label($"      ArcRedLow:{data.ArcRedLow}");
 		GUILayout.Label($"      ArcBlueLow:{data.ArcBlueLow}");
 		GUILayout.Label($"      ArcGreenLow:{data.ArcGreenLow}");
+		GUILayout.Label($"      ArcUnknownLow:{data.ArcUnknownLow}");
 		GUILayout.Label($"      ArcRedHigh:{data.ArcRedHigh}");
 		GUILayout.Label($"      ArcBlueHigh:{data.ArcBlueHigh}");
 		GUILayout.Label($"      ArcGreenHigh:{data.ArcGreenHigh}");
+		GUILayout.Label($"      ArcUnknownHigh:{data.ArcUnknownHigh}");
 		GUILayout.Label($"      ArcVoid:{data.ArcVoid}");
 	}
 

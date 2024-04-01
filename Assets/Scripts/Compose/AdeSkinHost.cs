@@ -81,9 +81,11 @@ namespace Arcade.Compose
 			public Color ArcRedLow;
 			public Color ArcBlueLow;
 			public Color ArcGreenLow;
+			public Color ArcUnknownLow;
 			public Color ArcRedHigh;
 			public Color ArcBlueHigh;
 			public Color ArcGreenHigh;
+			public Color ArcUnknownHigh;
 			public Color ArcVoid;
 			public Sprite TrackLight;
 			public Sprite TrackConflict;
@@ -172,9 +174,11 @@ namespace Arcade.Compose
 			public Color ArcRedLow;
 			public Color ArcBlueLow;
 			public Color ArcGreenLow;
+			public Color ArcUnknownLow;
 			public Color ArcRedHigh;
 			public Color ArcBlueHigh;
 			public Color ArcGreenHigh;
+			public Color ArcUnknownHigh;
 			public Color ArcVoid;
 		};
 		//The data of onetheme in one side
@@ -228,12 +232,16 @@ namespace Arcade.Compose
 			public string arcBlueLow;
 			[JsonPropertyAttribute("arc-green-low")]
 			public string arcGreenLow;
+			[JsonPropertyAttribute("arc-unknown-low")]
+			public string arcUnknownLow;
 			[JsonPropertyAttribute("arc-red-high")]
 			public string arcRedHigh;
 			[JsonPropertyAttribute("arc-blue-high")]
 			public string arcBlueHigh;
 			[JsonPropertyAttribute("arc-green-high")]
 			public string arcGreenHigh;
+			[JsonPropertyAttribute("arc-unknown-high")]
+			public string arcUnknownHigh;
 			[JsonPropertyAttribute("arc-void")]
 			public string arcVoid;
 		}
@@ -714,12 +722,16 @@ namespace Arcade.Compose
 			internalDefaultNoteData.Conflict.ArcBlueLow = rawDefaultData.ArcBlueLow;
 			internalDefaultNoteData.Light.ArcGreenLow = rawDefaultData.ArcGreenLow;
 			internalDefaultNoteData.Conflict.ArcGreenLow = rawDefaultData.ArcGreenLow;
+			internalDefaultNoteData.Light.ArcUnknownLow = rawDefaultData.ArcUnknownLow;
+			internalDefaultNoteData.Conflict.ArcUnknownLow = rawDefaultData.ArcUnknownLow;
 			internalDefaultNoteData.Light.ArcRedHigh = rawDefaultData.ArcRedHigh;
 			internalDefaultNoteData.Conflict.ArcRedHigh = rawDefaultData.ArcRedHigh;
 			internalDefaultNoteData.Light.ArcBlueHigh = rawDefaultData.ArcBlueHigh;
 			internalDefaultNoteData.Conflict.ArcBlueHigh = rawDefaultData.ArcBlueHigh;
 			internalDefaultNoteData.Light.ArcGreenHigh = rawDefaultData.ArcGreenHigh;
 			internalDefaultNoteData.Conflict.ArcGreenHigh = rawDefaultData.ArcGreenHigh;
+			internalDefaultNoteData.Light.ArcUnknownHigh = rawDefaultData.ArcUnknownHigh;
+			internalDefaultNoteData.Conflict.ArcUnknownHigh = rawDefaultData.ArcUnknownHigh;
 			internalDefaultNoteData.Light.ArcVoid = rawDefaultData.ArcVoid;
 			internalDefaultNoteData.Conflict.ArcVoid = rawDefaultData.ArcVoid;
 			internalDefaultNoteData.Colorless = internalDefaultNoteData.Light;
@@ -839,9 +851,11 @@ namespace Arcade.Compose
 			noteSideData.ArcRedLow = LoadColor(spec.arcRedLow, fallback.ArcRedLow);
 			noteSideData.ArcBlueLow = LoadColor(spec.arcBlueLow, fallback.ArcBlueLow);
 			noteSideData.ArcGreenLow = LoadColor(spec.arcGreenLow, fallback.ArcGreenLow);
+			noteSideData.ArcUnknownLow = LoadColor(spec.arcUnknownLow, fallback.ArcUnknownLow);
 			noteSideData.ArcRedHigh = LoadColor(spec.arcRedHigh, fallback.ArcRedHigh);
 			noteSideData.ArcBlueHigh = LoadColor(spec.arcBlueHigh, fallback.ArcBlueHigh);
 			noteSideData.ArcGreenHigh = LoadColor(spec.arcGreenHigh, fallback.ArcGreenHigh);
+			noteSideData.ArcUnknownHigh = LoadColor(spec.arcUnknownHigh, fallback.ArcUnknownHigh);
 			noteSideData.ArcVoid = LoadColor(spec.arcVoid, fallback.ArcVoid);
 
 			return noteSideData;
