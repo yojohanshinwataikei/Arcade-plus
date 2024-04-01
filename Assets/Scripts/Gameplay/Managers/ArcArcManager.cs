@@ -71,7 +71,7 @@ namespace Arcade.Gameplay
 				foreach (ArcArc b in Arcs)
 				{
 					if (a == b) continue;
-					if (Mathf.Abs(a.XEnd - b.XStart) < 0.1f && Mathf.Abs(a.EndTiming - b.Timing) <= 9 && Mathf.Abs(a.YEnd - b.YStart) < 0.01f)
+					if (Mathf.Abs(a.XEnd - b.XStart) < 0.25f && Mathf.Abs(a.EndTiming - b.Timing) <= 9 && Mathf.Abs(a.YEnd - b.YStart) < 0.01f)
 					{
 						if (a.Color == b.Color && a.IsVoid == b.IsVoid)
 						{
