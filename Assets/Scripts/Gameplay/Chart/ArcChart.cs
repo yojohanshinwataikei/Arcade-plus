@@ -505,7 +505,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
-					spriteRenderer.renderingLayerMask=MaskUtil.SetMask(spriteRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
+					spriteRenderer.renderingLayerMask = MaskUtil.SetMask(spriteRenderer.renderingLayerMask, ArcGameplayManager.Instance.SelectionLayerMask, value);
 					selected = value;
 				}
 			}
@@ -735,7 +735,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
-					spriteRenderer.renderingLayerMask=MaskUtil.SetMask(spriteRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
+					spriteRenderer.renderingLayerMask = MaskUtil.SetMask(spriteRenderer.renderingLayerMask, ArcGameplayManager.Instance.SelectionLayerMask, value);
 					selected = value;
 				}
 			}
@@ -832,6 +832,8 @@ namespace Arcade.Gameplay.Chart
 		public ArcArc Arc;
 		public ArcTimingGroup TimingGroup { get => Arc.TimingGroup; }
 
+		public bool IsConvertedVariousSizedArctap=false;
+
 		public Transform Model;
 		public Transform Shadow;
 		public MeshRenderer ModelRenderer;
@@ -913,8 +915,13 @@ namespace Arcade.Gameplay.Chart
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			float t = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
 			Vector3 parentLocalPosition = new Vector3(0, 0, -timingManager.CalculatePositionByTiming(Arc.Timing + offset, Arc.TimingGroup) / 1000f);
-			Vector3 baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
-									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f, 0);
+			Vector3 baseLocalPosition = new Vector3();
+			if(IsConvertedVariousSizedArctap){
+				baseLocalPosition=new Vector3(ArcAlgorithm.ArcXToWorld((Arc.XStart+Arc.XEnd)/2f),ArcAlgorithm.ArcYToWorld(Arc.YStart),0);
+			}else{
+				baseLocalPosition=new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
+										ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f, 0);
+			}
 			Vector3 offsetLocalPosition = -timingManager.CalculatePositionByTiming(Timing + offset, Arc.TimingGroup) / 1000f * this.FallDirection();
 			Vector3 additionalLocalPosition = new Vector3(0, 0, -0.6f);
 			LocalPosition = baseLocalPosition + offsetLocalPosition - parentLocalPosition + additionalLocalPosition;
@@ -1026,7 +1033,7 @@ namespace Arcade.Gameplay.Chart
 			{
 				if (selected != value)
 				{
-					ModelRenderer.renderingLayerMask=MaskUtil.SetMask(ModelRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
+					ModelRenderer.renderingLayerMask = MaskUtil.SetMask(ModelRenderer.renderingLayerMask, ArcGameplayManager.Instance.SelectionLayerMask, value);
 					selected = value;
 				}
 			}
@@ -1057,6 +1064,20 @@ namespace Arcade.Gameplay.Chart
 		public string Effect = "none";
 		public bool IsVoid;
 		public List<ArcArcTap> ArcTaps = new List<ArcArcTap>();
+
+		public ArcArcTap ConvertedVariousSizedArctap = null;
+
+		public bool IsVariousSizedArctap
+		{
+			get
+			{
+				if (Color == 3 && Timing == EndTiming && Math.Abs(YStart - YEnd) < float.Epsilon && !IsVoid)
+				{
+					return true;
+				}
+				return false;
+			}
+		}
 
 		public override ArcEvent Clone()
 		{
@@ -1198,6 +1219,14 @@ namespace Arcade.Gameplay.Chart
 			{
 				tap.Instantiate(this);
 			}
+			if (IsVariousSizedArctap){
+				ConvertedVariousSizedArctap=new ArcArcTap{
+					Timing=Timing,
+					Arc=this,
+					IsConvertedVariousSizedArctap=true,
+				};
+				ConvertedVariousSizedArctap.Instantiate(this);
+			}
 		}
 		public void DestroyArcTaps()
 		{
@@ -1205,6 +1234,8 @@ namespace Arcade.Gameplay.Chart
 			{
 				at.Destroy();
 			}
+			ConvertedVariousSizedArctap?.Destroy();
+			ConvertedVariousSizedArctap=null;
 		}
 		public void AddArcTap(ArcArcTap arctap)
 		{

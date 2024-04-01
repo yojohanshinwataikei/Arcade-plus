@@ -157,7 +157,12 @@ namespace Arcade.Gameplay
 
 			foreach (var t in Arcs)
 			{
-				RenderArcTaps(t);
+				foreach(var arctap in t.ArcTaps){
+					RenderArcTap(arctap);
+				}
+				if (t.ConvertedVariousSizedArctap!=null){
+					RenderArcTap(t.ConvertedVariousSizedArctap);
+				}
 				int duration = t.EndTiming - t.Timing;
 				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup, duration, !t.IsVoid) || (t.Judged && !t.IsVoid) || t.GroupHide())
 				{
@@ -212,36 +217,33 @@ namespace Arcade.Gameplay
 			}
 		}
 
-		private void RenderArcTaps(ArcArc arc)
+		private void RenderArcTap(ArcArcTap t)
 		{
 			int timing = ArcGameplayManager.Instance.Timing;
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
-			foreach (ArcArcTap t in arc.ArcTaps)
+			if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup) || t.Judged || t.GroupHide())
 			{
-				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup) || t.Judged || t.GroupHide())
-				{
-					t.Enable = false;
-					continue;
-				}
-				float pos = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup) / 1000f;
-				if (pos > -100 && pos <= 90)
-				{
-					t.Alpha = 1;
-					t.Enable = true;
-					t.UpdatePosition();
-				}
-				else if (pos > 90 && pos <= 100)
-				{
-					t.Enable = true;
-					t.Alpha = (100 - pos) / 10f;
-					t.UpdatePosition();
-				}
-				else
-				{
-					t.Enable = false;
-				}
+				t.Enable = false;
+				return;
+			}
+			float pos = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup) / 1000f;
+			if (pos > -100 && pos <= 90)
+			{
+				t.Alpha = 1;
+				t.Enable = true;
+				t.UpdatePosition();
+			}
+			else if (pos > 90 && pos <= 100)
+			{
+				t.Enable = true;
+				t.Alpha = (100 - pos) / 10f;
+				t.UpdatePosition();
+			}
+			else
+			{
+				t.Enable = false;
 			}
 		}
 
@@ -255,7 +257,12 @@ namespace Arcade.Gameplay
 				{
 					continue;
 				}
-				JudgeArcTaps(arc);
+				foreach(var arcTap in arc.ArcTaps){
+					JudgeArcTap(arcTap);
+				}
+				if(arc.ConvertedVariousSizedArctap!=null){
+					JudgeArcTap(arc.ConvertedVariousSizedArctap);
+				}
 				if (arc.Judged) continue;
 				if (currentTiming > arc.EndTiming + offset)
 				{
@@ -279,22 +286,19 @@ namespace Arcade.Gameplay
 				}
 			}
 		}
-		private void JudgeArcTaps(ArcArc arc)
+		private void JudgeArcTap(ArcArcTap t)
 		{
 			int currentTiming = ArcGameplayManager.Instance.Timing;
 			int offset = ArcAudioManager.Instance.AudioOffset;
-			foreach (ArcArcTap t in arc.ArcTaps)
+			if (t.Judged) return;
+			if (currentTiming > t.Timing + offset && currentTiming <= t.Timing + offset + 150)
 			{
-				if (t.Judged) continue;
-				if (currentTiming > t.Timing + offset && currentTiming <= t.Timing + offset + 150)
-				{
-					t.Judged = true;
-					if (ArcGameplayManager.Instance.IsPlaying) ArcEffectManager.Instance.PlayTapNoteEffectAt(new Vector2(t.LocalPosition.x, t.LocalPosition.y + 0.5f), true, arc.Effect);
-				}
-				else if (currentTiming > t.Timing + offset + 150)
-				{
-					t.Judged = true;
-				}
+				t.Judged = true;
+				if (ArcGameplayManager.Instance.IsPlaying) ArcEffectManager.Instance.PlayTapNoteEffectAt(new Vector2(t.LocalPosition.x, t.LocalPosition.y + 0.5f), true, t.Arc.Effect);
+			}
+			else if (currentTiming > t.Timing + offset + 150)
+			{
+				t.Judged = true;
 			}
 		}
 
