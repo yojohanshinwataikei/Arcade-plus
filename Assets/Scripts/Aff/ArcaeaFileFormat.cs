@@ -564,11 +564,6 @@ namespace Arcade.Aff
 				timing = endTiming;
 				endTiming = tmp;
 			}
-			if (color.data < 0 || color.data >= 3)
-			{
-				chart.warning.Add($"第 {context.values().value()[7].Start.Line + lineOffset} 行第 {context.values().value()[7].Start.Column + 1} 列，arc 事件的颜色超出范围，作为修复其颜色见会被设为红色");
-				color.data = 0;
-			}
 			List<RawAffArctap> arctaps = new List<RawAffArctap>();
 			var subevents = context.subevents();
 			if (subevents != null)

@@ -78,7 +78,6 @@ namespace Arcade.Gameplay
 			{
 				float playBackSpeed = ArcAudioManager.Instance.PlayBackSpeed;
 				timing += Time.deltaTime * playBackSpeed;
-				Debug.Log(EnablePlaybackSync);
 				if(EnablePlaybackSync){
 					float t = ArcAudioManager.Instance.Timing;
 					if (deltaDspTime > 0f && (timing >= 0 || ArcAudioManager.Instance.Timing > 0))

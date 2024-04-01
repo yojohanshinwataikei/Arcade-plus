@@ -334,7 +334,6 @@ namespace Arcade.Gameplay
 			ArcBlueHigh = arcBlueHigh;
 			ArcGreenHigh = arcGreenHigh;
 			ArcVoid = arcVoid;
-			//TODO: arc has slight diifferent color at different hight
 			ArcArcRenderer prefabRenderer = ArcNotePrefab.GetComponent<ArcArcRenderer>();
 			prefabRenderer.ReloadColor();
 			foreach (ArcArc arc in Arcs)
