@@ -78,7 +78,8 @@ namespace Arcade.Gameplay
 			{
 				float playBackSpeed = ArcAudioManager.Instance.PlayBackSpeed;
 				timing += Time.deltaTime * playBackSpeed;
-				if(EnablePlaybackSync){
+				if (EnablePlaybackSync)
+				{
 					float t = ArcAudioManager.Instance.Timing;
 					if (deltaDspTime > 0f && (timing >= 0 || ArcAudioManager.Instance.Timing > 0))
 					{
@@ -137,11 +138,13 @@ namespace Arcade.Gameplay
 		{
 			if (Chart != null)
 			{
-				foreach (var t in Chart.Arcs) {
+				foreach (var t in Chart.Arcs)
+				{
 					foreach (var a in t.ArcTaps) { a.Judged = false; }
 					t.Judged = false; t.Judging = false; t.AudioPlayed = false;
-					if(t.ConvertedVariousSizedArctap!=null){
-						t.ConvertedVariousSizedArctap.Judged=false;
+					if (t.ConvertedVariousSizedArctap != null)
+					{
+						t.ConvertedVariousSizedArctap.Judged = false;
 					}
 				};
 				foreach (var t in Chart.Holds) { t.Judged = false; t.Judging = false; t.AudioPlayed = false; };
@@ -194,6 +197,7 @@ namespace Arcade.Gameplay
 			foreach (var arc in Chart.Arcs)
 			{
 				if (arc.IsHitMyself(h)) return arc;
+				if (arc.ConvertedVariousSizedArctap?.IsMyself(h.transform.gameObject) ?? false) return arc;
 				foreach (var arctap in arc.ArcTaps)
 				{
 					if (arctap.IsMyself(h.transform.gameObject)) return arctap;

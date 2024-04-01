@@ -1167,6 +1167,10 @@ namespace Arcade.Gameplay.Chart
 			set
 			{
 				arcRenderer.Selected = value;
+				if (ConvertedVariousSizedArctap != null)
+				{
+					ConvertedVariousSizedArctap.Selected = value;
+				}
 			}
 		}
 		public override GameObject Instance
@@ -1257,6 +1261,7 @@ namespace Arcade.Gameplay.Chart
 					IsConvertedVariousSizedArctap = true,
 				};
 				ConvertedVariousSizedArctap.Instantiate(this);
+				ConvertedVariousSizedArctap.Selected=Selected;
 			}
 		}
 		public void DestroyArcTaps()

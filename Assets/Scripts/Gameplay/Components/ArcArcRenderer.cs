@@ -487,7 +487,7 @@ namespace Arcade.Gameplay
 		}
 		public void BuildCollider()
 		{
-			if (arc.Timing > arc.EndTiming || segments.Count == 0)
+			if (arc.Timing > arc.EndTiming || segments.Count == 0 || arc.IsVariousSizedArctap)
 			{
 				if (ArcCollider.sharedMesh)
 				{
