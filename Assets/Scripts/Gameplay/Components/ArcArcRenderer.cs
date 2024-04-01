@@ -264,12 +264,12 @@ namespace Arcade.Gameplay
 					if (value)
 					{
 						JudgeEffect.Play();
-						JudgeEffect.Simulate(1f/60f,60);
+						JudgeEffect.Simulate(1f / 60f, 60);
 					}
 					else
 					{
 						JudgeEffect.Stop();
-						JudgeEffect.Simulate(1f/60f,60);
+						JudgeEffect.Simulate(1f / 60f, 60);
 					}
 				}
 			}
@@ -284,7 +284,7 @@ namespace Arcade.Gameplay
 			{
 				if (selected != value)
 				{
-					HeadRenderer.renderingLayerMask=MaskUtil.SetMask(HeadRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
+					HeadRenderer.renderingLayerMask = MaskUtil.SetMask(HeadRenderer.renderingLayerMask, ArcGameplayManager.Instance.SelectionLayerMask, value);
 
 					foreach (var s in segments) s.Selected = value;
 					selected = value;
@@ -563,7 +563,7 @@ namespace Arcade.Gameplay
 				{
 					s.To = 1;
 				}
-				if (Mathf.Max(pos, endPos) < 0)
+				if ((endPos >= pos && Mathf.Max(pos, endPos) < 0) || (endPos < pos && Mathf.Max(pos, endPos) > 0))
 				{
 					if (arc.Judging || arc.IsVoid || arc.NoInput())
 					{
