@@ -19,6 +19,7 @@ namespace Arcade.Gameplay
 		public GameObject ArcNotePrefab, ArcTapPrefab, SfxArcTapPrefab, ConnectionPrefab;
 		public Transform ArcLayer;
 		public Color ConnectionColor;
+		public Sprite ArcTapShadowSkin;
 		public Texture2D ArcTapSkin;
 		public Material ArcTapMaterial;
 		public Texture2D SfxArcTapNoteSkin;
@@ -157,10 +158,12 @@ namespace Arcade.Gameplay
 
 			foreach (var t in Arcs)
 			{
-				foreach(var arctap in t.ArcTaps){
+				foreach (var arctap in t.ArcTaps)
+				{
 					RenderArcTap(arctap);
 				}
-				if (t.ConvertedVariousSizedArctap!=null){
+				if (t.ConvertedVariousSizedArctap != null)
+				{
 					RenderArcTap(t.ConvertedVariousSizedArctap);
 				}
 				int duration = t.EndTiming - t.Timing;
@@ -257,10 +260,12 @@ namespace Arcade.Gameplay
 				{
 					continue;
 				}
-				foreach(var arcTap in arc.ArcTaps){
+				foreach (var arcTap in arc.ArcTaps)
+				{
 					JudgeArcTap(arcTap);
 				}
-				if(arc.ConvertedVariousSizedArctap!=null){
+				if (arc.ConvertedVariousSizedArctap != null)
+				{
 					JudgeArcTap(arc.ConvertedVariousSizedArctap);
 				}
 				if (arc.Judged) continue;
@@ -304,12 +309,18 @@ namespace Arcade.Gameplay
 
 		public void SetArcTapShadowSkin(Sprite sprite)
 		{
+			ArcTapShadowSkin = sprite;
 			ArcTapPrefab.GetComponentInChildren<SpriteRenderer>().sprite = sprite;
+			SfxArcTapPrefab.GetComponentInChildren<SpriteRenderer>().sprite = sprite;
 			foreach (ArcArc arc in Arcs)
 			{
 				foreach (ArcArcTap t in arc.ArcTaps)
 				{
 					t.ShadowRenderer.sprite = sprite;
+				}
+				if (arc.ConvertedVariousSizedArctap != null)
+				{
+					arc.ConvertedVariousSizedArctap.ShadowRenderer.sprite = sprite;
 				}
 			}
 		}

@@ -905,6 +905,8 @@ namespace Arcade.Gameplay.Chart
 				arc.IsSfx ? ArcArcManager.Instance.SfxArcTapPrefab : ArcArcManager.Instance.ArcTapPrefab, arc.transform
 			);
 
+			ShadowRenderer.sprite=ArcArcManager.Instance.ArcTapShadowSkin;
+
 			UpdatePosition();
 			UpdateScale();
 			SetupArcTapConnection();
