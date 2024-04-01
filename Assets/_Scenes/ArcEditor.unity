@@ -20214,10 +20214,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
+    x: 0.05376344
+    y: 0.061156236
+    width: 0.8924731
+    height: 0.8776875
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -66895,6 +66895,7 @@ MonoBehaviour:
     type: 3}
   ArcLayer: {fileID: 985107420}
   ConnectionColor: {r: 0.47058824, g: 0.78431374, b: 0.8627451, a: 1}
+  ArcTapShadowSkin: {fileID: 21300000, guid: 42f18f8ce6622044ba299422f776f0f1, type: 3}
   ArcTapSkin: {fileID: 2800000, guid: 4774c9cdcbf72374bbb1a31f99e2a0de, type: 3}
   ArcTapMaterial: {fileID: 2100000, guid: 398ea87e569dea441b35a94a2d63ca34, type: 2}
   SfxArcTapNoteSkin: {fileID: 2800000, guid: 7c51aecf71d724444957e55a82bd6e23, type: 3}
@@ -66907,9 +66908,11 @@ MonoBehaviour:
   ArcRedLow: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
   ArcBlueLow: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}
   ArcGreenLow: {r: 0.13725491, g: 1, b: 0.42352942, a: 1}
+  ArcUnknownLow: {r: 0, g: 0, b: 0, a: 0}
   ArcRedHigh: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
   ArcBlueHigh: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}
   ArcGreenHigh: {r: 0.13725491, g: 1, b: 0.42352942, a: 1}
+  ArcUnknownHigh: {r: 0, g: 0, b: 0, a: 0}
   ArcVoid: {r: 0.5686275, g: 0.47058824, b: 0.6666667, a: 1}
   ShadowColor: {r: 0.3529412, g: 0.3529412, b: 0.3529412, a: 0.3529412}
   ArcJudgePos: 0
@@ -81582,10 +81585,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1707394408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400.5, y: -72.258064}
+  m_SizeDelta: {x: 705, y: 40.258064}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2105888210
 MonoBehaviour:
