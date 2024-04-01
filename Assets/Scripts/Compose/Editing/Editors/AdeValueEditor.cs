@@ -115,7 +115,15 @@ namespace Arcade.Compose.Editing
 				}
 				if (Color.gameObject.activeSelf)
 				{
+					Color.GetComponentInChildren<Dropdown>().interactable = true;
 					Color.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : (note as ArcArc).Color);
+					if (!multiple)
+					{
+						if ((note as ArcArc).Color >= 3)
+						{
+							Color.GetComponentInChildren<Dropdown>().interactable = false;
+						}
+					}
 				}
 				if (IsVoid.gameObject.activeSelf)
 				{
@@ -636,7 +644,7 @@ namespace Arcade.Compose.Editing
 					note.CalculateJudgeTimings();
 					ArcArcManager.Instance.CalculateArcRelationship();
 				};
-				var newCoordinate = await AdeCursorManager.Instance.SelectCoordinate(note.Timing,Progress.Create(updateStartCoordinate), cancellationToken);
+				var newCoordinate = await AdeCursorManager.Instance.SelectCoordinate(note.Timing, Progress.Create(updateStartCoordinate), cancellationToken);
 				updateStartCoordinate(newCoordinate);
 			}
 			catch (OperationCanceledException ex)
@@ -679,7 +687,7 @@ namespace Arcade.Compose.Editing
 					note.CalculateJudgeTimings();
 					ArcArcManager.Instance.CalculateArcRelationship();
 				};
-				var newCoordinate = await AdeCursorManager.Instance.SelectCoordinate(note.EndTiming,Progress.Create(updateEndCoordinate), cancellationToken);
+				var newCoordinate = await AdeCursorManager.Instance.SelectCoordinate(note.EndTiming, Progress.Create(updateEndCoordinate), cancellationToken);
 				updateEndCoordinate(newCoordinate);
 			}
 			catch (OperationCanceledException ex)
@@ -815,9 +823,9 @@ namespace Arcade.Compose.Editing
 			});
 		}
 
-        public override AdeOperationResult TryExecuteOperation()
-        {
-            if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ReselectTiming))
+		public override AdeOperationResult TryExecuteOperation()
+		{
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ReselectTiming))
 			{
 				var cancellation = new CancellationTokenSource();
 				return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
@@ -863,6 +871,6 @@ namespace Arcade.Compose.Editing
 				});
 			}
 			return false;
-        }
-    }
+		}
+	}
 }
