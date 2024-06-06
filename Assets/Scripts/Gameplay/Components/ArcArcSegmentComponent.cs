@@ -277,27 +277,32 @@ namespace Arcade.Gameplay
 
 			if (fromPos == toPos) return;
 
+			Vector3 AveragePos = (FromPos+ToPos)/2;
+			Vector3 OffsetPos = (ToPos-FromPos)/2;
+
+			transform.localPosition=AveragePos;
+
 			Vector3[] vertices = new Vector3[6];
 			Vector2[] uv = new Vector2[6];
 			Vector2[] uv2 = new Vector2[6];
 			int[] triangles = new int[] { 0, 3, 2, 0, 2, 1, 0, 5, 4, 0, 4, 1 };
 
-			vertices[0] = fromPos + new Vector3(0, offset / 2, 0);
+			vertices[0] = -OffsetPos + new Vector3(0, offset / 2, 0);
 			uv[0] = new Vector2(0, 0);
 			uv2[0] =new Vector2(fromHeight,0);
-			vertices[1] = toPos + new Vector3(0, offset / 2, 0);
+			vertices[1] = OffsetPos + new Vector3(0, offset / 2, 0);
 			uv[1] = new Vector2(0, 1);
 			uv2[1] =new Vector2(toHeight,0);
-			vertices[2] = toPos + new Vector3(offset, -offset / 2, 0);
+			vertices[2] = OffsetPos + new Vector3(offset, -offset / 2, 0);
 			uv[2] = new Vector2(1, 1);
 			uv2[2] =new Vector2(toHeight,0);
-			vertices[3] = fromPos + new Vector3(offset, -offset / 2, 0);
+			vertices[3] = -OffsetPos + new Vector3(offset, -offset / 2, 0);
 			uv[3] = new Vector2(1, 0);
 			uv2[3] =new Vector2(fromHeight,0);
-			vertices[4] = toPos + new Vector3(-offset, -offset / 2, 0);
+			vertices[4] = OffsetPos + new Vector3(-offset, -offset / 2, 0);
 			uv[4] = new Vector2(1, 1);
 			uv2[4] =new Vector2(toHeight,0);
-			vertices[5] = fromPos + new Vector3(-offset, -offset / 2, 0);
+			vertices[5] = -OffsetPos + new Vector3(-offset, -offset / 2, 0);
 			uv[5] = new Vector2(1, 0);
 			uv2[5] =new Vector2(fromHeight,0);
 
@@ -314,13 +319,16 @@ namespace Arcade.Gameplay
 			Vector2[] shadowuv = new Vector2[4];
 			int[] shadowtriangles = new int[6];
 
-			shadowvertices[0] = fromPos + new Vector3(-offset, -fromPos.y, 0);
+
+			ShadowFilter.transform.localPosition=new Vector3(0,-AveragePos.y,0);
+
+			shadowvertices[0] = -OffsetPos + new Vector3(-offset, OffsetPos.y, 0);
 			shadowuv[0] = new Vector2();
-			shadowvertices[1] = toPos + new Vector3(-offset, -toPos.y, 0); ;
+			shadowvertices[1] = OffsetPos + new Vector3(-offset, -OffsetPos.y, 0); ;
 			shadowuv[1] = new Vector2(0, 1);
-			shadowvertices[2] = toPos + new Vector3(offset, -toPos.y, 0);
+			shadowvertices[2] = OffsetPos + new Vector3(offset, -OffsetPos.y, 0);
 			shadowuv[2] = new Vector2(1, 1);
-			shadowvertices[3] = fromPos + new Vector3(offset, -fromPos.y, 0);
+			shadowvertices[3] = -OffsetPos + new Vector3(offset, OffsetPos.y, 0);
 			shadowuv[3] = new Vector2(1, 0);
 
 			shadowtriangles[0] = 0;
