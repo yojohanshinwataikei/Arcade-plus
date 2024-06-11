@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 
 
 namespace Arcade.Util.Rendering
 {
+
 	public class SelectionRendering : ScriptableRendererFeature
 	{
 		class SelectionPass : ScriptableRenderPass
@@ -15,9 +17,6 @@ namespace Arcade.Util.Rendering
 			public static readonly int SelectionColorShaderId = Shader.PropertyToID("_SelectionColor");
 			public static readonly int OutlineShaderId = Shader.PropertyToID("_OutlineColor");
 			public SelectionRendering feature;
-			private RTHandle selection;
-			private RTHandle selectionDepth;
-			private RTHandle cameraColor;
 			private List<ShaderTagId> shaderTagIdList = new List<ShaderTagId> {
 				new ShaderTagId("UniversalForward"),
 				new ShaderTagId("UniversalForwardOnly"),
@@ -36,61 +35,78 @@ namespace Arcade.Util.Rendering
 				profilingSampler = new ProfilingSampler("SelectionPass");
 			}
 
-			public void SetTarget(RTHandle cameraColor)
+			class MaskPassData
 			{
-				this.cameraColor = cameraColor;
+				public RendererListHandle objectsInSelection;
+			}
+			class BlitPassData
+			{
+				public TextureHandle src;
+				public Material material;
 			}
 
-			public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
+			public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameContext)
 			{
-				RenderTextureDescriptor descriptor = renderingData.cameraData.cameraTargetDescriptor;
+				UniversalRenderingData renderingData = frameContext.Get<UniversalRenderingData>();
+				UniversalCameraData cameraData = frameContext.Get<UniversalCameraData>();
+				UniversalLightData lightData = frameContext.Get<UniversalLightData>();
+				SortingCriteria sortFlags = cameraData.defaultOpaqueSortFlags;
+				// TODO: Use a specific shader pass to draw selection buffer
+				DrawingSettings drawingSettings = RenderingUtils.CreateDrawingSettings(
+					shaderTagIdList, renderingData, cameraData, lightData, sortFlags
+				);
+				RendererListParams rendererListParams = new RendererListParams(
+					renderingData.cullResults,
+					drawingSettings,
+					new FilteringSettings(RenderQueueRange.all, -1, feature.RenderingLayerMask)
+				);
+				RenderTextureDescriptor descriptor = cameraData.cameraTargetDescriptor;
 				descriptor.colorFormat = RenderTextureFormat.ARGB32;
-				RenderingUtils.ReAllocateIfNeeded(ref selectionDepth, descriptor, wrapMode: TextureWrapMode.Clamp, name: "_selection");
+				TextureHandle selectionMaskDepth = UniversalRenderer.CreateRenderGraphTexture(
+					renderGraph, descriptor, "selection depth", false
+				);
 				descriptor.depthBufferBits = 0;
-				RenderingUtils.ReAllocateIfNeeded(ref selection, descriptor, wrapMode: TextureWrapMode.Clamp, name: "_selection");
+				TextureHandle selectionMaskColor = UniversalRenderer.CreateRenderGraphTexture(
+					renderGraph, descriptor, "selection color", false
+				);
+
+				UniversalResourceData resourceData = frameContext.Get<UniversalResourceData>();
+				TextureHandle activeColorTexture = resourceData.activeColorTexture;
+
+				using (var builder = renderGraph.AddRasterRenderPass<MaskPassData>("Selection Mask", out var passData))
+				{
+					passData.objectsInSelection = renderGraph.CreateRendererList(rendererListParams);
+
+					builder.UseRendererList(passData.objectsInSelection);
+					builder.SetRenderAttachment(selectionMaskColor, 0);
+					builder.SetRenderAttachmentDepth(selectionMaskDepth, 0);
+					builder.SetRenderFunc((MaskPassData data, RasterGraphContext context) => ExecuteMaskPass(data, context));
+				}
 
 				selectionBlitMaterial.SetFloat(SampleDistanceShaderId, feature.SampleDistance * ((float)descriptor.width) / feature.SampleDistanceReferenceWidth);
 				selectionBlitMaterial.SetVector(BlitTextureSizeShaderId, new Vector4(descriptor.width, descriptor.height));
 				selectionBlitMaterial.SetColor(SelectionColorShaderId, feature.SelectionColor);
 				selectionBlitMaterial.SetColor(OutlineShaderId, feature.OutlineColor);
 
-				ConfigureTarget(selection, selectionDepth);
-				ConfigureClear(ClearFlag.All, new Color(0, 0, 0, 0));
+				using (var builder = renderGraph.AddRasterRenderPass<BlitPassData>("Selection Outline", out var passData))
+				{
+					passData.src = selectionMaskColor;
+					passData.material = selectionBlitMaterial;
+            		builder.UseTexture(selectionMaskColor, 0);
+            		builder.SetRenderAttachment(activeColorTexture, 0);
+					builder.SetRenderFunc((BlitPassData data, RasterGraphContext context) => ExecuteBlitPass(data, context));
+				}
 			}
 
-			public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+			static void ExecuteMaskPass(MaskPassData data, RasterGraphContext context)
 			{
-				if (renderingData.cameraData.cameraType != CameraType.Game)
-				{
-					return;
-				}
-				CommandBuffer cmd = CommandBufferPool.Get(name: "Selection");
-				using (new ProfilingScope(profilingSampler))
-				{
-					// TODO: Use a specific shader pass to draw selection buffer
-					DrawingSettings drawingSettings = CreateDrawingSettings(shaderTagIdList, ref renderingData, renderingData.cameraData.defaultOpaqueSortFlags);
-					RendererListParams rendererListParams = new RendererListParams(
-						renderingData.cullResults,
-						drawingSettings,
-						new FilteringSettings(RenderQueueRange.all, -1, feature.RenderingLayerMask)
-					);
-
-					RendererList rendererList = context.CreateRendererList(ref rendererListParams);
-
-					cmd.DrawRendererList(rendererList);
-					context.ExecuteCommandBuffer(cmd);
-					cmd.Clear();
-
-					Blitter.BlitCameraTexture(cmd, selection, cameraColor, selectionBlitMaterial, 0);
-
-					context.ExecuteCommandBuffer(cmd);
-					cmd.Clear();
-				}
-				CommandBufferPool.Release(cmd);
+				context.cmd.ClearRenderTarget(true, true, Color.clear);
+				context.cmd.DrawRendererList(data.objectsInSelection);
 			}
 
-			public override void OnCameraCleanup(CommandBuffer cmd)
+			static void ExecuteBlitPass(BlitPassData data, RasterGraphContext context)
 			{
+				Blitter.BlitTexture(context.cmd, data.src, new Vector4(1, 1, 0, 0), data.material, 0);
 			}
 		}
 
@@ -121,13 +137,6 @@ namespace Arcade.Util.Rendering
 			if (renderingData.cameraData.cameraType == CameraType.Game)
 			{
 				renderer.EnqueuePass(selectionPass);
-			}
-		}
-		public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
-		{
-			if (renderingData.cameraData.cameraType == CameraType.Game)
-			{
-				selectionPass.SetTarget(renderer.cameraColorTargetHandle);
 			}
 		}
 	}
