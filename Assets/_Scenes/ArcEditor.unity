@@ -20236,10 +20236,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.05376344
-    y: 0.061156236
-    width: 0.8924731
-    height: 0.8776875
+    x: 0.052083332
+    y: 0.059245102
+    width: 0.8958333
+    height: 0.8815098
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -54751,7 +54751,7 @@ MonoBehaviour:
   DifficultyPresent: {fileID: 1636349841}
   DifficultyFuture: {fileID: 597009600}
   DifficultyBeyond: {fileID: 1395789076}
-  DifficultyEternal: {fileID: 0}
+  DifficultyEternal: {fileID: 1073716303}
   DialogTops:
   - {fileID: 1168504486}
   - {fileID: 1284176827}
@@ -54854,6 +54854,8 @@ MonoBehaviour:
       type: 3}
     DifficultyFuture: {fileID: 21300000, guid: a5507624240f3be4d9e1a5dde1f449e7, type: 3}
     DifficultyBeyond: {fileID: 21300000, guid: 3f7e93e6d3af80845b9c3814da4cea84, type: 3}
+    DifficultyEternal: {fileID: 21300000, guid: 2005810f37cdcd64c839164f34506541,
+      type: 3}
     Pause: {fileID: 21300000, guid: fb68281b5b64d954a974ca717d5d2f3c, type: 3}
     PausePressed: {fileID: 21300000, guid: 89652f6c8bb53c94194bdf7a68db2b62, type: 3}
     Play: {fileID: 21300000, guid: 553478578ae7dea4595ccd544722e196, type: 3}
@@ -69108,7 +69110,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -64.99945, y: -20}
-  m_SizeDelta: {x: 237, y: 99}
+  m_SizeDelta: {x: 254, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1741821669
 MonoBehaviour:
