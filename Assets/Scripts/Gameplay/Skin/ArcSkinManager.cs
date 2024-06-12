@@ -23,6 +23,7 @@ namespace Arcade.Gameplay
 		public Image DifficultyPresent;
 		public Image DifficultyFuture;
 		public Image DifficultyBeyond;
+		public Image DifficultyEternal;
 
 		[Header("Dialog")]
 		//TODO: We should use a Dialog Component to handle dialogs
@@ -66,6 +67,7 @@ namespace Arcade.Gameplay
 			DifficultyPresent.sprite = skinData.DifficultyPresent.value;
 			DifficultyFuture.sprite = skinData.DifficultyFuture.value;
 			DifficultyBeyond.sprite = skinData.DifficultyBeyond.value;
+			DifficultyEternal.sprite = skinData.DifficultyEternal.value;
 
 			ArcadeComposeManager.Instance.SetPauseSprite(skinData.Pause.value);
 			ArcadeComposeManager.Instance.SetPausePressedSprite(skinData.PausePressed.value);

@@ -27,7 +27,7 @@ namespace Arcade.Compose
 		public string Title;
 		public string Artist;
 		public float BaseBpm;
-		public AdeChartDifficultyMetadata[] Difficulties = new AdeChartDifficultyMetadata[4];
+		public AdeChartDifficultyMetadata[] Difficulties = new AdeChartDifficultyMetadata[AdeProjectManager.DIFFICULTY_COUNT];
 
 		public int LastWorkingDifficulty = 2;
 		public int LastWorkingTiming;
@@ -36,6 +36,7 @@ namespace Arcade.Compose
 
 	public class AdeProjectManager : MonoBehaviour
 	{
+		public const int DIFFICULTY_COUNT=5;
 		public static AdeProjectManager Instance { get; private set; }
 
 		public string CurrentProjectFolder { get; set; }
@@ -316,9 +317,9 @@ namespace Arcade.Compose
 				CurrentProjectMetadata = new ArcadeProjectMetadata();
 				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 			}
-			if (CurrentProjectMetadata.Difficulties.Length < 4)
+			if (CurrentProjectMetadata.Difficulties.Length < DIFFICULTY_COUNT)
 			{
-				var Difficulties = new AdeChartDifficultyMetadata[4];
+				var Difficulties = new AdeChartDifficultyMetadata[DIFFICULTY_COUNT];
 				CurrentProjectMetadata.Difficulties.CopyTo(Difficulties, 0);
 				CurrentProjectMetadata.Difficulties = Difficulties;
 			}
