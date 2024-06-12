@@ -590,7 +590,9 @@ namespace Arcade.Compose
 		}
 		private void OnApplicationQuit()
 		{
+			Debug.Log("saving main setting when exit...");
 			SavePreferences();
+			Debug.Log("saved main setting when exit");
 		}
 		public void OpenLogFile()
 		{

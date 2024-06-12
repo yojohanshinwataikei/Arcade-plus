@@ -102,7 +102,9 @@ namespace Arcade.Compose.Feature
 		}
 		private void OnApplicationQuit()
 		{
+			Debug.Log("saving obs setting when exit...");
 			SavePreferences();
+			Debug.Log("saved obs setting when exit");
 		}
 
 		public void OpenOBSWebsite()

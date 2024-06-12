@@ -549,7 +549,9 @@ namespace Arcade.Compose
 
 		public void OnApplicationQuit()
 		{
+			Debug.Log("saving project when exit...");
 			SaveProject();
+			Debug.Log("saved project when exit");
 		}
 	}
 }

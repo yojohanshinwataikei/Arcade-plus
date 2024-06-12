@@ -403,7 +403,9 @@ namespace Arcade.Compose.Dialog
 		}
 		private void OnApplicationQuit()
 		{
+			Debug.Log("saving skin setting when exit...");
 			SavePreferences();
+			Debug.Log("saved skin setting when exit");
 		}
 
 		public void UpdateBackgroundFilterResult(string pattern)
