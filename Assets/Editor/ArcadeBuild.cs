@@ -15,7 +15,7 @@ public class ArcadeBuild
 				 locationPathName = "Build/x64/Arcade-plus.exe",
 				 scenes = new string[] { "Assets/_Scenes/ArcEditor.unity" },
 				 target = BuildTarget.StandaloneWindows64,
-				 options = BuildOptions.None,
+				 options = BuildOptions.AllowDebugging & BuildOptions.Development,
 			 }).summary.result.ToString());
 	}
 	[MenuItem("Arcade/UpdateBuildTime")]
