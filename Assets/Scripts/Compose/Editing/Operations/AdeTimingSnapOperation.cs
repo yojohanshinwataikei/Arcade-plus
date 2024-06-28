@@ -61,39 +61,51 @@ namespace Arcade.Compose.Operation
 				{
 					var newNote = note.Clone();
 					int newTiming = GetSnappedTiming(note.Timing);
+					bool isSingleArctapArc = false;
+					if (note is ArcArc)
+					{
+						isSingleArctapArc = ((note as ArcArc).EndTiming - note.Timing == 1) && (note as ArcArc).ArcTaps.Count > 0;
+					}
 					newNote.Timing = newTiming;
 					if (note is ArcLongNote)
 					{
-						int newEndTiming = GetSnappedTiming((note as ArcLongNote).EndTiming);
-						if (newEndTiming < newTiming)
+						if (isSingleArctapArc)
 						{
-							newEndTiming = newTiming;
+							(newNote as ArcLongNote).EndTiming = newTiming + 1;
 						}
-						if (newEndTiming == newTiming)
+						else
 						{
-							bool needAvoidZeroLength = false;
-							if (note is ArcHold)
+							int newEndTiming = GetSnappedTiming((note as ArcLongNote).EndTiming);
+							if (newEndTiming < newTiming)
 							{
-								needAvoidZeroLength = true;
+								newEndTiming = newTiming;
 							}
-							if (note is ArcArc)
+							if (newEndTiming == newTiming)
 							{
-								var arc = note as ArcArc;
-								if (arc.ArcTaps.Count > 0)
+								bool needAvoidZeroLength = false;
+								if (note is ArcHold)
 								{
 									needAvoidZeroLength = true;
 								}
-								if (Mathf.Approximately(arc.XStart, arc.XEnd) && Mathf.Approximately(arc.YStart, arc.YEnd))
+								if (note is ArcArc)
 								{
-									needAvoidZeroLength = true;
+									var arc = note as ArcArc;
+									if (arc.ArcTaps.Count > 0)
+									{
+										needAvoidZeroLength = true;
+									}
+									if (Mathf.Approximately(arc.XStart, arc.XEnd) && Mathf.Approximately(arc.YStart, arc.YEnd))
+									{
+										needAvoidZeroLength = true;
+									}
+								}
+								if (needAvoidZeroLength)
+								{
+									newEndTiming = GetNextSnappedTiming(newTiming);
 								}
 							}
-							if (needAvoidZeroLength)
-							{
-								newEndTiming = GetNextSnappedTiming(newTiming);
-							}
+							(newNote as ArcLongNote).EndTiming = newEndTiming;
 						}
-						(newNote as ArcLongNote).EndTiming = newEndTiming;
 					}
 					commands.Add(new EditArcEventCommand(note, newNote));
 					if (note is ArcArc)
@@ -131,15 +143,15 @@ namespace Arcade.Compose.Operation
 			return newTiming;
 		}
 
-        public override AdeOperationResult TryExecuteOperation()
-        {
-            if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.TimingSnap))
+		public override AdeOperationResult TryExecuteOperation()
+		{
+			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.TimingSnap))
 			{
 				SnapSelectedNotesTiming();
 				return true;
 			}
 			return false;
-        }
+		}
 
 		public void ManuallyExecuteOperation()
 		{
@@ -149,5 +161,5 @@ namespace Arcade.Compose.Operation
 				return null;
 			});
 		}
-    }
+	}
 }
