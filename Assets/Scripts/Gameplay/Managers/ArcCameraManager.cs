@@ -148,7 +148,11 @@ namespace Arcade.Gameplay
 			float delta = pos - CurrentTilt;
 			if (Mathf.Abs(delta) >= 0.001f)
 			{
-				float speed = 6f;
+				float speed = 4.8f;
+				if (Mathf.Abs(pos) <= 0.001f)
+				{
+					speed /= 2f;
+				}
 				CurrentTilt = CurrentTilt + speed * delta * Time.deltaTime;
 			}
 			else
