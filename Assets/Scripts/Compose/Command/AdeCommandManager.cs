@@ -6,11 +6,11 @@ using UnityEngine.UI;
 namespace Arcade.Compose.Command
 {
 
-	public class CommandManager : MonoBehaviour
+	public class AdeCommandManager : MonoBehaviour
 	{
 		public delegate void OnCommandExecuted(ICommand command, bool undo);
 		public OnCommandExecuted onCommandExecuted;
-		public static CommandManager Instance { get; private set; }
+		public static AdeCommandManager Instance { get; private set; }
 		private void Awake()
 		{
 			Instance = this;

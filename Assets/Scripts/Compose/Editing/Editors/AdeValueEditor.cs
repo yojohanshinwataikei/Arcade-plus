@@ -44,13 +44,13 @@ namespace Arcade.Compose.Editing
 		private void Start()
 		{
 			AdeSelectionManager.Instance.NoteEventListeners.Add(this);
-			CommandManager.Instance.onCommandExecuted+=OnCommandExecuted;
+			AdeCommandManager.Instance.onCommandExecuted+=OnCommandExecuted;
 		}
 
         private void OnDestroy()
 		{
 			AdeSelectionManager.Instance.NoteEventListeners.Remove(this);
-			CommandManager.Instance.onCommandExecuted-=OnCommandExecuted;
+			AdeCommandManager.Instance.onCommandExecuted-=OnCommandExecuted;
 		}
 
 		private void UpdateFields()
@@ -280,11 +280,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (commands.Count == 1)
 				{
-					CommandManager.Instance.Add(commands[0]);
+					AdeCommandManager.Instance.Add(commands[0]);
 				}
 				else if (commands.Count > 1)
 				{
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 				ArcGameplayManager.Instance.ResetJudge();
 			}
@@ -320,11 +320,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (commands.Count == 1)
 				{
-					CommandManager.Instance.Add(commands[0]);
+					AdeCommandManager.Instance.Add(commands[0]);
 				}
 				else if (commands.Count > 1)
 				{
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -348,11 +348,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (commands.Count == 1)
 				{
-					CommandManager.Instance.Add(commands[0]);
+					AdeCommandManager.Instance.Add(commands[0]);
 				}
 				else if (commands.Count > 1)
 				{
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 				ArcGameplayManager.Instance.ResetJudge();
 			}
@@ -380,11 +380,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (commands.Count == 1)
 				{
-					CommandManager.Instance.Add(commands[0]);
+					AdeCommandManager.Instance.Add(commands[0]);
 				}
 				else if (commands.Count > 1)
 				{
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -411,11 +411,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (commands.Count == 1)
 				{
-					CommandManager.Instance.Add(commands[0]);
+					AdeCommandManager.Instance.Add(commands[0]);
 				}
 				else if (commands.Count > 1)
 				{
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -442,11 +442,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (commands.Count == 1)
 				{
-					CommandManager.Instance.Add(commands[0]);
+					AdeCommandManager.Instance.Add(commands[0]);
 				}
 				else if (commands.Count > 1)
 				{
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -468,11 +468,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (commands.Count == 1)
 				{
-					CommandManager.Instance.Add(commands[0]);
+					AdeCommandManager.Instance.Add(commands[0]);
 				}
 				else if (commands.Count > 1)
 				{
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -494,11 +494,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (commands.Count == 1)
 				{
-					CommandManager.Instance.Add(commands[0]);
+					AdeCommandManager.Instance.Add(commands[0]);
 				}
 				else if (commands.Count > 1)
 				{
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -521,11 +521,11 @@ namespace Arcade.Compose.Editing
 				}
 				if (commands.Count == 1)
 				{
-					CommandManager.Instance.Add(commands[0]);
+					AdeCommandManager.Instance.Add(commands[0]);
 				}
 				else if (commands.Count > 1)
 				{
-					CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
 				}
 			}
 			catch (Exception Ex)
@@ -618,7 +618,7 @@ namespace Arcade.Compose.Editing
 
 			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
 
-			CommandManager.Instance.Prepare(command);
+			AdeCommandManager.Instance.Prepare(command);
 			try
 			{
 				while (true)
@@ -649,11 +649,11 @@ namespace Arcade.Compose.Editing
 			}
 			catch (OperationCanceledException ex)
 			{
-				CommandManager.Instance.Cancel();
+				AdeCommandManager.Instance.Cancel();
 				AdeSelectionManager.Instance.SelectNote(note);
 				throw ex;
 			}
-			CommandManager.Instance.Commit();
+			AdeCommandManager.Instance.Commit();
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
@@ -703,7 +703,7 @@ namespace Arcade.Compose.Editing
 
 			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
 
-			CommandManager.Instance.Prepare(command);
+			AdeCommandManager.Instance.Prepare(command);
 			try
 			{
 				while (true)
@@ -739,11 +739,11 @@ namespace Arcade.Compose.Editing
 			}
 			catch (OperationCanceledException ex)
 			{
-				CommandManager.Instance.Cancel();
+				AdeCommandManager.Instance.Cancel();
 				AdeSelectionManager.Instance.SelectNote(note);
 				throw ex;
 			}
-			CommandManager.Instance.Commit();
+			AdeCommandManager.Instance.Commit();
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
@@ -764,7 +764,7 @@ namespace Arcade.Compose.Editing
 
 			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
 
-			CommandManager.Instance.Prepare(command);
+			AdeCommandManager.Instance.Prepare(command);
 			try
 			{
 				Action<Vector2> updateStartCoordinate = (Vector2 coordinate) =>
@@ -782,11 +782,11 @@ namespace Arcade.Compose.Editing
 			}
 			catch (OperationCanceledException ex)
 			{
-				CommandManager.Instance.Cancel();
+				AdeCommandManager.Instance.Cancel();
 				AdeSelectionManager.Instance.SelectNote(note);
 				throw ex;
 			}
-			CommandManager.Instance.Commit();
+			AdeCommandManager.Instance.Commit();
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
@@ -807,7 +807,7 @@ namespace Arcade.Compose.Editing
 
 			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
 
-			CommandManager.Instance.Prepare(command);
+			AdeCommandManager.Instance.Prepare(command);
 			try
 			{
 				Action<Vector2> updateEndCoordinate = (Vector2 coordinate) =>
@@ -825,11 +825,11 @@ namespace Arcade.Compose.Editing
 			}
 			catch (OperationCanceledException ex)
 			{
-				CommandManager.Instance.Cancel();
+				AdeCommandManager.Instance.Cancel();
 				AdeSelectionManager.Instance.SelectNote(note);
 				throw ex;
 			}
-			CommandManager.Instance.Commit();
+			AdeCommandManager.Instance.Commit();
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
@@ -850,7 +850,7 @@ namespace Arcade.Compose.Editing
 
 			EditArcEventCommand command = new EditArcEventCommand(note, newNote);
 
-			CommandManager.Instance.Prepare(command);
+			AdeCommandManager.Instance.Prepare(command);
 			try
 			{
 				while (true)
@@ -883,11 +883,11 @@ namespace Arcade.Compose.Editing
 			}
 			catch (OperationCanceledException ex)
 			{
-				CommandManager.Instance.Cancel();
+				AdeCommandManager.Instance.Cancel();
 				AdeSelectionManager.Instance.SelectNote(note);
 				throw ex;
 			}
-			CommandManager.Instance.Commit();
+			AdeCommandManager.Instance.Commit();
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 

@@ -129,7 +129,7 @@ namespace Arcade.Compose.Operation
 					}
 				}
 			}
-			CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "时间对齐"));
+			AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "时间对齐"));
 		}
 
 		public int GetSnappedTiming(int timing)

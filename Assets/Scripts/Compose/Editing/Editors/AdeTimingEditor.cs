@@ -65,11 +65,11 @@ namespace Arcade.Compose.Editing
 
 		public void AddTiming(ArcTiming caller)
 		{
-			CommandManager.Instance.Add(new AddTimingEvent(currentTimingGroup, caller.Clone() as ArcTiming));
+			AdeCommandManager.Instance.Add(new AddTimingEvent(currentTimingGroup, caller.Clone() as ArcTiming));
 		}
 		public void RemoveTiming(ArcTiming caller)
 		{
-			CommandManager.Instance.Add(new RemoveTimingEvent(currentTimingGroup, caller));
+			AdeCommandManager.Instance.Add(new RemoveTimingEvent(currentTimingGroup, caller));
 		}
 		public void AddTimingGroup()
 		{
@@ -78,7 +78,7 @@ namespace Arcade.Compose.Editing
 				Id = ArcTimingManager.Instance.timingGroups.Count + 1,
 				Timings = ArcTimingManager.Instance.GetTiming(currentTimingGroup).Select((timing) => timing.Clone() as ArcTiming).ToList(),
 			};
-			CommandManager.Instance.Add(new AddTimingGroup(timingGroup));
+			AdeCommandManager.Instance.Add(new AddTimingGroup(timingGroup));
 			SetCurrentTimingGroup(timingGroup);
 		}
 		public void RemoveTimingGroup()
@@ -87,7 +87,7 @@ namespace Arcade.Compose.Editing
 			{
 				return;
 			}
-			CommandManager.Instance.Add(new RemoveTimingGroup(currentTimingGroup));
+			AdeCommandManager.Instance.Add(new RemoveTimingGroup(currentTimingGroup));
 		}
 
 		public void UpdateTiming()

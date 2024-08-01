@@ -61,7 +61,7 @@ namespace Arcade.Compose.Operation
 						break;
 				}
 			}
-			CommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "镜像"));
+			AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "镜像"));
 		}
 
 		public override AdeOperationResult TryExecuteOperation()

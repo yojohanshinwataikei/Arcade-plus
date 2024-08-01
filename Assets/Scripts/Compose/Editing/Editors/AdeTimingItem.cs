@@ -44,7 +44,7 @@ namespace Arcade.Compose.Editing
 				n.Timing = timing;
 				n.Bpm = bpm;
 				n.BeatsPerLine = beat;
-				CommandManager.Instance.Add(new EditTimingEvent(AdeTimingEditor.Instance.currentTimingGroup, TimingReference, n));
+				AdeCommandManager.Instance.Add(new EditTimingEvent(AdeTimingEditor.Instance.currentTimingGroup, TimingReference, n));
 			}
 			catch (Exception)
 			{

@@ -386,7 +386,7 @@ namespace Arcade.Compose
 			}
 			ArcadeComposeManager.Instance.Pause();
 			AdeObsManager.Instance.ForceStopRecording();
-			CommandManager.Instance.Clear();
+			AdeCommandManager.Instance.Clear();
 			Aff.RawAffChart raw = null;
 			try
 			{

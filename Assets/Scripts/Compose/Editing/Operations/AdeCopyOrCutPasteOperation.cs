@@ -75,7 +75,7 @@ namespace Arcade.Compose.Operation
 				}
 				newNotes.Add(newNote as ArcNote);
 			}
-			CommandManager.Instance.Prepare(new BatchCommand(commands.ToArray(), isCut ? "剪切" : "复制"));
+			AdeCommandManager.Instance.Prepare(new BatchCommand(commands.ToArray(), isCut ? "剪切" : "复制"));
 
 			try
 			{
@@ -151,10 +151,10 @@ namespace Arcade.Compose.Operation
 			}
 			catch (OperationCanceledException ex)
 			{
-				CommandManager.Instance.Cancel();
+				AdeCommandManager.Instance.Cancel();
 				throw ex;
 			}
-			CommandManager.Instance.Commit();
+			AdeCommandManager.Instance.Commit();
 			if (AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed())
 			{
 				foreach (var note in newNotes)

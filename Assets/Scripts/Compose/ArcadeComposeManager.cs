@@ -459,7 +459,7 @@ namespace Arcade.Compose
 			uint size = uint.Parse(x);
 			ArcadePreference.UndoBufferSize = size;
 			SavePreferences();
-			CommandManager.Instance.SetBufferSize(size);
+			AdeCommandManager.Instance.SetBufferSize(size);
 		}
 
 		public void LoadPreferences()
@@ -502,7 +502,7 @@ namespace Arcade.Compose
 					ArcadePreference.ReadWhatsNewVersion = BuildTimestamp;
 				}
 				UndoBufferSizeInput.SetTextWithoutNotify($"{ArcadePreference.UndoBufferSize}");
-				CommandManager.Instance.bufferSize = ArcadePreference.UndoBufferSize;
+				AdeCommandManager.Instance.bufferSize = ArcadePreference.UndoBufferSize;
 				bool resolutionHit = false;
 				for (int i = 0; i < ResolutionDropdown.options.Count; i++)
 				{

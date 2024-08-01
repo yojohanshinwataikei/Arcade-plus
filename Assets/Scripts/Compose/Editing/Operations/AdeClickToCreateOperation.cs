@@ -303,7 +303,7 @@ namespace Arcade.Compose.Operation
 			int timing = AdeCursorManager.Instance.AttachedTiming;
 			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
 			ArcHold note = new ArcHold() { Timing = timing, Track = track, EndTiming = timing, TimingGroup = timingGroup };
-			CommandManager.Instance.Prepare(new AddArcEventCommand(note));
+			AdeCommandManager.Instance.Prepare(new AddArcEventCommand(note));
 
 			try
 			{
@@ -328,10 +328,10 @@ namespace Arcade.Compose.Operation
 			}
 			catch (OperationCanceledException ex)
 			{
-				CommandManager.Instance.Cancel();
+				AdeCommandManager.Instance.Cancel();
 				throw ex;
 			}
-			CommandManager.Instance.Commit();
+			AdeCommandManager.Instance.Commit();
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
@@ -341,7 +341,7 @@ namespace Arcade.Compose.Operation
 			int timing = AdeCursorManager.Instance.AttachedTiming;
 			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
 			ArcArc note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, Effect = "none", IsVoid = currentArcIsVoid, LineType = currentArcType, TimingGroup = timingGroup };
-			CommandManager.Instance.Prepare(new AddArcEventCommand(note));
+			AdeCommandManager.Instance.Prepare(new AddArcEventCommand(note));
 
 			try
 			{
@@ -390,10 +390,10 @@ namespace Arcade.Compose.Operation
 			}
 			catch (OperationCanceledException ex)
 			{
-				CommandManager.Instance.Cancel();
+				AdeCommandManager.Instance.Cancel();
 				throw ex;
 			}
-			CommandManager.Instance.Commit();
+			AdeCommandManager.Instance.Commit();
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
@@ -416,7 +416,7 @@ namespace Arcade.Compose.Operation
 						int timing = AdeCursorManager.Instance.AttachedTiming;
 						var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
 						ArcTap note = new ArcTap() { Timing = timing, Track = track, TimingGroup = timingGroup };
-						CommandManager.Instance.Add(new AddArcEventCommand(note));
+						AdeCommandManager.Instance.Add(new AddArcEventCommand(note));
 						return true;
 					}
 					else if (mode == ClickToCreateMode.ArcTap)
@@ -428,7 +428,7 @@ namespace Arcade.Compose.Operation
 							if (currentArc.Timing <= timing && currentArc.EndTiming >= timing && currentArc.Timing < currentArc.EndTiming)
 							{
 								ArcArcTap note = new ArcArcTap() { Timing = timing };
-								CommandManager.Instance.Add(new AddArcTapCommand(currentArc, note));
+								AdeCommandManager.Instance.Add(new AddArcTapCommand(currentArc, note));
 								return true;
 							}
 						}

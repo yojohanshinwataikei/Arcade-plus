@@ -105,7 +105,7 @@ namespace Arcade.Compose
 				if (s is ArcArcTap) deleteCommands.Add(new RemoveArcTapCommand((s as ArcArcTap).Arc, s as ArcArcTap));
 				else deleteCommands.Add(new RemoveArcEventCommand(s));
 			}
-			if (deleteCommands.Count != 0) CommandManager.Instance.Add(new BatchCommand(deleteCommands.ToArray(), "删除"));
+			if (deleteCommands.Count != 0) AdeCommandManager.Instance.Add(new BatchCommand(deleteCommands.ToArray(), "删除"));
 			SelectedNotes.Clear();
 		}
 	}
