@@ -214,7 +214,7 @@ namespace Arcade.Gameplay
 				{
 					t.arcRenderer.EnableEffect = false;
 					t.arcRenderer.Highlight = true;
-					t.arcRenderer.Alpha = .85f * (125 / 255f);
+					t.arcRenderer.Alpha = 125 / 255f;
 				}
 				t.arcRenderer.UpdateArc();
 			}
