@@ -21,6 +21,7 @@ namespace Arcade.Compose.Editing
 		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, LineType, Color, IsVoid, SelectParent, TimingGroup;
 		public RectTransform MoveTiming, MoveTrack, MoveEndTiming, MoveStartPos, MoveEndPos;
 
+		public Image IsVoidIntermediate;
 		public void OnNoteSelect(ArcNote note)
 		{
 			UpdateFields();
@@ -130,20 +131,21 @@ namespace Arcade.Compose.Editing
 					(active) => Color.gameObject.SetActive(active),
 					(data) => ApplyColorDropDown(data)
 				);
+				UpdateField<bool?>(
+					(note) => note is ArcArc,
+					(note) => (note as ArcArc).IsVoid,
+					null,
+					(active) => IsVoid.gameObject.SetActive(active),
+					(data) => ApplyIsVoid(data)
+				);
 
-				IsVoid.gameObject.SetActive(true);
 				TimingGroup.gameObject.SetActive(true);
 				foreach (var s in selected)
 				{
-					if (IsVoid.gameObject.activeSelf) IsVoid.gameObject.SetActive(s is ArcArc);
 					if (TimingGroup.gameObject.activeSelf) TimingGroup.gameObject.SetActive(s is ISetableTimingGroup);
 				}
 				bool multiple = count != 1;
 				ArcNote note = selected[0];
-				if (IsVoid.gameObject.activeSelf)
-				{
-					IsVoid.GetComponentInChildren<Toggle>().SetIsOnWithoutNotify(multiple ? false : (note as ArcArc).IsVoid);
-				}
 				if (TimingGroup.gameObject.activeSelf)
 				{
 					TimingGroup.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : ((note as IHasTimingGroup).TimingGroup?.Id ?? 0));
@@ -151,7 +153,6 @@ namespace Arcade.Compose.Editing
 				Panel.gameObject.SetActive(true);
 			}
 		}
-
 		delegate bool GetActive(ArcNote note);
 		delegate TData GetValue<TData>(ArcNote note);
 		delegate void ApplyActive(bool active);
@@ -277,6 +278,13 @@ namespace Arcade.Compose.Editing
 			}
 			colorDropdownHelper.SetValueWithoutNotify(data);
 		}
+
+		private void ApplyIsVoid(bool? data)
+		{
+			IsVoidIntermediate.enabled = data == null;
+			IsVoid.GetComponentInChildren<Toggle>().SetIsOnWithoutNotify(data == true);
+		}
+
 
 		public void OnTiming(InputField inputField)
 		{
