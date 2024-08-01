@@ -5,8 +5,11 @@ using UnityEngine.UI;
 
 namespace Arcade.Compose.Command
 {
+
 	public class CommandManager : MonoBehaviour
 	{
+		public delegate void OnCommandExecuted(ICommand command, bool undo);
+		public OnCommandExecuted onCommandExecuted;
 		public static CommandManager Instance { get; private set; }
 		private void Awake()
 		{
@@ -72,6 +75,7 @@ namespace Arcade.Compose.Command
 				throw new Exception("有正在进行的命令，暂时不能执行新命令");
 			}
 			command.Do();
+			onCommandExecuted(command, false);
 			Debug.Log($"Add: {command.Name}");
 			undo.AddLast(command);
 			if (undo.Count > bufferSize)
@@ -82,7 +86,8 @@ namespace Arcade.Compose.Command
 		}
 		public void Undo()
 		{
-			if(AdeOperationManager.Instance.HasOngoingOperation){
+			if (AdeOperationManager.Instance.HasOngoingOperation)
+			{
 				AdeOperationManager.Instance.CancelOngoingOperation();
 				return;
 			}
@@ -95,6 +100,7 @@ namespace Arcade.Compose.Command
 			ICommand cmd = undo.Last.Value;
 			undo.RemoveLast();
 			cmd.Undo();
+			onCommandExecuted(preparing, true);
 			Debug.Log($"Undo: {cmd.Name}");
 			redo.AddLast(cmd);
 		}
@@ -109,6 +115,7 @@ namespace Arcade.Compose.Command
 			ICommand cmd = redo.Last.Value;
 			redo.RemoveLast();
 			cmd.Do();
+			onCommandExecuted(cmd, false);
 			Debug.Log($"Redo: {cmd.Name}");
 			undo.AddLast(cmd);
 		}
@@ -154,6 +161,7 @@ namespace Arcade.Compose.Command
 					undo.RemoveFirst();
 				}
 				redo.Clear();
+				onCommandExecuted(preparing, false);
 				preparing = null;
 			}
 		}

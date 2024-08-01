@@ -32,6 +32,10 @@ namespace Arcade.Compose.Editing
 		{
 			UpdateFields();
 		}
+        private void OnCommandExecuted(ICommand command, bool undo)
+        {
+			UpdateFields();
+        }
 
 		private void Awake()
 		{
@@ -40,10 +44,13 @@ namespace Arcade.Compose.Editing
 		private void Start()
 		{
 			AdeSelectionManager.Instance.NoteEventListeners.Add(this);
+			CommandManager.Instance.onCommandExecuted+=OnCommandExecuted;
 		}
-		private void OnDestroy()
+
+        private void OnDestroy()
 		{
 			AdeSelectionManager.Instance.NoteEventListeners.Remove(this);
+			CommandManager.Instance.onCommandExecuted-=OnCommandExecuted;
 		}
 
 		private void UpdateFields()
