@@ -106,25 +106,25 @@ namespace Arcade.Compose.Editing
 					(active) => EndPos.gameObject.SetActive(active),
 					(data) => EndPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
 				);
+				UpdateField(
+					(note) => note is ArcArc,
+					(note) => (note as ArcArc).LineType,
+					ArcLineType.Unknown,
+					(active) => LineType.gameObject.SetActive(active),
+					(data) => ApplyLineTypeDropDown(data)
+				);
 
-				EndPos.gameObject.SetActive(true);
-				LineType.gameObject.SetActive(true);
 				Color.gameObject.SetActive(true);
 				IsVoid.gameObject.SetActive(true);
 				TimingGroup.gameObject.SetActive(true);
 				foreach (var s in selected)
 				{
-					if (LineType.gameObject.activeSelf) LineType.gameObject.SetActive(s is ArcArc);
 					if (Color.gameObject.activeSelf) Color.gameObject.SetActive(s is ArcArc);
 					if (IsVoid.gameObject.activeSelf) IsVoid.gameObject.SetActive(s is ArcArc);
 					if (TimingGroup.gameObject.activeSelf) TimingGroup.gameObject.SetActive(s is ISetableTimingGroup);
 				}
 				bool multiple = count != 1;
 				ArcNote note = selected[0];
-				if (LineType.gameObject.activeSelf)
-				{
-					LineType.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : (int)(note as ArcArc).LineType);
-				}
 				if (Color.gameObject.activeSelf)
 				{
 					Color.GetComponentInChildren<Dropdown>().interactable = true;
@@ -154,11 +154,12 @@ namespace Arcade.Compose.Editing
 		delegate void ApplyActive(bool active);
 		delegate void ApplyData<TData>(TData data);
 
-		private void UpdateField<TData>(GetActive getActive, GetValue<TData> getValue, TData genericValue, ApplyActive applyActive, ApplyData<TData> applyData) where TData : class
+		private void UpdateField<TData>(GetActive getActive, GetValue<TData> getValue, TData genericValue, ApplyActive applyActive, ApplyData<TData> applyData)
 		{
 			List<ArcNote> selected = AdeSelectionManager.Instance.SelectedNotes;
 			bool active = true;
-			TData data = null;
+			TData data = default;
+			bool first = true;
 			foreach (var note in selected)
 			{
 				if (!getActive(note))
@@ -167,9 +168,10 @@ namespace Arcade.Compose.Editing
 					break;
 				}
 				TData newData = getValue(note);
-				if (data == null)
+				if (first)
 				{
 					data = newData;
+					first = false;
 				}
 				else
 				{
@@ -184,6 +186,76 @@ namespace Arcade.Compose.Editing
 			{
 				applyData(data);
 			}
+		}
+
+		private List<ArcLineType> lineTypeOptions = new List<ArcLineType>();
+
+		private Dictionary<ArcLineType, int> lineTypeIds = new Dictionary<ArcLineType, int>();
+
+		private Dictionary<ArcLineType, string> lineTypeToDropDownLabel = new Dictionary<ArcLineType, string>{
+			{ArcLineType.B,"B"},
+			{ArcLineType.S,"S"},
+			{ArcLineType.Si,"Si"},
+			{ArcLineType.So,"So"},
+			{ArcLineType.SiSi,"SiSi"},
+			{ArcLineType.SiSo,"SiSo"},
+			{ArcLineType.SoSi,"SoSi"},
+			{ArcLineType.SoSo,"SoSo"},
+			{ArcLineType.Unknown,"-"},
+		};
+
+		private void UpdateLineTypeOptions(List<ArcLineType> options)
+		{
+			Dropdown dropdown = LineType.GetComponentInChildren<Dropdown>();
+			dropdown.ClearOptions();
+			List<string> optionStrings = new List<string>();
+			lineTypeIds = new Dictionary<ArcLineType, int>();
+			foreach (var option in options)
+			{
+				optionStrings.Add(lineTypeToDropDownLabel[option]);
+			}
+			for (int i = 0; i < options.Count; i++)
+			{
+				lineTypeIds.Add(options[i], i);
+			}
+			dropdown.AddOptions(optionStrings);
+			lineTypeOptions = options;
+		}
+
+		private readonly List<ArcLineType> defaultLineTypeOptions = new List<ArcLineType>{
+			ArcLineType.B,
+			ArcLineType.S,
+			ArcLineType.Si,
+			ArcLineType.So,
+			ArcLineType.SiSi,
+			ArcLineType.SiSo,
+			ArcLineType.SoSi,
+			ArcLineType.SoSo,
+		};
+		private readonly List<ArcLineType> unknownLineTypeOptions = new List<ArcLineType>{
+			ArcLineType.Unknown,
+			ArcLineType.B,
+			ArcLineType.S,
+			ArcLineType.Si,
+			ArcLineType.So,
+			ArcLineType.SiSi,
+			ArcLineType.SiSo,
+			ArcLineType.SoSi,
+			ArcLineType.SoSo,
+		};
+
+		private void ApplyLineTypeDropDown(ArcLineType data)
+		{
+			if (data == ArcLineType.Unknown)
+			{
+				UpdateLineTypeOptions(unknownLineTypeOptions);
+			}
+			else
+			{
+				UpdateLineTypeOptions(defaultLineTypeOptions);
+			}
+			Dropdown dropdown = LineType.GetComponentInChildren<Dropdown>();
+			dropdown.SetValueWithoutNotify(lineTypeIds[data]);
 		}
 
 		public void OnTiming(InputField inputField)
@@ -350,10 +422,15 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
+				ArcLineType lineType = lineTypeOptions[dropdown.value];
+				if (lineType == ArcLineType.Unknown)
+				{
+					return;
+				}
 				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
-					ne.LineType = (ArcLineType)dropdown.value;
+					ne.LineType = lineType;
 					commands.Add(new EditArcEventCommand(n, ne));
 				}
 				if (commands.Count == 1)
