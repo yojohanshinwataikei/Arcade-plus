@@ -22,15 +22,15 @@ namespace Arcade.Compose.Editing
 
 		public void OnNoteSelect(ArcNote note)
 		{
-			MakeupFields();
+			UpdateFields();
 		}
 		public void OnNoteDeselect(ArcNote note)
 		{
-			MakeupFields();
+			UpdateFields();
 		}
 		public void OnNoteDeselectAll()
 		{
-			MakeupFields();
+			UpdateFields();
 		}
 
 		private void Awake()
@@ -46,7 +46,7 @@ namespace Arcade.Compose.Editing
 			AdeSelectionManager.Instance.NoteEventListeners.Remove(this);
 		}
 
-		private void MakeupFields()
+		private void UpdateFields()
 		{
 			List<ArcNote> selected = AdeSelectionManager.Instance.SelectedNotes;
 			int count = selected.Count;
@@ -70,10 +70,43 @@ namespace Arcade.Compose.Editing
 				MoveEndTiming.gameObject.SetActive(count == 1);
 				MoveStartPos.gameObject.SetActive(count == 1);
 				MoveEndPos.gameObject.SetActive(count == 1);
-				Timing.gameObject.SetActive(true);
-				Track.gameObject.SetActive(true);
-				EndTiming.gameObject.SetActive(true);
-				StartPos.gameObject.SetActive(true);
+
+				UpdateField(
+					(note) => true,
+					(note) => note.Timing.ToString(),
+					"-",
+					(active) => Timing.gameObject.SetActive(active),
+					(data) => Timing.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
+				);
+				UpdateField(
+					(note) => note is ArcLongNote,
+					(note) => (note as ArcLongNote).EndTiming.ToString(),
+					"-",
+					(active) => EndTiming.gameObject.SetActive(active),
+					(data) => EndTiming.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
+				);
+				UpdateField(
+					(note) => note is ArcTap || note is ArcHold,
+					(note) => note is ArcTap ? (note as ArcTap).Track.ToString() : (note as ArcHold).Track.ToString(),
+					"-",
+					(active) => Track.gameObject.SetActive(active),
+					(data) => Track.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
+				);
+				UpdateField(
+					(note) => note is ArcArc,
+					(note) => $"{(note as ArcArc).XStart:f2},{(note as ArcArc).YStart:f2}",
+					"-,-",
+					(active) => StartPos.gameObject.SetActive(active),
+					(data) => StartPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
+				);
+				UpdateField(
+					(note) => note is ArcArc,
+					(note) => $"{(note as ArcArc).XEnd:f2},{(note as ArcArc).YEnd:f2}",
+					"-,-",
+					(active) => EndPos.gameObject.SetActive(active),
+					(data) => EndPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
+				);
+
 				EndPos.gameObject.SetActive(true);
 				LineType.gameObject.SetActive(true);
 				Color.gameObject.SetActive(true);
@@ -81,10 +114,6 @@ namespace Arcade.Compose.Editing
 				TimingGroup.gameObject.SetActive(true);
 				foreach (var s in selected)
 				{
-					if (Track.gameObject.activeSelf) Track.gameObject.SetActive(s is ArcTap || s is ArcHold);
-					if (EndTiming.gameObject.activeSelf) EndTiming.gameObject.SetActive(s is ArcLongNote);
-					if (StartPos.gameObject.activeSelf) StartPos.gameObject.SetActive(s is ArcArc);
-					if (EndPos.gameObject.activeSelf) EndPos.gameObject.SetActive(s is ArcArc);
 					if (LineType.gameObject.activeSelf) LineType.gameObject.SetActive(s is ArcArc);
 					if (Color.gameObject.activeSelf) Color.gameObject.SetActive(s is ArcArc);
 					if (IsVoid.gameObject.activeSelf) IsVoid.gameObject.SetActive(s is ArcArc);
@@ -92,23 +121,6 @@ namespace Arcade.Compose.Editing
 				}
 				bool multiple = count != 1;
 				ArcNote note = selected[0];
-				Timing.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-" : note.Timing.ToString());
-				if (Track.gameObject.activeSelf)
-				{
-					Track.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-" : (note is ArcTap ? (note as ArcTap).Track.ToString() : (note as ArcHold).Track.ToString()));
-				}
-				if (EndTiming.gameObject.activeSelf)
-				{
-					EndTiming.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-" : (note as ArcLongNote).EndTiming.ToString());
-				}
-				if (StartPos.gameObject.activeSelf)
-				{
-					StartPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-,-" : $"{(note as ArcArc).XStart.ToString("f2")},{(note as ArcArc).YStart.ToString("f2")}");
-				}
-				if (EndPos.gameObject.activeSelf)
-				{
-					EndPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(multiple ? "-,-" : $"{(note as ArcArc).XEnd.ToString("f2")},{(note as ArcArc).YEnd.ToString("f2")}");
-				}
 				if (LineType.gameObject.activeSelf)
 				{
 					LineType.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : (int)(note as ArcArc).LineType);
@@ -134,6 +146,43 @@ namespace Arcade.Compose.Editing
 					TimingGroup.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : ((note as IHasTimingGroup).TimingGroup?.Id ?? 0));
 				}
 				Panel.gameObject.SetActive(true);
+			}
+		}
+
+		delegate bool GetActive(ArcNote note);
+		delegate TData GetValue<TData>(ArcNote note);
+		delegate void ApplyActive(bool active);
+		delegate void ApplyData<TData>(TData data);
+
+		private void UpdateField<TData>(GetActive getActive, GetValue<TData> getValue, TData genericValue, ApplyActive applyActive, ApplyData<TData> applyData) where TData : class
+		{
+			List<ArcNote> selected = AdeSelectionManager.Instance.SelectedNotes;
+			bool active = true;
+			TData data = null;
+			foreach (var note in selected)
+			{
+				if (!getActive(note))
+				{
+					active = false;
+					break;
+				}
+				TData newData = getValue(note);
+				if (data == null)
+				{
+					data = newData;
+				}
+				else
+				{
+					if (!data.Equals(newData))
+					{
+						data = genericValue;
+					}
+				}
+			}
+			applyActive(active);
+			if (active)
+			{
+				applyData(data);
 			}
 		}
 
