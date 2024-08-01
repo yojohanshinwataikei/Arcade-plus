@@ -191,6 +191,7 @@ namespace Arcade.Gameplay
 						{
 							a.Flag = true;
 							float alpha = 1;
+
 							if (a.Judging)
 							{
 								a.FlashCount = (a.FlashCount + 1) % 5;
@@ -199,19 +200,21 @@ namespace Arcade.Gameplay
 							}
 							else
 							{
-								alpha = 0.65f;
+								if (t.ArcGroup.Count != 1 && currentTiming > t.Timing + offset)
+								{
+									alpha = 0.65f;
+								}
 								a.arcRenderer.Highlight = false;
 							}
-							alpha *= 0.8823592f;
-							a.arcRenderer.Alpha = alpha;
+							a.arcRenderer.Alpha = alpha * (225 / 255f);
 						}
 					}
 				}
 				else
 				{
 					t.arcRenderer.EnableEffect = false;
-					t.arcRenderer.Highlight = false;
-					t.arcRenderer.Alpha = 0.318627f;
+					t.arcRenderer.Highlight = true;
+					t.arcRenderer.Alpha = .85f * (125 / 255f);
 				}
 				t.arcRenderer.UpdateArc();
 			}
