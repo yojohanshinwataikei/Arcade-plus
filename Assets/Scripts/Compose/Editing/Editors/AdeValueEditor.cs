@@ -9,6 +9,7 @@ using Arcade.Gameplay;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using Arcade.Util.UniTaskHelper;
+using Arcade.Util.UI;
 
 namespace Arcade.Compose.Editing
 {
@@ -43,6 +44,7 @@ namespace Arcade.Compose.Editing
 		}
 		private void Start()
 		{
+			lineTypeDropdownHelper=new DropdownHelper<ArcLineType>(LineType.GetComponentInChildren<Dropdown>());
 			AdeSelectionManager.Instance.NoteEventListeners.Add(this);
 			AdeCommandManager.Instance.onCommandExecuted+=OnCommandExecuted;
 		}
@@ -195,9 +197,7 @@ namespace Arcade.Compose.Editing
 			}
 		}
 
-		private List<ArcLineType> lineTypeOptions = new List<ArcLineType>();
-
-		private Dictionary<ArcLineType, int> lineTypeIds = new Dictionary<ArcLineType, int>();
+		private DropdownHelper<ArcLineType> lineTypeDropdownHelper;
 
 		private Dictionary<ArcLineType, string> lineTypeToDropDownLabel = new Dictionary<ArcLineType, string>{
 			{ArcLineType.B,"B"},
@@ -210,24 +210,6 @@ namespace Arcade.Compose.Editing
 			{ArcLineType.SoSo,"SoSo"},
 			{ArcLineType.Unknown,"-"},
 		};
-
-		private void UpdateLineTypeOptions(List<ArcLineType> options)
-		{
-			Dropdown dropdown = LineType.GetComponentInChildren<Dropdown>();
-			dropdown.ClearOptions();
-			List<string> optionStrings = new List<string>();
-			lineTypeIds = new Dictionary<ArcLineType, int>();
-			foreach (var option in options)
-			{
-				optionStrings.Add(lineTypeToDropDownLabel[option]);
-			}
-			for (int i = 0; i < options.Count; i++)
-			{
-				lineTypeIds.Add(options[i], i);
-			}
-			dropdown.AddOptions(optionStrings);
-			lineTypeOptions = options;
-		}
 
 		private readonly List<ArcLineType> defaultLineTypeOptions = new List<ArcLineType>{
 			ArcLineType.B,
@@ -255,14 +237,14 @@ namespace Arcade.Compose.Editing
 		{
 			if (data == ArcLineType.Unknown)
 			{
-				UpdateLineTypeOptions(unknownLineTypeOptions);
+				lineTypeDropdownHelper.UpdateOptions(unknownLineTypeOptions,(lineType,_)=>lineTypeToDropDownLabel[lineType]);
 			}
 			else
 			{
-				UpdateLineTypeOptions(defaultLineTypeOptions);
+				lineTypeDropdownHelper.UpdateOptions(defaultLineTypeOptions,(lineType,_)=>lineTypeToDropDownLabel[lineType]);
 			}
 			Dropdown dropdown = LineType.GetComponentInChildren<Dropdown>();
-			dropdown.SetValueWithoutNotify(lineTypeIds[data]);
+			lineTypeDropdownHelper.SetValueWithoutNotify(data);
 		}
 
 		public void OnTiming(InputField inputField)
@@ -429,7 +411,7 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				ArcLineType lineType = lineTypeOptions[dropdown.value];
+				ArcLineType lineType = lineTypeDropdownHelper.QueryDataById(dropdown.value);
 				if (lineType == ArcLineType.Unknown)
 				{
 					return;
