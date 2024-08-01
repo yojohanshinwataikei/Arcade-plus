@@ -47,6 +47,7 @@ namespace Arcade.Compose.Editing
 		{
 			lineTypeDropdownHelper = new DropdownHelper<ArcLineType?>(LineType.GetComponentInChildren<Dropdown>());
 			colorDropdownHelper = new DropdownHelper<int?>(Color.GetComponentInChildren<Dropdown>());
+			timingGroupDropdownHelper = new DropdownHelper<ArcTimingGroupOption?>(TimingGroup.GetComponentInChildren<Dropdown>());
 			AdeSelectionManager.Instance.NoteEventListeners.Add(this);
 			AdeCommandManager.Instance.onCommandExecuted += OnCommandExecuted;
 		}
@@ -57,7 +58,7 @@ namespace Arcade.Compose.Editing
 			AdeCommandManager.Instance.onCommandExecuted -= OnCommandExecuted;
 		}
 
-		private void UpdateFields()
+		public void UpdateFields()
 		{
 			List<ArcNote> selected = AdeSelectionManager.Instance.SelectedNotes;
 			int count = selected.Count;
@@ -138,22 +139,18 @@ namespace Arcade.Compose.Editing
 					(active) => IsVoid.gameObject.SetActive(active),
 					(data) => ApplyIsVoid(data)
 				);
-
-				TimingGroup.gameObject.SetActive(true);
-				foreach (var s in selected)
-				{
-					if (TimingGroup.gameObject.activeSelf) TimingGroup.gameObject.SetActive(s is ISetableTimingGroup);
-				}
-				bool multiple = count != 1;
-				ArcNote note = selected[0];
-				if (TimingGroup.gameObject.activeSelf)
-				{
-					TimingGroup.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : ((note as IHasTimingGroup).TimingGroup?.Id ?? 0));
-				}
+				UpdateField<ArcTimingGroupOption?>(
+					(note) => note is ISetableTimingGroup,
+					(note) => new ArcTimingGroupOption{timingGroup=(note as IHasTimingGroup).TimingGroup},
+					null,
+					(active) => TimingGroup.gameObject.SetActive(active),
+					(data) => ApplyTimingGroupDropdown(data)
+				);
 				Panel.gameObject.SetActive(true);
 			}
 		}
-		delegate bool GetActive(ArcNote note);
+
+        delegate bool GetActive(ArcNote note);
 		delegate TData GetValue<TData>(ArcNote note);
 		delegate void ApplyActive(bool active);
 		delegate void ApplyData<TData>(TData data);
@@ -284,6 +281,39 @@ namespace Arcade.Compose.Editing
 			IsVoidIntermediate.enabled = data == null;
 			IsVoid.GetComponentInChildren<Toggle>().SetIsOnWithoutNotify(data == true);
 		}
+
+		private struct ArcTimingGroupOption{
+			public ArcTimingGroup timingGroup;
+		}
+		private DropdownHelper<ArcTimingGroupOption?> timingGroupDropdownHelper;
+
+		private string GetArcTimingGroupOptionString(ArcTimingGroupOption? color)
+		{
+			if (color==null)
+			{
+				return "-";
+			}
+			else if (color.Value.timingGroup==null)
+			{
+				return "默认";
+			}else{
+				return color.Value.timingGroup.Id.ToString();
+			}
+		}
+        private void ApplyTimingGroupDropdown(ArcTimingGroupOption? data)
+        {
+			List<ArcTimingGroupOption?> options=new List<ArcTimingGroupOption?>();
+			if(data==null){
+				options.Add(null);
+			}
+			options.Add(new ArcTimingGroupOption{timingGroup=null});
+			foreach (var tg in ArcTimingManager.Instance.timingGroups)
+			{
+				options.Add(new ArcTimingGroupOption{timingGroup=tg});
+			}
+			timingGroupDropdownHelper.UpdateOptions(options,(option,_)=>GetArcTimingGroupOptionString(option));
+            timingGroupDropdownHelper.SetValueWithoutNotify(data);
+        }
 
 
 		public void OnTiming(InputField inputField)
@@ -539,10 +569,14 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
+				ArcTimingGroupOption? timingGroupOption = timingGroupDropdownHelper.QueryDataById(dropdown.value);
+				if(timingGroupOption==null){
+					return;
+				}
 				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ISetableTimingGroup;
-					ne.TimingGroup = dropdown.value == 0 ? null : ArcTimingManager.Instance.timingGroups[dropdown.value - 1];
+					ne.TimingGroup = timingGroupOption.Value.timingGroup;
 					commands.Add(new EditArcEventCommand(n, ne as ArcEvent));
 				}
 				if (commands.Count == 1)
@@ -572,25 +606,6 @@ namespace Arcade.Compose.Editing
 					AdeSelectionManager.Instance.DeselectAllNotes();
 					AdeSelectionManager.Instance.SelectNote(arc);
 				}
-			}
-		}
-
-		public void UpdateTimingGroupOptions()
-		{
-			List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
-			options.Add(new Dropdown.OptionData { text = "默认" });
-			foreach (var tg in ArcTimingManager.Instance.timingGroups)
-			{
-				options.Add(new Dropdown.OptionData { text = tg.Id.ToString() });
-			}
-			TimingGroup.GetComponentInChildren<Dropdown>().options = options;
-			List<ArcNote> selected = AdeSelectionManager.Instance.SelectedNotes;
-			int count = selected.Count;
-			if (TimingGroup.gameObject.activeSelf && count > 0)
-			{
-				bool multiple = count != 1;
-				ArcNote note = selected[0];
-				TimingGroup.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : ((note as IHasTimingGroup).TimingGroup?.Id ?? 0));
 			}
 		}
 

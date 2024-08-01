@@ -184,7 +184,7 @@ namespace Arcade.Compose.Editing
 			{
 				UpdateTiming();
 			}
-			AdeValueEditor.Instance.UpdateTimingGroupOptions();
+			AdeValueEditor.Instance.UpdateFields();
 		}
 	}
 
