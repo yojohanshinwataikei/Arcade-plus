@@ -220,7 +220,6 @@ namespace Arcade.Gameplay.Chart
 		SiSo,
 		SoSi,
 		SoSo,
-		Unknown,
 	}
 	public enum CameraEaseType
 	{

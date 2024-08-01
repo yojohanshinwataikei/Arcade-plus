@@ -33,10 +33,10 @@ namespace Arcade.Compose.Editing
 		{
 			UpdateFields();
 		}
-        private void OnCommandExecuted(ICommand command, bool undo)
-        {
+		private void OnCommandExecuted(ICommand command, bool undo)
+		{
 			UpdateFields();
-        }
+		}
 
 		private void Awake()
 		{
@@ -44,15 +44,16 @@ namespace Arcade.Compose.Editing
 		}
 		private void Start()
 		{
-			lineTypeDropdownHelper=new DropdownHelper<ArcLineType>(LineType.GetComponentInChildren<Dropdown>());
+			lineTypeDropdownHelper = new DropdownHelper<ArcLineType?>(LineType.GetComponentInChildren<Dropdown>());
+			colorDropdownHelper = new DropdownHelper<int?>(Color.GetComponentInChildren<Dropdown>());
 			AdeSelectionManager.Instance.NoteEventListeners.Add(this);
-			AdeCommandManager.Instance.onCommandExecuted+=OnCommandExecuted;
+			AdeCommandManager.Instance.onCommandExecuted += OnCommandExecuted;
 		}
 
-        private void OnDestroy()
+		private void OnDestroy()
 		{
 			AdeSelectionManager.Instance.NoteEventListeners.Remove(this);
-			AdeCommandManager.Instance.onCommandExecuted-=OnCommandExecuted;
+			AdeCommandManager.Instance.onCommandExecuted -= OnCommandExecuted;
 		}
 
 		private void UpdateFields()
@@ -115,37 +116,30 @@ namespace Arcade.Compose.Editing
 					(active) => EndPos.gameObject.SetActive(active),
 					(data) => EndPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
 				);
-				UpdateField(
+				UpdateField<ArcLineType?>(
 					(note) => note is ArcArc,
 					(note) => (note as ArcArc).LineType,
-					ArcLineType.Unknown,
+					null,
 					(active) => LineType.gameObject.SetActive(active),
 					(data) => ApplyLineTypeDropDown(data)
 				);
+				UpdateField<int?>(
+					(note) => note is ArcArc,
+					(note) => (note as ArcArc).Color,
+					null,
+					(active) => Color.gameObject.SetActive(active),
+					(data) => ApplyColorDropDown(data)
+				);
 
-				Color.gameObject.SetActive(true);
 				IsVoid.gameObject.SetActive(true);
 				TimingGroup.gameObject.SetActive(true);
 				foreach (var s in selected)
 				{
-					if (Color.gameObject.activeSelf) Color.gameObject.SetActive(s is ArcArc);
 					if (IsVoid.gameObject.activeSelf) IsVoid.gameObject.SetActive(s is ArcArc);
 					if (TimingGroup.gameObject.activeSelf) TimingGroup.gameObject.SetActive(s is ISetableTimingGroup);
 				}
 				bool multiple = count != 1;
 				ArcNote note = selected[0];
-				if (Color.gameObject.activeSelf)
-				{
-					Color.GetComponentInChildren<Dropdown>().interactable = true;
-					Color.GetComponentInChildren<Dropdown>().SetValueWithoutNotify(multiple ? 0 : (note as ArcArc).Color);
-					if (!multiple)
-					{
-						if ((note as ArcArc).Color >= 3)
-						{
-							Color.GetComponentInChildren<Dropdown>().interactable = false;
-						}
-					}
-				}
 				if (IsVoid.gameObject.activeSelf)
 				{
 					IsVoid.GetComponentInChildren<Toggle>().SetIsOnWithoutNotify(multiple ? false : (note as ArcArc).IsVoid);
@@ -197,21 +191,21 @@ namespace Arcade.Compose.Editing
 			}
 		}
 
-		private DropdownHelper<ArcLineType> lineTypeDropdownHelper;
+		private DropdownHelper<ArcLineType?> lineTypeDropdownHelper;
 
-		private Dictionary<ArcLineType, string> lineTypeToDropDownLabel = new Dictionary<ArcLineType, string>{
-			{ArcLineType.B,"B"},
-			{ArcLineType.S,"S"},
-			{ArcLineType.Si,"Si"},
-			{ArcLineType.So,"So"},
-			{ArcLineType.SiSi,"SiSi"},
-			{ArcLineType.SiSo,"SiSo"},
-			{ArcLineType.SoSi,"SoSi"},
-			{ArcLineType.SoSo,"SoSo"},
-			{ArcLineType.Unknown,"-"},
+		private Dictionary<ValueTuple<ArcLineType?>, string> lineTypeToDropDownLabel = new Dictionary<ValueTuple<ArcLineType?>, string>{
+			{ValueTuple.Create<ArcLineType?>(ArcLineType.B),"B"},
+			{ValueTuple.Create<ArcLineType?>(ArcLineType.S),"S"},
+			{ValueTuple.Create<ArcLineType?>(ArcLineType.Si),"Si"},
+			{ValueTuple.Create<ArcLineType?>(ArcLineType.So),"So"},
+			{ValueTuple.Create<ArcLineType?>(ArcLineType.SiSi),"SiSi"},
+			{ValueTuple.Create<ArcLineType?>(ArcLineType.SiSo),"SiSo"},
+			{ValueTuple.Create<ArcLineType?>(ArcLineType.SoSi),"SoSi"},
+			{ValueTuple.Create<ArcLineType?>(ArcLineType.SoSo),"SoSo"},
+			{ValueTuple.Create<ArcLineType?>(null),"-"},
 		};
 
-		private readonly List<ArcLineType> defaultLineTypeOptions = new List<ArcLineType>{
+		private readonly List<ArcLineType?> defaultLineTypeOptions = new List<ArcLineType?>{
 			ArcLineType.B,
 			ArcLineType.S,
 			ArcLineType.Si,
@@ -221,8 +215,8 @@ namespace Arcade.Compose.Editing
 			ArcLineType.SoSi,
 			ArcLineType.SoSo,
 		};
-		private readonly List<ArcLineType> unknownLineTypeOptions = new List<ArcLineType>{
-			ArcLineType.Unknown,
+		private readonly List<ArcLineType?> unknownLineTypeOptions = new List<ArcLineType?>{
+			null,
 			ArcLineType.B,
 			ArcLineType.S,
 			ArcLineType.Si,
@@ -233,18 +227,55 @@ namespace Arcade.Compose.Editing
 			ArcLineType.SoSo,
 		};
 
-		private void ApplyLineTypeDropDown(ArcLineType data)
+		private void ApplyLineTypeDropDown(ArcLineType? data)
 		{
-			if (data == ArcLineType.Unknown)
+			if (data == null)
 			{
-				lineTypeDropdownHelper.UpdateOptions(unknownLineTypeOptions,(lineType,_)=>lineTypeToDropDownLabel[lineType]);
+				lineTypeDropdownHelper.UpdateOptions(unknownLineTypeOptions, (lineType, _) => lineTypeToDropDownLabel[ValueTuple.Create(lineType)]);
 			}
 			else
 			{
-				lineTypeDropdownHelper.UpdateOptions(defaultLineTypeOptions,(lineType,_)=>lineTypeToDropDownLabel[lineType]);
+				lineTypeDropdownHelper.UpdateOptions(defaultLineTypeOptions, (lineType, _) => lineTypeToDropDownLabel[ValueTuple.Create(lineType)]);
 			}
-			Dropdown dropdown = LineType.GetComponentInChildren<Dropdown>();
 			lineTypeDropdownHelper.SetValueWithoutNotify(data);
+		}
+
+		private DropdownHelper<int?> colorDropdownHelper;
+
+		private Dictionary<ValueTuple<int?>, string> colorToDropDownLabel = new Dictionary<ValueTuple<int?>, string>{
+			{ValueTuple.Create<int?>(null),"-"},
+			{ValueTuple.Create<int?>(0),"蓝"},
+			{ValueTuple.Create<int?>(1),"红"},
+			{ValueTuple.Create<int?>(2),"绿"},
+		};
+
+		private string GetColorOptionString(int? color)
+		{
+			if (colorToDropDownLabel.ContainsKey(ValueTuple.Create(color)))
+			{
+				return colorToDropDownLabel[ValueTuple.Create(color)];
+			}
+			else
+			{
+				return "其他";
+			}
+		}
+
+		private void ApplyColorDropDown(int? data)
+		{
+			if (data == null)
+			{
+				colorDropdownHelper.UpdateOptions(new List<int?> { null, 0, 1 }, (color, _) => GetColorOptionString(color));
+			}
+			else if (data >= 2 || data < 0)
+			{
+				colorDropdownHelper.UpdateOptions(new List<int?> { 0, 1, data }, (color, _) => GetColorOptionString(color));
+			}
+			else
+			{
+				colorDropdownHelper.UpdateOptions(new List<int?> { 0, 1 }, (color, _) => GetColorOptionString(color));
+			}
+			colorDropdownHelper.SetValueWithoutNotify(data);
 		}
 
 		public void OnTiming(InputField inputField)
@@ -411,15 +442,15 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				ArcLineType lineType = lineTypeDropdownHelper.QueryDataById(dropdown.value);
-				if (lineType == ArcLineType.Unknown)
+				ArcLineType? lineType = lineTypeDropdownHelper.QueryDataById(dropdown.value);
+				if (lineType == null)
 				{
 					return;
 				}
 				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
-					ne.LineType = lineType;
+					ne.LineType = lineType.Value;
 					commands.Add(new EditArcEventCommand(n, ne));
 				}
 				if (commands.Count == 1)
@@ -442,10 +473,15 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
+				int? color = colorDropdownHelper.QueryDataById(dropdown.value);
+				if (color == null)
+				{
+					return;
+				}
 				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 				{
 					var ne = n.Clone() as ArcArc;
-					ne.Color = dropdown.value;
+					ne.Color = color.Value;
 					commands.Add(new EditArcEventCommand(n, ne));
 				}
 				if (commands.Count == 1)
