@@ -608,7 +608,7 @@ namespace Arcade.Gameplay
 					}
 					continue;
 				}
-				if (pos > 90 && pos < 100)
+				if (pos > 90 && pos < 100 && !arc.IsVoid)
 				{
 					s.Enable = true;
 					s.CurrentArcMaterial = null;
