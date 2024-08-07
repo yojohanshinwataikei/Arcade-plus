@@ -518,121 +518,87 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnLineType(Dropdown dropdown)
 		{
-			try
+			ArcLineType? lineType = lineTypeDropdownHelper.QueryDataById(dropdown.value);
+			if (lineType == null)
 			{
-				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				ArcLineType? lineType = lineTypeDropdownHelper.QueryDataById(dropdown.value);
-				if (lineType == null)
-				{
-					return;
-				}
-				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
-				{
-					var ne = n.Clone() as ArcArc;
-					ne.LineType = lineType.Value;
-					commands.Add(new EditArcEventCommand(n, ne));
-				}
-				if (commands.Count == 1)
-				{
-					AdeCommandManager.Instance.Add(commands[0]);
-				}
-				else if (commands.Count > 1)
-				{
-					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
-				}
+				return;
 			}
-			catch (Exception Ex)
-			{
-				AdeToast.Instance.Show("赋值时出现错误");
-				Debug.LogException(Ex);
-			}
+			HandleValueChange(
+				lineType.Value,
+				(ArcLineType raw,ref ArcLineType result)=>{
+					result=raw;
+					return null;
+				},
+				(value,note)=>{
+					return null;
+				},
+				(value,note)=>{
+					(note as ArcArc).LineType=value;
+				}
+			);
 		}
 		public void OnColor(Dropdown dropdown)
 		{
-			try
+			int? color = colorDropdownHelper.QueryDataById(dropdown.value);
+			if (color == null)
 			{
-				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				int? color = colorDropdownHelper.QueryDataById(dropdown.value);
-				if (color == null)
-				{
-					return;
-				}
-				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
-				{
-					var ne = n.Clone() as ArcArc;
-					ne.Color = color.Value;
-					commands.Add(new EditArcEventCommand(n, ne));
-				}
-				if (commands.Count == 1)
-				{
-					AdeCommandManager.Instance.Add(commands[0]);
-				}
-				else if (commands.Count > 1)
-				{
-					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
-				}
+				return;
 			}
-			catch (Exception Ex)
-			{
-				AdeToast.Instance.Show("赋值时出现错误");
-				Debug.LogException(Ex);
-			}
+			HandleValueChange(
+				color.Value,
+				(int raw,ref int result)=>{
+					result=raw;
+					return null;
+				},
+				(value,note)=>{
+					return null;
+				},
+				(value,note)=>{
+					(note as ArcArc).Color=value;
+				}
+			);
 		}
 		public void OnIsVoid(Toggle toggle)
 		{
-			try
-			{
-				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
-				{
-					var ne = n.Clone() as ArcArc;
-					ne.IsVoid = toggle.isOn;
-					commands.Add(new EditArcEventCommand(n, ne));
+			HandleValueChange(
+				toggle.isOn,
+				(bool raw,ref bool result)=>{
+					result=raw;
+					return null;
+				},
+				(value,note)=>{
+					if(note is ArcArc){
+						var arc=note as ArcArc;
+						if((!value)&&arc.ArcTaps.Count>0){
+							return new ValueChangeErrorMessage{message="Arc 含有 ArcTap 时必须是黑线"};
+						}
+					}
+					return null;
+				},
+				(value,note)=>{
+					(note as ArcArc).IsVoid=value;
 				}
-				if (commands.Count == 1)
-				{
-					AdeCommandManager.Instance.Add(commands[0]);
-				}
-				else if (commands.Count > 1)
-				{
-					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
-				}
-			}
-			catch (Exception Ex)
-			{
-				AdeToast.Instance.Show("赋值时出现错误");
-				Debug.LogException(Ex);
-			}
+			);
 		}
 		public void OnTimingGroup(Dropdown dropdown)
 		{
-			try
-			{
-				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				ArcTimingGroupOption? timingGroupOption = timingGroupDropdownHelper.QueryDataById(dropdown.value);
-				if(timingGroupOption==null){
-					return;
-				}
-				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
-				{
-					var ne = n.Clone() as ISetableTimingGroup;
-					ne.TimingGroup = timingGroupOption.Value.timingGroup;
-					commands.Add(new EditArcEventCommand(n, ne as ArcEvent));
-				}
-				if (commands.Count == 1)
-				{
-					AdeCommandManager.Instance.Add(commands[0]);
-				}
-				else if (commands.Count > 1)
-				{
-					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
-				}
+			ArcTimingGroupOption? timingGroupOption = timingGroupDropdownHelper.QueryDataById(dropdown.value);
+			if(timingGroupOption==null){
+				return;
 			}
-			catch (Exception Ex)
-			{
-				AdeToast.Instance.Show("赋值时出现错误");
-				Debug.LogException(Ex);
-			}
+			HandleValueChange(
+				timingGroupOption.Value,
+				(ArcTimingGroupOption raw,ref ArcTimingGroupOption result)=>{
+					result=raw;
+					return null;
+				},
+				(value,note)=>{
+					return null;
+				},
+				(value,note)=>{
+					(note as ISetableTimingGroup).TimingGroup=value.timingGroup;
+				}
+			);
 		}
 
 		public void OnSelectParent()
