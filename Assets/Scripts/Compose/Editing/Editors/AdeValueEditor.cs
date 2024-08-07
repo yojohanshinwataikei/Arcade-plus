@@ -363,6 +363,9 @@ namespace Arcade.Compose.Editing
 					if(!int.TryParse(raw,out result)){
 						return new ValueChangeErrorMessage{message="时间数值格式错误"};
 					}
+					if(result<0){
+						return new ValueChangeErrorMessage{message="时间数值不能为负数"};
+					}
 					return null;
 				},
 				(value,note)=>{
@@ -436,6 +439,9 @@ namespace Arcade.Compose.Editing
 				(string raw,ref int result)=>{
 					if(!int.TryParse(raw,out result)){
 						return new ValueChangeErrorMessage{message="时间数值格式错误"};
+					}
+					if(result<0){
+						return new ValueChangeErrorMessage{message="时间数值不能为负数"};
 					}
 					return null;
 				},
