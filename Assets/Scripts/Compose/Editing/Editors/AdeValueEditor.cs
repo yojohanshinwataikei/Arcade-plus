@@ -467,7 +467,7 @@ namespace Arcade.Compose.Editing
 					return null;
 				},
 				(value,note)=>{
-					(note as ArcLongNote).Timing=value;
+					(note as ArcLongNote).EndTiming=value;
 				}
 			);
 		}
