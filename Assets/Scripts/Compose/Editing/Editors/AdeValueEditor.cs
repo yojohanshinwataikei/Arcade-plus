@@ -403,71 +403,67 @@ namespace Arcade.Compose.Editing
 		}
 		public void OnTrack(InputField inputField)
 		{
-			try
-			{
-				string t = inputField.text;
-				int track = int.Parse(t);
-				if (track < 0 || track > 5) throw new InvalidDataException("轨道只能为 0 - 5");
-				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
-				{
-					if (n is ArcTap)
-					{
-						ArcTap ne = n.Clone() as ArcTap;
-						ne.Track = track;
-						commands.Add(new EditArcEventCommand(n, ne));
-
+			HandleValueChange(
+				inputField.text,
+				(string raw,ref int result)=>{
+					if(!int.TryParse(raw,out result)){
+						return new ValueChangeErrorMessage{message="轨道数值格式错误"};
 					}
-					else if (n is ArcHold)
-					{
-						ArcHold ne = n.Clone() as ArcHold;
-						ne.Track = track;
-						commands.Add(new EditArcEventCommand(n, ne));
+					if (result < 0 || result > 5){
+						return new ValueChangeErrorMessage{message="轨道只能为 0 - 5"};
+					}
+					return null;
+				},
+				(value,note)=>{
+					return null;
+				},
+				(value,note)=>{
+					if(note is ArcTap){
+						var tap=note as ArcTap;
+						tap.Track=value;
+					}
+					if(note is ArcHold){
+						var hold=note as ArcHold;
+						hold.Track=value;
 					}
 				}
-				if (commands.Count == 1)
-				{
-					AdeCommandManager.Instance.Add(commands[0]);
-				}
-				else if (commands.Count > 1)
-				{
-					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
-				}
-			}
-			catch (Exception Ex)
-			{
-				AdeToast.Instance.Show("赋值时出现错误");
-				Debug.LogException(Ex);
-			}
+			);
 		}
 		public void OnEndTiming(InputField inputField)
 		{
-			try
-			{
-				string t = inputField.text;
-				int endTiming = int.Parse(t);
-				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
-				{
-					var ne = n.Clone() as ArcLongNote;
-					ne.EndTiming = endTiming;
-					commands.Add(new EditArcEventCommand(n, ne));
+			HandleValueChange(
+				inputField.text,
+				(string raw,ref int result)=>{
+					if(!int.TryParse(raw,out result)){
+						return new ValueChangeErrorMessage{message="时间数值格式错误"};
+					}
+					return null;
+				},
+				(value,note)=>{
+					if(note is ArcHold){
+						var hold=note as ArcHold;
+						if(hold.Timing>=value){
+							return new ValueChangeErrorMessage{message="Hold 的结束时间不能早于时间"};
+						}
+					}
+					if(note is ArcArc){
+						var arc=note as ArcArc;
+						if(arc.Timing>value||(arc.Timing>=value&&arc.ArcTaps.Count>0)){
+							return new ValueChangeErrorMessage{message="Arc 的结束时间不能早于时间"};
+						}
+						foreach (var arctap in arc.ArcTaps)
+						{
+							if(arctap.Timing>value){
+								return new ValueChangeErrorMessage{message="Arc 的结束时间不早于其上 Arctap 的时间"};
+							}
+						}
+					}
+					return null;
+				},
+				(value,note)=>{
+					(note as ArcLongNote).Timing=value;
 				}
-				if (commands.Count == 1)
-				{
-					AdeCommandManager.Instance.Add(commands[0]);
-				}
-				else if (commands.Count > 1)
-				{
-					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
-				}
-				ArcGameplayManager.Instance.ResetJudge();
-			}
-			catch (Exception Ex)
-			{
-				AdeToast.Instance.Show("赋值时出现错误");
-				Debug.LogException(Ex);
-			}
+			);
 		}
 		public void OnStartPos(InputField inputField)
 		{
