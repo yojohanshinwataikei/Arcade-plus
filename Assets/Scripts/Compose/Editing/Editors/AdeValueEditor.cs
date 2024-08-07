@@ -471,67 +471,50 @@ namespace Arcade.Compose.Editing
 				}
 			);
 		}
+
+		private ValueChangeErrorMessage? ParseCoord(string raw,ref Vector2 result){
+					string[] coords = raw.Split(',');
+					float x,y;
+					if(coords.Length!=2){
+						return new ValueChangeErrorMessage{message="坐标位置格式错误"};
+					}
+					if(!float.TryParse(coords[0],out x)){
+						return new ValueChangeErrorMessage{message="坐标位置格式错误"};
+					}
+					if(!float.TryParse(coords[1],out y)){
+						return new ValueChangeErrorMessage{message="坐标位置格式错误"};
+					}
+					result=new Vector2(x,y);
+					return null;
+				}
+
 		public void OnStartPos(InputField inputField)
 		{
-			try
-			{
-				string t = inputField.text;
-				string[] ts = t.Split(',');
-				float x = float.Parse(ts[0]);
-				float y = float.Parse(ts[1]);
-				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
-				{
-					var ne = n.Clone() as ArcArc;
-					ne.XStart = x;
-					ne.YStart = y;
-					commands.Add(new EditArcEventCommand(n, ne));
+			HandleValueChange<string,Vector2>(
+				inputField.text,
+				ParseCoord,
+				(value,note)=>{
+					return null;
+				},
+				(value,note)=>{
+					(note as ArcArc).XStart=value.x;
+					(note as ArcArc).YStart=value.y;
 				}
-				if (commands.Count == 1)
-				{
-					AdeCommandManager.Instance.Add(commands[0]);
-				}
-				else if (commands.Count > 1)
-				{
-					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
-				}
-			}
-			catch (Exception Ex)
-			{
-				AdeToast.Instance.Show("赋值时出现错误");
-				Debug.LogException(Ex);
-			}
+			);
 		}
 		public void OnEndPos(InputField inputField)
 		{
-			try
-			{
-				string t = inputField.text;
-				string[] ts = t.Split(',');
-				float x = float.Parse(ts[0]);
-				float y = float.Parse(ts[1]);
-				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
-				{
-					var ne = n.Clone() as ArcArc;
-					ne.XEnd = x;
-					ne.YEnd = y;
-					commands.Add(new EditArcEventCommand(n, ne));
+			HandleValueChange<string,Vector2>(
+				inputField.text,
+				ParseCoord,
+				(value,note)=>{
+					return null;
+				},
+				(value,note)=>{
+					(note as ArcArc).XEnd=value.x;
+					(note as ArcArc).YEnd=value.y;
 				}
-				if (commands.Count == 1)
-				{
-					AdeCommandManager.Instance.Add(commands[0]);
-				}
-				else if (commands.Count > 1)
-				{
-					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
-				}
-			}
-			catch (Exception Ex)
-			{
-				AdeToast.Instance.Show("赋值时出现错误");
-				Debug.LogException(Ex);
-			}
+			);
 		}
 		public void OnLineType(Dropdown dropdown)
 		{
