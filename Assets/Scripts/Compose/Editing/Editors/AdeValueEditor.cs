@@ -315,35 +315,91 @@ namespace Arcade.Compose.Editing
             timingGroupDropdownHelper.SetValueWithoutNotify(data);
         }
 
+		private struct ValueChangeErrorMessage{
+			public string message;
+		}
+		private delegate ValueChangeErrorMessage? ParseValue<TRaw,TValue>(TRaw raw,ref TValue result);
+		private delegate ValueChangeErrorMessage? ValidateValue<TValue>(TValue value,ArcNote note);
+		private delegate void ApplyValue<TValue>(TValue value,ArcNote note);
+
+		private void HandleValueChange<TRaw,TValue>(TRaw raw,ParseValue<TRaw,TValue> parseValue, ValidateValue<TValue> validateValue,ApplyValue<TValue> applyValue){
+			TValue result=default;
+			var parseValueErrorMessage=parseValue(raw,ref result);
+			if(parseValueErrorMessage!=null){
+				AdeToast.Instance.Show(parseValueErrorMessage.Value.message);
+				UpdateFields();
+				return;
+			}
+			foreach(var note in AdeSelectionManager.Instance.SelectedNotes){
+				var validateValueErrorMessage=validateValue(result,note);
+				if(validateValueErrorMessage!=null){
+					AdeToast.Instance.Show(validateValueErrorMessage.Value.message);
+					UpdateFields();
+					return;
+				}
+			}
+			List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
+			foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
+			{
+				var ne = n.Clone();
+				applyValue(result,ne as ArcNote);
+				commands.Add(new EditArcEventCommand(n, ne));
+			}
+			if (commands.Count == 1)
+			{
+				AdeCommandManager.Instance.Add(commands[0]);
+			}
+			else if (commands.Count > 1)
+			{
+				AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+			}
+		}
 
 		public void OnTiming(InputField inputField)
 		{
-			try
-			{
-				string t = inputField.text;
-				int timing = int.Parse(t);
-				List<EditArcEventCommand> commands = new List<EditArcEventCommand>();
-				foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
-				{
-					var ne = n.Clone();
-					ne.Timing = timing;
-					commands.Add(new EditArcEventCommand(n, ne));
+			HandleValueChange(
+				inputField.text,
+				(string raw,ref int result)=>{
+					if(!int.TryParse(raw,out result)){
+						return new ValueChangeErrorMessage{message="时间数值格式错误"};
+					}
+					return null;
+				},
+				(value,note)=>{
+					if(note is ArcHold){
+						var hold=note as ArcHold;
+						if(hold.EndTiming<=value){
+							return new ValueChangeErrorMessage{message="Hold 的时间不能晚于结束时间"};
+						}
+					}
+					if(note is ArcArc){
+						var arc=note as ArcArc;
+						if(arc.EndTiming<value||(arc.EndTiming<=value&&arc.ArcTaps.Count>0)){
+							return new ValueChangeErrorMessage{message="Arc 的时间不能晚于结束时间"};
+						}
+						foreach (var arctap in arc.ArcTaps)
+						{
+							if(arctap.Timing<value){
+								if(!AdeSelectionManager.Instance.SelectedNotes.Contains(arctap)){
+									return new ValueChangeErrorMessage{message="Arc 的时间不能晚于其上 Arctap 的时间"};
+								}
+							}
+						}
+					}
+					if(note is ArcArcTap){
+						var arctap=note as ArcArcTap;
+						if(arctap.Arc.Timing>value||arctap.Arc.EndTiming<value){
+							if(!AdeSelectionManager.Instance.SelectedNotes.Contains(arctap.Arc)){
+								return new ValueChangeErrorMessage{message="Arctap 的时间不能超过所在 Arc 的时间范围"};
+							}
+						}
+					}
+					return null;
+				},
+				(value,note)=>{
+					note.Timing=value;
 				}
-				if (commands.Count == 1)
-				{
-					AdeCommandManager.Instance.Add(commands[0]);
-				}
-				else if (commands.Count > 1)
-				{
-					AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
-				}
-				ArcGameplayManager.Instance.ResetJudge();
-			}
-			catch (Exception Ex)
-			{
-				AdeToast.Instance.Show("赋值时出现错误");
-				Debug.LogException(Ex);
-			}
+			);
 		}
 		public void OnTrack(InputField inputField)
 		{
@@ -563,7 +619,6 @@ namespace Arcade.Compose.Editing
 				Debug.LogException(Ex);
 			}
 		}
-
 		public void OnTimingGroup(Dropdown dropdown)
 		{
 			try
