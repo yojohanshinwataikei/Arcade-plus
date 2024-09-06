@@ -610,8 +610,6 @@ namespace Arcade.Compose.Editing
 				}
 			}
 		}
-
-
         private bool GetSeparateArctapAvailable()
         {
             bool allVoidArc=true;
@@ -620,7 +618,7 @@ namespace Arcade.Compose.Editing
 			{
 				if(note is ArcArc arc){
 					if(arc.IsVoid){
-						if(arc.ArcTaps.Count>0){
+						if(arc.ArcTaps.Count>0&&arc.EndTiming-arc.Timing>1){
 							hasArctap=true;
 						}
 						continue;
@@ -637,6 +635,9 @@ namespace Arcade.Compose.Editing
 			{
 				if(note is ArcArc arc)
 				{
+					if(arc.EndTiming-arc.Timing<=1){
+						continue;
+					}
 					foreach (var arcTap in arc.ArcTaps)
 					{
 						int timing=arcTap.Timing;
