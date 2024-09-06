@@ -632,7 +632,43 @@ namespace Arcade.Compose.Editing
         }
 
 		public void OnSeparateArctap(){
+			List<ICommand> commands= new List<ICommand>();
+			foreach (var note in AdeSelectionManager.Instance.SelectedNotes)
+			{
+				if(note is ArcArc arc)
+				{
+					foreach (var arcTap in arc.ArcTaps)
+					{
+						int timing=arcTap.Timing;
+						float t = 1f * (timing - arc.Timing) / (arc.EndTiming - arc.Timing);
+						float x=ArcAlgorithm.X(arc.XStart,arc.XEnd,t,arc.LineType);
+						float y=ArcAlgorithm.Y(arc.YStart,arc.YEnd,t,arc.LineType);
+						x=Mathf.RoundToInt(x*100)/100f;
+						y=Mathf.RoundToInt(y*100)/100f;
+						commands.Add(new RemoveArcTapCommand(arc, arcTap));
+						ArcArc newArc=new ArcArc() {
+							Timing = timing,
+							EndTiming = timing+1,
+							Color = arc.Color,
+							Effect = "none",
+							IsVoid = true,
+							LineType = ArcLineType.S,
+							TimingGroup = arc.TimingGroup,
+							XStart=x,
+							XEnd=x,
+							YStart=y,
+							YEnd=y,
+						};
+						commands.Add(new AddArcEventCommand(newArc));
+						ArcArcTap newArcTap = new ArcArcTap() { Timing = timing };
+						commands.Add(new AddArcTapCommand(newArc,newArcTap));
 
+					}
+				}
+			}
+			if(commands.Count>0){
+				AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "分离 Arctap"));
+			}
 		}
 
 		private bool IsValidTiming(ArcNote note, int timing)
