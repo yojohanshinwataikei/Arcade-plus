@@ -18,7 +18,7 @@ namespace Arcade.Compose.Editing
 		public static AdeValueEditor Instance { get; private set; }
 
 		public RectTransform Panel;
-		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, LineType, Color, IsVoid, SelectParent, TimingGroup;
+		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, LineType, Color, IsVoid, SelectParent, SeparateArctap, TimingGroup;
 		public RectTransform MoveTiming, MoveTrack, MoveEndTiming, MoveStartPos, MoveEndPos;
 
 		public Image IsVoidIntermediate;
@@ -82,6 +82,7 @@ namespace Arcade.Compose.Editing
 				MoveEndTiming.gameObject.SetActive(count == 1);
 				MoveStartPos.gameObject.SetActive(count == 1);
 				MoveEndPos.gameObject.SetActive(count == 1);
+				SeparateArctap.gameObject.SetActive(GetSeparateArctapAvailable());
 
 				UpdateField(
 					(note) => true,
@@ -613,6 +614,30 @@ namespace Arcade.Compose.Editing
 					AdeSelectionManager.Instance.SelectNote(arc);
 				}
 			}
+		}
+
+
+        private bool GetSeparateArctapAvailable()
+        {
+            bool allVoidArc=true;
+            bool hasArctap=false;
+			foreach (var note in AdeSelectionManager.Instance.SelectedNotes)
+			{
+				if(note is ArcArc arc){
+					if(arc.IsVoid){
+						if(arc.ArcTaps.Count>0){
+							hasArctap=true;
+						}
+						continue;
+					}
+				}
+				allVoidArc=false;
+			}
+			return allVoidArc&&hasArctap;
+        }
+
+		public void OnSeparateArctap(){
+
 		}
 
 		private bool IsValidTiming(ArcNote note, int timing)
