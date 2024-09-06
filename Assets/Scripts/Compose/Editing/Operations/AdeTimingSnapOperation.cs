@@ -37,14 +37,14 @@ namespace Arcade.Compose.Operation
 			List<ICommand> commands = new List<ICommand>();
 			foreach (var note in selected)
 			{
-				if (note is ArcArcTap)
+				if (note is ArcArcTap arcTap)
 				{
-					if (selected.Contains((note as ArcArcTap).Arc))
+					if (selected.Contains(arcTap.Arc))
 					{
 						continue;
 					}
 					var newNote = note.Clone();
-					var arc = (note as ArcArcTap).Arc;
+					var arc = arcTap.Arc;
 					int newTiming = GetSnappedTiming(note.Timing);
 					if (newTiming < arc.Timing)
 					{
@@ -62,20 +62,20 @@ namespace Arcade.Compose.Operation
 					var newNote = note.Clone();
 					int newTiming = GetSnappedTiming(note.Timing);
 					bool isSingleArctapArc = false;
-					if (note is ArcArc)
+					if (note is ArcArc arcArc)
 					{
-						isSingleArctapArc = ((note as ArcArc).EndTiming - note.Timing == 1) && (note as ArcArc).ArcTaps.Count > 0;
+						isSingleArctapArc = (arcArc.EndTiming - note.Timing == 1) && arcArc.ArcTaps.Count > 0;
 					}
 					newNote.Timing = newTiming;
-					if (note is ArcLongNote)
+					if (note is ArcLongNote longNote)
 					{
 						if (isSingleArctapArc)
 						{
-							(newNote as ArcLongNote).EndTiming = newTiming + 1;
+							longNote.EndTiming = newTiming + 1;
 						}
 						else
 						{
-							int newEndTiming = GetSnappedTiming((note as ArcLongNote).EndTiming);
+							int newEndTiming = GetSnappedTiming(longNote.EndTiming);
 							if (newEndTiming < newTiming)
 							{
 								newEndTiming = newTiming;
@@ -87,9 +87,8 @@ namespace Arcade.Compose.Operation
 								{
 									needAvoidZeroLength = true;
 								}
-								if (note is ArcArc)
+								if (note is ArcArc arc)
 								{
-									var arc = note as ArcArc;
 									if (arc.ArcTaps.Count > 0)
 									{
 										needAvoidZeroLength = true;
@@ -104,17 +103,17 @@ namespace Arcade.Compose.Operation
 									newEndTiming = GetNextSnappedTiming(newTiming);
 								}
 							}
-							(newNote as ArcLongNote).EndTiming = newEndTiming;
+							longNote.EndTiming = newEndTiming;
 						}
 					}
 					commands.Add(new EditArcEventCommand(note, newNote));
 					if (note is ArcArc)
 					{
 						ArcArc newArc = newNote as ArcArc;
-						foreach (var arcTap in (note as ArcArc).ArcTaps)
+						foreach (var nestedArcTap in (note as ArcArc).ArcTaps)
 						{
-							var newArcTap = arcTap.Clone();
-							int newArcTapTiming = GetSnappedTiming(arcTap.Timing);
+							var newArcTap = nestedArcTap.Clone();
+							int newArcTapTiming = GetSnappedTiming(nestedArcTap.Timing);
 							if (newArcTapTiming < newArc.Timing)
 							{
 								newArcTapTiming = newArc.Timing;
@@ -124,7 +123,7 @@ namespace Arcade.Compose.Operation
 								newArcTapTiming = newArc.EndTiming;
 							}
 							newArcTap.Timing = newArcTapTiming;
-							commands.Add(new EditArcEventCommand(arcTap, newArcTap));
+							commands.Add(new EditArcEventCommand(nestedArcTap, newArcTap));
 						}
 					}
 				}

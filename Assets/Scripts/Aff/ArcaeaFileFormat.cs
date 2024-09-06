@@ -238,24 +238,20 @@ namespace Arcade.Aff
 		}
 		static void writeItem(TextWriter writer, IRawAffItem item, string intent = "")
 		{
-			if (item is RawAffTiming)
+			if (item is RawAffTiming timing)
 			{
-				var timing = item as RawAffTiming;
 				writer.WriteLine($"{intent}timing({timing.Timing},{timing.Bpm.ToString("f2")},{timing.BeatsPerLine.ToString("f2")});");
 			}
-			else if (item is RawAffTap)
+			else if (item is RawAffTap tap)
 			{
-				var tap = item as RawAffTap;
 				writer.WriteLine($"{intent}({tap.Timing},{tap.Track});");
 			}
-			else if (item is RawAffHold)
+			else if (item is RawAffHold hold)
 			{
-				var hold = item as RawAffHold;
 				writer.WriteLine($"{intent}hold({hold.Timing},{hold.EndTiming},{hold.Track});");
 			}
-			else if (item is RawAffArc)
+			else if (item is RawAffArc arc)
 			{
-				var arc = item as RawAffArc;
 				if (arc.ArcTaps.Count > 0)
 				{
 					arc.IsVoid = true;
@@ -265,38 +261,35 @@ namespace Arcade.Aff
 					(arc.ArcTaps.Count > 0 ? $"[{string.Join(",", arc.ArcTaps.Select(e => $"arctap({e.Timing})"))}]" : "") +
 					";");
 			}
-			else if (item is RawAffCamera)
+			else if (item is RawAffCamera cam)
 			{
-				var cam = item as RawAffCamera;
 				writer.WriteLine($"{intent}camera({cam.Timing},{cam.MoveX.ToString("f2")},{cam.MoveY.ToString("f2")},{cam.MoveZ.ToString("f2")}," +
 					$"{cam.RotateX.ToString("f2")},{cam.RotateY.ToString("f2")},{cam.RotateZ.ToString("f2")},{CameraEaseTypeStrings[cam.CameraType]},{cam.Duration});");
 			}
-			else if (item is RawAffSceneControl)
+			else if (item is RawAffSceneControl scenecontrol)
 			{
-				var scenecontrol = item as RawAffSceneControl;
 				List<string> values = new List<string>();
 				values.Add(scenecontrol.Timing.ToString());
 				values.Add(scenecontrol.Type);
 				foreach (var @param in scenecontrol.Params)
 				{
-					if (@param is RawAffInt)
+					if (@param is RawAffInt @int)
 					{
-						values.Add((@param as RawAffInt).data.ToString());
+						values.Add(@int.data.ToString());
 					}
-					else if (@param is RawAffFloat)
+					else if (@param is RawAffFloat @float)
 					{
-						values.Add((@param as RawAffFloat).data.ToString("f2"));
+						values.Add(@float.data.ToString("f2"));
 					}
-					else if (@param is RawAffWord)
+					else if (@param is RawAffWord word)
 					{
-						values.Add((@param as RawAffWord).data);
+						values.Add(word.data);
 					}
 				}
 				writer.WriteLine($"{intent}scenecontrol({string.Join(",", values)});");
 			}
-			else if (item is RawAffTimingGroup)
+			else if (item is RawAffTimingGroup timinggroup)
 			{
-				var timinggroup = item as RawAffTimingGroup;
 				writer.WriteLine($"{intent}timinggroup({timinggroup.Attributes}){{");
 				foreach (var nestedItem in timinggroup.Items)
 				{
@@ -436,9 +429,9 @@ namespace Arcade.Aff
 				IRawAffEvent @event = item.@event().value;
 				if (@event != null)
 				{
-					if (@event is IRawAffItem)
+					if (@event is IRawAffItem innerItem)
 					{
-						chart.items.Add(@event as IRawAffItem);
+						chart.items.Add(innerItem);
 					}
 					else
 					{
@@ -572,9 +565,8 @@ namespace Arcade.Aff
 				{
 					if (@event.value != null)
 					{
-						if (@event.value is RawAffArctap)
+						if (@event.value is RawAffArctap arctap)
 						{
-							var arctap = @event.value as RawAffArctap;
 							if (arctap.Timing < timing.data || arctap.Timing > endTiming.data)
 							{
 								chart.warning.Add($"第 {@event.values().value()[0].Start.Line + lineOffset} 行第 {@event.values().value()[0].Start.Column + 1} 列，arctap 事件的时间超出所属 arc 的时间范围，此 arctap 事件将被忽略");
@@ -787,9 +779,9 @@ namespace Arcade.Aff
 		{
 			if (context.value != null)
 			{
-				if (context.value is T)
+				if (context.value is T value)
 				{
-					return context.value as T;
+					return value;
 				}
 				else
 				{

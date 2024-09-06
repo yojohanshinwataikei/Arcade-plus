@@ -370,14 +370,12 @@ namespace Arcade.Compose.Editing
 					return null;
 				},
 				(value,note)=>{
-					if(note is ArcHold){
-						var hold=note as ArcHold;
+					if(note is ArcHold hold){
 						if(hold.EndTiming<=value){
 							return new ValueChangeErrorMessage{message="Hold 的时间不能晚于结束时间"};
 						}
 					}
-					if(note is ArcArc){
-						var arc=note as ArcArc;
+					if(note is ArcArc arc){
 						if(arc.EndTiming<value||(arc.EndTiming<=value&&arc.ArcTaps.Count>0)){
 							return new ValueChangeErrorMessage{message="Arc 的时间不能晚于结束时间"};
 						}
@@ -422,12 +420,10 @@ namespace Arcade.Compose.Editing
 					return null;
 				},
 				(value,note)=>{
-					if(note is ArcTap){
-						var tap=note as ArcTap;
+					if(note is ArcTap tap){
 						tap.Track=value;
 					}
-					if(note is ArcHold){
-						var hold=note as ArcHold;
+					if(note is ArcHold hold){
 						hold.Track=value;
 					}
 				}
@@ -568,8 +564,7 @@ namespace Arcade.Compose.Editing
 					return null;
 				},
 				(value,note)=>{
-					if(note is ArcArc){
-						var arc=note as ArcArc;
+					if(note is ArcArc arc){
 						if((!value)&&arc.ArcTaps.Count>0){
 							return new ValueChangeErrorMessage{message="Arc 含有 ArcTap 时必须是黑线"};
 						}
@@ -607,9 +602,9 @@ namespace Arcade.Compose.Editing
 			List<ArcNote> selectedNotes = AdeSelectionManager.Instance.SelectedNotes;
 			if (selectedNotes.Count == 1)
 			{
-				if (selectedNotes[0] is ArcArcTap)
+				if (selectedNotes[0] is ArcArcTap arcTap)
 				{
-					ArcArc arc = (selectedNotes[0] as ArcArcTap).Arc;
+					ArcArc arc = arcTap.Arc;
 					AdeSelectionManager.Instance.DeselectAllNotes();
 					AdeSelectionManager.Instance.SelectNote(arc);
 				}
@@ -642,9 +637,8 @@ namespace Arcade.Compose.Editing
 
 		private bool IsValidTiming(ArcNote note, int timing)
 		{
-			if (note is ArcArc)
+			if (note is ArcArc arc)
 			{
-				var arc = note as ArcArc;
 				if (timing > arc.EndTiming)
 				{
 					return false;
@@ -658,18 +652,16 @@ namespace Arcade.Compose.Editing
 				}
 			}
 			else
-			if (note is ArcHold)
+			if (note is ArcHold hold)
 			{
-				var hold = note as ArcHold;
 				if (timing >= hold.EndTiming)
 				{
 					return false;
 				}
 			}
 			else
-			if (note is ArcArcTap)
+			if (note is ArcArcTap arcTap)
 			{
-				var arcTap = note as ArcArcTap;
 				if (timing > arcTap.Arc.EndTiming || timing < arcTap.Arc.Timing)
 				{
 					return false;
@@ -731,9 +723,8 @@ namespace Arcade.Compose.Editing
 
 		private bool IsValidEndTiming(ArcNote note, int timing)
 		{
-			if (note is ArcArc)
+			if (note is ArcArc arc)
 			{
-				var arc = note as ArcArc;
 				if (timing < arc.Timing)
 				{
 					return false;
@@ -747,9 +738,8 @@ namespace Arcade.Compose.Editing
 				}
 			}
 			else
-			if (note is ArcHold)
+			if (note is ArcHold hold)
 			{
-				var hold = note as ArcHold;
 				if (timing <= hold.Timing)
 				{
 					return false;

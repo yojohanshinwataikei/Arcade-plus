@@ -5,10 +5,10 @@ namespace Arcade.Compose.Command
 {
 	public class AddArcEventCommand : ICommand
 	{
-		private readonly ArcEvent note = null;
+		private readonly ArcEvent @event = null;
 		public AddArcEventCommand(ArcEvent note)
 		{
-			this.note = note;
+			this.@event = note;
 		}
 		public string Name
 		{
@@ -19,7 +19,7 @@ namespace Arcade.Compose.Command
 		}
 		public void Do()
 		{
-			switch (note)
+			switch (@event)
 			{
 				case ArcTap note:
 					ArcTapNoteManager.Instance.Add(note);
@@ -34,34 +34,34 @@ namespace Arcade.Compose.Command
 		}
 		public void Undo()
 		{
-			if (note is ArcNote)
+			if (@event is ArcNote note)
 			{
-				AdeSelectionManager.Instance.DeselectNote(note as ArcNote);
+				AdeSelectionManager.Instance.DeselectNote(note);
 			}
-			if (note is ArcTap)
+			if (@event is ArcTap tap)
 			{
-				ArcTapNoteManager.Instance.Remove(note as ArcTap);
+				ArcTapNoteManager.Instance.Remove(tap);
 			}
-			else if (note is ArcHold)
+			else if (@event is ArcHold hold)
 			{
-				ArcHoldNoteManager.Instance.Remove(note as ArcHold);
+				ArcHoldNoteManager.Instance.Remove(hold);
 			}
-			else if (note is ArcArc)
+			else if (@event is ArcArc arc)
 			{
-				foreach (var arctap in (note as ArcArc).ArcTaps)
+				foreach (var arctap in arc.ArcTaps)
 				{
 					AdeSelectionManager.Instance.DeselectNote(arctap);
 				}
-				ArcArcManager.Instance.Remove(note as ArcArc);
+				ArcArcManager.Instance.Remove(arc);
 			}
 		}
 	}
 	public class RemoveArcEventCommand : ICommand
 	{
-		private readonly ArcEvent note = null;
+		private readonly ArcEvent @event = null;
 		public RemoveArcEventCommand(ArcEvent note)
 		{
-			this.note = note;
+			this.@event = note;
 		}
 		public string Name
 		{
@@ -72,40 +72,40 @@ namespace Arcade.Compose.Command
 		}
 		public void Do()
 		{
-			if (note is ArcNote)
+			if (@event is ArcNote note)
 			{
-				AdeSelectionManager.Instance.DeselectNote(note as ArcNote);
+				AdeSelectionManager.Instance.DeselectNote(note);
 			}
-			if (note is ArcTap)
+			if (@event is ArcTap tap)
 			{
-				ArcTapNoteManager.Instance.Remove(note as ArcTap);
+				ArcTapNoteManager.Instance.Remove(tap);
 			}
-			else if (note is ArcHold)
+			else if (@event is ArcHold hold)
 			{
-				ArcHoldNoteManager.Instance.Remove(note as ArcHold);
+				ArcHoldNoteManager.Instance.Remove(hold);
 			}
-			else if (note is ArcArc)
+			else if (@event is ArcArc arc)
 			{
-				foreach (var arctap in (note as ArcArc).ArcTaps)
+				foreach (var arctap in arc.ArcTaps)
 				{
 					AdeSelectionManager.Instance.DeselectNote(arctap);
 				}
-				ArcArcManager.Instance.Remove(note as ArcArc);
+				ArcArcManager.Instance.Remove(arc);
 			}
 		}
 		public void Undo()
 		{
-			if (note is ArcTap)
+			if (@event is ArcTap tap)
 			{
-				ArcTapNoteManager.Instance.Add(note as ArcTap);
+				ArcTapNoteManager.Instance.Add(tap);
 			}
-			else if (note is ArcHold)
+			else if (@event is ArcHold hold)
 			{
-				ArcHoldNoteManager.Instance.Add(note as ArcHold);
+				ArcHoldNoteManager.Instance.Add(hold);
 			}
-			else if (note is ArcArc)
+			else if (@event is ArcArc arc)
 			{
-				ArcArcManager.Instance.Add(note as ArcArc);
+				ArcArcManager.Instance.Add(arc);
 			}
 		}
 	}

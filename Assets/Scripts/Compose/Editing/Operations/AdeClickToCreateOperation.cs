@@ -265,9 +265,8 @@ namespace Arcade.Compose.Operation
 				return null;
 			}
 			var note = notes[0];
-			if (note is ArcArc)
+			if (note is ArcArc arc)
 			{
-				var arc = note as ArcArc;
 				if (arc.IsVoid)
 				{
 					return arc;

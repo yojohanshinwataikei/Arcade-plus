@@ -102,7 +102,7 @@ namespace Arcade.Compose
 			List<ICommand> deleteCommands = new List<ICommand>();
 			foreach (var s in SelectedNotes)
 			{
-				if (s is ArcArcTap) deleteCommands.Add(new RemoveArcTapCommand((s as ArcArcTap).Arc, s as ArcArcTap));
+				if (s is ArcArcTap arcTap) deleteCommands.Add(new RemoveArcTapCommand(arcTap.Arc, arcTap));
 				else deleteCommands.Add(new RemoveArcEventCommand(s));
 			}
 			if (deleteCommands.Count != 0) AdeCommandManager.Instance.Add(new BatchCommand(deleteCommands.ToArray(), "删除"));

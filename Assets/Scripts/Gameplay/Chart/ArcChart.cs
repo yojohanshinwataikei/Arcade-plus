@@ -41,46 +41,46 @@ namespace Arcade.Gameplay.Chart
 
 		void addRawItem(IRawAffItem item, ArcTimingGroup timingGroup)
 		{
-			if (item is RawAffTiming)
+			if (item is RawAffTiming rawTiming)
 			{
 				if (timingGroup == null)
 				{
-					Timings.Add(new ArcTiming(item as RawAffTiming));
+					Timings.Add(new ArcTiming(rawTiming));
 				}
 				else
 				{
-					timingGroup.Timings.Add(new ArcTiming(item as RawAffTiming));
+					timingGroup.Timings.Add(new ArcTiming(rawTiming));
 				}
 			}
-			else if (item is RawAffTap)
+			else if (item is RawAffTap rawTap)
 			{
-				Taps.Add(new ArcTap(item as RawAffTap, timingGroup));
+				Taps.Add(new ArcTap(rawTap, timingGroup));
 			}
-			else if (item is RawAffHold)
+			else if (item is RawAffHold rawHold)
 			{
-				Holds.Add(new ArcHold(item as RawAffHold, timingGroup));
+				Holds.Add(new ArcHold(rawHold, timingGroup));
 			}
-			else if (item is RawAffArc)
+			else if (item is RawAffArc rawArc)
 			{
-				Arcs.Add(new ArcArc(item as RawAffArc, timingGroup));
+				Arcs.Add(new ArcArc(rawArc, timingGroup));
 			}
-			else if (item is RawAffCamera)
+			else if (item is RawAffCamera rawCamera)
 			{
-				Cameras.Add(new ArcCamera(item as RawAffCamera, timingGroup));
+				Cameras.Add(new ArcCamera(rawCamera, timingGroup));
 			}
-			else if (item is RawAffSceneControl)
+			else if (item is RawAffSceneControl rawSceneControl)
 			{
-				SceneControl.Add(new ArcSceneControl(item as RawAffSceneControl, timingGroup));
+				SceneControl.Add(new ArcSceneControl(rawSceneControl, timingGroup));
 			}
-			else if (item is RawAffTimingGroup)
+			else if (item is RawAffTimingGroup rawTimingGroup)
 			{
 				ArcTimingGroup arcTimingGroup = new ArcTimingGroup()
 				{
 					Id = TimingGroups.Count + 1,
 				};
-				arcTimingGroup.ApplyAttributes((item as RawAffTimingGroup).Attributes);
+				arcTimingGroup.ApplyAttributes(rawTimingGroup.Attributes);
 				TimingGroups.Add(arcTimingGroup);
-				foreach (var nestedItem in (item as RawAffTimingGroup).Items)
+				foreach (var nestedItem in rawTimingGroup.Items)
 				{
 					addRawItem(nestedItem, arcTimingGroup);
 				}
@@ -107,9 +107,9 @@ namespace Arcade.Gameplay.Chart
 
 			foreach (var arcEvent in events)
 			{
-				if (arcEvent is IHasTimingGroup)
+				if (arcEvent is IHasTimingGroup hasTimingGroup)
 				{
-					ArcTimingGroup timingGroup = (arcEvent as IHasTimingGroup).TimingGroup;
+					ArcTimingGroup timingGroup = hasTimingGroup.TimingGroup;
 					if (timingGroup != null)
 					{
 						timingGroupEvents[timingGroup].Add(arcEvent);
@@ -131,9 +131,9 @@ namespace Arcade.Gameplay.Chart
 			raw.additionalMetadata = AdditionalMetadata;
 			foreach (var e in mainEvents)
 			{
-				if (e is IIntoRawItem)
+				if (e is IIntoRawItem intoRawItem)
 				{
-					var rawItem = (e as IIntoRawItem).IntoRawItem();
+					var rawItem = intoRawItem.IntoRawItem();
 					raw.items.Add(rawItem);
 				}
 			}
@@ -146,9 +146,9 @@ namespace Arcade.Gameplay.Chart
 				};
 				foreach (var e in timingGroupEvents[timingGroup])
 				{
-					if (e is IIntoRawItem)
+					if (e is IIntoRawItem intoRawItem)
 					{
-						var rawItem = (e as IIntoRawItem).IntoRawItem() as IRawAffNestableItem;
+						var rawItem = intoRawItem.IntoRawItem() as IRawAffNestableItem;
 						timingGroupItem.Items.Add(rawItem);
 					}
 
@@ -268,28 +268,28 @@ namespace Arcade.Gameplay.Chart
 			}
 			else if (RawType == "hidegroup" && RawParams.Count == 2)
 			{
-				if ((RawParams[0] is RawAffFloat) && (RawParams[1] is RawAffInt))
+				if ((RawParams[0] is RawAffFloat) && (RawParams[1] is RawAffInt param1))
 				{
 					Type = SceneControlType.HideGroup;
-					Enable = (RawParams[1] as RawAffInt).data > 0;
+					Enable = param1.data > 0;
 				}
 			}
 			else if (RawType == "enwidencamera" && RawParams.Count == 2)
 			{
-				if ((RawParams[0] is RawAffFloat) && (RawParams[1] is RawAffInt))
+				if ((RawParams[0] is RawAffFloat param0) && (RawParams[1] is RawAffInt param1))
 				{
 					Type = SceneControlType.EnwidenCamera;
-					Duration = (RawParams[0] as RawAffFloat).data;
-					Enable = (RawParams[1] as RawAffInt).data > 0;
+					Duration = param0.data;
+					Enable = param1.data > 0;
 				}
 			}
 			else if (RawType == "enwidenlanes" && RawParams.Count == 2)
 			{
-				if ((RawParams[0] is RawAffFloat) && (RawParams[1] is RawAffInt))
+				if ((RawParams[0] is RawAffFloat param0) && (RawParams[1] is RawAffInt param1))
 				{
 					Type = SceneControlType.EnwidenLanes;
-					Duration = (RawParams[0] as RawAffFloat).data;
-					Enable = (RawParams[1] as RawAffInt).data > 0;
+					Duration = param0.data;
+					Enable = param1.data > 0;
 				}
 			}
 			TimingGroup = timingGroup;

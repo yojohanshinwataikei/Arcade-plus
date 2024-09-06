@@ -61,9 +61,8 @@ namespace Arcade.Compose
 			{
 				content += $"\n段落选择起点: {AdeSelectNoteOperation.Instance.RangeSelectPosition}";
 			}
-			if (AdeSelectionManager.Instance.SelectedNotes.Count == 1 && AdeSelectionManager.Instance.SelectedNotes[0] is ArcArc)
+			if (AdeSelectionManager.Instance.SelectedNotes.Count == 1 && AdeSelectionManager.Instance.SelectedNotes[0] is ArcArc arc)
 			{
-				ArcArc arc = AdeSelectionManager.Instance.SelectedNotes[0] as ArcArc;
 				if (arc.EndTiming - arc.Timing != 0)
 				{
 					float p = ((float)(cursor.AttachedTiming - arc.Timing)) / ((float)(arc.EndTiming - arc.Timing));
