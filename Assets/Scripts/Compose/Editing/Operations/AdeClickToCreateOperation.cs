@@ -195,6 +195,13 @@ namespace Arcade.Compose.Operation
 					SwitchType();
 				}
 			}
+			if (Mode == ClickToCreateMode.ArcTap)
+			{
+				if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ClickToCreateArctapMode))
+				{
+					SwitchArctapMode();
+				}
+			}
 
 			UpdateArcTapCursor();
 		}
@@ -267,6 +274,22 @@ namespace Arcade.Compose.Operation
 						break;
 					case ArcLineType.SoSi:
 						currentArcType = ArcLineType.S;
+						break;
+				}
+			}
+		}
+		public void SwitchArctapMode()
+		{
+
+			if (!AdeOperationManager.Instance.HasOngoingOperation)
+			{
+				switch (ArctapMode)
+				{
+					case ClickToCreateArctapMode.OnArc:
+						ArctapMode = ClickToCreateArctapMode.Single;
+						break;
+					case ClickToCreateArctapMode.Single:
+						ArctapMode = ClickToCreateArctapMode.OnArc;
 						break;
 				}
 			}

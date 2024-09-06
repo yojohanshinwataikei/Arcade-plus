@@ -159,6 +159,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Click To Create Arctap Mode",
+                    "type": "Value",
+                    "id": "2cb65965-bb9d-477d-ae33-9efd19dc988c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Play When Holding",
                     "type": "Value",
                     "id": "906c56a2-3584-45c7-a679-d656873a9e8f",
@@ -1410,6 +1419,61 @@
                     "processors": "",
                     "groups": "",
                     "action": "Click To Create Arc Type",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Key With Modifiers",
+                    "id": "cde71a49-f29c-433a-aca3-42e40ba484bb",
+                    "path": "KeyWithModifiers",
+                    "interactions": "HotKey",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arctap Mode",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "key",
+                    "id": "d4de7451-0083-46dc-b3cd-99532d580a89",
+                    "path": "<Keyboard>/backslash",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arctap Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier1",
+                    "id": "6313d0e1-243f-4aa0-83dc-a8970c1cd827",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arctap Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier2",
+                    "id": "71d7fd70-456f-4a94-86e7-630c07e259b2",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arctap Mode",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "modifier3",
+                    "id": "a27c6bdb-0e45-4109-9cc2-0c54a06cf4f6",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click To Create Arctap Mode",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },

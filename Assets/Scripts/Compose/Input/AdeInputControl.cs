@@ -184,6 +184,15 @@ namespace Arcade.Compose
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""Click To Create Arctap Mode"",
+                    ""type"": ""Value"",
+                    ""id"": ""2cb65965-bb9d-477d-ae33-9efd19dc988c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""Play When Holding"",
                     ""type"": ""Value"",
                     ""id"": ""906c56a2-3584-45c7-a679-d656873a9e8f"",
@@ -1440,6 +1449,61 @@ namespace Arcade.Compose
                 },
                 {
                     ""name"": ""Key With Modifiers"",
+                    ""id"": ""cde71a49-f29c-433a-aca3-42e40ba484bb"",
+                    ""path"": ""KeyWithModifiers"",
+                    ""interactions"": ""HotKey"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap Mode"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""key"",
+                    ""id"": ""d4de7451-0083-46dc-b3cd-99532d580a89"",
+                    ""path"": ""<Keyboard>/backslash"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap Mode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier1"",
+                    ""id"": ""6313d0e1-243f-4aa0-83dc-a8970c1cd827"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap Mode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier2"",
+                    ""id"": ""71d7fd70-456f-4a94-86e7-630c07e259b2"",
+                    ""path"": ""<Keyboard>/alt"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap Mode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""modifier3"",
+                    ""id"": ""a27c6bdb-0e45-4109-9cc2-0c54a06cf4f6"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click To Create Arctap Mode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Key With Modifiers"",
                     ""id"": ""fc7bf4cf-ac7a-4c7f-aa3f-77ebad3f417f"",
                     ""path"": ""KeyWithModifiers"",
                     ""interactions"": ""HotKey(needModifier3=true)"",
@@ -2300,6 +2364,7 @@ namespace Arcade.Compose
             m_ArcadeHotkey_ClickToCreateArcVoid = m_ArcadeHotkey.FindAction("Click To Create Arc Void", throwIfNotFound: true);
             m_ArcadeHotkey_ClickToCreateArcColor = m_ArcadeHotkey.FindAction("Click To Create Arc Color", throwIfNotFound: true);
             m_ArcadeHotkey_ClickToCreateArcType = m_ArcadeHotkey.FindAction("Click To Create Arc Type", throwIfNotFound: true);
+            m_ArcadeHotkey_ClickToCreateArctapMode = m_ArcadeHotkey.FindAction("Click To Create Arctap Mode", throwIfNotFound: true);
             m_ArcadeHotkey_PlayWhenHolding = m_ArcadeHotkey.FindAction("Play When Holding", throwIfNotFound: true);
             m_ArcadeHotkey_PreviewWhenHolding = m_ArcadeHotkey.FindAction("Preview When Holding", throwIfNotFound: true);
             m_ArcadeHotkey_PlayOrPause = m_ArcadeHotkey.FindAction("Play Or Pause", throwIfNotFound: true);
@@ -2406,6 +2471,7 @@ namespace Arcade.Compose
         private readonly InputAction m_ArcadeHotkey_ClickToCreateArcVoid;
         private readonly InputAction m_ArcadeHotkey_ClickToCreateArcColor;
         private readonly InputAction m_ArcadeHotkey_ClickToCreateArcType;
+        private readonly InputAction m_ArcadeHotkey_ClickToCreateArctapMode;
         private readonly InputAction m_ArcadeHotkey_PlayWhenHolding;
         private readonly InputAction m_ArcadeHotkey_PreviewWhenHolding;
         private readonly InputAction m_ArcadeHotkey_PlayOrPause;
@@ -2444,6 +2510,7 @@ namespace Arcade.Compose
             public InputAction @ClickToCreateArcVoid => m_Wrapper.m_ArcadeHotkey_ClickToCreateArcVoid;
             public InputAction @ClickToCreateArcColor => m_Wrapper.m_ArcadeHotkey_ClickToCreateArcColor;
             public InputAction @ClickToCreateArcType => m_Wrapper.m_ArcadeHotkey_ClickToCreateArcType;
+            public InputAction @ClickToCreateArctapMode => m_Wrapper.m_ArcadeHotkey_ClickToCreateArctapMode;
             public InputAction @PlayWhenHolding => m_Wrapper.m_ArcadeHotkey_PlayWhenHolding;
             public InputAction @PreviewWhenHolding => m_Wrapper.m_ArcadeHotkey_PreviewWhenHolding;
             public InputAction @PlayOrPause => m_Wrapper.m_ArcadeHotkey_PlayOrPause;
@@ -2521,6 +2588,9 @@ namespace Arcade.Compose
                 @ClickToCreateArcType.started += instance.OnClickToCreateArcType;
                 @ClickToCreateArcType.performed += instance.OnClickToCreateArcType;
                 @ClickToCreateArcType.canceled += instance.OnClickToCreateArcType;
+                @ClickToCreateArctapMode.started += instance.OnClickToCreateArctapMode;
+                @ClickToCreateArctapMode.performed += instance.OnClickToCreateArctapMode;
+                @ClickToCreateArctapMode.canceled += instance.OnClickToCreateArctapMode;
                 @PlayWhenHolding.started += instance.OnPlayWhenHolding;
                 @PlayWhenHolding.performed += instance.OnPlayWhenHolding;
                 @PlayWhenHolding.canceled += instance.OnPlayWhenHolding;
@@ -2627,6 +2697,9 @@ namespace Arcade.Compose
                 @ClickToCreateArcType.started -= instance.OnClickToCreateArcType;
                 @ClickToCreateArcType.performed -= instance.OnClickToCreateArcType;
                 @ClickToCreateArcType.canceled -= instance.OnClickToCreateArcType;
+                @ClickToCreateArctapMode.started -= instance.OnClickToCreateArctapMode;
+                @ClickToCreateArctapMode.performed -= instance.OnClickToCreateArctapMode;
+                @ClickToCreateArctapMode.canceled -= instance.OnClickToCreateArctapMode;
                 @PlayWhenHolding.started -= instance.OnPlayWhenHolding;
                 @PlayWhenHolding.performed -= instance.OnPlayWhenHolding;
                 @PlayWhenHolding.canceled -= instance.OnPlayWhenHolding;
@@ -2776,6 +2849,7 @@ namespace Arcade.Compose
             void OnClickToCreateArcVoid(InputAction.CallbackContext context);
             void OnClickToCreateArcColor(InputAction.CallbackContext context);
             void OnClickToCreateArcType(InputAction.CallbackContext context);
+            void OnClickToCreateArctapMode(InputAction.CallbackContext context);
             void OnPlayWhenHolding(InputAction.CallbackContext context);
             void OnPreviewWhenHolding(InputAction.CallbackContext context);
             void OnPlayOrPause(InputAction.CallbackContext context);
