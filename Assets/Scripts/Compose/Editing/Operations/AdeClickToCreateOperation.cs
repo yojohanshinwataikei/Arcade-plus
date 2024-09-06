@@ -87,7 +87,7 @@ namespace Arcade.Compose.Operation
 				if (mode != value)
 				{
 					mode = value;
-					ArctapMode=ClickToCreateArctapMode.OnArc;
+					ArctapMode = ClickToCreateArctapMode.OnArc;
 				}
 				if (mode == ClickToCreateMode.Idle)
 				{
@@ -208,27 +208,25 @@ namespace Arcade.Compose.Operation
 
 		private void UpdateArcTapCursor()
 		{
-			if (Mode != ClickToCreateMode.ArcTap)
+			if (Mode != ClickToCreateMode.ArcTap || ArctapMode!=ClickToCreateArctapMode.OnArc)
 			{
 				AdeCursorManager.Instance.ArcTapCursorEnabled = false;
 				return;
 			}
-			if(ArctapMode==ClickToCreateArctapMode.OnArc){
-				ArcArc currentArc = GetCurrentArc();
-				if(currentArc==null){
-					AdeCursorManager.Instance.ArcTapCursorEnabled = false;
-					return;
-				}
-				int timing = AdeCursorManager.Instance.AttachedTiming;
-				bool canAddArcTap = MayAddArcTapOnArc();
-				AdeCursorManager.Instance.ArcTapCursorEnabled = canAddArcTap;
-				AdeCursorManager.Instance.ArcTapCursorIsSfx = currentArc.IsSfx;
-				if (!canAddArcTap) return;
-				float t = 1f * (timing - currentArc.Timing) / (currentArc.EndTiming - currentArc.Timing);
-				Vector2 gizmo = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(currentArc.XStart, currentArc.XEnd, t, currentArc.LineType)),
-										ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(currentArc.YStart, currentArc.YEnd, t, currentArc.LineType)) - 0.5f);
-				AdeCursorManager.Instance.ArcTapCursorPosition = gizmo;
+			ArcArc currentArc = GetCurrentArc();
+			if(currentArc==null){
+				AdeCursorManager.Instance.ArcTapCursorEnabled = false;
+				return;
 			}
+			int timing = AdeCursorManager.Instance.AttachedTiming;
+			bool canAddArcTap = MayAddArcTapOnArc();
+			AdeCursorManager.Instance.ArcTapCursorEnabled = canAddArcTap;
+			AdeCursorManager.Instance.ArcTapCursorIsSfx = currentArc.IsSfx;
+			if (!canAddArcTap) return;
+			float t = 1f * (timing - currentArc.Timing) / (currentArc.EndTiming - currentArc.Timing);
+			Vector2 gizmo = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(currentArc.XStart, currentArc.XEnd, t, currentArc.LineType)),
+									ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(currentArc.YStart, currentArc.YEnd, t, currentArc.LineType)) - 0.5f);
+			AdeCursorManager.Instance.ArcTapCursorPosition = gizmo;
 		}
 		public void SwitchColor()
 		{
@@ -465,6 +463,39 @@ namespace Arcade.Compose.Operation
 			AdeSelectionManager.Instance.SelectNote(note);
 		}
 
+        private async UniTask ExecuteAddSingleArctap(CancellationToken cancellationToken)
+        {
+			int timing = AdeCursorManager.Instance.AttachedTiming;
+			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
+			ArcArc arc = new ArcArc() { Timing = timing, EndTiming = timing+1, Color = currentArcColor, Effect = "none", IsVoid = true, LineType = ArcLineType.S, TimingGroup = timingGroup };
+			ArcArcTap arctap = new ArcArcTap() { Timing = timing };
+			AdeCommandManager.Instance.Prepare(new BatchCommand(new ICommand[]{
+				new AddArcEventCommand(arc),
+				new AddArcTapCommand(arc,arctap),
+			},"添加单个 ArcTap"));
+			try
+			{
+				Action<Vector2> updateStartCoordinate = (coord) =>
+				{
+					arc.XStart = coord.x;
+					arc.YStart = coord.y;
+					arc.XEnd = coord.x;
+					arc.YEnd = coord.y;
+					arc.Rebuild();
+					ArcArcManager.Instance.CalculateArcRelationship();
+				};
+				var startCoord = await AdeCursorManager.Instance.SelectCoordinate(arc.Timing, Progress.Create(updateStartCoordinate), cancellationToken);
+				updateStartCoordinate(startCoord);
+			}
+			catch (OperationCanceledException ex)
+			{
+				AdeCommandManager.Instance.Cancel();
+				throw ex;
+			}
+			AdeCommandManager.Instance.Commit();
+			AdeSelectionManager.Instance.SelectNote(arctap);
+        }
+
 		public override AdeOperationResult TryExecuteOperation()
 		{
 			if (!Enable)
@@ -489,16 +520,27 @@ namespace Arcade.Compose.Operation
 					}
 					else if (mode == ClickToCreateMode.ArcTap)
 					{
-						ArcArc currentArc = GetCurrentArc();
-						if (currentArc != null)
-						{
-							int timing = AdeCursorManager.Instance.AttachedTiming;
-							if (currentArc.Timing <= timing && currentArc.EndTiming >= timing && currentArc.Timing < currentArc.EndTiming)
+						if(arctapMode == ClickToCreateArctapMode.OnArc){
+							ArcArc currentArc = GetCurrentArc();
+							if (currentArc != null)
 							{
-								ArcArcTap note = new ArcArcTap() { Timing = timing };
-								AdeCommandManager.Instance.Add(new AddArcTapCommand(currentArc, note));
-								return true;
+								int timing = AdeCursorManager.Instance.AttachedTiming;
+								if (currentArc.Timing <= timing && currentArc.EndTiming >= timing && currentArc.Timing < currentArc.EndTiming)
+								{
+									ArcArcTap note = new ArcArcTap() { Timing = timing };
+									AdeCommandManager.Instance.Add(new AddArcTapCommand(currentArc, note));
+									return true;
+								}
 							}
+						}
+						else if(arctapMode == ClickToCreateArctapMode.Single)
+						{
+							var cancellation = new CancellationTokenSource();
+							return AdeOperationResult.FromOngoingOperation(new AdeOngoingOperation
+							{
+								task = ExecuteAddSingleArctap(cancellation.Token).WithExceptionLogger(),
+								cancellation = cancellation,
+							});
 						}
 					}
 					else if (mode == ClickToCreateMode.Hold)
@@ -523,5 +565,5 @@ namespace Arcade.Compose.Operation
 			}
 			return false;
 		}
-	}
+    }
 }
