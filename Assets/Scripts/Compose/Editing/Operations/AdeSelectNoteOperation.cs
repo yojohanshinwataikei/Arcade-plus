@@ -88,7 +88,7 @@ namespace Arcade.Compose.Operation
                 }
                 else
                 {
-                    if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed() && !AdeClickToCreate.Instance.MayAddArcTap())
+                    if (!AdeInputManager.Instance.Inputs.MultipleSelection.IsPressed() && !AdeClickToCreate.Instance.MayAddArcTapOnArc())
                     {
                         AdeSelectionManager.Instance.DeselectAllNotes();
                     }

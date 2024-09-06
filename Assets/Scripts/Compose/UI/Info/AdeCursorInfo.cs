@@ -30,11 +30,6 @@ namespace Arcade.Compose
 				}
 			}
 		}
-		// Start is called before the first frame update
-		void Start()
-		{
-
-		}
 
 		void Update()
 		{
@@ -55,6 +50,10 @@ namespace Arcade.Compose
 				if (AdeClickToCreate.Instance.Mode == ClickToCreateMode.Arc)
 				{
 					content += $"\n{AdeClickToCreate.Instance.CurrentArcColor}/{AdeClickToCreate.Instance.CurrentArcIsVoid}/{AdeClickToCreate.Instance.CurrentArcType}";
+				}
+				if (AdeClickToCreate.Instance.Mode == ClickToCreateMode.ArcTap)
+				{
+					content += $"\n{AdeClickToCreate.Instance.CurrentArctapMode}";
 				}
 			}
 			if (AdeSelectNoteOperation.Instance.RangeSelectPosition != null)

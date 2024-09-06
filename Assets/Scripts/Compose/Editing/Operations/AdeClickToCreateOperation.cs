@@ -22,6 +22,11 @@ namespace Arcade.Compose.Operation
 		Arc = 3,
 		ArcTap = 4
 	}
+	public enum ClickToCreateArctapMode
+	{
+		OnArc = 0,
+		Single = 1
+	}
 	public class AdeClickToCreate : AdeOperation
 	{
 		public static AdeClickToCreate Instance { get; private set; }
@@ -82,10 +87,26 @@ namespace Arcade.Compose.Operation
 				if (mode != value)
 				{
 					mode = value;
+					ArctapMode=ClickToCreateArctapMode.OnArc;
 				}
 				if (mode == ClickToCreateMode.Idle)
 				{
 					AdeCursorManager.Instance.ArcTapCursorEnabled = false;
+				}
+			}
+		}
+		private ClickToCreateArctapMode arctapMode;
+		public ClickToCreateArctapMode ArctapMode{
+			get{
+				if (!ArcGameplayManager.Instance.IsLoaded) return ClickToCreateArctapMode.OnArc;
+				if (Mode!=ClickToCreateMode.ArcTap) return ClickToCreateArctapMode.OnArc;
+				return arctapMode;
+			}
+			set
+			{
+				if (arctapMode != value)
+				{
+					arctapMode = value;
 				}
 			}
 		}
@@ -109,6 +130,13 @@ namespace Arcade.Compose.Operation
 			get
 			{
 				return currentArcType.ToString();
+			}
+		}
+		public string CurrentArctapMode
+		{
+			get
+			{
+				return arctapMode == ClickToCreateArctapMode.OnArc ? "加在 Arc 上" : "单独创建";
 			}
 		}
 
@@ -173,21 +201,27 @@ namespace Arcade.Compose.Operation
 
 		private void UpdateArcTapCursor()
 		{
-			ArcArc currentArc = GetCurrentArc();
-			if (Mode != ClickToCreateMode.ArcTap || currentArc == null)
+			if (Mode != ClickToCreateMode.ArcTap)
 			{
 				AdeCursorManager.Instance.ArcTapCursorEnabled = false;
 				return;
 			}
-			int timing = AdeCursorManager.Instance.AttachedTiming;
-			bool canAddArcTap = MayAddArcTap();
-			AdeCursorManager.Instance.ArcTapCursorEnabled = canAddArcTap;
-			AdeCursorManager.Instance.ArcTapCursorIsSfx = currentArc.IsSfx;
-			if (!canAddArcTap) return;
-			float t = 1f * (timing - currentArc.Timing) / (currentArc.EndTiming - currentArc.Timing);
-			Vector2 gizmo = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(currentArc.XStart, currentArc.XEnd, t, currentArc.LineType)),
-									   ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(currentArc.YStart, currentArc.YEnd, t, currentArc.LineType)) - 0.5f);
-			AdeCursorManager.Instance.ArcTapCursorPosition = gizmo;
+			if(ArctapMode==ClickToCreateArctapMode.OnArc){
+				ArcArc currentArc = GetCurrentArc();
+				if(currentArc==null){
+					AdeCursorManager.Instance.ArcTapCursorEnabled = false;
+					return;
+				}
+				int timing = AdeCursorManager.Instance.AttachedTiming;
+				bool canAddArcTap = MayAddArcTapOnArc();
+				AdeCursorManager.Instance.ArcTapCursorEnabled = canAddArcTap;
+				AdeCursorManager.Instance.ArcTapCursorIsSfx = currentArc.IsSfx;
+				if (!canAddArcTap) return;
+				float t = 1f * (timing - currentArc.Timing) / (currentArc.EndTiming - currentArc.Timing);
+				Vector2 gizmo = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(currentArc.XStart, currentArc.XEnd, t, currentArc.LineType)),
+										ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(currentArc.YStart, currentArc.YEnd, t, currentArc.LineType)) - 0.5f);
+				AdeCursorManager.Instance.ArcTapCursorPosition = gizmo;
+			}
 		}
 		public void SwitchColor()
 		{
@@ -249,6 +283,18 @@ namespace Arcade.Compose.Operation
 				Mode = newMode;
 			}
 		}
+		public void SetClickToCreateArctapMode(int mode)
+		{
+			ClickToCreateArctapMode newMode = (ClickToCreateArctapMode)mode;
+			SetClickToCreateArctapMode(newMode);
+		}
+		public void SetClickToCreateArctapMode(ClickToCreateArctapMode newMode)
+		{
+			if (!AdeOperationManager.Instance.HasOngoingOperation)
+			{
+				ArctapMode = newMode;
+			}
+		}
 		public void SetArcTypeMode(int type)
 		{
 			if (!AdeOperationManager.Instance.HasOngoingOperation)
@@ -275,7 +321,7 @@ namespace Arcade.Compose.Operation
 			return null;
 		}
 
-		public bool MayAddArcTap()
+		public bool MayAddArcTapOnArc()
 		{
 			if (Mode != ClickToCreateMode.ArcTap)
 			{
