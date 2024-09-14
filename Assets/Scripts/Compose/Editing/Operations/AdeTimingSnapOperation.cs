@@ -71,7 +71,7 @@ namespace Arcade.Compose.Operation
 					{
 						if (isSingleArctapArc)
 						{
-							longNote.EndTiming = newTiming + 1;
+							(newNote as ArcLongNote).EndTiming = newTiming + 1;
 						}
 						else
 						{
@@ -103,7 +103,7 @@ namespace Arcade.Compose.Operation
 									newEndTiming = GetNextSnappedTiming(newTiming);
 								}
 							}
-							longNote.EndTiming = newEndTiming;
+							(newNote as ArcLongNote).EndTiming = newEndTiming;
 						}
 					}
 					commands.Add(new EditArcEventCommand(note, newNote));
