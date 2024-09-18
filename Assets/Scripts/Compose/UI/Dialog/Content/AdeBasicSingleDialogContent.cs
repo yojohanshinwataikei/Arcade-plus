@@ -10,6 +10,11 @@ namespace Arcade.Compose.Dialog
         private void Awake()
         {
             Instance = this;
+            Dialog.OnClose+=OnClose;
+        }
+        private void OnDestroy()
+        {
+            Dialog.OnClose-=OnClose;
         }
 
         public Text Content;
@@ -24,9 +29,8 @@ namespace Arcade.Compose.Dialog
             callback = Callback;
             OpenDialog();
         }
-        public void Hide()
+        public void OnClose()
         {
-            CloseDialog();
             callback?.Invoke();
             callback = null;
         }

@@ -18294,7 +18294,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 554080369}
+      objectReference: {fileID: 554080368}
     - target: {fileID: 3714948514251659801, guid: 5e051a0432c3f8c4982d8a29a1108d94,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -18303,7 +18303,7 @@ PrefabInstance:
     - target: {fileID: 3714948514251659801, guid: 5e051a0432c3f8c4982d8a29a1108d94,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Arcade.Compose.Dialog.AdeSkinDialogContent, Arcade
+      value: Arcade.Compose.AdeDialog, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 5769178430461151883, guid: 5e051a0432c3f8c4982d8a29a1108d94,
         type: 3}
@@ -24848,16 +24848,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 718584905}
+      objectReference: {fileID: 718584903}
     - target: {fileID: 3714948514251659801, guid: 5e051a0432c3f8c4982d8a29a1108d94,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Hide
+      value: Close
       objectReference: {fileID: 0}
     - target: {fileID: 3714948514251659801, guid: 5e051a0432c3f8c4982d8a29a1108d94,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: Arcade.Compose.AdeHotkeyDialogContent, Arcade
+      value: Arcade.Compose.AdeDialog, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 5769178430461151883, guid: 5e051a0432c3f8c4982d8a29a1108d94,
         type: 3}
@@ -40104,8 +40104,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 718584905}
-        m_TargetAssemblyTypeName: Arcade.Compose.AdeHotkeyDialogContent, Arcade
+      - m_Target: {fileID: 718584903}
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeDialog, Arcade
         m_MethodName: SwitchOpenState
         m_Mode: 1
         m_Arguments:
@@ -71103,8 +71103,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 554080369}
-        m_TargetAssemblyTypeName: Arcade.Compose.Dialog.AdeSkinDialogContent, Arcade
+      - m_Target: {fileID: 554080368}
+        m_TargetAssemblyTypeName: Arcade.Compose.AdeDialog, Arcade
         m_MethodName: SwitchOpenState
         m_Mode: 1
         m_Arguments:

@@ -19,6 +19,9 @@ namespace Arcade.Compose
 
     public abstract class AdeDialog : MonoBehaviour{
         public GameObject View;
+
+        public Action OnOpen;
+        public Action OnClose;
         public void Open(){
             AdeDialogManager.Instance.Open(this);
         }
@@ -43,6 +46,7 @@ namespace Arcade.Compose
 
         public void Open(AdeDialog dialog)
         {
+            dialog.OnOpen?.Invoke();
             dialog.transform.SetParent(Opening);
             dialog.View.SetActive(true);
         }
@@ -51,6 +55,7 @@ namespace Arcade.Compose
         {
             dialog.View.SetActive(false);
             dialog.transform.SetParent(Closed);
+            dialog.OnClose?.Invoke();
         }
 
         public void SwitchOpenState(AdeDialog dialog)

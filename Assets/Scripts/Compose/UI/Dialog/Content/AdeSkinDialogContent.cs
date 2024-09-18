@@ -77,7 +77,14 @@ namespace Arcade.Compose.Dialog
 		private void Awake()
 		{
 			Instance = this;
+            Dialog.OnClose+=OnClose;
 		}
+
+		private void OnDestroy()
+		{
+            Dialog.OnClose-=OnClose;
+		}
+
 		private void Start()
 		{
 			SideDropdown.onValueChanged.AddListener(SelectSide);
@@ -340,19 +347,9 @@ namespace Arcade.Compose.Dialog
 			Initialize();
 		}
 
-		public void Close()
+		public void OnClose()
 		{
 			BackgroundSearchInput.text = "";
-			CloseDialog();
-		}
-
-		public void SwitchOpenState(){
-
-            if(Dialog.View.activeSelf){
-                Close();
-            }else{
-                OpenDialog();
-            }
 		}
 
 		private AdeSkinBackgroundOption CurrentBackgroundOption => (preference.IsExternalBackground ? ExternalBackgroundButtons : InternalBackgroundButtons)[preference.SelectedBackground];
