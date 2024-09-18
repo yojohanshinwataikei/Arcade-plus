@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 namespace Arcade.Compose.Dialog
 {
-	public class AdeSingleDialog : MonoBehaviour
+	public class AdeBasicSingleDialog : MonoBehaviour
     {
-        public static AdeSingleDialog Instance { get; private set; }
+        public static AdeBasicSingleDialog Instance { get; private set; }
         private void Awake()
         {
             Instance = this;

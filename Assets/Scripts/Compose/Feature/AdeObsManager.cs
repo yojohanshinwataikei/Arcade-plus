@@ -306,7 +306,7 @@ namespace Arcade.Compose.Feature
 		{
 			if (RecordingCancellation != null)
 			{
-				AdeSingleDialog.Instance.Show("OBS 快速录制被手动中断", "提示");
+				AdeBasicSingleDialog.Instance.Show("OBS 快速录制被手动中断", "提示");
 				StopRecord();
 			}
 		}

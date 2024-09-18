@@ -180,7 +180,7 @@ namespace Arcade.Compose
 			}
 			catch (Exception Ex)
 			{
-				AdeSingleDialog.Instance.Show(Ex.Message, "读取错误");
+				AdeBasicSingleDialog.Instance.Show(Ex.Message, "读取错误");
 				Debug.Log(Ex);
 				CurrentProjectMetadata = null;
 				CurrentProjectFolder = null;
@@ -203,7 +203,7 @@ namespace Arcade.Compose
 			}
 			catch (Exception Ex)
 			{
-				AdeSingleDialog.Instance.Show(Ex.Message + "\n" + Ex.ToString(), "保存错误");
+				AdeBasicSingleDialog.Instance.Show(Ex.Message + "\n" + Ex.ToString(), "保存错误");
 			}
 			AdeToast.Instance.Show("谱面已保存至\n" + path + "\n原文件已备份至\n" + backupPath);
 			fs.Close();
@@ -225,7 +225,7 @@ namespace Arcade.Compose
 				}
 				catch (Exception Ex)
 				{
-					AdeSingleDialog.Instance.Show(Ex.Message + "\n" + Ex.ToString(), "自动保存错误");
+					AdeBasicSingleDialog.Instance.Show(Ex.Message + "\n" + Ex.ToString(), "自动保存错误");
 				}
 				fs.Close();
 			}
@@ -285,7 +285,7 @@ namespace Arcade.Compose
 			}
 			catch (Exception Ex)
 			{
-				AdeSingleDialog.Instance.Show(Ex.Message, "元信息读取错误");
+				AdeBasicSingleDialog.Instance.Show(Ex.Message, "元信息读取错误");
 				SetTutorialMessage("无法加载工程元信息，请删除谱面文件夹下的 Arcade 文件夹后重新打开谱面文件夹");
 				return;
 			}
@@ -395,20 +395,20 @@ namespace Arcade.Compose
 			catch (Exception Ex)
 			{
 				Debug.LogWarning(Ex);
-				AdeSingleDialog.Instance.Show(Ex.Message, "谱面读取错误");
+				AdeBasicSingleDialog.Instance.Show(Ex.Message, "谱面读取错误");
 			}
 			Gameplay.Chart.ArcChart chart = null;
 			if (raw != null)
 			{
 				if (raw.error.Count > 0)
 				{
-					AdeSingleDialog.Instance.Show($"格式问题：\n{(raw.error.Count > 256 ? "* 谱面错误太多，仅显示前 256 条" : "")}{string.Join("\n", raw.error.Take(256).Select(s => $"- {s}"))}", "谱面解析失败");
+					AdeBasicSingleDialog.Instance.Show($"格式问题：\n{(raw.error.Count > 256 ? "* 谱面错误太多，仅显示前 256 条" : "")}{string.Join("\n", raw.error.Take(256).Select(s => $"- {s}"))}", "谱面解析失败");
 				}
 				else
 				{
 					if (raw.warning.Count > 0)
 					{
-						AdeSingleDialog.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并对谱面进行了自动修复\n谱面在存在的问题：\n{(raw.warning.Count > 256 ? "* 谱面错误太多，仅显示前 256 条" : "")}{string.Join("\n", raw.warning.Take(256).Select(s => $"- {s}"))}", "谱面解析出现问题");
+						AdeBasicSingleDialog.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并对谱面进行了自动修复\n谱面在存在的问题：\n{(raw.warning.Count > 256 ? "* 谱面错误太多，仅显示前 256 条" : "")}{string.Join("\n", raw.warning.Take(256).Select(s => $"- {s}"))}", "谱面解析出现问题");
 					}
 					chart = new Gameplay.Chart.ArcChart(raw);
 				}
