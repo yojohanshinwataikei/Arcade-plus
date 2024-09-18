@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Arcade.Aff.Faults
 {
-	public abstract class Fault
+    public abstract class Fault
     {
         public Fault(string Reason)
         {
@@ -189,7 +189,8 @@ namespace Arcade.Aff.Faults
                 {
                     if (t.Timing > a.Timing && t.Timing < a.EndTiming)
                     {
-                        if(Mathf.Approximately(a.XStart,a.XEnd) && Mathf.Approximately(a.YStart,a.YEnd)){
+                        if (Mathf.Approximately(a.XStart, a.XEnd) && Mathf.Approximately(a.YStart, a.YEnd))
+                        {
                             continue;
                         }
                         Faults.Add(a);
@@ -201,47 +202,52 @@ namespace Arcade.Aff.Faults
     }
 }
 
-public class AdeFaultDetector : MonoBehaviour
+
+
+namespace Arcade.Compose
 {
-    public Text Status;
-    public void OnInvoke()
+    public class AdeFaultDetector : MonoBehaviour
     {
-        if (!ArcGameplayManager.Instance.IsLoaded)
+        public Text Status;
+        public void OnInvoke()
         {
-            AdeToast.Instance.Show("未加载工程");
-            return;
-        }
-
-        Status.text = "请点击检查";
-
-        ArcChart chart = ArcGameplayManager.Instance.Chart;
-        Fault[] checks = new Fault[] {new ShortHoldFault(), new ShortArcFault(), new TileTapFault(), new TileArcTapFault(), new TileTapHoldFault(),
-                                      new TileHoldFault(), new CrossTimingFault()};
-        string path = AdeProjectManager.Instance.CurrentProjectFolder + "/Arcade/ChartFault.txt";
-        FileStream fs = new FileStream(path, FileMode.Create);
-        StreamWriter sw = new StreamWriter(fs);
-        int count = 0;
-        sw.WriteLine("错误报告");
-        sw.WriteLine("\t时间(原始)为aff中定义的Timing，便于在aff中搜索");
-        sw.WriteLine("\t时间(偏移)为偏移后时间，便于在Arcade的时间框中直接跳转定位");
-        sw.WriteLine();
-        foreach (var c in checks)
-        {
-            c.Check(chart);
-            if (c.Faults.Count > 0)
+            if (!ArcGameplayManager.Instance.IsLoaded)
             {
-                sw.WriteLine(c.Reason);
-                foreach (var f in c.Faults)
-                {
-                    sw.WriteLine($"\t时间(原始):{f.Timing}\t时间(偏移):{f.Timing + ArcAudioManager.Instance.AudioOffset}");
-                }
-                count += c.Faults.Count;
+                AdeToast.Instance.Show("未加载工程");
+                return;
             }
+
+            Status.text = "请点击检查";
+
+            ArcChart chart = ArcGameplayManager.Instance.Chart;
+            Fault[] checks = new Fault[] {new ShortHoldFault(), new ShortArcFault(), new TileTapFault(), new TileArcTapFault(), new TileTapHoldFault(),
+                                      new TileHoldFault(), new CrossTimingFault()};
+            string path = AdeProjectManager.Instance.CurrentProjectFolder + "/Arcade/ChartFault.txt";
+            FileStream fs = new FileStream(path, FileMode.Create);
+            StreamWriter sw = new StreamWriter(fs);
+            int count = 0;
+            sw.WriteLine("错误报告");
+            sw.WriteLine("\t时间(原始)为aff中定义的Timing，便于在aff中搜索");
+            sw.WriteLine("\t时间(偏移)为偏移后时间，便于在Arcade的时间框中直接跳转定位");
+            sw.WriteLine();
+            foreach (var c in checks)
+            {
+                c.Check(chart);
+                if (c.Faults.Count > 0)
+                {
+                    sw.WriteLine(c.Reason);
+                    foreach (var f in c.Faults)
+                    {
+                        sw.WriteLine($"\t时间(原始):{f.Timing}\t时间(偏移):{f.Timing + ArcAudioManager.Instance.AudioOffset}");
+                    }
+                    count += c.Faults.Count;
+                }
+            }
+
+            sw.Close();
+            Status.text = $"检查完成，共 {count} 个错误";
+            Arcade.Util.Shell.FileBrowser.OpenExplorer(path);
         }
-
-        sw.Close();
-        Status.text = $"检查完成，共 {count} 个错误";
-		Arcade.Util.Shell.FileBrowser.OpenExplorer(path);
     }
-}
 
+}

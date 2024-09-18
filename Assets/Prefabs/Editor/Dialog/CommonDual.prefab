@@ -52,6 +52,9 @@ MonoBehaviour:
   View: {fileID: 6491603006820416724}
   LeftButton: {fileID: 3890832544920511414}
   RightButton: {fileID: 8733053374718706607}
+  Title: {fileID: 5799433057663707407}
+  LeftButtonText: {fileID: 1488989341244346080}
+  RightButtonText: {fileID: 6278072184932088342}
 --- !u!1 &916241478414792433
 GameObject:
   m_ObjectHideFlags: 0
