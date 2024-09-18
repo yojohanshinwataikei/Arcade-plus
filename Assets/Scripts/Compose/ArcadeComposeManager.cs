@@ -492,14 +492,14 @@ namespace Arcade.Compose
 				ArcGameplayManager.Instance.Auto = ArcadePreference.Auto;
 				AdeProjectManager.Instance.SaveMode.text = ArcadePreference.ChartSortMode == Gameplay.Chart.ChartSortMode.Timing ? "按时间" : "按类别";
 				AutoButton.image.color = ArcGameplayManager.Instance.Auto ? new Color(0.59f, 0.55f, 0.65f, 1f) : new Color(0.9f, 0.9f, 0.9f, 1);
-				if (ArcadePreference.AgreedUserAgreementVersion < ArcadeUserAgreementDialogContent.CurrentUserAgreementVersion)
-				{
-					ArcadeUserAgreementDialogContent.Instance.OpenDialog();
-				}
 				if (ArcadePreference.ReadWhatsNewVersion < BuildTimestamp)
 				{
 					AdeBasicSingleDialogContent.Instance.Show(ChangeLog.text);
 					ArcadePreference.ReadWhatsNewVersion = BuildTimestamp;
+				}
+				if (ArcadePreference.AgreedUserAgreementVersion < ArcadeUserAgreementDialogContent.CurrentUserAgreementVersion)
+				{
+					ArcadeUserAgreementDialogContent.Instance.OpenDialog();
 				}
 				UndoBufferSizeInput.SetTextWithoutNotify($"{ArcadePreference.UndoBufferSize}");
 				AdeCommandManager.Instance.bufferSize = ArcadePreference.UndoBufferSize;
