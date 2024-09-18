@@ -12,11 +12,10 @@ namespace Arcade.Compose.Dialog
 		public float Chart = 0.7f;
 		public float Effect = 0f;
 	}
-	public class AdeSoundDialog : MonoBehaviour
+	public class AdeSoundDialogContent : AdeDialogContent<AdeSingleDialog>
 	{
-		public static AdeSoundDialog Instance { get; private set; }
+		public static AdeSoundDialogContent Instance { get; private set; }
 
-		public GameObject View;
 		public InputField ChartAudio, EffectAudio;
 		public AudioSource ChartSource, EffectSource;
 		private SoundPreferences preferences;
@@ -99,11 +98,6 @@ namespace Arcade.Compose.Dialog
 			{
 				EffectAudio.text = preferences.Effect.ToString();
 			}
-		}
-
-		public void SwitchStatus()
-		{
-			View.SetActive(!View.activeSelf);
 		}
 	}
 }

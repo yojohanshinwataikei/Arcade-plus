@@ -22,6 +22,9 @@ namespace Arcade.Compose
         public void Close(){
             AdeDialogManager.Instance.Close(this);
         }
+        public void SwitchOpenState(){
+            AdeDialogManager.Instance.SwitchOpenState(this);
+        }
     }
 
     public class AdeDialogManager : MonoBehaviour
@@ -45,6 +48,15 @@ namespace Arcade.Compose
         {
             dialog.View.SetActive(false);
             dialog.transform.SetParent(Closed);
+        }
+
+        public void SwitchOpenState(AdeDialog dialog)
+        {
+            if(dialog.View.activeSelf){
+                Close(dialog);
+            }else{
+                Open(dialog);
+            }
         }
     }
 }

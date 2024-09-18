@@ -29,13 +29,13 @@ namespace Arcade.Compose
 		{
 			Left.DOPivotX(1, Duration).SetEase(Ease.InCubic);
 			Right.DOPivotX(0, Duration).SetEase(Ease.InCubic);
-			AudioSource.PlayClipAtPoint(OpenAudio, new Vector3(),AdeSoundDialog.Instance.ChartSource.volume);
+			AudioSource.PlayClipAtPoint(OpenAudio, new Vector3(),AdeSoundDialogContent.Instance.ChartSource.volume);
 		}
 		public void Close()
 		{
 			Left.DOPivotX(0, Duration).SetEase(Ease.OutCubic);
 			Right.DOPivotX(1, Duration).SetEase(Ease.OutCubic);
-			AudioSource.PlayClipAtPoint(CloseAudio, new Vector3(),AdeSoundDialog.Instance.ChartSource.volume);
+			AudioSource.PlayClipAtPoint(CloseAudio, new Vector3(),AdeSoundDialogContent.Instance.ChartSource.volume);
 		}
 		public IEnumerator OpenCoroutine()
 		{
