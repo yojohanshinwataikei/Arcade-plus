@@ -45,8 +45,7 @@ namespace Arcade.Compose.Feature
 		public Toggle ObsServerUsePasswordToggle;
 		public Button ConnectionButton;
 		public Text ConnectionButtonLabel;
-		public Button StartRecordButton;
-		public GameObject OBSDialogView;
+		public AdeDualDialog OBSDialog;
 
 		private bool hasOngoingConnectionTask = false;
 		private bool obsIsRecording = false;
@@ -179,7 +178,7 @@ namespace Arcade.Compose.Feature
 					ConnectionButtonLabel.text = "连接到 OBS";
 				}
 			}
-			StartRecordButton.interactable = obs.IsConnected && ArcGameplayManager.Instance.IsLoaded && !obsIsRecording && RecordingCancellation == null;
+			OBSDialog.RightButton.interactable = obs.IsConnected && ArcGameplayManager.Instance.IsLoaded && !obsIsRecording && RecordingCancellation == null;
 		}
 
 		// OBS event handlers are not executed in main unity thread,
@@ -289,7 +288,7 @@ namespace Arcade.Compose.Feature
 
 		public void StartRecord()
 		{
-			OBSDialogView.SetActive(false);
+			OBSDialog.Close();
 			UpdateFieldsState();
 			RecordingCancellation = new CancellationTokenSource();
 			Record(RecordingCancellation.Token).WithExceptionLogger().Forget();
