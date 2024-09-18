@@ -48509,6 +48509,18 @@ MonoBehaviour:
   DifficultyFuture: {fileID: 597009600}
   DifficultyBeyond: {fileID: 1395789076}
   DifficultyEternal: {fileID: 1073716303}
+  SingleDialogs:
+  - {fileID: 7975284371560177514}
+  - {fileID: 977612715}
+  - {fileID: 718584903}
+  - {fileID: 554080368}
+  - {fileID: 1292584802}
+  - {fileID: 1203096265}
+  DualDialogs:
+  - {fileID: 1745668602}
+  - {fileID: 21901426}
+  - {fileID: 1304908886}
+  - {fileID: 102795145}
   DialogTops: []
   DialogBackgrounds:
   - {fileID: 1707394409}
@@ -48556,6 +48568,7 @@ MonoBehaviour:
   - {fileID: 2103494961}
   ComboText: {fileID: 490141569}
   TutorialBanner: {fileID: 994086310}
+  Toast: {fileID: 1707394409}
 --- !u!114 &1378078349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61526,6 +61539,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1741821667}
   m_CullTransparentMesh: 0
+--- !u!114 &1745668602 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1884020023232504589, guid: 9fe68c1939a4a7548ad71b279850dbb8,
+    type: 3}
+  m_PrefabInstance: {fileID: 1679084452}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e1b08d2fadecf14dae41037fd877e15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1745670605
 GameObject:
   m_ObjectHideFlags: 0

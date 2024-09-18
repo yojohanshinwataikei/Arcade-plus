@@ -26,12 +26,8 @@ namespace Arcade.Gameplay
 		public Image DifficultyEternal;
 
 		[Header("Dialog")]
-		//TODO: We should use a Dialog Component to handle dialogs
-		public List<Image> DialogTops;
-		public List<Image> DialogBackgrounds;
-		public List<Button> DialogSingleButtons;
-		public List<Button> DialogDualLeftButtons;
-		public List<Button> DialogDualRightButtons;
+		public List<AdeSingleDialog> SingleDialogs;
+		public List<AdeDualDialog> DualDialogs;
 
 		[Header("Shutter")]
 		public Image ShutterLeft;
@@ -51,6 +47,7 @@ namespace Arcade.Gameplay
 		public Text ComboText;
 
 		public Image TutorialBanner;
+		public Image Toast;
 
 		private void Awake()
 		{
@@ -74,40 +71,27 @@ namespace Arcade.Gameplay
 			ArcadeComposeManager.Instance.SetPlaySprite(skinData.Play.value);
 			ArcadeComposeManager.Instance.SetPlayPressedSprite(skinData.PlayPressed.value);
 
-			foreach (Image dialogTop in DialogTops)
-			{
-				dialogTop.sprite = skinData.DialogTop.value;
+			Toast.sprite=skinData.DialogBackground.value;
+			foreach(AdeSingleDialog singleDialog in SingleDialogs){
+				singleDialog.SetDialogSkin(
+					skinData.DialogTop.value,
+					skinData.DialogBackground.value,
+					skinData.ButtonSingle.value,
+					skinData.ButtonSingleDisabled.value,
+					skinData.ButtonSinglePressed.value
+				);
 			}
-			foreach (Image dialogBackground in DialogBackgrounds)
-			{
-				dialogBackground.sprite = skinData.DialogBackground.value;
-			}
-			foreach (Button dialogSingleButton in DialogSingleButtons)
-			{
-				dialogSingleButton.image.sprite = skinData.ButtonSingle.value;
-				dialogSingleButton.spriteState = new SpriteState
-				{
-					disabledSprite = skinData.ButtonSingleDisabled.value,
-					pressedSprite = skinData.ButtonSinglePressed.value
-				};
-			}
-			foreach (Button dialogDualLeftButton in DialogDualLeftButtons)
-			{
-				dialogDualLeftButton.image.sprite = skinData.ButtonDualLeft.value;
-				dialogDualLeftButton.spriteState = new SpriteState
-				{
-					disabledSprite = skinData.ButtonDualLeftDisabled.value,
-					pressedSprite = skinData.ButtonDualLeftPressed.value
-				};
-			}
-			foreach (Button dialogDualRightButton in DialogDualRightButtons)
-			{
-				dialogDualRightButton.image.sprite = skinData.ButtonDualRight.value;
-				dialogDualRightButton.spriteState = new SpriteState
-				{
-					disabledSprite = skinData.ButtonDualRightDisabled.value,
-					pressedSprite = skinData.ButtonDualRightPressed.value
-				};
+			foreach(AdeDualDialog dualDialog in DualDialogs){
+				dualDialog.SetDialogSkin(
+					skinData.DialogTop.value,
+					skinData.DialogBackground.value,
+					skinData.ButtonDualLeft.value,
+					skinData.ButtonDualLeftDisabled.value,
+					skinData.ButtonDualLeftPressed.value,
+					skinData.ButtonDualRight.value,
+					skinData.ButtonDualRightDisabled.value,
+					skinData.ButtonDualRightPressed.value
+				);
 			}
 
 			ShutterLeft.sprite = skinData.ShutterLeft.value;

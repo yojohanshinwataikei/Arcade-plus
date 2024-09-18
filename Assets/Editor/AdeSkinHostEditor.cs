@@ -15,8 +15,10 @@ public class AdeSkinHostEditor : Editor
 		if (!Application.isPlaying) return;
 		ShowSkinData(AdeSkinHost.Instance.skinData);
 		GUILayout.Label("External backgrounds:");
-		foreach(KeyValuePair<string, Labelled<Sprite>> backgroundData in AdeSkinHost.Instance.ExternalBackgrounds){
-			GUILayout.Label($"  {backgroundData.Key}:{backgroundData.Value.label}");
+		if(AdeSkinHost.Instance.ExternalBackgrounds!=null){
+			foreach(KeyValuePair<string, Labelled<Sprite>> backgroundData in AdeSkinHost.Instance.ExternalBackgrounds){
+				GUILayout.Label($"  {backgroundData.Key}:{backgroundData.Value.label}");
+			}
 		}
 	}
 

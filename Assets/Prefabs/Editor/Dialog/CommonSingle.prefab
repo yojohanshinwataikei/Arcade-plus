@@ -1185,3 +1185,5 @@ MonoBehaviour:
   CompleteButton: {fileID: 3714948514251659801}
   Title: {fileID: 8881123870687879159}
   ButtonText: {fileID: 7512387723348576892}
+  DialogTop: {fileID: 8540422236066012935}
+  DialogBackground: {fileID: 4990346637717368552}
