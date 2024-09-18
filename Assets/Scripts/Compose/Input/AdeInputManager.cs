@@ -15,7 +15,7 @@ namespace Arcade.Compose
 		public AdeInputControl.ArcadeHotkeyActions Hotkeys { get => Controls.ArcadeHotkey; }
 		public AdeInputControl.ArcadeInputActions Inputs { get => Controls.ArcadeInput; }
 		public EventSystem EventSystem;
-		public AdeHotkeyDialog Dialog;
+		public AdeHotkeyDialogContent Dialog;
 
 		public static AdeInputManager Instance { get; private set; }
 

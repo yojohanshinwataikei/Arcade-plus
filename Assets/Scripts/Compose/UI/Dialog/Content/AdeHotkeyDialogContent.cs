@@ -2,9 +2,8 @@ using UnityEngine;
 
 namespace Arcade.Compose
 {
-    public class AdeHotkeyDialog : MonoBehaviour
+    public class AdeHotkeyDialogContent : AdeDialogContent<AdeSingleDialog>
     {
-        public GameObject View;
         public AdeHotkeyRebindingButton[] RebindingButtons;
         public void Show()
         {
@@ -12,13 +11,22 @@ namespace Arcade.Compose
             {
                 AdeInputManager.Instance.UpdateTextForHotkeyButton(button);
             }
-            View.SetActive(true);
+            OpenDialog();
         }
 
         public void Hide()
         {
             AdeInputManager.Instance.SetHotkeyRebindingButton(null);
-            View.SetActive(false);
+            CloseDialog();
+        }
+
+        public void SwitchOpenState()
+        {
+            if(Dialog.View.activeSelf){
+                Hide();
+            }else{
+                Show();
+            }
         }
     }
 }
