@@ -15,7 +15,7 @@ namespace Arcade.Compose
 		public Color UnselectedColor;
 
 		public void OnSelected(){
-			AdeSkinDialog.Instance.SelectBackground(BackgroundName,External);
+			AdeSkinDialogContent.Instance.SelectBackground(BackgroundName,External);
 		}
 
 		public void Initialize(string bg,bool external,Sprite image)

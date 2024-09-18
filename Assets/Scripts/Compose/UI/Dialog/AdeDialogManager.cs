@@ -12,6 +12,9 @@ namespace Arcade.Compose
         public void CloseDialog(){
             Dialog.Close();
         }
+        public void SwitchDialogOpenState(){
+            Dialog.SwitchOpenState();
+        }
     }
 
     public abstract class AdeDialog : MonoBehaviour{

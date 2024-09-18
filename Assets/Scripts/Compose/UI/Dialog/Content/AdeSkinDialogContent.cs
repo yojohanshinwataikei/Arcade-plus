@@ -43,12 +43,11 @@ namespace Arcade.Compose.Dialog
 		}
 	}
 
-	public class AdeSkinDialog : MonoBehaviour
+	public class AdeSkinDialogContent : AdeDialogContent<AdeSingleDialog>
 	{
-		public static AdeSkinDialog Instance { get; private set; }
+		public static AdeSkinDialogContent Instance { get; private set; }
 
 		public GameObject BackgroundOptionPrefab;
-		public GameObject DialogView;
 
 		public InputField BackgroundSearchInput;
 
@@ -341,10 +340,19 @@ namespace Arcade.Compose.Dialog
 			Initialize();
 		}
 
-		public void CloseDialog()
+		public void Close()
 		{
 			BackgroundSearchInput.text = "";
-			DialogView.SetActive(false);
+			CloseDialog();
+		}
+
+		public void SwitchOpenState(){
+
+            if(Dialog.View.activeSelf){
+                Close();
+            }else{
+                OpenDialog();
+            }
 		}
 
 		private AdeSkinBackgroundOption CurrentBackgroundOption => (preference.IsExternalBackground ? ExternalBackgroundButtons : InternalBackgroundButtons)[preference.SelectedBackground];
