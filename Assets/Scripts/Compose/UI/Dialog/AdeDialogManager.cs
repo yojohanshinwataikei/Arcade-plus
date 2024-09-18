@@ -5,16 +5,17 @@ namespace Arcade.Compose
 {
 
     public abstract class AdeDialogContent<TDialog> : MonoBehaviour where TDialog:AdeDialog{
-        public TDialog dialog;
+        public TDialog Dialog;
         public void OpenDialog(){
-            dialog.Open();
+            Dialog.Open();
         }
-        public void Close(){
-            dialog.Close();
+        public void CloseDialog(){
+            Dialog.Close();
         }
     }
 
     public abstract class AdeDialog : MonoBehaviour{
+        public GameObject View;
         public void Open(){
             AdeDialogManager.Instance.Open(this);
         }
@@ -27,19 +28,23 @@ namespace Arcade.Compose
     {
 		public static AdeDialogManager Instance { get; private set; }
 
+        public Transform Opening,Closed;
+
         private void Awake()
 		{
 			Instance = this;
 		}
 
-        public void Open(AdeDialog adeDialog)
+        public void Open(AdeDialog dialog)
         {
-            throw new NotImplementedException();
+            dialog.transform.SetParent(Opening);
+            dialog.View.SetActive(true);
         }
 
-        public void Close(AdeDialog adeDialog)
+        public void Close(AdeDialog dialog)
         {
-            throw new NotImplementedException();
+            dialog.View.SetActive(false);
+            dialog.transform.SetParent(Closed);
         }
     }
 }

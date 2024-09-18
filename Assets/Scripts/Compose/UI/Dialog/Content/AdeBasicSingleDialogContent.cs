@@ -4,16 +4,14 @@ using UnityEngine.UI;
 
 namespace Arcade.Compose.Dialog
 {
-	public class AdeBasicSingleDialog : MonoBehaviour
+	public class AdeBasicSingleDialogContent : AdeDialogContent<AdeSingleDialog>
     {
-        public static AdeBasicSingleDialog Instance { get; private set; }
+        public static AdeBasicSingleDialogContent Instance { get; private set; }
         private void Awake()
         {
             Instance = this;
         }
 
-        public RectTransform Dialog, View;
-        public Text Title, Button1;
         public Text Content;
 
         private Action callback;
@@ -21,14 +19,14 @@ namespace Arcade.Compose.Dialog
         public void Show(string Content, string Title = null, string Button1 = null, Action Callback = null)
         {
             this.Content.text = Content;
-            this.Title.text = Title ?? "提示";
-            this.Button1.text = Button1 ?? "确认";
+            this.Dialog.Title.text = Title ?? "提示";
+            this.Dialog.ButtonText.text = Button1 ?? "确认";
             callback = Callback;
-            View.gameObject.SetActive(true);
+            OpenDialog();
         }
         public void Hide()
         {
-            View.gameObject.SetActive(false);
+            CloseDialog();
             callback?.Invoke();
             callback = null;
         }

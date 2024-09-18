@@ -353,7 +353,7 @@ namespace Arcade.Compose
 			if (type != LogType.Exception) return;
 			try
 			{
-				AdeBasicSingleDialog.Instance.Show(condition + "\n" + stackTrace, "异常", "确定");
+				AdeBasicSingleDialogContent.Instance.Show(condition + "\n" + stackTrace, "异常", "确定");
 			}
 			catch
 			{
@@ -498,7 +498,7 @@ namespace Arcade.Compose
 				}
 				if (ArcadePreference.ReadWhatsNewVersion < BuildTimestamp)
 				{
-					AdeBasicSingleDialog.Instance.Show(ChangeLog.text);
+					AdeBasicSingleDialogContent.Instance.Show(ChangeLog.text);
 					ArcadePreference.ReadWhatsNewVersion = BuildTimestamp;
 				}
 				UndoBufferSizeInput.SetTextWithoutNotify($"{ArcadePreference.UndoBufferSize}");
