@@ -639,7 +639,6 @@ namespace Arcade.Gameplay.Chart
 			int u = 0;
 			double bpm = ArcTimingManager.Instance.CalculateBpmByTiming(Timing, TimingGroup);
 			bpm = Math.Abs(bpm);
-			if (bpm == 0) return;
 			double interval = 60000f / bpm / (bpm >= 255 ? 1 : 2) / ArcGameplayManager.Instance.TimingPointDensityFactor;
 			int total = (int)((EndTiming - Timing) / interval);
 			if ((u ^ 1) >= total)
