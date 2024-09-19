@@ -370,6 +370,8 @@ namespace Arcade.Compose
 			string[] files = new string[]{
 				Path.Combine(CurrentProjectFolder, "1080_base.jpg"),
 				Path.Combine(CurrentProjectFolder, "base.jpg"),
+				Path.Combine(CurrentProjectFolder, "1080_base_256.jpg"),
+				Path.Combine(CurrentProjectFolder, "base_256.jpg"),
 			};
 			foreach (string coverPath in files)
 			{
