@@ -20,6 +20,7 @@ namespace Arcade.Compose
 	public class AdeChartDifficultyMetadata
 	{
 		public string Rating;
+		public float BaseBpm;
 	}
 	[Serializable]
 	public class ArcadeProjectMetadata
@@ -110,7 +111,7 @@ namespace Arcade.Compose
 		{
 			if (shouldReload)
 			{
-				ReloadChart(CurrentDifficulty);
+				ReloadChart();
 				ArcGameplayManager.Instance.Timing = ArcGameplayManager.Instance.Chart.LastEventTiming - 500;
 				shouldReload = false;
 			}
@@ -243,6 +244,18 @@ namespace Arcade.Compose
 			loadingCoroutine = null;
 		}
 
+		private IEnumerator LoadDifficultyCoroutine(int difficulty)
+		{
+			yield return AdeShutterManager.Instance.CloseCoroutine();
+			LoadDifficulty(difficulty);
+			if (!ArcGameplayManager.Instance.IsLoaded)
+			{
+				SetTutorialMessage("无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹");
+			}
+			yield return AdeShutterManager.Instance.OpenCoroutine();
+			loadingCoroutine = null;
+		}
+
 		private IEnumerator LoadProjectCoroutine(string folder)
 		{
 			yield return AdeShutterManager.Instance.CloseCoroutine();
@@ -250,7 +263,7 @@ namespace Arcade.Compose
 			yield return AdeShutterManager.Instance.OpenCoroutine();
 			loadingCoroutine = null;
 		}
-		public void ReloadChart(int index)
+		public void ReloadChart()
 		{
 			if (loadingCoroutine != null)
 			{
@@ -260,7 +273,19 @@ namespace Arcade.Compose
 			{
 				return;
 			}
-			loadingCoroutine = StartCoroutine(LoadChartCoroutine(index));
+			loadingCoroutine = StartCoroutine(LoadChartCoroutine(CurrentDifficulty));
+		}
+		public void SwitchDifficulty(int difficulty)
+		{
+			if (loadingCoroutine != null)
+			{
+				return;
+			}
+			if (CurrentProjectMetadata == null)
+			{
+				return;
+			}
+			loadingCoroutine = StartCoroutine(LoadDifficultyCoroutine(difficulty));
 		}
 
 		public void SetDefaultCover(Sprite cover)
@@ -270,6 +295,23 @@ namespace Arcade.Compose
 				CoverImage.sprite = cover;
 			}
 			DefaultCover = cover;
+		}
+		private void LoadDifficulty(int difficulty){
+			LoadCover(difficulty);
+			LoadAudio(difficulty);
+			if (AudioClip == null)
+			{
+				SetTutorialMessage("无法加载音频文件，请确认音频文件存在且格式正确后重新打开谱面文件夹");
+				return;
+			}
+			LoadChart(difficulty);
+			if (!ArcGameplayManager.Instance.IsLoaded)
+			{
+				SetTutorialMessage("无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹");
+				return;
+			}
+			LoadSpecialEffectAudio();
+			SetTutorialMessage(null);
 		}
 
 		private void LoadProject(string folder)
@@ -289,21 +331,7 @@ namespace Arcade.Compose
 				SetTutorialMessage("无法加载工程元信息，请删除谱面文件夹下的 Arcade 文件夹后重新打开谱面文件夹");
 				return;
 			}
-			LoadCover();
-			LoadAudio();
-			if (AudioClip == null)
-			{
-				SetTutorialMessage("无法加载音频文件，请确认音频文件存在且格式正确后重新打开谱面文件夹");
-				return;
-			}
-			LoadChart(CurrentProjectMetadata.LastWorkingDifficulty);
-			if (!ArcGameplayManager.Instance.IsLoaded)
-			{
-				SetTutorialMessage("无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹");
-				return;
-			}
-			LoadSpecialEffectAudio();
-			SetTutorialMessage(null);
+			LoadDifficulty(CurrentProjectMetadata.LastWorkingDifficulty);
 		}
 
 		private void LoadMetadata()
@@ -337,29 +365,33 @@ namespace Arcade.Compose
 			BaseBpm.text = ArcTimingManager.Instance.BaseBpm.ToString();
 		}
 
-		private void LoadCover()
+		private void LoadCover(int difficulty)
 		{
-			string coverPath = Path.Combine(CurrentProjectFolder, "base.jpg");
-			Texture2D texture = Loader.LoadTexture2D(coverPath);
-			if (texture == null)
+			string[] files = new string[]{
+				Path.Combine(CurrentProjectFolder, "1080_base.jpg"),
+				Path.Combine(CurrentProjectFolder, "base.jpg"),
+			};
+			foreach (string coverPath in files)
 			{
-
-				CoverImage.sprite = DefaultCover;
-				return;
+				Texture2D texture = Loader.LoadTexture2D(coverPath);
+				if (texture != null){
+					Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+					sprite.name = coverPath;
+					Cover = texture;
+					CoverSprite = sprite;
+					CoverImage.sprite = CoverSprite;
+					return;
+				}
 			}
-			Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-			sprite.name = coverPath;
-			Cover = texture;
-			CoverSprite = sprite;
-			CoverImage.sprite = CoverSprite;
+			CoverImage.sprite = DefaultCover;
 		}
-		private void LoadAudio()
+		private void LoadAudio(int difficulty)
 		{
 			string[] files = new string[]{
 				Path.Combine(CurrentProjectFolder, "base.ogg"),
 				Path.Combine(CurrentProjectFolder, "base.mp3"),
 				Path.Combine(CurrentProjectFolder, "base.wav"),
-				};
+			};
 			foreach (string audioPath in files)
 			{
 				AudioClip clip = Loader.LoadAudioFile(audioPath);
