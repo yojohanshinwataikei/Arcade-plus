@@ -368,6 +368,10 @@ namespace Arcade.Compose
 		private void LoadCover(int difficulty)
 		{
 			string[] files = new string[]{
+				Path.Combine(CurrentProjectFolder, $"1080_{difficulty}.jpg"),
+				Path.Combine(CurrentProjectFolder, $"{difficulty}.jpg"),
+				Path.Combine(CurrentProjectFolder, $"1080_{difficulty}_256.jpg"),
+				Path.Combine(CurrentProjectFolder, $"{difficulty}_256.jpg"),
 				Path.Combine(CurrentProjectFolder, "1080_base.jpg"),
 				Path.Combine(CurrentProjectFolder, "base.jpg"),
 				Path.Combine(CurrentProjectFolder, "1080_base_256.jpg"),
