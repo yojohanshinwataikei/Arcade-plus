@@ -65,6 +65,7 @@ namespace Arcade.Compose
 		private Coroutine loadingCoroutine;
 		private FileSystemWatcher watcher = new FileSystemWatcher();
 		private bool shouldReload = false;
+		private bool audioOverrided = false;
 
 		public string ProjectArcadeFolder
 		{
@@ -359,10 +360,6 @@ namespace Arcade.Compose
 			Composer.interactable = true;
 			Diff.interactable = true;
 			OpenLabel.color = new Color(0, 0, 0, 0);
-
-			ArcTimingManager.Instance.BaseBpm = CurrentProjectMetadata.BaseBpm == 0 ? 100 : CurrentProjectMetadata.BaseBpm;
-			BaseBpm.interactable = true;
-			BaseBpm.text = ArcTimingManager.Instance.BaseBpm.ToString();
 		}
 
 		private void LoadCover(int difficulty)
@@ -391,21 +388,31 @@ namespace Arcade.Compose
 			}
 			CoverImage.sprite = DefaultCover;
 		}
+		struct AudioSpec
+		{
+			public string path;
+			public bool overrided;
+		};
 		private void LoadAudio(int difficulty)
 		{
-			string[] files = new string[]{
-				Path.Combine(CurrentProjectFolder, "base.ogg"),
-				Path.Combine(CurrentProjectFolder, "base.mp3"),
-				Path.Combine(CurrentProjectFolder, "base.wav"),
+
+			AudioSpec[] files = new AudioSpec[]{
+				new AudioSpec{path=Path.Combine(CurrentProjectFolder, $"{difficulty}.ogg"),overrided=true},
+				new AudioSpec{path=Path.Combine(CurrentProjectFolder, $"{difficulty}.mp3"),overrided=true},
+				new AudioSpec{path=Path.Combine(CurrentProjectFolder, $"{difficulty}.wav"),overrided=true},
+				new AudioSpec{path=Path.Combine(CurrentProjectFolder, "base.ogg"),overrided=false},
+				new AudioSpec{path=Path.Combine(CurrentProjectFolder, "base.mp3"),overrided=false},
+				new AudioSpec{path=Path.Combine(CurrentProjectFolder, "base.wav"),overrided=false},
 			};
-			foreach (string audioPath in files)
+			foreach (AudioSpec audioPath in files)
 			{
-				AudioClip clip = Loader.LoadAudioFile(audioPath);
+				AudioClip clip = Loader.LoadAudioFile(audioPath.path);
 				if (clip != null)
 				{
 					AudioClip = clip;
 					AdeTimingSlider.Instance.Enable = true;
 					AdeTimingSlider.Instance.Length = (int)(AudioClip.length * 1000);
+					audioOverrided=audioPath.overrided;
 					return;
 				}
 			}
@@ -457,6 +464,13 @@ namespace Arcade.Compose
 			Diff.text = CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null ? "" : CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating;
 			foreach (Image i in DifficultyImages) i.color = new Color(1f, 1f, 1f, 0.6f);
 			DifficultyImages[difficulty].color = new Color(1, 1, 1, 1);
+
+			float rawBaseBpm=audioOverrided?
+				CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null?0:CurrentProjectMetadata.Difficulties[difficulty].BaseBpm:
+				CurrentProjectMetadata.BaseBpm;
+			ArcTimingManager.Instance.BaseBpm = rawBaseBpm == 0 ? 100 : rawBaseBpm;
+			BaseBpm.interactable = true;
+			BaseBpm.text = ArcTimingManager.Instance.BaseBpm.ToString();
 
 			AudioOffset.interactable = true;
 			CurrentTimingGroup.interactable = true;
@@ -515,8 +529,9 @@ namespace Arcade.Compose
 		{
 			if (CurrentProjectMetadata == null) return;
 			if (CurrentDifficulty < 0 || CurrentDifficulty > 3) return;
-			if (CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null)
+			if (CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null){
 				CurrentProjectMetadata.Difficulties[CurrentDifficulty] = new AdeChartDifficultyMetadata();
+			}
 			CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating = Diff.text;
 		}
 		public void OnBaseBpmEdited()
@@ -526,7 +541,16 @@ namespace Arcade.Compose
 			if (result)
 			{
 				if (value <= 0) value = 100;
-				if (CurrentProjectMetadata != null) CurrentProjectMetadata.BaseBpm = value;
+				if (CurrentProjectMetadata != null) {
+					if(audioOverrided){
+						if (CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null){
+							CurrentProjectMetadata.Difficulties[CurrentDifficulty] = new AdeChartDifficultyMetadata();
+						}
+						CurrentProjectMetadata.Difficulties[CurrentDifficulty].BaseBpm = value;
+					}else{
+						CurrentProjectMetadata.BaseBpm = value;
+					}
+				};
 				ArcTimingManager.Instance.BaseBpm = value;
 				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 				ArcArcManager.Instance.Rebuild();
