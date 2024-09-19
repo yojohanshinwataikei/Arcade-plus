@@ -17328,10 +17328,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.05452563
-    y: 0.06203053
-    width: 0.8909488
-    height: 0.87593895
+    x: 0.052083332
+    y: 0.05925208
+    width: 0.8958333
+    height: 0.88149583
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -48521,12 +48521,6 @@ MonoBehaviour:
   - {fileID: 21901426}
   - {fileID: 1304908886}
   - {fileID: 102795145}
-  DialogTops: []
-  DialogBackgrounds:
-  - {fileID: 1707394409}
-  DialogSingleButtons: []
-  DialogDualLeftButtons: []
-  DialogDualRightButtons: []
   ShutterLeft: {fileID: 1457777037}
   ShutterRight: {fileID: 1725267674}
   SkyInputLabel: {fileID: 89880146}
@@ -51268,7 +51262,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u57FA\u51C6BPM"
+  m_Text: "\u6D41\u901F\u57FA\u51C6"
 --- !u!222 &1449674639
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -72809,10 +72803,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1707394408}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 400.5, y: -71.78189}
+  m_SizeDelta: {x: 705, y: 39.781895}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2105888210
 MonoBehaviour:
