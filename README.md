@@ -14,7 +14,7 @@ Arcade-plus is only completely tested on Latest Windows 11. However it should wo
 
 Also, macOS and Linux support is experimental for now, if you find any bug that only happens on your OS, please help us by opening a bug-fixing pull request.
 
-### Why this version does not have localisation feature?
+### Why is there no localization feature in this version?
 
 Localization feature was supported in old versions of Arcade. However, Sch decided to remove it because of bad code design and messy UI layout. Therefore, we removed this feature as well.
 
