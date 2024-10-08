@@ -66,8 +66,8 @@ namespace Arcade.Gameplay
 					t.Enable = false;
 					continue;
 				}
-				t.Position = timing.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup);
-				float endPosition = timing.CalculatePositionByTiming(t.EndTiming + offset, t.TimingGroup);
+				t.Position = timing.CalculatePositionByTiming(t.Timing, t.TimingGroup);
+				float endPosition = timing.CalculatePositionByTiming(t.EndTiming, t.TimingGroup);
 				t.Enable = true;
 				if (t.Judging)
 				{

@@ -413,7 +413,7 @@ namespace Arcade.Compose
 					{
 						continue;
 					}
-					float pos = ArcTimingManager.Instance.CalculatePositionByTiming(((int)t.Timing + offset), timingGroup);
+					float pos = ArcTimingManager.Instance.CalculatePositionByTiming((int)t.Timing, timingGroup);
 					if (pos > 100000 || pos < -100000)
 					{
 						continue;

@@ -172,11 +172,11 @@ namespace Arcade.Gameplay
 			}
 		}
 
-		public float CalculatePositionByTiming(int AudioTiming, ArcTimingGroup timingGroup)
+		public float CalculatePositionByTiming(int ChartTiming, ArcTimingGroup timingGroup)
 		{
-			return CalculatePositionByTimingAndStart(ArcGameplayManager.Instance.AudioTiming, AudioTiming, timingGroup);
+			return CalculatePositionByTimingAndStart(ArcGameplayManager.Instance.ChartTiming, ChartTiming, timingGroup);
 		}
-		public float CalculatePositionByTimingAndStart(int pivotAudioTiming, int targetAudioTiming, ArcTimingGroup timingGroup)
+		public float CalculatePositionByTimingAndStart(int pivotChartTiming, int targetChartTiming, ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
 			if (Timings.Count == 0)
@@ -184,9 +184,9 @@ namespace Arcade.Gameplay
 				return 0;
 			}
 			int offset = ArcGameplayManager.Instance.AudioOffset;
-			bool reversed = pivotAudioTiming > targetAudioTiming;
-			int startTiming = (reversed ? targetAudioTiming : pivotAudioTiming) - offset;
-			int endTiming = (reversed ? pivotAudioTiming : targetAudioTiming) - offset;
+			bool reversed = pivotChartTiming > targetChartTiming;
+			int startTiming = reversed ? targetChartTiming : pivotChartTiming;
+			int endTiming = reversed ? pivotChartTiming : targetChartTiming;
 			int startTimingId = Timings.FindLastIndex((timing) => timing.Timing <= startTiming);
 			int endTimingId = Timings.FindLastIndex((timing) => timing.Timing <= endTiming);
 			if (startTimingId == -1)
@@ -411,7 +411,7 @@ namespace Arcade.Gameplay
 				{
 					continue;
 				}
-				float pos = CalculatePositionByTiming((int)(t + offset), null);
+				float pos = CalculatePositionByTiming((int)t, null);
 				if (pos > 100000 || pos < -100000)
 				{
 					continue;

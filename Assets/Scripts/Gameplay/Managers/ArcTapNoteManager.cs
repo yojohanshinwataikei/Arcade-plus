@@ -65,7 +65,7 @@ namespace Arcade.Gameplay
 					t.Enable = false;
 					continue;
 				}
-				t.Position = timing.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup);
+				t.Position = timing.CalculatePositionByTiming(t.Timing, t.TimingGroup);
 				if (t.Position > 100000 || t.Position < -100000)
 				{
 					t.Enable = false;

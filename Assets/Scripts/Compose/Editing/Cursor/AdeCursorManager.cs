@@ -184,14 +184,14 @@ namespace Arcade.Compose
 				if (overriddenCursorTiming != null)
 				{
 					z = ArcTimingManager.Instance.CalculatePositionByTiming(
-						overriddenCursorTiming.Value + ArcGameplayManager.Instance.AudioOffset,
+						overriddenCursorTiming.Value,
 						AdeTimingEditor.Instance.currentTimingGroup
 					) / -1000f;
 				}
 				else
 				{
 					z = ArcTimingManager.Instance.CalculatePositionByTiming(
-						AttachedTiming + ArcGameplayManager.Instance.AudioOffset,
+						AttachedTiming,
 						AdeTimingEditor.Instance.currentTimingGroup
 					) / -1000f;
 				}
@@ -267,14 +267,14 @@ namespace Arcade.Compose
 				if (overriddenCursorTiming != null)
 				{
 					z = ArcTimingManager.Instance.CalculatePositionByTiming(
-						overriddenCursorTiming.Value + ArcGameplayManager.Instance.AudioOffset,
+						overriddenCursorTiming.Value,
 						AdeTimingEditor.Instance.currentTimingGroup
 					) / -1000f;
 				}
 				else
 				{
 					z = ArcTimingManager.Instance.CalculatePositionByTiming(
-						AttachedTiming + ArcGameplayManager.Instance.AudioOffset,
+						AttachedTiming,
 						AdeTimingEditor.Instance.currentTimingGroup
 					) / -1000f;;
 				}

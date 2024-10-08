@@ -916,7 +916,7 @@ namespace Arcade.Gameplay.Chart
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			int offset = ArcGameplayManager.Instance.AudioOffset;
 			float t = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
-			Vector3 parentLocalPosition = new Vector3(0, 0, -timingManager.CalculatePositionByTiming(Arc.Timing + offset, Arc.TimingGroup) / 1000f);
+			Vector3 parentLocalPosition = new Vector3(0, 0, -timingManager.CalculatePositionByTiming(Arc.Timing, Arc.TimingGroup) / 1000f);
 			Vector3 baseLocalPosition = new Vector3();
 			if (IsConvertedVariousSizedArctap)
 			{
@@ -927,7 +927,7 @@ namespace Arcade.Gameplay.Chart
 				baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
 										ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f, 0);
 			}
-			Vector3 offsetLocalPosition = -timingManager.CalculatePositionByTiming(Timing + offset, Arc.TimingGroup) / 1000f * this.FallDirection();
+			Vector3 offsetLocalPosition = -timingManager.CalculatePositionByTiming(Timing, Arc.TimingGroup) / 1000f * this.FallDirection();
 			Vector3 additionalLocalPosition = new Vector3(0, 0, -0.6f);
 			LocalPosition = baseLocalPosition + offsetLocalPosition - parentLocalPosition + additionalLocalPosition;
 		}
@@ -999,7 +999,7 @@ namespace Arcade.Gameplay.Chart
 			float t = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
 			LocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
 									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f,
-									  -timingManager.CalculatePositionByTimingAndStart(Arc.Timing + offset, Timing + offset, Arc.TimingGroup) / 1000f - 0.6f);
+									  -timingManager.CalculatePositionByTimingAndStart(Arc.Timing, Timing, Arc.TimingGroup) / 1000f - 0.6f);
 			SetupArcTapConnection();
 		}
 
@@ -1286,7 +1286,7 @@ namespace Arcade.Gameplay.Chart
 			float t = 1f * (arctap.Timing - Timing) / (EndTiming - Timing);
 			arctap.LocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(XStart, XEnd, t, LineType)),
 									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(YStart, YEnd, t, LineType)) - 0.5f,
-									  -timingManager.CalculatePositionByTimingAndStart(Timing + offset, arctap.Timing + offset, TimingGroup) / 1000f - 0.6f);
+									  -timingManager.CalculatePositionByTimingAndStart(Timing, arctap.Timing, TimingGroup) / 1000f - 0.6f);
 			ArcTaps.Add(arctap);
 		}
 		public void RemoveArcTap(ArcArcTap arctap)

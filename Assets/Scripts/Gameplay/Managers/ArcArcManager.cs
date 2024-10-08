@@ -173,8 +173,8 @@ namespace Arcade.Gameplay
 					t.Enable = false;
 					continue;
 				}
-				t.Position = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup);
-				t.EndPosition = timingManager.CalculatePositionByTiming(t.EndTiming + offset, t.TimingGroup);
+				t.Position = timingManager.CalculatePositionByTiming(t.Timing, t.TimingGroup);
+				t.EndPosition = timingManager.CalculatePositionByTiming(t.EndTiming, t.TimingGroup);
 				if (Mathf.Min(t.Position, t.EndPosition) > 100000 || Mathf.Max(t.Position, t.EndPosition) < -100000)
 				{
 					t.Enable = false;
@@ -235,7 +235,7 @@ namespace Arcade.Gameplay
 				t.Enable = false;
 				return;
 			}
-			float pos = timingManager.CalculatePositionByTiming(t.Timing + offset, t.TimingGroup) / 1000f;
+			float pos = timingManager.CalculatePositionByTiming(t.Timing, t.TimingGroup) / 1000f;
 			if (pos > -100 && pos <= 90)
 			{
 				t.Alpha = 1;
