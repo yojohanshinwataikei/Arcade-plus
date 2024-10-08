@@ -48,11 +48,11 @@ namespace Arcade.Gameplay
 		{
 			get
 			{
-				return audioTiming + GlobalAudioOffset;
+				return audioTiming + GlobalAudioOffset / 1000f;
 			}
 			set
 			{
-				audioTiming = value - GlobalAudioOffset;
+				audioTiming = value - GlobalAudioOffset / 1000f;
 			}
 		}
 		public int ChartAudioOffset { get; set; }
@@ -117,7 +117,7 @@ namespace Arcade.Gameplay
 			{
 				float playBackSpeed = ArcAudioManager.Instance.PlayBackSpeed;
 				AudioTimingWithoutGlobalOffset += Time.deltaTime * playBackSpeed;
-				if (EnablePlaybackSync)
+				if (EnablePlaybackSync && AudioTimingWithoutGlobalOffset <= Length)
 				{
 					float t = ArcAudioManager.Instance.Timing;
 					if (deltaDspTime > 0f && (AudioTimingWithoutGlobalOffset >= 0 || ArcAudioManager.Instance.Timing > 0))
@@ -203,6 +203,7 @@ namespace Arcade.Gameplay
 
 		public void Play()
 		{
+			Debug.Log(AudioTimingWithoutGlobalOffset);
 			if (AudioTimingWithoutGlobalOffset < 0)
 			{
 				ArcAudioManager.Instance.Source.Stop();
@@ -212,7 +213,10 @@ namespace Arcade.Gameplay
 			else
 			{
 				ArcAudioManager.Instance.Timing = AudioTimingWithoutGlobalOffset;
-				ArcAudioManager.Instance.Play();
+				if (AudioTimingWithoutGlobalOffset <= Length)
+				{
+					ArcAudioManager.Instance.Play();
+				}
 			}
 			IsPlaying = true;
 		}

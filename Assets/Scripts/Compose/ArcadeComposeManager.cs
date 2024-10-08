@@ -125,6 +125,7 @@ namespace Arcade.Compose
 		public Dropdown TargetFramerateDropdown;
 		public InputField UndoBufferSizeInput;
 		public Toggle PlaybackSyncToggle;
+		public InputField GlobalAudioOffsetInput;
 
 		public TextAsset ChangeLog;
 		public TextAsset BuildTimestampText;
@@ -167,6 +168,7 @@ namespace Arcade.Compose
 				SavePreferences();
 			});
 			UndoBufferSizeInput.onEndEdit.AddListener(SetUndoBufferSize);
+			GlobalAudioOffsetInput.onEndEdit.AddListener(SetGlobalAudioOffset);
 			PlaybackSyncToggle.onValueChanged.AddListener((bool value) =>
 			{
 				ArcadePreference.PlaybackSync = value;
@@ -462,6 +464,14 @@ namespace Arcade.Compose
 			AdeCommandManager.Instance.SetBufferSize(size);
 		}
 
+		public void SetGlobalAudioOffset(string x)
+		{
+			int offset = int.Parse(x);
+			ArcadePreference.GlobalAudioOffset = offset;
+			SavePreferences();
+			ArcGameplayManager.Instance.GlobalAudioOffset = offset;
+		}
+
 		public void LoadPreferences()
 		{
 			try
@@ -503,6 +513,8 @@ namespace Arcade.Compose
 				}
 				UndoBufferSizeInput.SetTextWithoutNotify($"{ArcadePreference.UndoBufferSize}");
 				AdeCommandManager.Instance.bufferSize = ArcadePreference.UndoBufferSize;
+				GlobalAudioOffsetInput.SetTextWithoutNotify($"{ArcadePreference.GlobalAudioOffset}");
+				ArcGameplayManager.Instance.GlobalAudioOffset = ArcadePreference.GlobalAudioOffset;
 				bool resolutionHit = false;
 				for (int i = 0; i < ResolutionDropdown.options.Count; i++)
 				{
