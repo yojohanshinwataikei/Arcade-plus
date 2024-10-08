@@ -126,7 +126,7 @@ namespace Arcade.Gameplay.Chart
 			}
 
 			RawAffChart raw = new RawAffChart();
-			raw.AudioOffset = ArcGameplayManager.Instance.AudioOffset;
+			raw.AudioOffset = ArcGameplayManager.Instance.ChartAudioOffset;
 			raw.TimingPointDensityFactor = TimingPointDensityFactor;
 			raw.additionalMetadata = AdditionalMetadata;
 			foreach (var e in mainEvents)

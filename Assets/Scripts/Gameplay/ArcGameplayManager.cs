@@ -44,16 +44,28 @@ namespace Arcade.Gameplay
 				ArcAudioManager.Instance.Timing = Mathf.Max(0, audioTiming);
 			}
 		}
-		public int AudioOffset { get; set; }
+		private float AudioTimingWithoutGlobalOffset
+		{
+			get
+			{
+				return audioTiming + GlobalAudioOffset;
+			}
+			set
+			{
+				audioTiming = value - GlobalAudioOffset;
+			}
+		}
+		public int ChartAudioOffset { get; set; }
+		public int GlobalAudioOffset { get; set; }
 		public int ChartTiming
 		{
 			get
 			{
-				return AudioTiming - AudioOffset;
+				return AudioTiming - ChartAudioOffset;
 			}
 			set
 			{
-				AudioTiming = value + AudioOffset;
+				AudioTiming = value + ChartAudioOffset;
 			}
 		}
 		public int Length { get; private set; }
@@ -62,14 +74,14 @@ namespace Arcade.Gameplay
 		{
 			get
 			{
-				return -AudioOffset;
+				return -ChartAudioOffset;
 			}
 		}
 		public int AllEndChartTiming
 		{
 			get
 			{
-				return Length - AudioOffset;
+				return Length - ChartAudioOffset;
 			}
 		}
 		public bool IsLoaded
@@ -104,20 +116,20 @@ namespace Arcade.Gameplay
 			if (IsPlaying)
 			{
 				float playBackSpeed = ArcAudioManager.Instance.PlayBackSpeed;
-				audioTiming += Time.deltaTime * playBackSpeed;
+				AudioTimingWithoutGlobalOffset += Time.deltaTime * playBackSpeed;
 				if (EnablePlaybackSync)
 				{
 					float t = ArcAudioManager.Instance.Timing;
-					if (deltaDspTime > 0f && (audioTiming >= 0 || ArcAudioManager.Instance.Timing > 0))
+					if (deltaDspTime > 0f && (AudioTimingWithoutGlobalOffset >= 0 || ArcAudioManager.Instance.Timing > 0))
 					{
-						float delta = audioTiming - t;
+						float delta = AudioTimingWithoutGlobalOffset - t;
 						int bufferLength;
 						int numBuffers;
 						AudioSettings.GetDSPBufferSize(out bufferLength, out numBuffers);
 						float maxDelta = 2 * (float)bufferLength / (float)AudioSettings.outputSampleRate;
 						if (Mathf.Abs(delta) > maxDelta)
 						{
-							audioTiming = t;
+							AudioTimingWithoutGlobalOffset = t;
 						}
 					}
 				}
@@ -135,7 +147,7 @@ namespace Arcade.Gameplay
 			Clean();
 			Chart = chart;
 			Length = (int)(audio.length * 1000);
-			AudioOffset = chart.AudioOffset;
+			ChartAudioOffset = chart.AudioOffset;
 
 			ArcCameraManager.Instance.ResetCamera();
 			ArcAudioManager.Instance.Load(audio);
@@ -181,7 +193,7 @@ namespace Arcade.Gameplay
 		}
 		public void PlayDelayed()
 		{
-			audioTiming = -3f;
+			AudioTimingWithoutGlobalOffset = -3f;
 			ResetJudge();
 			ArcAudioManager.Instance.Source.Stop();
 			ArcAudioManager.Instance.Timing = 0;
@@ -191,15 +203,15 @@ namespace Arcade.Gameplay
 
 		public void Play()
 		{
-			if (audioTiming < 0)
+			if (AudioTimingWithoutGlobalOffset < 0)
 			{
 				ArcAudioManager.Instance.Source.Stop();
 				ArcAudioManager.Instance.Timing = 0;
-				ArcAudioManager.Instance.Source.PlayDelayed(-audioTiming);
+				ArcAudioManager.Instance.Source.PlayDelayed(-AudioTimingWithoutGlobalOffset);
 			}
 			else
 			{
-				ArcAudioManager.Instance.Timing = audioTiming;
+				ArcAudioManager.Instance.Timing = AudioTimingWithoutGlobalOffset;
 				ArcAudioManager.Instance.Play();
 			}
 			IsPlaying = true;

@@ -37,7 +37,7 @@ namespace Arcade.Compose
 			EnableInfo = cursor.WallEnabled || cursor.TrackEnabled;
 			string content = string.Empty;
 			if (!EnableInfo) return;
-			content += $"音乐时间: {cursor.AttachedTiming + ArcGameplayManager.Instance.AudioOffset}\n";
+			content += $"音乐时间: {cursor.AttachedTiming + ArcGameplayManager.Instance.ChartAudioOffset}\n";
 			content += $"谱面时间: {cursor.AttachedTiming}";
 			if (cursor.WallEnabled)
 			{

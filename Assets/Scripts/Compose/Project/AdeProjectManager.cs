@@ -476,7 +476,7 @@ namespace Arcade.Compose
 
 			AudioOffset.interactable = true;
 			CurrentTimingGroup.interactable = true;
-			AudioOffset.text = ArcGameplayManager.Instance.AudioOffset.ToString();
+			AudioOffset.text = ArcGameplayManager.Instance.ChartAudioOffset.ToString();
 
 			bool watching = watcher.EnableRaisingEvents;
 			watcher.EnableRaisingEvents = false;
@@ -577,7 +577,7 @@ namespace Arcade.Compose
 			bool result = int.TryParse(AudioOffset.text, out value);
 			if (result)
 			{
-				ArcGameplayManager.Instance.AudioOffset = value;
+				ArcGameplayManager.Instance.ChartAudioOffset = value;
 				AudioOffset.text = value.ToString();
 			}
 		}

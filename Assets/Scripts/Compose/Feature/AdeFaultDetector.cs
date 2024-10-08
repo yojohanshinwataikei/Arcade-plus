@@ -238,7 +238,7 @@ namespace Arcade.Compose
 					sw.WriteLine(c.Reason);
 					foreach (var f in c.Faults)
 					{
-						sw.WriteLine($"\t谱面时间:{f.Timing}\t音频时间:{f.Timing + ArcGameplayManager.Instance.AudioOffset}");
+						sw.WriteLine($"\t谱面时间:{f.Timing}\t音频时间:{f.Timing + ArcGameplayManager.Instance.ChartAudioOffset}");
 					}
 					count += c.Faults.Count;
 				}
