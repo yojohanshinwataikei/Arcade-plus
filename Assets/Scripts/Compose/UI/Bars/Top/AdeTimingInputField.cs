@@ -2,41 +2,66 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Arcade.Gameplay;
+using System;
 
 namespace Arcade.Compose.UI
 {
-	[RequireComponent(typeof(InputField))]
-	public class AdeTimingInputField : MonoBehaviour, ISelectHandler, IDeselectHandler
+	public class AdeTimingInputField : MonoBehaviour
 	{
 		public static AdeTimingInputField Instance { get; private set; }
 		private void Start()
 		{
 			Instance = this;
-			timing = GetComponent<InputField>();
-			timing.onValueChanged.AddListener(OnValueChange);
+			TimingInput.onValueChanged.AddListener(OnValueChange);
+			SwitchModeButton.onClick.AddListener(OnSwitchMode);
+			UpdateLabel();
 		}
 
-		private InputField timing;
-		private bool timingSelected;
+		public InputField TimingInput;
+		public Button SwitchModeButton;
+		public Text Label;
+
+		private bool useChartTiming = false;
+
+		public void UpdateLabel()
+		{
+			if (useChartTiming)
+			{
+				Label.text = "谱面时间";
+			}
+			else
+			{
+				Label.text = "音频时间";
+			}
+		}
 
 		private void Update()
 		{
-			if (!timingSelected) timing.text = ArcGameplayManager.Instance.AudioTiming.ToString();
+			if (!TimingInput.isFocused)
+			{
+				int timing = useChartTiming ? ArcGameplayManager.Instance.ChartTiming : ArcGameplayManager.Instance.AudioTiming;
+				TimingInput.SetTextWithoutNotify(timing.ToString());
+			}
 		}
 
-		public void OnDeselect(BaseEventData eventData)
-		{
-			timingSelected = false;
-		}
-		public void OnSelect(BaseEventData eventData)
-		{
-			timingSelected = true;
-		}
 		public void OnValueChange(string s)
 		{
-			if (!timingSelected) return;
-			int value = 0;
-			if (int.TryParse(s, out value)) ArcGameplayManager.Instance.AudioTiming = value;
+			if (int.TryParse(s, out int value))
+			{
+				if (useChartTiming)
+				{
+					ArcGameplayManager.Instance.ChartTiming = value;
+				}
+				else
+				{
+					ArcGameplayManager.Instance.AudioTiming = value;
+				}
+			}
+		}
+		private void OnSwitchMode()
+		{
+			useChartTiming = !useChartTiming;
+			UpdateLabel();
 		}
 	}
 }
