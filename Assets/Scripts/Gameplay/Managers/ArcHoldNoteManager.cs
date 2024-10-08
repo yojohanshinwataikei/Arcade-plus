@@ -56,7 +56,7 @@ namespace Arcade.Gameplay
 		private void RenderHoldNotes()
 		{
 			ArcTimingManager timing = ArcTimingManager.Instance;
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 
 			foreach (var t in Holds)
 			{
@@ -130,7 +130,7 @@ namespace Arcade.Gameplay
 		private void JudgeHoldNotes()
 		{
 			ArcTimingManager timing = ArcTimingManager.Instance;
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			ArcEffectManager.Instance.ResetHoldNoteEffect();
 			foreach (var t in Holds)

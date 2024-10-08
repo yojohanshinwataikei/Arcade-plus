@@ -163,7 +163,7 @@ namespace Arcade.Gameplay
 				{
 					n++;
 					t = -n * segment;
-					if (t < -ArcAudioManager.Instance.AudioOffset)
+					if (t < -ArcGameplayManager.Instance.AudioOffset)
 					{
 						break;
 					}
@@ -183,7 +183,7 @@ namespace Arcade.Gameplay
 			{
 				return 0;
 			}
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 			bool reversed = pivotTiming > targetTiming;
 			int startTiming = (reversed ? targetTiming : pivotTiming) - offset;
 			int endTiming = (reversed ? pivotTiming : targetTiming) - offset;
@@ -216,13 +216,13 @@ namespace Arcade.Gameplay
 			{
 				return 0;
 			}
-			int currentTiming = ArcGameplayManager.Instance.AudioTiming - ArcAudioManager.Instance.AudioOffset;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming - ArcGameplayManager.Instance.AudioOffset;
 			if (position < 0)
 			{
 				return currentTiming;
 			}
 			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing <= currentTiming);
-			int allEndTime = ArcGameplayManager.Instance.Length - ArcAudioManager.Instance.AudioOffset;
+			int allEndTime = ArcGameplayManager.Instance.Length - ArcGameplayManager.Instance.AudioOffset;
 			float positionRemain = position;
 			for (int i = currentTimingId; i < Timings.Count; i++)
 			{
@@ -239,9 +239,9 @@ namespace Arcade.Gameplay
 				{
 					return startTiming;
 				}
-				return Mathf.RoundToInt(Mathf.Lerp(startTiming, endTiming, positionRemain / delta)) + ArcAudioManager.Instance.AudioOffset;
+				return Mathf.RoundToInt(Mathf.Lerp(startTiming, endTiming, positionRemain / delta)) + ArcGameplayManager.Instance.AudioOffset;
 			}
-			return allEndTime + ArcAudioManager.Instance.AudioOffset;
+			return allEndTime + ArcGameplayManager.Instance.AudioOffset;
 		}
 
 
@@ -262,7 +262,7 @@ namespace Arcade.Gameplay
 
 		private void UpdateChartSpeedStatus()
 		{
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 			int currentTiming = ArcGameplayManager.Instance.AudioTiming - offset;
 			if (Timings.Count == 0)
 			{
@@ -289,7 +289,7 @@ namespace Arcade.Gameplay
 			}
 			else
 			{
-				int currentTiming = ArcGameplayManager.Instance.AudioTiming - ArcAudioManager.Instance.AudioOffset;
+				int currentTiming = ArcGameplayManager.Instance.AudioTiming - ArcGameplayManager.Instance.AudioOffset;
 				int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing <= currentTiming);
 				float[] TimingPosition = new float[Timings.Count];
 				for (int i = currentTimingId; i + 1 < Timings.Count; i++)
@@ -309,9 +309,9 @@ namespace Arcade.Gameplay
 				}
 				earliestRenderTime = float.PositiveInfinity;
 				latestRenderTime = float.NegativeInfinity;
-				int allBeginTime = -ArcAudioManager.Instance.AudioOffset;
+				int allBeginTime = -ArcGameplayManager.Instance.AudioOffset;
 				float allBeginPosition = TimingPosition[0] + (allBeginTime - Timings[0].Timing) * Timings[0].Bpm / BaseBpm * Velocity;
-				int allEndTime = ArcGameplayManager.Instance.Length - ArcAudioManager.Instance.AudioOffset;
+				int allEndTime = ArcGameplayManager.Instance.Length - ArcGameplayManager.Instance.AudioOffset;
 				float allEndPosition = TimingPosition[Timings.Count - 1] + (allEndTime - Timings[Timings.Count - 1].Timing) * Timings[Timings.Count - 1].Bpm / BaseBpm * Velocity;
 
 				for (int i = -1; i < Timings.Count; i++)
@@ -388,8 +388,8 @@ namespace Arcade.Gameplay
 
 				earliestRenderTime = Mathf.Min(earliestRenderTime, currentTiming);
 				latestRenderTime = Mathf.Max(latestRenderTime, currentTiming);
-				earliestRenderTime += ArcAudioManager.Instance.AudioOffset;
-				latestRenderTime += ArcAudioManager.Instance.AudioOffset;
+				earliestRenderTime += ArcGameplayManager.Instance.AudioOffset;
+				latestRenderTime += ArcGameplayManager.Instance.AudioOffset;
 			}
 			if (timingGroup == null)
 			{
@@ -405,7 +405,7 @@ namespace Arcade.Gameplay
 		private void UpdateBeatline()
 		{
 			int index = 0;
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 			foreach (float t in beatlineTimings)
 			{
 				if (!ShouldTryRender((int)(t + offset), null, 0, false))

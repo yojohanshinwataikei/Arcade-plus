@@ -474,7 +474,7 @@ namespace Arcade.Compose
 
 			AudioOffset.interactable = true;
 			CurrentTimingGroup.interactable = true;
-			AudioOffset.text = ArcAudioManager.Instance.AudioOffset.ToString();
+			AudioOffset.text = ArcGameplayManager.Instance.AudioOffset.ToString();
 
 			bool watching = watcher.EnableRaisingEvents;
 			watcher.EnableRaisingEvents =false;
@@ -563,7 +563,7 @@ namespace Arcade.Compose
 			bool result = int.TryParse(AudioOffset.text, out value);
 			if (result)
 			{
-				ArcAudioManager.Instance.AudioOffset = value;
+				ArcGameplayManager.Instance.AudioOffset = value;
 				AudioOffset.text = value.ToString();
 			}
 		}

@@ -406,7 +406,7 @@ namespace Arcade.Compose
 			beatlineInUse = 0;
 			if (EnableBeatline)
 			{
-				int offset = ArcAudioManager.Instance.AudioOffset;
+				int offset = ArcGameplayManager.Instance.AudioOffset;
 				foreach (var t in beatlineTimings)
 				{
 					if (!ArcTimingManager.Instance.ShouldTryRender(((int)t.Timing + offset), timingGroup, 0, false))
@@ -456,7 +456,7 @@ namespace Arcade.Compose
 		public int AttachBeatlineTimingFromFos(float z)
 		{
 			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
-			int defaultTiming = ArcTimingManager.Instance.CalculateTimingByPosition(-z * 1000, timingGroup) - ArcAudioManager.Instance.AudioOffset;
+			int defaultTiming = ArcTimingManager.Instance.CalculateTimingByPosition(-z * 1000, timingGroup) - ArcGameplayManager.Instance.AudioOffset;
 			if (!EnableBeatline) return defaultTiming;
 			if (beatlineInUse == 0) return defaultTiming;
 			List<float> deltas = new List<float>();

@@ -44,6 +44,7 @@ namespace Arcade.Gameplay
 				ArcAudioManager.Instance.Timing = Mathf.Max(0, audioTiming);
 			}
 		}
+		public int AudioOffset { get; set; }
 		public int Length { get; private set; }
 		public bool IsLoaded
 		{
@@ -108,9 +109,10 @@ namespace Arcade.Gameplay
 			Clean();
 			Chart = chart;
 			Length = (int)(audio.length * 1000);
+			AudioOffset=chart.AudioOffset;
 
 			ArcCameraManager.Instance.ResetCamera();
-			ArcAudioManager.Instance.Load(audio, chart.AudioOffset);
+			ArcAudioManager.Instance.Load(audio);
 			ArcTimingManager.Instance.Load(chart.Timings, chart.TimingGroups);
 			ArcTapNoteManager.Instance.Load(chart.Taps);
 			ArcHoldNoteManager.Instance.Load(chart.Holds);

@@ -396,7 +396,7 @@ namespace Arcade.Gameplay
 			if (arc == null) return;
 
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 			int duration = arc.EndTiming - arc.Timing;
 
 			int v1 = duration < 1000 ? 14 : 7;
@@ -558,7 +558,7 @@ namespace Arcade.Gameplay
 		{
 			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 			float z = arc.transform.localPosition.z;
 
 			foreach (ArcArcSegmentComponent s in segments)
@@ -639,7 +639,7 @@ namespace Arcade.Gameplay
 			}
 
 			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 
 			if (arc.Position > 100000 || arc.Position < -100000)
 			{
@@ -724,7 +724,7 @@ namespace Arcade.Gameplay
 			else
 			{
 				int currentTiming = ArcGameplayManager.Instance.AudioTiming;
-				int offset = ArcAudioManager.Instance.AudioOffset;
+				int offset = ArcGameplayManager.Instance.AudioOffset;
 				if ((arc.Judging || arc.NoInput()) && arc.Timing + offset < currentTiming) EnableHeightIndicator = false;
 				else EnableHeightIndicator = true;
 				HeightIndicatorRenderer.color = Color.Lerp(currentLowColor, currentHighColor, arc.YStart);
@@ -734,7 +734,7 @@ namespace Arcade.Gameplay
 		{
 			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			int duration = arc.EndTiming - arc.Timing;
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 
 			if (duration == 0 || arc.IsVariousSizedArctap)
 			{
@@ -790,7 +790,7 @@ namespace Arcade.Gameplay
 				if (arc.Judging || arc.IsVoid)
 				{
 					double timing = ((double)h.textureCoord.x) * (arc.EndTiming - arc.Timing) + arc.Timing;
-					return timing + ArcAudioManager.Instance.AudioOffset + double.Epsilon >= ArcGameplayManager.Instance.AudioTiming;
+					return timing + ArcGameplayManager.Instance.AudioOffset + double.Epsilon >= ArcGameplayManager.Instance.AudioTiming;
 				}
 				return true;
 			}

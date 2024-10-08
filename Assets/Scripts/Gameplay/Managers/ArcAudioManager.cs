@@ -39,7 +39,6 @@ namespace Arcade.Gameplay
 				Source.clip = value;
 			}
 		}
-		public int AudioOffset { get; set; }
 
 		private float playBackSpeed = 1;
 
@@ -66,9 +65,8 @@ namespace Arcade.Gameplay
 			}
 		}
 
-		public void Load(AudioClip clip, int offset)
+		public void Load(AudioClip clip)
 		{
-			AudioOffset = offset;
 			Clip = clip;
 			Clip.LoadAudioData();
 		}

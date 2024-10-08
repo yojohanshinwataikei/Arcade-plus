@@ -25,7 +25,7 @@ namespace Arcade.Gameplay
 			ScoreText.text = "00000000";
 			if (!ArcGameplayManager.Instance.IsLoaded) return;
 			if (ArcGameplayManager.Instance.Chart == null) return;
-			ScoreText.text = CalculateScore(ArcGameplayManager.Instance.AudioTiming - ArcAudioManager.Instance.AudioOffset).ToString("D8");
+			ScoreText.text = CalculateScore(ArcGameplayManager.Instance.AudioTiming - ArcGameplayManager.Instance.AudioOffset).ToString("D8");
 
 			if (combo < 2) ComboText.text = "";
 			else ComboText.text = combo.ToString();

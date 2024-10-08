@@ -56,7 +56,7 @@ namespace Arcade.Gameplay
 		private void RenderTapNotes()
 		{
 			ArcTimingManager timing = ArcTimingManager.Instance;
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 
 			foreach (var t in Taps)
 			{
@@ -84,7 +84,7 @@ namespace Arcade.Gameplay
 		private void JudgeTapNotes()
 		{
 			ArcTimingManager timing = ArcTimingManager.Instance;
-			int offset = ArcAudioManager.Instance.AudioOffset;
+			int offset = ArcGameplayManager.Instance.AudioOffset;
 			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			foreach (var t in Taps)
 			{
