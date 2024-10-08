@@ -40,7 +40,7 @@ namespace Arcade.Compose.UI
 		private void Update()
 		{
 			if (!Enable) return;
-			if (!pointerDown) timingSlider.value = ArcGameplayManager.Instance.Timing;
+			if (!pointerDown) timingSlider.value = ArcGameplayManager.Instance.AudioTiming;
 		}
 		public void OnPointerDown(PointerEventData eventData)
 		{
@@ -52,7 +52,7 @@ namespace Arcade.Compose.UI
 		}
 		public void OnDrag(PointerEventData eventData)
 		{
-			ArcGameplayManager.Instance.Timing = (int)timingSlider.value;
+			ArcGameplayManager.Instance.AudioTiming = (int)timingSlider.value;
 			ArcGameplayManager.Instance.ResetJudge();
 		}
 	}

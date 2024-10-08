@@ -556,7 +556,7 @@ namespace Arcade.Gameplay
 		}
 		private void UpdateSegments()
 		{
-			int currentTiming = ArcGameplayManager.Instance.Timing;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			float z = arc.transform.localPosition.z;
@@ -638,7 +638,7 @@ namespace Arcade.Gameplay
 				return;
 			}
 
-			int currentTiming = ArcGameplayManager.Instance.Timing;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
 			if (arc.Position > 100000 || arc.Position < -100000)
@@ -723,7 +723,7 @@ namespace Arcade.Gameplay
 			}
 			else
 			{
-				int currentTiming = ArcGameplayManager.Instance.Timing;
+				int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 				int offset = ArcAudioManager.Instance.AudioOffset;
 				if ((arc.Judging || arc.NoInput()) && arc.Timing + offset < currentTiming) EnableHeightIndicator = false;
 				else EnableHeightIndicator = true;
@@ -732,7 +732,7 @@ namespace Arcade.Gameplay
 		}
 		private void UpdateArcCap()
 		{
-			int currentTiming = ArcGameplayManager.Instance.Timing;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			int duration = arc.EndTiming - arc.Timing;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
@@ -790,7 +790,7 @@ namespace Arcade.Gameplay
 				if (arc.Judging || arc.IsVoid)
 				{
 					double timing = ((double)h.textureCoord.x) * (arc.EndTiming - arc.Timing) + arc.Timing;
-					return timing + ArcAudioManager.Instance.AudioOffset + double.Epsilon >= ArcGameplayManager.Instance.Timing;
+					return timing + ArcAudioManager.Instance.AudioOffset + double.Epsilon >= ArcGameplayManager.Instance.AudioTiming;
 				}
 				return true;
 			}

@@ -101,7 +101,7 @@ namespace Arcade.Gameplay
 
 		private void UpdateCameraPosition()
 		{
-			int currentTiming = ArcGameplayManager.Instance.Timing;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			currentTiming -= offset;
 			for (int i = 0; i < Cameras.Count; ++i)

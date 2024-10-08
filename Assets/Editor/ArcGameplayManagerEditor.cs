@@ -39,12 +39,12 @@ public class ArcGameplayManagerEditor : Editor
 		GUILayout.EndHorizontal();
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Timing");
-		GUILayout.Label(ArcGameplayManager.Instance.Timing.ToString());
+		GUILayout.Label(ArcGameplayManager.Instance.AudioTiming.ToString());
 		GUILayout.EndHorizontal();
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Set Timing");
 		setTiming = EditorGUILayout.IntField(setTiming);
-		if (GUILayout.Button("Set")) ArcGameplayManager.Instance.Timing = setTiming;
+		if (GUILayout.Button("Set")) ArcGameplayManager.Instance.AudioTiming = setTiming;
 		GUILayout.EndHorizontal();
 		Repaint();
 	}

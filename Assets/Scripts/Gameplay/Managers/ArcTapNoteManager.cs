@@ -85,7 +85,7 @@ namespace Arcade.Gameplay
 		{
 			ArcTimingManager timing = ArcTimingManager.Instance;
 			int offset = ArcAudioManager.Instance.AudioOffset;
-			int currentTiming = ArcGameplayManager.Instance.Timing;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			foreach (var t in Taps)
 			{
 				if (t.NoInput())

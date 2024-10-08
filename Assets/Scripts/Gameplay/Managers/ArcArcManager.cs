@@ -154,7 +154,7 @@ namespace Arcade.Gameplay
 		private void RenderArcs()
 		{
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
-			int currentTiming = ArcGameplayManager.Instance.Timing;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
 			foreach (var t in Arcs)
@@ -226,7 +226,7 @@ namespace Arcade.Gameplay
 
 		private void RenderArcTap(ArcArcTap t)
 		{
-			int timing = ArcGameplayManager.Instance.Timing;
+			int timing = ArcGameplayManager.Instance.AudioTiming;
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
@@ -256,7 +256,7 @@ namespace Arcade.Gameplay
 
 		private void JudgeArcs()
 		{
-			int currentTiming = ArcGameplayManager.Instance.Timing;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			foreach (ArcArc arc in Arcs)
 			{
@@ -297,7 +297,7 @@ namespace Arcade.Gameplay
 		}
 		private void JudgeArcTap(ArcArcTap t)
 		{
-			int currentTiming = ArcGameplayManager.Instance.Timing;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 			if (t.Judged) return;
 			if (currentTiming > t.Timing + offset && currentTiming <= t.Timing + offset + 150)

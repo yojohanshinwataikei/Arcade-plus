@@ -227,7 +227,7 @@ namespace Arcade.Compose
 
 		private void CheckScroll()
 		{
-			int timing = GameplayManager.Timing;
+			int timing = GameplayManager.AudioTiming;
 			int offset = ArcAudioManager.Instance.AudioOffset;
 
 			if (AdeInputManager.Instance.Hotkeys.ScrollToStart.WasPressedThisFrame())
@@ -296,9 +296,9 @@ namespace Arcade.Compose
 			if (timing > GameplayManager.Length) timing = GameplayManager.Length;
 			if (timing < 0) timing = 0;
 
-			if (GameplayManager.Timing != Mathf.RoundToInt(timing))
+			if (GameplayManager.AudioTiming != Mathf.RoundToInt(timing))
 			{
-				GameplayManager.Timing = Mathf.RoundToInt(timing);
+				GameplayManager.AudioTiming = Mathf.RoundToInt(timing);
 				GameplayManager.ResetJudge();
 			}
 		}
@@ -322,7 +322,7 @@ namespace Arcade.Compose
 				if (holding && !GameplayManager.IsPlaying)
 				{
 					GameplayManager.Play();
-					playShotTiming = GameplayManager.Timing;
+					playShotTiming = GameplayManager.AudioTiming;
 					//AdeToast.Instance.Show("松开空格暂停并倒回，按下Q仅暂停", "Release 'Space' pause and rollback);
 				}
 				if (!holding && GameplayManager.IsPlaying)
@@ -330,7 +330,7 @@ namespace Arcade.Compose
 					GameplayManager.Pause();
 					if (shouldGoBackToPlayShotTiming)
 					{
-						GameplayManager.Timing = playShotTiming;
+						GameplayManager.AudioTiming = playShotTiming;
 					}
 				}
 			}

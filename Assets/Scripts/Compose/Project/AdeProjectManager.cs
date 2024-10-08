@@ -113,7 +113,7 @@ namespace Arcade.Compose
 			if (shouldReload)
 			{
 				ReloadChart();
-				ArcGameplayManager.Instance.Timing = ArcGameplayManager.Instance.Chart.LastEventTiming - 500;
+				ArcGameplayManager.Instance.AudioTiming = ArcGameplayManager.Instance.Chart.LastEventTiming - 500;
 				shouldReload = false;
 			}
 			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Save))
@@ -193,7 +193,7 @@ namespace Arcade.Compose
 			if (CurrentProjectMetadata == null || CurrentProjectFolder == null) return;
 			if (ArcGameplayManager.Instance.Chart == null) return;
 			CurrentProjectMetadata.LastWorkingDifficulty = CurrentDifficulty;
-			CurrentProjectMetadata.LastWorkingTiming = ArcGameplayManager.Instance.Timing;
+			CurrentProjectMetadata.LastWorkingTiming = ArcGameplayManager.Instance.AudioTiming;
 			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 			string path = Path.Combine(CurrentProjectFolder, $"{CurrentDifficulty}.aff");
 			string backupPath = Path.Combine(ProjectBackupFolder, $"{CurrentDifficulty}_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.aff");
@@ -481,7 +481,7 @@ namespace Arcade.Compose
 			watcher.Path = CurrentProjectFolder;
 			watcher.Filter = $"{difficulty}.aff";
 			watcher.EnableRaisingEvents=watching;
-			ArcGameplayManager.Instance.Timing = CurrentProjectMetadata.LastWorkingTiming;
+			ArcGameplayManager.Instance.AudioTiming = CurrentProjectMetadata.LastWorkingTiming;
 		}
 
 		private void LoadSpecialEffectAudio()

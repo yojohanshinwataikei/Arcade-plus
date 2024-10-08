@@ -31,17 +31,17 @@ namespace Arcade.Gameplay
 
 		public bool Auto { get; set; }
 		public bool IsPlaying { get; set; }
-		private float timing;
-		public int Timing
+		private float audioTiming;
+		public int AudioTiming
 		{
 			get
 			{
-				return Mathf.RoundToInt(timing * 1000);
+				return Mathf.RoundToInt(audioTiming * 1000);
 			}
 			set
 			{
-				timing = value / 1000f;
-				ArcAudioManager.Instance.Timing = Mathf.Max(0, timing);
+				audioTiming = value / 1000f;
+				ArcAudioManager.Instance.Timing = Mathf.Max(0, audioTiming);
 			}
 		}
 		public int Length { get; private set; }
@@ -77,25 +77,25 @@ namespace Arcade.Gameplay
 			if (IsPlaying)
 			{
 				float playBackSpeed = ArcAudioManager.Instance.PlayBackSpeed;
-				timing += Time.deltaTime * playBackSpeed;
+				audioTiming += Time.deltaTime * playBackSpeed;
 				if (EnablePlaybackSync)
 				{
 					float t = ArcAudioManager.Instance.Timing;
-					if (deltaDspTime > 0f && (timing >= 0 || ArcAudioManager.Instance.Timing > 0))
+					if (deltaDspTime > 0f && (audioTiming >= 0 || ArcAudioManager.Instance.Timing > 0))
 					{
-						float delta = timing - t;
+						float delta = audioTiming - t;
 						int bufferLength;
 						int numBuffers;
 						AudioSettings.GetDSPBufferSize(out bufferLength, out numBuffers);
 						float maxDelta = 2 * (float)bufferLength / (float)AudioSettings.outputSampleRate;
 						if (Mathf.Abs(delta) > maxDelta)
 						{
-							timing = t;
+							audioTiming = t;
 						}
 					}
 				}
 			}
-			if (Timing > Length)
+			if (AudioTiming > Length)
 			{
 				OnMusicFinished.Invoke();
 				Stop();
@@ -123,7 +123,7 @@ namespace Arcade.Gameplay
 		}
 		public void Clean()
 		{
-			Timing = 0;
+			AudioTiming = 0;
 			ArcTimingManager.Instance.Clean();
 			ArcTapNoteManager.Instance.Clean();
 			ArcHoldNoteManager.Instance.Clean();
@@ -153,7 +153,7 @@ namespace Arcade.Gameplay
 		}
 		public void PlayDelayed()
 		{
-			timing = -3f;
+			audioTiming = -3f;
 			ResetJudge();
 			ArcAudioManager.Instance.Source.Stop();
 			ArcAudioManager.Instance.Timing = 0;
@@ -163,15 +163,15 @@ namespace Arcade.Gameplay
 
 		public void Play()
 		{
-			if (timing < 0)
+			if (audioTiming < 0)
 			{
 				ArcAudioManager.Instance.Source.Stop();
 				ArcAudioManager.Instance.Timing = 0;
-				ArcAudioManager.Instance.Source.PlayDelayed(-timing);
+				ArcAudioManager.Instance.Source.PlayDelayed(-audioTiming);
 			}
 			else
 			{
-				ArcAudioManager.Instance.Timing = timing;
+				ArcAudioManager.Instance.Timing = audioTiming;
 				ArcAudioManager.Instance.Play();
 			}
 			IsPlaying = true;
@@ -184,7 +184,7 @@ namespace Arcade.Gameplay
 		}
 		public void Stop()
 		{
-			timing = 0;
+			audioTiming = 0;
 			ArcAudioManager.Instance.Pause();
 			ArcAudioManager.Instance.Timing = 0;
 			IsPlaying = false;

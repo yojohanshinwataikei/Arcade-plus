@@ -174,7 +174,7 @@ namespace Arcade.Gameplay
 
 		public float CalculatePositionByTiming(int timing, ArcTimingGroup timingGroup)
 		{
-			return CalculatePositionByTimingAndStart(ArcGameplayManager.Instance.Timing, timing, timingGroup);
+			return CalculatePositionByTimingAndStart(ArcGameplayManager.Instance.AudioTiming, timing, timingGroup);
 		}
 		public float CalculatePositionByTimingAndStart(int pivotTiming, int targetTiming, ArcTimingGroup timingGroup)
 		{
@@ -216,7 +216,7 @@ namespace Arcade.Gameplay
 			{
 				return 0;
 			}
-			int currentTiming = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming - ArcAudioManager.Instance.AudioOffset;
 			if (position < 0)
 			{
 				return currentTiming;
@@ -263,7 +263,7 @@ namespace Arcade.Gameplay
 		private void UpdateChartSpeedStatus()
 		{
 			int offset = ArcAudioManager.Instance.AudioOffset;
-			int currentTiming = ArcGameplayManager.Instance.Timing - offset;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming - offset;
 			if (Timings.Count == 0)
 			{
 				CurrentSpeed = 0;
@@ -289,7 +289,7 @@ namespace Arcade.Gameplay
 			}
 			else
 			{
-				int currentTiming = ArcGameplayManager.Instance.Timing - ArcAudioManager.Instance.AudioOffset;
+				int currentTiming = ArcGameplayManager.Instance.AudioTiming - ArcAudioManager.Instance.AudioOffset;
 				int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing <= currentTiming);
 				float[] TimingPosition = new float[Timings.Count];
 				for (int i = currentTimingId; i + 1 < Timings.Count; i++)
@@ -518,7 +518,7 @@ namespace Arcade.Gameplay
 			}
 			if (timing + duration >= earliestRenderTime && timing <= latestRenderTime)
 			{
-				if (note && timing + duration + LostDelay < ArcGameplayManager.Instance.Timing)
+				if (note && timing + duration + LostDelay < ArcGameplayManager.Instance.AudioTiming)
 				{
 					return false;
 				}

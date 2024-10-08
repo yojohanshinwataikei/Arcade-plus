@@ -107,7 +107,7 @@ namespace Arcade.Gameplay
 				}
 				else
 				{
-					if (t.Timing + offset < ArcGameplayManager.Instance.Timing)
+					if (t.Timing + offset < ArcGameplayManager.Instance.AudioTiming)
 					{
 						if (!t.FadingHolds())
 						{
@@ -116,7 +116,7 @@ namespace Arcade.Gameplay
 						else
 						{
 							int firstJudge = t.JudgeTimings.Count > 0 ? t.JudgeTimings[0] : t.Timing;
-							if (firstJudge + offset < ArcGameplayManager.Instance.Timing)
+							if (firstJudge + offset < ArcGameplayManager.Instance.AudioTiming)
 							{
 								alpha = 0.5f;
 							}
@@ -131,7 +131,7 @@ namespace Arcade.Gameplay
 		{
 			ArcTimingManager timing = ArcTimingManager.Instance;
 			int offset = ArcAudioManager.Instance.AudioOffset;
-			int currentTiming = ArcGameplayManager.Instance.Timing;
+			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
 			ArcEffectManager.Instance.ResetHoldNoteEffect();
 			foreach (var t in Holds)
 			{

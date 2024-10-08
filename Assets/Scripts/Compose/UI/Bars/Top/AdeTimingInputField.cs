@@ -21,7 +21,7 @@ namespace Arcade.Compose.UI
 
 		private void Update()
 		{
-			if (!timingSelected) timing.text = ArcGameplayManager.Instance.Timing.ToString();
+			if (!timingSelected) timing.text = ArcGameplayManager.Instance.AudioTiming.ToString();
 		}
 
 		public void OnDeselect(BaseEventData eventData)
@@ -36,7 +36,7 @@ namespace Arcade.Compose.UI
 		{
 			if (!timingSelected) return;
 			int value = 0;
-			if (int.TryParse(s, out value)) ArcGameplayManager.Instance.Timing = value;
+			if (int.TryParse(s, out value)) ArcGameplayManager.Instance.AudioTiming = value;
 		}
 	}
 }
