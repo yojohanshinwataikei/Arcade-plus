@@ -50,18 +50,23 @@ namespace Arcade.Gameplay
 			}
 			private set
 			{
-				Source.pitch=value;
-				if(value==1){
-					Source.outputAudioMixerGroup=null;
-				}else if(value>=0.5f){
-					Source.outputAudioMixerGroup=PitchShiftMixerGroup;
-					PitchShiftMixerGroup.audioMixer.SetFloat("pitchShift",1f/value);
-				}else{
-					Source.outputAudioMixerGroup=DoublePitchShiftMixerGroup;
-					PitchShiftMixerGroup.audioMixer.SetFloat("pitchShift",2f);
-					PitchShiftMixerGroup.audioMixer.SetFloat("pitchShift2",0.5f/value);
+				Source.pitch = value;
+				if (value == 1)
+				{
+					Source.outputAudioMixerGroup = null;
 				}
-				playBackSpeed=value;
+				else if (value >= 0.5f)
+				{
+					Source.outputAudioMixerGroup = PitchShiftMixerGroup;
+					PitchShiftMixerGroup.audioMixer.SetFloat("pitchShift", 1f / value);
+				}
+				else
+				{
+					Source.outputAudioMixerGroup = DoublePitchShiftMixerGroup;
+					PitchShiftMixerGroup.audioMixer.SetFloat("pitchShift", 2f);
+					PitchShiftMixerGroup.audioMixer.SetFloat("pitchShift2", 0.5f / value);
+				}
+				playBackSpeed = value;
 			}
 		}
 
@@ -79,19 +84,27 @@ namespace Arcade.Gameplay
 			Source.Pause();
 		}
 
-		public void NextPlaybackSpeed(){
-			if(PlayBackSpeedButtonText.text=="100%"){
-				PlayBackSpeed=0.75f;
-				PlayBackSpeedButtonText.text="75%";
-			}else if(PlayBackSpeedButtonText.text=="75%"){
-				PlayBackSpeed=0.5f;
-				PlayBackSpeedButtonText.text="50%";
-			}else if(PlayBackSpeedButtonText.text=="50%"){
-				PlayBackSpeed=0.25f;
-				PlayBackSpeedButtonText.text="25%";
-			}else{
-				PlayBackSpeed=1f;
-				PlayBackSpeedButtonText.text="100%";
+		public void NextPlaybackSpeed()
+		{
+			if (PlayBackSpeedButtonText.text == "100%")
+			{
+				PlayBackSpeed = 0.75f;
+				PlayBackSpeedButtonText.text = "75%";
+			}
+			else if (PlayBackSpeedButtonText.text == "75%")
+			{
+				PlayBackSpeed = 0.5f;
+				PlayBackSpeedButtonText.text = "50%";
+			}
+			else if (PlayBackSpeedButtonText.text == "50%")
+			{
+				PlayBackSpeed = 0.25f;
+				PlayBackSpeedButtonText.text = "25%";
+			}
+			else
+			{
+				PlayBackSpeed = 1f;
+				PlayBackSpeedButtonText.text = "100%";
 			}
 		}
 	}

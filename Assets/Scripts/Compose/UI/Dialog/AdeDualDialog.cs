@@ -16,8 +16,8 @@ namespace Arcade.Compose
 			Sprite buttonRight, Sprite buttonRightDisabled, Sprite buttonRightPressed
 		)
 		{
-			DialogTop.sprite=dialogTop;
-			DialogBackground.sprite=dialogBackground;
+			DialogTop.sprite = dialogTop;
+			DialogBackground.sprite = dialogBackground;
 			LeftButton.image.sprite = buttonLeft;
 			LeftButton.spriteState = new SpriteState
 			{

@@ -37,7 +37,7 @@ namespace Arcade.Compose
 
 	public class AdeProjectManager : MonoBehaviour
 	{
-		public const int DIFFICULTY_COUNT=5;
+		public const int DIFFICULTY_COUNT = 5;
 		public static AdeProjectManager Instance { get; private set; }
 
 		public string CurrentProjectFolder { get; set; }
@@ -297,7 +297,8 @@ namespace Arcade.Compose
 			}
 			DefaultCover = cover;
 		}
-		private void LoadDifficulty(int difficulty){
+		private void LoadDifficulty(int difficulty)
+		{
 			LoadCover(difficulty);
 			LoadAudio(difficulty);
 			if (AudioClip == null)
@@ -377,7 +378,8 @@ namespace Arcade.Compose
 			foreach (string coverPath in files)
 			{
 				Texture2D texture = Loader.LoadTexture2D(coverPath);
-				if (texture != null){
+				if (texture != null)
+				{
 					Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 					sprite.name = coverPath;
 					Cover = texture;
@@ -412,7 +414,7 @@ namespace Arcade.Compose
 					AudioClip = clip;
 					AdeTimingSlider.Instance.Enable = true;
 					AdeTimingSlider.Instance.Length = (int)(AudioClip.length * 1000);
-					audioOverrided=audioPath.overrided;
+					audioOverrided = audioPath.overrided;
 					return;
 				}
 			}
@@ -465,8 +467,8 @@ namespace Arcade.Compose
 			foreach (Image i in DifficultyImages) i.color = new Color(1f, 1f, 1f, 0.6f);
 			DifficultyImages[difficulty].color = new Color(1, 1, 1, 1);
 
-			float rawBaseBpm=audioOverrided?
-				CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null?0:CurrentProjectMetadata.Difficulties[difficulty].BaseBpm:
+			float rawBaseBpm = audioOverrided ?
+				CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null ? 0 : CurrentProjectMetadata.Difficulties[difficulty].BaseBpm :
 				CurrentProjectMetadata.BaseBpm;
 			ArcTimingManager.Instance.BaseBpm = rawBaseBpm == 0 ? 100 : rawBaseBpm;
 			BaseBpm.interactable = true;
@@ -477,27 +479,33 @@ namespace Arcade.Compose
 			AudioOffset.text = ArcGameplayManager.Instance.AudioOffset.ToString();
 
 			bool watching = watcher.EnableRaisingEvents;
-			watcher.EnableRaisingEvents =false;
+			watcher.EnableRaisingEvents = false;
 			watcher.Path = CurrentProjectFolder;
 			watcher.Filter = $"{difficulty}.aff";
-			watcher.EnableRaisingEvents=watching;
+			watcher.EnableRaisingEvents = watching;
 			ArcGameplayManager.Instance.AudioTiming = CurrentProjectMetadata.LastWorkingTiming;
 		}
 
 		private void LoadSpecialEffectAudio()
 		{
-			var effects=new HashSet<string>();
-			foreach(var arc in ArcGameplayManager.Instance.Chart.Arcs){
+			var effects = new HashSet<string>();
+			foreach (var arc in ArcGameplayManager.Instance.Chart.Arcs)
+			{
 				effects.Add(arc.Effect);
 			}
-			foreach(var effect in effects){
-				if(effect.EndsWith("_wav")){
-					string effectAudioFilename=effect.Substring(0,effect.Length-4);
-					string effectAudioPath=Path.Combine(CurrentProjectFolder, $"{effectAudioFilename}.wav");
+			foreach (var effect in effects)
+			{
+				if (effect.EndsWith("_wav"))
+				{
+					string effectAudioFilename = effect.Substring(0, effect.Length - 4);
+					string effectAudioPath = Path.Combine(CurrentProjectFolder, $"{effectAudioFilename}.wav");
 					AudioClip clip = Loader.LoadAudioFile(effectAudioPath);
-					if(clip!=null){
-						ArcEffectManager.Instance.AddSpecialEffectAudio(effect,clip);
-					}else{
+					if (clip != null)
+					{
+						ArcEffectManager.Instance.AddSpecialEffectAudio(effect, clip);
+					}
+					else
+					{
 						Debug.LogWarning($"SpecialEffectAudio for effect '{effect}' load fail");
 					}
 				}
@@ -529,7 +537,8 @@ namespace Arcade.Compose
 		{
 			if (CurrentProjectMetadata == null) return;
 			if (CurrentDifficulty < 0 || CurrentDifficulty > 3) return;
-			if (CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null){
+			if (CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null)
+			{
 				CurrentProjectMetadata.Difficulties[CurrentDifficulty] = new AdeChartDifficultyMetadata();
 			}
 			CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating = Diff.text;
@@ -541,13 +550,18 @@ namespace Arcade.Compose
 			if (result)
 			{
 				if (value <= 0) value = 100;
-				if (CurrentProjectMetadata != null) {
-					if(audioOverrided){
-						if (CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null){
+				if (CurrentProjectMetadata != null)
+				{
+					if (audioOverrided)
+					{
+						if (CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null)
+						{
 							CurrentProjectMetadata.Difficulties[CurrentDifficulty] = new AdeChartDifficultyMetadata();
 						}
 						CurrentProjectMetadata.Difficulties[CurrentDifficulty].BaseBpm = value;
-					}else{
+					}
+					else
+					{
 						CurrentProjectMetadata.BaseBpm = value;
 					}
 				};

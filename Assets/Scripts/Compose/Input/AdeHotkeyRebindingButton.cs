@@ -9,7 +9,8 @@ namespace Arcade.Compose
 		public string HotkeyName;
 		public Text Text;
 
-		public void StartRebinding(){
+		public void StartRebinding()
+		{
 			AdeInputManager.Instance.SetHotkeyRebindingButton(this);
 		}
 	}

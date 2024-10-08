@@ -58,14 +58,18 @@ namespace Arcade.Gameplay
 		}
 		public int Length { get; private set; }
 
-		public int AllBeginChartTiming{
-			get{
+		public int AllBeginChartTiming
+		{
+			get
+			{
 				return -AudioOffset;
 			}
 		}
-		public int AllEndChartTiming{
-			get{
-				return Length-AudioOffset;
+		public int AllEndChartTiming
+		{
+			get
+			{
+				return Length - AudioOffset;
 			}
 		}
 		public bool IsLoaded
@@ -131,7 +135,7 @@ namespace Arcade.Gameplay
 			Clean();
 			Chart = chart;
 			Length = (int)(audio.length * 1000);
-			AudioOffset=chart.AudioOffset;
+			AudioOffset = chart.AudioOffset;
 
 			ArcCameraManager.Instance.ResetCamera();
 			ArcAudioManager.Instance.Load(audio);

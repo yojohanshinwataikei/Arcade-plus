@@ -688,7 +688,8 @@ namespace Arcade.Compose
 				data.side = Side.Colorless;
 			}
 			data.theme = null;
-			if(spec.theme!=null){
+			if (spec.theme != null)
+			{
 				if (skinData.ThemeDatas.ContainsKey(spec.theme))
 				{
 					data.theme = spec.theme;
@@ -998,7 +999,7 @@ namespace Arcade.Compose
 		private Sprite LoadWarpRepeatPivotFullRectSprite(string path, Vector2 pivot, List<UnityEngine.Object> resourceList)
 		{
 			Texture2D texture = LoadTexture2D(path, resourceList);
-			texture.wrapMode=TextureWrapMode.Repeat;
+			texture.wrapMode = TextureWrapMode.Repeat;
 			if (texture == null)
 			{
 				return null;
@@ -1027,7 +1028,7 @@ namespace Arcade.Compose
 			if (clip != null)
 			{
 				resourceList.Add(clip);
-				clip.name=path;
+				clip.name = path;
 			}
 			return clip;
 		}
@@ -1038,7 +1039,7 @@ namespace Arcade.Compose
 			if (mesh != null)
 			{
 				resourceList.Add(mesh);
-				mesh.name=path;
+				mesh.name = path;
 			}
 			return mesh;
 		}

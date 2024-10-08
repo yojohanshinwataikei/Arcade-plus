@@ -65,7 +65,8 @@ namespace Arcade.Compose.MarkingMenu
 		{
 			Text = StartupText;
 		}
-		public void Show(){
+		public void Show()
+		{
 			gameObject.SetActive(true);
 			active = true;
 			ItemCanvasGroup.DOComplete();
@@ -89,7 +90,8 @@ namespace Arcade.Compose.MarkingMenu
 
 		public void OnPointerEnter(PointerEventData data)
 		{
-			if(active){
+			if (active)
+			{
 				PointerInItem = true;
 				Background.color = InColor;
 				pointerInItemTiming = 0;
@@ -97,7 +99,8 @@ namespace Arcade.Compose.MarkingMenu
 		}
 		public void OnPointerExit(PointerEventData data)
 		{
-			if(active){
+			if (active)
+			{
 				PointerInItem = false;
 				Background.color = OutColor;
 				pointerInItemTiming = 0;

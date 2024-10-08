@@ -77,12 +77,12 @@ namespace Arcade.Compose.Dialog
 		private void Awake()
 		{
 			Instance = this;
-            Dialog.OnClose+=OnClose;
+			Dialog.OnClose += OnClose;
 		}
 
 		private void OnDestroy()
 		{
-            Dialog.OnClose-=OnClose;
+			Dialog.OnClose -= OnClose;
 		}
 
 		private void Start()

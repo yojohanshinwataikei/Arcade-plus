@@ -904,7 +904,7 @@ namespace Arcade.Gameplay.Chart
 				arc.IsSfx ? ArcArcManager.Instance.SfxArcTapPrefab : ArcArcManager.Instance.ArcTapPrefab, arc.transform
 			);
 
-			ShadowRenderer.sprite=ArcArcManager.Instance.ArcTapShadowSkin;
+			ShadowRenderer.sprite = ArcArcManager.Instance.ArcTapShadowSkin;
 
 			UpdatePosition();
 			UpdateScale();
@@ -1260,7 +1260,7 @@ namespace Arcade.Gameplay.Chart
 					IsConvertedVariousSizedArctap = true,
 				};
 				ConvertedVariousSizedArctap.Instantiate(this);
-				ConvertedVariousSizedArctap.Selected=Selected;
+				ConvertedVariousSizedArctap.Selected = Selected;
 			}
 		}
 		public void DestroyArcTaps()

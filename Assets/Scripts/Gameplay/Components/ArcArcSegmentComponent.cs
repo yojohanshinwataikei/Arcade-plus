@@ -177,7 +177,7 @@ namespace Arcade.Gameplay
 			{
 				if (selected != value)
 				{
-					SegmentRenderer.renderingLayerMask=MaskUtil.SetMask(SegmentRenderer.renderingLayerMask,ArcGameplayManager.Instance.SelectionLayerMask,value);
+					SegmentRenderer.renderingLayerMask = MaskUtil.SetMask(SegmentRenderer.renderingLayerMask, ArcGameplayManager.Instance.SelectionLayerMask, value);
 
 					selected = value;
 				}
@@ -277,10 +277,10 @@ namespace Arcade.Gameplay
 
 			if (fromPos == toPos) return;
 
-			Vector3 AveragePos = (FromPos+ToPos)/2;
-			Vector3 OffsetPos = (ToPos-FromPos)/2;
+			Vector3 AveragePos = (FromPos + ToPos) / 2;
+			Vector3 OffsetPos = (ToPos - FromPos) / 2;
 
-			transform.localPosition=AveragePos;
+			transform.localPosition = AveragePos;
 
 			Vector3[] vertices = new Vector3[6];
 			Vector2[] uv = new Vector2[6];
@@ -289,22 +289,22 @@ namespace Arcade.Gameplay
 
 			vertices[0] = -OffsetPos + new Vector3(0, offset / 2, 0);
 			uv[0] = new Vector2(0, 0);
-			uv2[0] =new Vector2(fromHeight,0);
+			uv2[0] = new Vector2(fromHeight, 0);
 			vertices[1] = OffsetPos + new Vector3(0, offset / 2, 0);
 			uv[1] = new Vector2(0, 1);
-			uv2[1] =new Vector2(toHeight,0);
+			uv2[1] = new Vector2(toHeight, 0);
 			vertices[2] = OffsetPos + new Vector3(offset, -offset / 2, 0);
 			uv[2] = new Vector2(1, 1);
-			uv2[2] =new Vector2(toHeight,0);
+			uv2[2] = new Vector2(toHeight, 0);
 			vertices[3] = -OffsetPos + new Vector3(offset, -offset / 2, 0);
 			uv[3] = new Vector2(1, 0);
-			uv2[3] =new Vector2(fromHeight,0);
+			uv2[3] = new Vector2(fromHeight, 0);
 			vertices[4] = OffsetPos + new Vector3(-offset, -offset / 2, 0);
 			uv[4] = new Vector2(1, 1);
-			uv2[4] =new Vector2(toHeight,0);
+			uv2[4] = new Vector2(toHeight, 0);
 			vertices[5] = -OffsetPos + new Vector3(-offset, -offset / 2, 0);
 			uv[5] = new Vector2(1, 0);
-			uv2[5] =new Vector2(fromHeight,0);
+			uv2[5] = new Vector2(fromHeight, 0);
 
 			Destroy(SegmentFilter.sharedMesh);
 			SegmentFilter.sharedMesh = new Mesh()
@@ -320,7 +320,7 @@ namespace Arcade.Gameplay
 			int[] shadowtriangles = new int[6];
 
 
-			ShadowFilter.transform.localPosition=new Vector3(0,-AveragePos.y,0);
+			ShadowFilter.transform.localPosition = new Vector3(0, -AveragePos.y, 0);
 
 			shadowvertices[0] = -OffsetPos + new Vector3(-offset, OffsetPos.y, 0);
 			shadowuv[0] = new Vector2();

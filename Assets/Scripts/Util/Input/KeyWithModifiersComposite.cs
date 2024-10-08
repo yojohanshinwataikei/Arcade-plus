@@ -34,11 +34,12 @@ namespace Arcade.Util.Input
 
 		public override KeyWithModifiersData ReadValue(ref InputBindingCompositeContext context)
 		{
-			return new KeyWithModifiersData{
-				modifier1=context.ReadValueAsButton(modifier1),
-				modifier2=context.ReadValueAsButton(modifier2),
-				modifier3=context.ReadValueAsButton(modifier3),
-				keyValue=context.ReadValue<float>(key)
+			return new KeyWithModifiersData
+			{
+				modifier1 = context.ReadValueAsButton(modifier1),
+				modifier2 = context.ReadValueAsButton(modifier2),
+				modifier3 = context.ReadValueAsButton(modifier3),
+				keyValue = context.ReadValue<float>(key)
 			};
 		}
 

@@ -7,10 +7,10 @@ using UnityEngine.InputSystem;
 
 namespace Arcade.Compose
 {
-	public abstract class AdeMarkingMenuItemProvider:MonoBehaviour
+	public abstract class AdeMarkingMenuItemProvider : MonoBehaviour
 	{
-		public virtual bool IsOnlyMarkingMenu { get=>false; }
-		public virtual MarkingMenuItem[] MarkingMenuItems { get=>null; }
+		public virtual bool IsOnlyMarkingMenu { get => false; }
+		public virtual MarkingMenuItem[] MarkingMenuItems { get => null; }
 	}
 	public class AdeMarkingMenuManager : MonoBehaviour
 	{

@@ -15,8 +15,10 @@ public class AdeSkinHostEditor : Editor
 		if (!Application.isPlaying) return;
 		ShowSkinData(AdeSkinHost.Instance.skinData);
 		GUILayout.Label("External backgrounds:");
-		if(AdeSkinHost.Instance.ExternalBackgrounds!=null){
-			foreach(KeyValuePair<string, Labelled<Sprite>> backgroundData in AdeSkinHost.Instance.ExternalBackgrounds){
+		if (AdeSkinHost.Instance.ExternalBackgrounds != null)
+		{
+			foreach (KeyValuePair<string, Labelled<Sprite>> backgroundData in AdeSkinHost.Instance.ExternalBackgrounds)
+			{
 				GUILayout.Label($"  {backgroundData.Key}:{backgroundData.Value.label}");
 			}
 		}
@@ -76,19 +78,22 @@ public class AdeSkinHostEditor : Editor
 		GUILayout.Label($"  SfxArcTapModel:{data.SfxArcTapModel.label}");
 		GUILayout.Label($"Default note type:{data.DefaultNoteData}");
 		GUILayout.Label("Note datas:");
-		foreach(KeyValuePair<string, WithSideData<NoteSideData>> noteData in data.NoteDatas){
+		foreach (KeyValuePair<string, WithSideData<NoteSideData>> noteData in data.NoteDatas)
+		{
 			GUILayout.Label($"  {noteData.Key}:");
-			ShowWithSideData<NoteSideData>(noteData.Value,ShowNoteSideData);
+			ShowWithSideData<NoteSideData>(noteData.Value, ShowNoteSideData);
 		}
 		GUILayout.Label($"Default theme type:{data.DefaultThemeData}");
 		GUILayout.Label("Theme datas:");
-		foreach(KeyValuePair<string, WithSideData<ThemeSideData>> themeData in data.ThemeDatas){
+		foreach (KeyValuePair<string, WithSideData<ThemeSideData>> themeData in data.ThemeDatas)
+		{
 			GUILayout.Label($"  {themeData.Key}:");
-			ShowWithSideData<ThemeSideData>(themeData.Value,ShowThemeSideData);
+			ShowWithSideData<ThemeSideData>(themeData.Value, ShowThemeSideData);
 		}
 		GUILayout.Label($"Default background:{data.DefaultBackground}");
 		GUILayout.Label("Background datas:");
-		foreach(KeyValuePair<string, BackgroundData> backgroundData in data.BackgroundDatas){
+		foreach (KeyValuePair<string, BackgroundData> backgroundData in data.BackgroundDatas)
+		{
 			GUILayout.Label($"  {backgroundData.Key}:");
 			ShowBackground(backgroundData.Value);
 		}
@@ -103,7 +108,7 @@ public class AdeSkinHostEditor : Editor
 
 	private delegate void dataShower<T>(T data);
 
-	private void ShowWithSideData<T>(WithSideData<T> data,dataShower<T> shower)
+	private void ShowWithSideData<T>(WithSideData<T> data, dataShower<T> shower)
 	{
 		GUILayout.Label("    Light:");
 		shower(data.Light);

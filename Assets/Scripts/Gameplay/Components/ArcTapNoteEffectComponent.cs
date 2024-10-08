@@ -5,7 +5,7 @@ using UnityEngine.VFX;
 
 namespace Arcade.Gameplay
 {
-	public class ArcTapNoteEffectComponent : MonoBehaviour,IPoolable
+	public class ArcTapNoteEffectComponent : MonoBehaviour, IPoolable
 	{
 		public bool Available { get; private set; } = true;
 		public VisualEffect Effect;
@@ -15,8 +15,8 @@ namespace Arcade.Gameplay
 		{
 			Available = false;
 			transform.position = pos;
-			Effect.enabled=true;
-			Effect.SetTexture("Texture",Texture);
+			Effect.enabled = true;
+			Effect.SetTexture("Texture", Texture);
 			Effect.Play();
 			StartCoroutine(WaitForEnd());
 		}
@@ -25,13 +25,14 @@ namespace Arcade.Gameplay
 			yield return new WaitForSeconds(0.5f);
 			Effect.Reinit();
 			Effect.Stop();
-			Effect.enabled=false;
+			Effect.enabled = false;
 			yield return null;
 			Available = true;
 		}
-		public void SetTexture(Texture2D texture){
-			Effect.SetTexture("Texture",texture);
-			Texture=texture;
+		public void SetTexture(Texture2D texture)
+		{
+			Effect.SetTexture("Texture", texture);
+			Texture = texture;
 		}
 	}
 }

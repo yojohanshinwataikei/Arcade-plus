@@ -20,8 +20,9 @@ namespace Arcade.Gameplay
 		{
 			tapNoteEffectPool = new GameObjectPool<ArcTapNoteEffectComponent>(TapNoteJudgeEffect, EffectPlane.transform, 10);
 			sfxTapNoteEffectPool = new GameObjectPool<ArcTapNoteEffectComponent>(SfxTapNoteJudgeEffect, EffectPlane.transform, 10);
-			for (int i = 0; i < 6; ++i) {
-				HoldNoteEffectPosition[i]=HoldNoteEffects[i].transform.position;
+			for (int i = 0; i < 6; ++i)
+			{
+				HoldNoteEffectPosition[i] = HoldNoteEffects[i].transform.position;
 			};
 		}
 
@@ -45,20 +46,20 @@ namespace Arcade.Gameplay
 		{
 			for (int track = 0; track < 6; track++)
 			{
-				HoldNoteEffects[track].transform.position=EffectPlane.GetPositionOnPlane(HoldNoteEffectPosition[track]);
+				HoldNoteEffects[track].transform.position = EffectPlane.GetPositionOnPlane(HoldNoteEffectPosition[track]);
 				bool show = holdEffectStatus[track];
 				if (show != holdEffectPlaying[track])
 				{
-					holdEffectPlaying[track]=show;
+					holdEffectPlaying[track] = show;
 					if (show)
 					{
 						HoldNoteEffects[track].Play();
-						HoldNoteEffects[track].Simulate(1f/60f,60);
+						HoldNoteEffects[track].Simulate(1f / 60f, 60);
 					}
 					else
 					{
 						HoldNoteEffects[track].Stop();
-						HoldNoteEffects[track].Simulate(1f/60f,60);
+						HoldNoteEffects[track].Simulate(1f / 60f, 60);
 					}
 				}
 			}

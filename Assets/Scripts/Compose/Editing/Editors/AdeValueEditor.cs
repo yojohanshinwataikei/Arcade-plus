@@ -142,7 +142,7 @@ namespace Arcade.Compose.Editing
 				);
 				UpdateField<ArcTimingGroupOption?>(
 					(note) => note is ISetableTimingGroup,
-					(note) => new ArcTimingGroupOption{timingGroup=(note as IHasTimingGroup).TimingGroup},
+					(note) => new ArcTimingGroupOption { timingGroup = (note as IHasTimingGroup).TimingGroup },
 					null,
 					(active) => TimingGroup.gameObject.SetActive(active),
 					(data) => ApplyTimingGroupDropdown(data)
@@ -151,7 +151,7 @@ namespace Arcade.Compose.Editing
 			}
 		}
 
-        delegate bool GetActive(ArcNote note);
+		delegate bool GetActive(ArcNote note);
 		delegate TData GetValue<TData>(ArcNote note);
 		delegate void ApplyActive(bool active);
 		delegate void ApplyData<TData>(TData data);
@@ -283,57 +283,66 @@ namespace Arcade.Compose.Editing
 			IsVoid.GetComponentInChildren<Toggle>().SetIsOnWithoutNotify(data == true);
 		}
 
-		private struct ArcTimingGroupOption{
+		private struct ArcTimingGroupOption
+		{
 			public ArcTimingGroup timingGroup;
 		}
 		private DropdownHelper<ArcTimingGroupOption?> timingGroupDropdownHelper;
 
 		private string GetArcTimingGroupOptionString(ArcTimingGroupOption? color)
 		{
-			if (color==null)
+			if (color == null)
 			{
 				return "-";
 			}
-			else if (color.Value.timingGroup==null)
+			else if (color.Value.timingGroup == null)
 			{
 				return "默认";
-			}else{
+			}
+			else
+			{
 				return color.Value.timingGroup.Id.ToString();
 			}
 		}
-        private void ApplyTimingGroupDropdown(ArcTimingGroupOption? data)
-        {
-			List<ArcTimingGroupOption?> options=new List<ArcTimingGroupOption?>();
-			if(data==null){
+		private void ApplyTimingGroupDropdown(ArcTimingGroupOption? data)
+		{
+			List<ArcTimingGroupOption?> options = new List<ArcTimingGroupOption?>();
+			if (data == null)
+			{
 				options.Add(null);
 			}
-			options.Add(new ArcTimingGroupOption{timingGroup=null});
+			options.Add(new ArcTimingGroupOption { timingGroup = null });
 			foreach (var tg in ArcTimingManager.Instance.timingGroups)
 			{
-				options.Add(new ArcTimingGroupOption{timingGroup=tg});
+				options.Add(new ArcTimingGroupOption { timingGroup = tg });
 			}
-			timingGroupDropdownHelper.UpdateOptions(options,(option,_)=>GetArcTimingGroupOptionString(option));
-            timingGroupDropdownHelper.SetValueWithoutNotify(data);
-        }
+			timingGroupDropdownHelper.UpdateOptions(options, (option, _) => GetArcTimingGroupOptionString(option));
+			timingGroupDropdownHelper.SetValueWithoutNotify(data);
+		}
 
-		private struct ValueChangeErrorMessage{
+		private struct ValueChangeErrorMessage
+		{
 			public string message;
 		}
-		private delegate ValueChangeErrorMessage? ParseValue<TRaw,TValue>(TRaw raw,ref TValue result);
-		private delegate ValueChangeErrorMessage? ValidateValue<TValue>(TValue value,ArcNote note);
-		private delegate void ApplyValue<TValue>(TValue value,ArcNote note);
+		private delegate ValueChangeErrorMessage? ParseValue<TRaw, TValue>(TRaw raw, ref TValue result);
+		private delegate ValueChangeErrorMessage? ValidateValue<TValue>(TValue value, ArcNote note);
+		private delegate void ApplyValue<TValue>(TValue value, ArcNote note);
 
-		private void HandleValueChange<TRaw,TValue>(TRaw raw,ParseValue<TRaw,TValue> parseValue, ValidateValue<TValue> validateValue,ApplyValue<TValue> applyValue){
-			TValue result=default;
-			var parseValueErrorMessage=parseValue(raw,ref result);
-			if(parseValueErrorMessage!=null){
+		private void HandleValueChange<TRaw, TValue>(TRaw raw, ParseValue<TRaw, TValue> parseValue, ValidateValue<TValue> validateValue, ApplyValue<TValue> applyValue)
+		{
+			TValue result = default;
+			var parseValueErrorMessage = parseValue(raw, ref result);
+			if (parseValueErrorMessage != null)
+			{
 				AdeToast.Instance.Show(parseValueErrorMessage.Value.message);
 				UpdateFields();
 				return;
 			}
-			foreach(var note in AdeSelectionManager.Instance.SelectedNotes){
-				var validateValueErrorMessage=validateValue(result,note);
-				if(validateValueErrorMessage!=null){
+			foreach (var note in AdeSelectionManager.Instance.SelectedNotes)
+			{
+				var validateValueErrorMessage = validateValue(result, note);
+				if (validateValueErrorMessage != null)
+				{
 					AdeToast.Instance.Show(validateValueErrorMessage.Value.message);
 					UpdateFields();
 					return;
@@ -343,7 +352,7 @@ namespace Arcade.Compose.Editing
 			foreach (var n in AdeSelectionManager.Instance.SelectedNotes)
 			{
 				var ne = n.Clone();
-				applyValue(result,ne as ArcNote);
+				applyValue(result, ne as ArcNote);
 				commands.Add(new EditArcEventCommand(n, ne));
 			}
 			if (commands.Count == 1)
@@ -360,46 +369,60 @@ namespace Arcade.Compose.Editing
 		{
 			HandleValueChange(
 				inputField.text,
-				(string raw,ref int result)=>{
-					if(!int.TryParse(raw,out result)){
-						return new ValueChangeErrorMessage{message="时间数值格式错误"};
+				(string raw, ref int result) =>
+				{
+					if (!int.TryParse(raw, out result))
+					{
+						return new ValueChangeErrorMessage { message = "时间数值格式错误" };
 					}
-					if(result<0){
-						return new ValueChangeErrorMessage{message="时间数值不能为负数"};
+					if (result < 0)
+					{
+						return new ValueChangeErrorMessage { message = "时间数值不能为负数" };
 					}
 					return null;
 				},
-				(value,note)=>{
-					if(note is ArcHold hold){
-						if(hold.EndTiming<=value){
-							return new ValueChangeErrorMessage{message="Hold 的时间不能晚于结束时间"};
+				(value, note) =>
+				{
+					if (note is ArcHold hold)
+					{
+						if (hold.EndTiming <= value)
+						{
+							return new ValueChangeErrorMessage { message = "Hold 的时间不能晚于结束时间" };
 						}
 					}
-					if(note is ArcArc arc){
-						if(arc.EndTiming<value||(arc.EndTiming<=value&&arc.ArcTaps.Count>0)){
-							return new ValueChangeErrorMessage{message="Arc 的时间不能晚于结束时间"};
+					if (note is ArcArc arc)
+					{
+						if (arc.EndTiming < value || (arc.EndTiming <= value && arc.ArcTaps.Count > 0))
+						{
+							return new ValueChangeErrorMessage { message = "Arc 的时间不能晚于结束时间" };
 						}
 						foreach (var arctap in arc.ArcTaps)
 						{
-							if(arctap.Timing<value){
-								if(!AdeSelectionManager.Instance.SelectedNotes.Contains(arctap)){
-									return new ValueChangeErrorMessage{message="Arc 的时间不能晚于其上 Arctap 的时间"};
+							if (arctap.Timing < value)
+							{
+								if (!AdeSelectionManager.Instance.SelectedNotes.Contains(arctap))
+								{
+									return new ValueChangeErrorMessage { message = "Arc 的时间不能晚于其上 Arctap 的时间" };
 								}
 							}
 						}
 					}
-					if(note is ArcArcTap){
-						var arctap=note as ArcArcTap;
-						if(arctap.Arc.Timing>value||arctap.Arc.EndTiming<value){
-							if(!AdeSelectionManager.Instance.SelectedNotes.Contains(arctap.Arc)){
-								return new ValueChangeErrorMessage{message="Arctap 的时间不能超过所在 Arc 的时间范围"};
+					if (note is ArcArcTap)
+					{
+						var arctap = note as ArcArcTap;
+						if (arctap.Arc.Timing > value || arctap.Arc.EndTiming < value)
+						{
+							if (!AdeSelectionManager.Instance.SelectedNotes.Contains(arctap.Arc))
+							{
+								return new ValueChangeErrorMessage { message = "Arctap 的时间不能超过所在 Arc 的时间范围" };
 							}
 						}
 					}
 					return null;
 				},
-				(value,note)=>{
-					note.Timing=value;
+				(value, note) =>
+				{
+					note.Timing = value;
 				}
 			);
 		}
@@ -407,24 +430,31 @@ namespace Arcade.Compose.Editing
 		{
 			HandleValueChange(
 				inputField.text,
-				(string raw,ref int result)=>{
-					if(!int.TryParse(raw,out result)){
-						return new ValueChangeErrorMessage{message="轨道数值格式错误"};
+				(string raw, ref int result) =>
+				{
+					if (!int.TryParse(raw, out result))
+					{
+						return new ValueChangeErrorMessage { message = "轨道数值格式错误" };
 					}
-					if (result < 0 || result > 5){
-						return new ValueChangeErrorMessage{message="轨道只能为 0 - 5"};
+					if (result < 0 || result > 5)
+					{
+						return new ValueChangeErrorMessage { message = "轨道只能为 0 - 5" };
 					}
 					return null;
 				},
-				(value,note)=>{
+				(value, note) =>
+				{
 					return null;
 				},
-				(value,note)=>{
-					if(note is ArcTap tap){
-						tap.Track=value;
+				(value, note) =>
+				{
+					if (note is ArcTap tap)
+					{
+						tap.Track = value;
 					}
-					if(note is ArcHold hold){
-						hold.Track=value;
+					if (note is ArcHold hold)
+					{
+						hold.Track = value;
 					}
 				}
 			);
@@ -433,83 +463,101 @@ namespace Arcade.Compose.Editing
 		{
 			HandleValueChange(
 				inputField.text,
-				(string raw,ref int result)=>{
-					if(!int.TryParse(raw,out result)){
-						return new ValueChangeErrorMessage{message="时间数值格式错误"};
+				(string raw, ref int result) =>
+				{
+					if (!int.TryParse(raw, out result))
+					{
+						return new ValueChangeErrorMessage { message = "时间数值格式错误" };
 					}
-					if(result<0){
-						return new ValueChangeErrorMessage{message="时间数值不能为负数"};
+					if (result < 0)
+					{
+						return new ValueChangeErrorMessage { message = "时间数值不能为负数" };
 					}
 					return null;
 				},
-				(value,note)=>{
-					if(note is ArcHold){
-						var hold=note as ArcHold;
-						if(hold.Timing>=value){
-							return new ValueChangeErrorMessage{message="Hold 的结束时间不能早于时间"};
+				(value, note) =>
+				{
+					if (note is ArcHold)
+					{
+						var hold = note as ArcHold;
+						if (hold.Timing >= value)
+						{
+							return new ValueChangeErrorMessage { message = "Hold 的结束时间不能早于时间" };
 						}
 					}
-					if(note is ArcArc){
-						var arc=note as ArcArc;
-						if(arc.Timing>value||(arc.Timing>=value&&arc.ArcTaps.Count>0)){
-							return new ValueChangeErrorMessage{message="Arc 的结束时间不能早于时间"};
+					if (note is ArcArc)
+					{
+						var arc = note as ArcArc;
+						if (arc.Timing > value || (arc.Timing >= value && arc.ArcTaps.Count > 0))
+						{
+							return new ValueChangeErrorMessage { message = "Arc 的结束时间不能早于时间" };
 						}
 						foreach (var arctap in arc.ArcTaps)
 						{
-							if(arctap.Timing>value){
-								return new ValueChangeErrorMessage{message="Arc 的结束时间不早于其上 Arctap 的时间"};
+							if (arctap.Timing > value)
+							{
+								return new ValueChangeErrorMessage { message = "Arc 的结束时间不早于其上 Arctap 的时间" };
 							}
 						}
 					}
 					return null;
 				},
-				(value,note)=>{
-					(note as ArcLongNote).EndTiming=value;
+				(value, note) =>
+				{
+					(note as ArcLongNote).EndTiming = value;
 				}
 			);
 		}
 
-		private ValueChangeErrorMessage? ParseCoord(string raw,ref Vector2 result){
-					string[] coords = raw.Split(',');
-					float x,y;
-					if(coords.Length!=2){
-						return new ValueChangeErrorMessage{message="坐标位置格式错误"};
-					}
-					if(!float.TryParse(coords[0],out x)){
-						return new ValueChangeErrorMessage{message="坐标位置格式错误"};
-					}
-					if(!float.TryParse(coords[1],out y)){
-						return new ValueChangeErrorMessage{message="坐标位置格式错误"};
-					}
-					result=new Vector2(x,y);
-					return null;
-				}
+		private ValueChangeErrorMessage? ParseCoord(string raw, ref Vector2 result)
+		{
+			string[] coords = raw.Split(',');
+			float x, y;
+			if (coords.Length != 2)
+			{
+				return new ValueChangeErrorMessage { message = "坐标位置格式错误" };
+			}
+			if (!float.TryParse(coords[0], out x))
+			{
+				return new ValueChangeErrorMessage { message = "坐标位置格式错误" };
+			}
+			if (!float.TryParse(coords[1], out y))
+			{
+				return new ValueChangeErrorMessage { message = "坐标位置格式错误" };
+			}
+			result = new Vector2(x, y);
+			return null;
+		}
 
 		public void OnStartPos(InputField inputField)
 		{
-			HandleValueChange<string,Vector2>(
+			HandleValueChange<string, Vector2>(
 				inputField.text,
 				ParseCoord,
-				(value,note)=>{
+				(value, note) =>
+				{
 					return null;
 				},
-				(value,note)=>{
-					(note as ArcArc).XStart=value.x;
-					(note as ArcArc).YStart=value.y;
+				(value, note) =>
+				{
+					(note as ArcArc).XStart = value.x;
+					(note as ArcArc).YStart = value.y;
 				}
 			);
 		}
 		public void OnEndPos(InputField inputField)
 		{
-			HandleValueChange<string,Vector2>(
+			HandleValueChange<string, Vector2>(
 				inputField.text,
 				ParseCoord,
-				(value,note)=>{
+				(value, note) =>
+				{
 					return null;
 				},
-				(value,note)=>{
-					(note as ArcArc).XEnd=value.x;
-					(note as ArcArc).YEnd=value.y;
+				(value, note) =>
+				{
+					(note as ArcArc).XEnd = value.x;
+					(note as ArcArc).YEnd = value.y;
 				}
 			);
 		}
@@ -522,15 +570,18 @@ namespace Arcade.Compose.Editing
 			}
 			HandleValueChange(
 				lineType.Value,
-				(ArcLineType raw,ref ArcLineType result)=>{
-					result=raw;
+				(ArcLineType raw, ref ArcLineType result) =>
+				{
+					result = raw;
 					return null;
 				},
-				(value,note)=>{
+				(value, note) =>
+				{
 					return null;
 				},
-				(value,note)=>{
-					(note as ArcArc).LineType=value;
+				(value, note) =>
+				{
+					(note as ArcArc).LineType = value;
 				}
 			);
 		}
@@ -543,15 +594,18 @@ namespace Arcade.Compose.Editing
 			}
 			HandleValueChange(
 				color.Value,
-				(int raw,ref int result)=>{
-					result=raw;
+				(int raw, ref int result) =>
+				{
+					result = raw;
 					return null;
 				},
-				(value,note)=>{
+				(value, note) =>
+				{
 					return null;
 				},
-				(value,note)=>{
-					(note as ArcArc).Color=value;
+				(value, note) =>
+				{
+					(note as ArcArc).Color = value;
 				}
 			);
 		}
@@ -559,40 +613,49 @@ namespace Arcade.Compose.Editing
 		{
 			HandleValueChange(
 				toggle.isOn,
-				(bool raw,ref bool result)=>{
-					result=raw;
+				(bool raw, ref bool result) =>
+				{
+					result = raw;
 					return null;
 				},
-				(value,note)=>{
-					if(note is ArcArc arc){
-						if((!value)&&arc.ArcTaps.Count>0){
-							return new ValueChangeErrorMessage{message="Arc 含有 ArcTap 时必须是黑线"};
+				(value, note) =>
+				{
+					if (note is ArcArc arc)
+					{
+						if ((!value) && arc.ArcTaps.Count > 0)
+						{
+							return new ValueChangeErrorMessage { message = "Arc 含有 ArcTap 时必须是黑线" };
 						}
 					}
 					return null;
 				},
-				(value,note)=>{
-					(note as ArcArc).IsVoid=value;
+				(value, note) =>
+				{
+					(note as ArcArc).IsVoid = value;
 				}
 			);
 		}
 		public void OnTimingGroup(Dropdown dropdown)
 		{
 			ArcTimingGroupOption? timingGroupOption = timingGroupDropdownHelper.QueryDataById(dropdown.value);
-			if(timingGroupOption==null){
+			if (timingGroupOption == null)
+			{
 				return;
 			}
 			HandleValueChange(
 				timingGroupOption.Value,
-				(ArcTimingGroupOption raw,ref ArcTimingGroupOption result)=>{
-					result=raw;
+				(ArcTimingGroupOption raw, ref ArcTimingGroupOption result) =>
+				{
+					result = raw;
 					return null;
 				},
-				(value,note)=>{
+				(value, note) =>
+				{
 					return null;
 				},
-				(value,note)=>{
-					(note as ISetableTimingGroup).TimingGroup=value.timingGroup;
+				(value, note) =>
+				{
+					(note as ISetableTimingGroup).TimingGroup = value.timingGroup;
 				}
 			);
 		}
@@ -610,64 +673,71 @@ namespace Arcade.Compose.Editing
 				}
 			}
 		}
-        private bool GetSeparateArctapAvailable()
-        {
-            bool allVoidArc=true;
-            bool hasArctap=false;
+		private bool GetSeparateArctapAvailable()
+		{
+			bool allVoidArc = true;
+			bool hasArctap = false;
 			foreach (var note in AdeSelectionManager.Instance.SelectedNotes)
 			{
-				if(note is ArcArc arc){
-					if(arc.IsVoid){
-						if(arc.ArcTaps.Count>0&&arc.EndTiming-arc.Timing>1){
-							hasArctap=true;
+				if (note is ArcArc arc)
+				{
+					if (arc.IsVoid)
+					{
+						if (arc.ArcTaps.Count > 0 && arc.EndTiming - arc.Timing > 1)
+						{
+							hasArctap = true;
 						}
 						continue;
 					}
 				}
-				allVoidArc=false;
+				allVoidArc = false;
 			}
-			return allVoidArc&&hasArctap;
-        }
+			return allVoidArc && hasArctap;
+		}
 
-		public void OnSeparateArctap(){
-			List<ICommand> commands= new List<ICommand>();
+		public void OnSeparateArctap()
+		{
+			List<ICommand> commands = new List<ICommand>();
 			foreach (var note in AdeSelectionManager.Instance.SelectedNotes)
 			{
-				if(note is ArcArc arc)
+				if (note is ArcArc arc)
 				{
-					if(arc.EndTiming-arc.Timing<=1){
+					if (arc.EndTiming - arc.Timing <= 1)
+					{
 						continue;
 					}
 					foreach (var arcTap in arc.ArcTaps)
 					{
-						int timing=arcTap.Timing;
+						int timing = arcTap.Timing;
 						float t = 1f * (timing - arc.Timing) / (arc.EndTiming - arc.Timing);
-						float x=ArcAlgorithm.X(arc.XStart,arc.XEnd,t,arc.LineType);
-						float y=ArcAlgorithm.Y(arc.YStart,arc.YEnd,t,arc.LineType);
-						x=Mathf.RoundToInt(x*100)/100f;
-						y=Mathf.RoundToInt(y*100)/100f;
+						float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, t, arc.LineType);
+						float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, t, arc.LineType);
+						x = Mathf.RoundToInt(x * 100) / 100f;
+						y = Mathf.RoundToInt(y * 100) / 100f;
 						commands.Add(new RemoveArcTapCommand(arc, arcTap));
-						ArcArc newArc=new ArcArc() {
+						ArcArc newArc = new ArcArc()
+						{
 							Timing = timing,
-							EndTiming = timing+1,
+							EndTiming = timing + 1,
 							Color = arc.Color,
 							Effect = "none",
 							IsVoid = true,
 							LineType = ArcLineType.S,
 							TimingGroup = arc.TimingGroup,
-							XStart=x,
-							XEnd=x,
-							YStart=y,
-							YEnd=y,
+							XStart = x,
+							XEnd = x,
+							YStart = y,
+							YEnd = y,
 						};
 						commands.Add(new AddArcEventCommand(newArc));
 						ArcArcTap newArcTap = new ArcArcTap() { Timing = timing };
-						commands.Add(new AddArcTapCommand(newArc,newArcTap));
+						commands.Add(new AddArcTapCommand(newArc, newArcTap));
 
 					}
 				}
 			}
-			if(commands.Count>0){
+			if (commands.Count > 0)
+			{
 				AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "分离 Arctap"));
 			}
 		}

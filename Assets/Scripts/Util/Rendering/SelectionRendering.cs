@@ -92,8 +92,8 @@ namespace Arcade.Util.Rendering
 				{
 					passData.src = selectionMaskColor;
 					passData.material = selectionBlitMaterial;
-            		builder.UseTexture(selectionMaskColor, 0);
-            		builder.SetRenderAttachment(activeColorTexture, 0);
+					builder.UseTexture(selectionMaskColor, 0);
+					builder.SetRenderAttachment(activeColorTexture, 0);
 					builder.SetRenderFunc((BlitPassData data, RasterGraphContext context) => ExecuteBlitPass(data, context));
 				}
 			}

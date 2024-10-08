@@ -69,7 +69,8 @@ namespace Arcade.Compose
 						{
 							SelectNote(arctap);
 						}
-						if(arctap.Arc.EndTiming-arctap.Arc.Timing==1){
+						if (arctap.Arc.EndTiming - arctap.Arc.Timing == 1)
+						{
 							SelectNote(arctap.Arc);
 						}
 					}

@@ -168,7 +168,8 @@ namespace Arcade.Util.Loader
 			return clip;
 		}
 
-		public static Texture2D LoadTexture2D(string path){
+		public static Texture2D LoadTexture2D(string path)
+		{
 			byte[] file;
 			try
 			{
@@ -185,7 +186,7 @@ namespace Arcade.Util.Loader
 			{
 				texture.wrapMode = TextureWrapMode.Clamp;
 				texture.name = path;
-				texture.mipMapBias=-4;
+				texture.mipMapBias = -4;
 				return texture;
 			}
 			else
@@ -195,23 +196,28 @@ namespace Arcade.Util.Loader
 			}
 		}
 
-		public static Mesh LoadObjMesh(string path){
-			try{
-				OBJLoader loader=new OBJLoader{
+		public static Mesh LoadObjMesh(string path)
+		{
+			try
+			{
+				OBJLoader loader = new OBJLoader
+				{
 					SplitMode = SplitMode.None
 				};
-				GameObject obj=loader.Load(path);
-				MeshRenderer renderer=obj.GetComponentInChildren<MeshRenderer>();
-				MeshFilter filter=obj.GetComponentInChildren<MeshFilter>();
-				Mesh mesh=filter.sharedMesh;
+				GameObject obj = loader.Load(path);
+				MeshRenderer renderer = obj.GetComponentInChildren<MeshRenderer>();
+				MeshFilter filter = obj.GetComponentInChildren<MeshFilter>();
+				Mesh mesh = filter.sharedMesh;
 				foreach (var material in renderer.sharedMaterials)
 				{
 					UnityEngine.Object.Destroy(material);
 				}
 				UnityEngine.Object.Destroy(obj);
 				return mesh;
-			}catch(System.Exception ex){
-				Debug.LogWarning($"Can not load obj mesh, path: {path}");
+			}
+			catch (System.Exception ex)
+			{
+				Debug.LogWarning($"Can not load obj mesh, path: {path} ex:{ex}");
 			}
 			return null;
 		}

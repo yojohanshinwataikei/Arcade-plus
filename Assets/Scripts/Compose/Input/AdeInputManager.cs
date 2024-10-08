@@ -44,8 +44,9 @@ namespace Arcade.Compose
 
 		private bool IsFocusingOnTextField()
 		{
-			GameObject selected=EventSystem.currentSelectedGameObject;
-			if(selected == null){
+			GameObject selected = EventSystem.currentSelectedGameObject;
+			if (selected == null)
+			{
 				return false;
 			}
 			InputField inputField = EventSystem.currentSelectedGameObject.GetComponent<InputField>();
@@ -394,10 +395,13 @@ namespace Arcade.Compose
 			if (rebindingButton != null)
 			{
 				UpdateTextForHotkeyButton(rebindingButton);
-				if(Inputs.Cancel.IsPressed()){
+				if (Inputs.Cancel.IsPressed())
+				{
 					rebindingOperation.Cancel();
 				}
-			}else{
+			}
+			else
+			{
 				rebindFinishedThisFrame = false;
 			}
 		}

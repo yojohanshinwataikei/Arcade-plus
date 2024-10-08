@@ -589,7 +589,7 @@ namespace Arcade.Gameplay
 						continue;
 					}
 				}
-				if (s.FromTiming  < currentTiming && s.ToTiming >= currentTiming)
+				if (s.FromTiming < currentTiming && s.ToTiming >= currentTiming)
 				{
 					s.Enable = true;
 					s.CurrentArcMaterial = null;
@@ -736,13 +736,13 @@ namespace Arcade.Gameplay
 				return;
 			}
 
-			Vector3 arcCapScaleFactor = new Vector3(256/ArcCapRenderer.sprite.rect.width,256/ArcCapRenderer.sprite.rect.height,1);
+			Vector3 arcCapScaleFactor = new Vector3(256 / ArcCapRenderer.sprite.rect.width, 256 / ArcCapRenderer.sprite.rect.height, 1);
 
 			if (arc.Timing < currentTiming && arc.EndTiming >= currentTiming)
 			{
 				EnableArcCap = true;
 				ArcCapRenderer.color = new Color(1, 1, 1, arc.IsVoid ? 0.5f : 1f);
-				ArcCap.localScale = Vector3.Scale(new Vector3(arc.IsVoid ? 0.21f : 0.35f, arc.IsVoid ? 0.21f : 0.35f),arcCapScaleFactor);
+				ArcCap.localScale = Vector3.Scale(new Vector3(arc.IsVoid ? 0.21f : 0.35f, arc.IsVoid ? 0.21f : 0.35f), arcCapScaleFactor);
 
 				foreach (var s in segments)
 				{
@@ -763,7 +763,7 @@ namespace Arcade.Gameplay
 				float scale = 0.35f + 0.5f * (1 - p);
 				EnableArcCap = true;
 				ArcCapRenderer.color = new Color(1, 1, 1, p);
-				ArcCap.localScale = Vector3.Scale(new Vector3(scale, scale),arcCapScaleFactor);
+				ArcCap.localScale = Vector3.Scale(new Vector3(scale, scale), arcCapScaleFactor);
 				ArcCap.position = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XStart), ArcAlgorithm.ArcYToWorld(arc.YStart));
 				JudgeEffectTransform.position = ArcCap.position;
 			}

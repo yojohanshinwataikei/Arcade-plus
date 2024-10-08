@@ -157,7 +157,7 @@ namespace Arcade.Compose
 		{
 			get => ArcTapCursorEnabled
 			|| currentSelectTaskType == SelectTaskType.TimingForArc
-			|| shouldRenderWall ;
+			|| shouldRenderWall;
 		}
 
 		public bool IsTrackHit { get; private set; }
@@ -276,7 +276,7 @@ namespace Arcade.Compose
 					z = ArcTimingManager.Instance.CalculatePositionByTiming(
 						AttachedTiming,
 						AdeTimingEditor.Instance.currentTimingGroup
-					) / -1000f;;
+					) / -1000f;
 				}
 				if (TrackEnabled)
 				{

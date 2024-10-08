@@ -175,7 +175,7 @@ public class ArcSceneControlManager : MonoBehaviour
 			ExtraLaneCriticalLineRenderer.gameObject.SetActive(enwidenLaneRatio > 0);
 			ExtraLaneCriticalLineRenderer.color = new Color(1, 1, 1, enwidenLaneRatio);
 		}
-		ArcTimingManager.Instance.BeatlineEnwidenRatio=enwidenLaneRatio;
+		ArcTimingManager.Instance.BeatlineEnwidenRatio = enwidenLaneRatio;
 	}
 
 	private void HideTrack()

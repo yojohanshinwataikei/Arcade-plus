@@ -71,8 +71,9 @@ namespace Arcade.Gameplay
 			ArcadeComposeManager.Instance.SetPlaySprite(skinData.Play.value);
 			ArcadeComposeManager.Instance.SetPlayPressedSprite(skinData.PlayPressed.value);
 
-			Toast.sprite=skinData.DialogBackground.value;
-			foreach(AdeSingleDialog singleDialog in SingleDialogs){
+			Toast.sprite = skinData.DialogBackground.value;
+			foreach (AdeSingleDialog singleDialog in SingleDialogs)
+			{
 				singleDialog.SetDialogSkin(
 					skinData.DialogTop.value,
 					skinData.DialogBackground.value,
@@ -81,7 +82,8 @@ namespace Arcade.Gameplay
 					skinData.ButtonSinglePressed.value
 				);
 			}
-			foreach(AdeDualDialog dualDialog in DualDialogs){
+			foreach (AdeDualDialog dualDialog in DualDialogs)
+			{
 				dualDialog.SetDialogSkin(
 					skinData.DialogTop.value,
 					skinData.DialogBackground.value,
@@ -104,14 +106,16 @@ namespace Arcade.Gameplay
 			TutorialBanner.sprite = skinData.TutorialBanner.value;
 			BackgroundDarken.sprite = skinData.BackgroundDarken.value;
 
-			SkyInputLabel.sprite=skinData.SkyInputLabel.value;
-			SkyInputLine.sprite=skinData.SkyInputLine.value;
+			SkyInputLabel.sprite = skinData.SkyInputLabel.value;
+			SkyInputLine.sprite = skinData.SkyInputLine.value;
 
-			foreach(SpriteRenderer trackLaneDivider in TrackLaneDividers){
-				trackLaneDivider.sprite=skinData.TrackLaneDivider.value;
+			foreach (SpriteRenderer trackLaneDivider in TrackLaneDividers)
+			{
+				trackLaneDivider.sprite = skinData.TrackLaneDivider.value;
 			}
-			foreach(SpriteRenderer laneHit in LaneHits){
-				laneHit.sprite=skinData.LaneHit.value;
+			foreach (SpriteRenderer laneHit in LaneHits)
+			{
+				laneHit.sprite = skinData.LaneHit.value;
 			}
 
 			ArcEffectManager.Instance.SetSfxTapEffectTexture(skinData.ParticleSfxTap.value);
@@ -123,45 +127,51 @@ namespace Arcade.Gameplay
 
 			ArcArcManager.Instance.SetHeightIndicatorSkin(skinData.HeightIndicator.value);
 
-			ArcArcManager.Instance.SetArcBodySkin(skinData.ArcBody.value,skinData.ArcBodyHighlight.value);
+			ArcArcManager.Instance.SetArcBodySkin(skinData.ArcBody.value, skinData.ArcBodyHighlight.value);
 
 			ArcArcManager.Instance.SetSfxArcTapModel(skinData.SfxArcTapModel.value);
-			AdeCursorManager.Instance.SfxArcTapCursorRenderer.GetComponent<MeshFilter>().mesh=skinData.SfxArcTapModel.value;
+			AdeCursorManager.Instance.SfxArcTapCursorRenderer.GetComponent<MeshFilter>().mesh = skinData.SfxArcTapModel.value;
 		}
-		public void SetNoteSideSkin(AdeSkinHost.NoteSideData noteSideData){
+		public void SetNoteSideSkin(AdeSkinHost.NoteSideData noteSideData)
+		{
 			ArcTapNoteManager.Instance.SetTapNoteSkin(noteSideData.TapNote.value);
-			ArcHoldNoteManager.Instance.SetHoldNoteSkin(noteSideData.HoldNote.value,noteSideData.HoldNoteHighlight.value);
+			ArcHoldNoteManager.Instance.SetHoldNoteSkin(noteSideData.HoldNote.value, noteSideData.HoldNoteHighlight.value);
 			ArcArcManager.Instance.SetArcTapSkin(noteSideData.ArcTap.value);
-			ArcArcManager.Instance.SetSfxArcTapSkin(noteSideData.SfxArcTapNote.value,noteSideData.SfxArcTapCore.value);
+			ArcArcManager.Instance.SetSfxArcTapSkin(noteSideData.SfxArcTapNote.value, noteSideData.SfxArcTapCore.value);
 			ArcTapNoteManager.Instance.SetConnectionLineColor(noteSideData.ConnectionLineColor);
 			ArcArcManager.Instance.SetArcColors(
-				noteSideData.ArcRedLow,noteSideData.ArcBlueLow,noteSideData.ArcGreenLow,noteSideData.ArcUnknownLow,
-				noteSideData.ArcRedHigh,noteSideData.ArcBlueHigh,noteSideData.ArcGreenHigh,noteSideData.ArcUnknownHigh,
+				noteSideData.ArcRedLow, noteSideData.ArcBlueLow, noteSideData.ArcGreenLow, noteSideData.ArcUnknownLow,
+				noteSideData.ArcRedHigh, noteSideData.ArcBlueHigh, noteSideData.ArcGreenHigh, noteSideData.ArcUnknownHigh,
 				noteSideData.ArcVoid);
 		}
-		public void SetThemeSideSkin(AdeSkinHost.ThemeSideData themeSideData){
-			foreach(SpriteRenderer trackComponent in TrackComponents){
-				trackComponent.sprite=themeSideData.Track.value;
+		public void SetThemeSideSkin(AdeSkinHost.ThemeSideData themeSideData)
+		{
+			foreach (SpriteRenderer trackComponent in TrackComponents)
+			{
+				trackComponent.sprite = themeSideData.Track.value;
 			}
-			foreach(SpriteRenderer trackExtraComponent in TrackExtraComponents){
-				trackExtraComponent.sprite=themeSideData.TrackExtra.value;
+			foreach (SpriteRenderer trackExtraComponent in TrackExtraComponents)
+			{
+				trackExtraComponent.sprite = themeSideData.TrackExtra.value;
 			}
-			foreach(SpriteRenderer criticalLine in CriticalLines){
-				criticalLine.sprite=themeSideData.CriticalLine.value;
+			foreach (SpriteRenderer criticalLine in CriticalLines)
+			{
+				criticalLine.sprite = themeSideData.CriticalLine.value;
 			}
-			foreach(SpriteRenderer criticalLineExtra in CriticalLineExtras){
-				criticalLineExtra.sprite=themeSideData.CriticalLineExtra.value;
+			foreach (SpriteRenderer criticalLineExtra in CriticalLineExtras)
+			{
+				criticalLineExtra.sprite = themeSideData.CriticalLineExtra.value;
 			}
-			Color ComboTextColor=themeSideData.ComboTextColor;
-			ComboTextColor.a=0.75f;
+			Color ComboTextColor = themeSideData.ComboTextColor;
+			ComboTextColor.a = 0.75f;
 			ComboText.color = ComboTextColor;
 			ArcEffectManager.Instance.SetTapEffectTexture(themeSideData.ParticleNote.value);
-			ArcEffectManager.Instance.SetParticleArcColor(themeSideData.ParticleArcStartColor,themeSideData.ParticleArcEndColor);
+			ArcEffectManager.Instance.SetParticleArcColor(themeSideData.ParticleArcStartColor, themeSideData.ParticleArcEndColor);
 		}
 
 		public void SetBackground(Sprite background)
 		{
-			Background.sprite=background;
+			Background.sprite = background;
 		}
 	}
 }

@@ -14,20 +14,22 @@ namespace Arcade.Compose
 		public Color SelectedColor;
 		public Color UnselectedColor;
 
-		public void OnSelected(){
-			AdeSkinDialogContent.Instance.SelectBackground(BackgroundName,External);
-		}
-
-		public void Initialize(string bg,bool external,Sprite image)
+		public void OnSelected()
 		{
-			BackgroundName=bg;
-			Label.text=bg;
-			Preview.sprite=image;
-			External=external;
+			AdeSkinDialogContent.Instance.SelectBackground(BackgroundName, External);
 		}
 
-		public void SetSelected(bool selected){
-			Preview.color=selected?SelectedColor:UnselectedColor;
+		public void Initialize(string bg, bool external, Sprite image)
+		{
+			BackgroundName = bg;
+			Label.text = bg;
+			Preview.sprite = image;
+			External = external;
+		}
+
+		public void SetSelected(bool selected)
+		{
+			Preview.color = selected ? SelectedColor : UnselectedColor;
 		}
 	}
 }
