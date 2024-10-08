@@ -172,11 +172,11 @@ namespace Arcade.Gameplay
 			}
 		}
 
-		public float CalculatePositionByTiming(int timing, ArcTimingGroup timingGroup)
+		public float CalculatePositionByTiming(int AudioTiming, ArcTimingGroup timingGroup)
 		{
-			return CalculatePositionByTimingAndStart(ArcGameplayManager.Instance.AudioTiming, timing, timingGroup);
+			return CalculatePositionByTimingAndStart(ArcGameplayManager.Instance.AudioTiming, AudioTiming, timingGroup);
 		}
-		public float CalculatePositionByTimingAndStart(int pivotTiming, int targetTiming, ArcTimingGroup timingGroup)
+		public float CalculatePositionByTimingAndStart(int pivotAudioTiming, int targetAudioTiming, ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
 			if (Timings.Count == 0)
@@ -184,9 +184,9 @@ namespace Arcade.Gameplay
 				return 0;
 			}
 			int offset = ArcGameplayManager.Instance.AudioOffset;
-			bool reversed = pivotTiming > targetTiming;
-			int startTiming = (reversed ? targetTiming : pivotTiming) - offset;
-			int endTiming = (reversed ? pivotTiming : targetTiming) - offset;
+			bool reversed = pivotAudioTiming > targetAudioTiming;
+			int startTiming = (reversed ? targetAudioTiming : pivotAudioTiming) - offset;
+			int endTiming = (reversed ? pivotAudioTiming : targetAudioTiming) - offset;
 			int startTimingId = Timings.FindLastIndex((timing) => timing.Timing <= startTiming);
 			int endTimingId = Timings.FindLastIndex((timing) => timing.Timing <= endTiming);
 			if (startTimingId == -1)
@@ -209,7 +209,7 @@ namespace Arcade.Gameplay
 			return newresult;
 		}
 
-		public int CalculateTimingByPosition(float position, ArcTimingGroup timingGroup)
+		public int CalculateAudioTimingByPosition(float position, ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
 			if (Timings.Count == 0)
@@ -245,25 +245,24 @@ namespace Arcade.Gameplay
 		}
 
 
-		public float CalculateBpmByTiming(int timing, ArcTimingGroup timingGroup)
+		public float CalculateBpmByTiming(int ChartTiming, ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
 			if (Timings.Count == 0)
 			{
 				return 0;
 			}
-			if (timing < Timings[0].Timing)
+			if (ChartTiming < Timings[0].Timing)
 			{
 				return Timings[0].Bpm;
 			}
 
-			return Timings.Last(timingEvent => timingEvent.Timing <= timing).Bpm;
+			return Timings.Last(timingEvent => timingEvent.Timing <= ChartTiming).Bpm;
 		}
 
 		private void UpdateChartSpeedStatus()
 		{
-			int offset = ArcGameplayManager.Instance.AudioOffset;
-			int currentTiming = ArcGameplayManager.Instance.AudioTiming - offset;
+			int currentTiming = ArcGameplayManager.Instance.ChartTiming;
 			if (Timings.Count == 0)
 			{
 				CurrentSpeed = 0;
