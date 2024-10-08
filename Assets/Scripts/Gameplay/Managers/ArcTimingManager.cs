@@ -36,8 +36,8 @@ namespace Arcade.Gameplay
 		public SpriteRenderer[] TrackComponentRenderers;
 		private List<float> beatlineTimings = new List<float>();
 		private List<SpriteRenderer> beatLineInstances = new List<SpriteRenderer>();
-		private float earliestRenderAudioTime = 0;
-		private float latestRenderAudioTime = 0;
+		private float earliestRenderTime = 0;
+		private float latestRenderTime = 0;
 		private int phaseShaderId = 0;
 		private float phase = 0;
 		public float CurrentSpeed { get; set; }
@@ -288,7 +288,7 @@ namespace Arcade.Gameplay
 			}
 			else
 			{
-				int currentTiming = ArcGameplayManager.Instance.AudioTiming - ArcGameplayManager.Instance.AudioOffset;
+				int currentTiming = ArcGameplayManager.Instance.ChartTiming;
 				int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing <= currentTiming);
 				float[] TimingPosition = new float[Timings.Count];
 				for (int i = currentTimingId; i + 1 < Timings.Count; i++)
@@ -387,18 +387,16 @@ namespace Arcade.Gameplay
 
 				earliestRenderTime = Mathf.Min(earliestRenderTime, currentTiming);
 				latestRenderTime = Mathf.Max(latestRenderTime, currentTiming);
-				earliestRenderTime += ArcGameplayManager.Instance.AudioOffset;
-				latestRenderTime += ArcGameplayManager.Instance.AudioOffset;
 			}
 			if (timingGroup == null)
 			{
-				this.earliestRenderAudioTime = earliestRenderTime;
-				this.latestRenderAudioTime = latestRenderTime;
+				this.earliestRenderTime = earliestRenderTime;
+				this.latestRenderTime = latestRenderTime;
 			}
 			else
 			{
-				timingGroup.earliestRenderAudioTime = earliestRenderTime;
-				timingGroup.latestRenderAudioTime = latestRenderTime;
+				timingGroup.earliestRenderTime = earliestRenderTime;
+				timingGroup.latestRenderTime = latestRenderTime;
 			}
 		}
 		private void UpdateBeatline()
@@ -503,20 +501,19 @@ namespace Arcade.Gameplay
 		// Invoker should manually check position again after this check passed
 		public bool ShouldTryRender(int ChartTiming, ArcTimingGroup timingGroup, int duration = 0, bool note = true)
 		{
-			int offset=ArcGameplayManager.Instance.AudioOffset;
 			float earliestRenderTime;
 			float latestRenderTime;
 			if (timingGroup == null)
 			{
-				earliestRenderTime = this.earliestRenderAudioTime;
-				latestRenderTime = this.latestRenderAudioTime;
+				earliestRenderTime = this.earliestRenderTime;
+				latestRenderTime = this.latestRenderTime;
 			}
 			else
 			{
-				earliestRenderTime = timingGroup.earliestRenderAudioTime;
-				latestRenderTime = timingGroup.latestRenderAudioTime;
+				earliestRenderTime = timingGroup.earliestRenderTime;
+				latestRenderTime = timingGroup.latestRenderTime;
 			}
-			if (ChartTiming + offset + duration >= earliestRenderTime && ChartTiming + offset <= latestRenderTime)
+			if (ChartTiming + duration >= earliestRenderTime && ChartTiming <= latestRenderTime)
 			{
 				if (note && ChartTiming + duration + LostDelay < ArcGameplayManager.Instance.AudioTiming)
 				{
