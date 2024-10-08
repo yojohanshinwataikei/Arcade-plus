@@ -1450,8 +1450,8 @@ namespace Arcade.Gameplay.Chart
 		public int AngleX = 0;
 		public int AngleY = 0;
 		public bool GroupHide = false;
-		public float earliestRenderTime = 0;
-		public float latestRenderTime = 0;
+		public float earliestRenderAudioTime = 0;
+		public float latestRenderAudioTime = 0;
 
 		public void ApplyAttributes(string attributes)
 		{

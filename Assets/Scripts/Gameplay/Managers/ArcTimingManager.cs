@@ -36,8 +36,8 @@ namespace Arcade.Gameplay
 		public SpriteRenderer[] TrackComponentRenderers;
 		private List<float> beatlineTimings = new List<float>();
 		private List<SpriteRenderer> beatLineInstances = new List<SpriteRenderer>();
-		private float earliestRenderTime = 0;
-		private float latestRenderTime = 0;
+		private float earliestRenderAudioTime = 0;
+		private float latestRenderAudioTime = 0;
 		private int phaseShaderId = 0;
 		private float phase = 0;
 		public float CurrentSpeed { get; set; }
@@ -392,13 +392,13 @@ namespace Arcade.Gameplay
 			}
 			if (timingGroup == null)
 			{
-				this.earliestRenderTime = earliestRenderTime;
-				this.latestRenderTime = latestRenderTime;
+				this.earliestRenderAudioTime = earliestRenderTime;
+				this.latestRenderAudioTime = latestRenderTime;
 			}
 			else
 			{
-				timingGroup.earliestRenderTime = earliestRenderTime;
-				timingGroup.latestRenderTime = latestRenderTime;
+				timingGroup.earliestRenderAudioTime = earliestRenderTime;
+				timingGroup.latestRenderAudioTime = latestRenderTime;
 			}
 		}
 		private void UpdateBeatline()
@@ -407,7 +407,7 @@ namespace Arcade.Gameplay
 			int offset = ArcGameplayManager.Instance.AudioOffset;
 			foreach (float t in beatlineTimings)
 			{
-				if (!ShouldTryRender((int)(t + offset), null, 0, false))
+				if (!ShouldTryRender((int)(t), null, 0, false))
 				{
 					continue;
 				}
@@ -501,23 +501,24 @@ namespace Arcade.Gameplay
 		}
 		// Note: this is a function used to optimize rendering by avoid not needed position calculation
 		// Invoker should manually check position again after this check passed
-		public bool ShouldTryRender(int timing, ArcTimingGroup timingGroup, int duration = 0, bool note = true)
+		public bool ShouldTryRender(int ChartTiming, ArcTimingGroup timingGroup, int duration = 0, bool note = true)
 		{
+			int offset=ArcGameplayManager.Instance.AudioOffset;
 			float earliestRenderTime;
 			float latestRenderTime;
 			if (timingGroup == null)
 			{
-				earliestRenderTime = this.earliestRenderTime;
-				latestRenderTime = this.latestRenderTime;
+				earliestRenderTime = this.earliestRenderAudioTime;
+				latestRenderTime = this.latestRenderAudioTime;
 			}
 			else
 			{
-				earliestRenderTime = timingGroup.earliestRenderTime;
-				latestRenderTime = timingGroup.latestRenderTime;
+				earliestRenderTime = timingGroup.earliestRenderAudioTime;
+				latestRenderTime = timingGroup.latestRenderAudioTime;
 			}
-			if (timing + duration >= earliestRenderTime && timing <= latestRenderTime)
+			if (ChartTiming + offset + duration >= earliestRenderTime && ChartTiming + offset <= latestRenderTime)
 			{
-				if (note && timing + duration + LostDelay < ArcGameplayManager.Instance.AudioTiming)
+				if (note && ChartTiming + duration + LostDelay < ArcGameplayManager.Instance.AudioTiming)
 				{
 					return false;
 				}

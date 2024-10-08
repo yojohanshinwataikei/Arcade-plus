@@ -409,7 +409,7 @@ namespace Arcade.Compose
 				int offset = ArcGameplayManager.Instance.AudioOffset;
 				foreach (var t in beatlineTimings)
 				{
-					if (!ArcTimingManager.Instance.ShouldTryRender(((int)t.Timing + offset), timingGroup, 0, false))
+					if (!ArcTimingManager.Instance.ShouldTryRender(((int)t.Timing), timingGroup, 0, false))
 					{
 						continue;
 					}

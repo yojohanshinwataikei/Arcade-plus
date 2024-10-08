@@ -168,7 +168,7 @@ namespace Arcade.Gameplay
 					RenderArcTap(t.ConvertedVariousSizedArctap);
 				}
 				int duration = t.EndTiming - t.Timing;
-				if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup, duration, !t.IsVoid) || (t.Judged && !t.IsVoid) || t.GroupHide())
+				if (!timingManager.ShouldTryRender(t.Timing, t.TimingGroup, duration, !t.IsVoid) || (t.Judged && !t.IsVoid) || t.GroupHide())
 				{
 					t.Enable = false;
 					continue;
@@ -230,7 +230,7 @@ namespace Arcade.Gameplay
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			int offset = ArcGameplayManager.Instance.AudioOffset;
 
-			if (!timingManager.ShouldTryRender(t.Timing + offset, t.TimingGroup) || t.Judged || t.GroupHide())
+			if (!timingManager.ShouldTryRender(t.Timing, t.TimingGroup) || t.Judged || t.GroupHide())
 			{
 				t.Enable = false;
 				return;
