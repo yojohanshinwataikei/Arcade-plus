@@ -41,7 +41,7 @@ Most parts of this project is licensed under the MIT license. See [License](LICE
 - Files under `Assets/SFB` comes from [Unity Standalone File Browser](https://github.com/gkngkc/UnityStandaloneFileBrowser). These files are licensed by gkngkc and other authors.
 - Files under `Assets/OBJImport` comes from [Runtime OBJ Importer](https://assetstore.unity.com/packages/tools/modeling/runtime-obj-importer-49547). These files are licensed by Dummiesman.
 - Files under `Assets/DefaultSkin/Sound` folder are samples bundles with and modified using [LMMS](https://lmms.io). These files are in public domains.
-- Files under `Assets/Textures/Icon/MDI` are generated from [Material Design Icons](https://materialdesignicons.com/), go to their site for license issue.
+- Files under `Assets/Textures/Icon/MDI` are generated from [Material Design Icons](https://pictogrammers.com/library/mdi/), go to their site for license issue.
 - The `Assets/Textures/Icon/OBS.png` are generated from the icon of [Open Broadcaster Software](https://obsproject.com/), go to their site for license issue.
 - Files under `Assets/Fonts` are free font files. These files are licensed by their authors.
 - All other Texture files in this repo is also licensed under CC-BY-4.0, see [LICENSE.texture](LICENSE.texture).
