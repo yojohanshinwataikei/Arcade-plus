@@ -460,12 +460,6 @@ namespace Arcade.Compose
 					chart = new Gameplay.Chart.ArcChart(raw);
 				}
 			}
-			ArcGameplayManager.Instance.Load(chart, AudioClip);
-			CurrentDifficulty = difficulty;
-
-			Diff.text = CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null ? "" : CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating;
-			foreach (Image i in DifficultyImages) i.color = new Color(1f, 1f, 1f, 0.6f);
-			DifficultyImages[difficulty].color = new Color(1, 1, 1, 1);
 
 			float rawBaseBpm = audioOverrided ?
 				CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null ? 0 : CurrentProjectMetadata.Difficulties[difficulty].BaseBpm :
@@ -473,6 +467,13 @@ namespace Arcade.Compose
 			ArcTimingManager.Instance.BaseBpm = rawBaseBpm == 0 ? 100 : rawBaseBpm;
 			BaseBpm.interactable = true;
 			BaseBpm.text = ArcTimingManager.Instance.BaseBpm.ToString();
+
+			ArcGameplayManager.Instance.Load(chart, AudioClip);
+			CurrentDifficulty = difficulty;
+
+			Diff.text = CurrentProjectMetadata.Difficulties[CurrentDifficulty] == null ? "" : CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating;
+			foreach (Image i in DifficultyImages) i.color = new Color(1f, 1f, 1f, 0.6f);
+			DifficultyImages[difficulty].color = new Color(1, 1, 1, 1);
 
 			AudioOffset.interactable = true;
 			CurrentTimingGroup.interactable = true;

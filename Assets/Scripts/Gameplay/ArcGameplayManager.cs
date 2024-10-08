@@ -203,7 +203,6 @@ namespace Arcade.Gameplay
 
 		public void Play()
 		{
-			Debug.Log(AudioTimingWithoutGlobalOffset);
 			if (AudioTimingWithoutGlobalOffset < 0)
 			{
 				ArcAudioManager.Instance.Source.Stop();
