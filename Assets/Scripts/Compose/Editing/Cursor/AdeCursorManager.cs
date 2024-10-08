@@ -224,7 +224,7 @@ namespace Arcade.Compose
 				{
 					return overriddenCursorTiming.Value;
 				}
-				return AdeGridManager.Instance.AttachBeatlineTimingFromFos(trackHit.point.z);
+				return AdeGridManager.Instance.AttachBeatlineTimingFromPos(trackHit.point.z);
 			}
 		}
 

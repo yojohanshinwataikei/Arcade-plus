@@ -453,10 +453,10 @@ namespace Arcade.Compose
 			HideExceededVerticalInstance();
 		}
 
-		public int AttachBeatlineTimingFromFos(float z)
+		public int AttachBeatlineTimingFromPos(float z)
 		{
 			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
-			int defaultTiming = ArcTimingManager.Instance.CalculateAudioTimingByPosition(-z * 1000, timingGroup) - ArcGameplayManager.Instance.AudioOffset;
+			int defaultTiming = ArcTimingManager.Instance.CalculateChartTimingByPosition(-z * 1000, timingGroup);
 			if (!EnableBeatline) return defaultTiming;
 			if (beatlineInUse == 0) return defaultTiming;
 			List<float> deltas = new List<float>();

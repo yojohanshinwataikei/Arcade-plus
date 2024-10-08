@@ -209,14 +209,14 @@ namespace Arcade.Gameplay
 			return newresult;
 		}
 
-		public int CalculateAudioTimingByPosition(float position, ArcTimingGroup timingGroup)
+		public int CalculateChartTimingByPosition(float position, ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
 			if (Timings.Count == 0)
 			{
 				return 0;
 			}
-			int currentTiming = ArcGameplayManager.Instance.AudioTiming - ArcGameplayManager.Instance.AudioOffset;
+			int currentTiming = ArcGameplayManager.Instance.ChartTiming;
 			if (position < 0)
 			{
 				return currentTiming;
@@ -239,9 +239,9 @@ namespace Arcade.Gameplay
 				{
 					return startTiming;
 				}
-				return Mathf.RoundToInt(Mathf.Lerp(startTiming, endTiming, positionRemain / delta)) + ArcGameplayManager.Instance.AudioOffset;
+				return Mathf.RoundToInt(Mathf.Lerp(startTiming, endTiming, positionRemain / delta));
 			}
-			return allEndTime + ArcGameplayManager.Instance.AudioOffset;
+			return allEndTime;
 		}
 
 
