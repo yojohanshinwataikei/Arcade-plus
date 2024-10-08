@@ -396,7 +396,6 @@ namespace Arcade.Gameplay
 			if (arc == null) return;
 
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
 			int duration = arc.EndTiming - arc.Timing;
 
 			int v1 = duration < 1000 ? 14 : 7;
@@ -556,9 +555,7 @@ namespace Arcade.Gameplay
 		}
 		private void UpdateSegments()
 		{
-			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
-			ArcTimingManager timingManager = ArcTimingManager.Instance;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
+			int currentTiming = ArcGameplayManager.Instance.ChartTiming;
 			float z = arc.transform.localPosition.z;
 
 			foreach (ArcArcSegmentComponent s in segments)
@@ -579,7 +576,7 @@ namespace Arcade.Gameplay
 					s.To = 1;
 				}
 
-				if ((s.ToTiming + offset < currentTiming && s.ToTiming != s.FromTiming) || (Mathf.Max(pos, endPos) < 0 && s.ToTiming == s.FromTiming))
+				if ((s.ToTiming < currentTiming && s.ToTiming != s.FromTiming) || (Mathf.Max(pos, endPos) < 0 && s.ToTiming == s.FromTiming))
 				{
 					if (arc.Judging || arc.IsVoid || arc.NoInput())
 					{
@@ -592,7 +589,7 @@ namespace Arcade.Gameplay
 						continue;
 					}
 				}
-				if (s.FromTiming + offset < currentTiming && s.ToTiming + offset >= currentTiming)
+				if (s.FromTiming  < currentTiming && s.ToTiming >= currentTiming)
 				{
 					s.Enable = true;
 					s.CurrentArcMaterial = null;
@@ -638,8 +635,7 @@ namespace Arcade.Gameplay
 				return;
 			}
 
-			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
+			int currentTiming = ArcGameplayManager.Instance.ChartTiming;
 
 			if (arc.Position > 100000 || arc.Position < -100000)
 			{
@@ -660,7 +656,7 @@ namespace Arcade.Gameplay
 				headPropertyBlock.SetColor(lowColorShaderId, lowC);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
 			}
-			else if (arc.Timing + offset < currentTiming)
+			else if (arc.Timing < currentTiming)
 			{
 				HeadRenderer.GetPropertyBlock(headPropertyBlock);
 				headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
@@ -723,18 +719,16 @@ namespace Arcade.Gameplay
 			}
 			else
 			{
-				int currentTiming = ArcGameplayManager.Instance.AudioTiming;
-				int offset = ArcGameplayManager.Instance.AudioOffset;
-				if ((arc.Judging || arc.NoInput()) && arc.Timing + offset < currentTiming) EnableHeightIndicator = false;
+				int currentTiming = ArcGameplayManager.Instance.ChartTiming;
+				if ((arc.Judging || arc.NoInput()) && arc.Timing < currentTiming) EnableHeightIndicator = false;
 				else EnableHeightIndicator = true;
 				HeightIndicatorRenderer.color = Color.Lerp(currentLowColor, currentHighColor, arc.YStart);
 			}
 		}
 		private void UpdateArcCap()
 		{
-			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
+			int currentTiming = ArcGameplayManager.Instance.ChartTiming;
 			int duration = arc.EndTiming - arc.Timing;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
 
 			if (duration == 0 || arc.IsVariousSizedArctap)
 			{
@@ -744,7 +738,7 @@ namespace Arcade.Gameplay
 
 			Vector3 arcCapScaleFactor = new Vector3(256/ArcCapRenderer.sprite.rect.width,256/ArcCapRenderer.sprite.rect.height,1);
 
-			if (arc.Timing + offset < currentTiming && arc.EndTiming + offset >= currentTiming)
+			if (arc.Timing < currentTiming && arc.EndTiming >= currentTiming)
 			{
 				EnableArcCap = true;
 				ArcCapRenderer.color = new Color(1, 1, 1, arc.IsVoid ? 0.5f : 1f);
@@ -752,7 +746,7 @@ namespace Arcade.Gameplay
 
 				foreach (var s in segments)
 				{
-					if (s.FromTiming + offset < currentTiming && s.ToTiming + offset >= currentTiming)
+					if (s.FromTiming < currentTiming && s.ToTiming >= currentTiming)
 					{
 						float t = (s.FromPos.z - arc.Position / 1000f) / (s.FromPos.z - s.ToPos.z);
 						ArcCap.position = new Vector3(s.FromPos.x + (s.ToPos.x - s.FromPos.x) * t,
@@ -763,7 +757,7 @@ namespace Arcade.Gameplay
 					}
 				}
 			}
-			else if (arc.Timing + offset >= currentTiming && IsHead && !arc.IsVoid)
+			else if (arc.Timing >= currentTiming && IsHead && !arc.IsVoid)
 			{
 				float p = 1 - Mathf.Abs(arc.Position) / 100000;
 				float scale = 0.35f + 0.5f * (1 - p);
@@ -790,7 +784,7 @@ namespace Arcade.Gameplay
 				if (arc.Judging || arc.IsVoid)
 				{
 					double timing = ((double)h.textureCoord.x) * (arc.EndTiming - arc.Timing) + arc.Timing;
-					return timing + ArcGameplayManager.Instance.AudioOffset + double.Epsilon >= ArcGameplayManager.Instance.AudioTiming;
+					return timing + double.Epsilon >= ArcGameplayManager.Instance.ChartTiming;
 				}
 				return true;
 			}

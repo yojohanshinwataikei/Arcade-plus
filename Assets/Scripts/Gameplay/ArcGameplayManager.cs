@@ -51,8 +51,23 @@ namespace Arcade.Gameplay
 			{
 				return AudioTiming - AudioOffset;
 			}
+			set
+			{
+				AudioTiming = value + AudioOffset;
+			}
 		}
 		public int Length { get; private set; }
+
+		public int AllBeginChartTiming{
+			get{
+				return -AudioOffset;
+			}
+		}
+		public int AllEndChartTiming{
+			get{
+				return Length-AudioOffset;
+			}
+		}
 		public bool IsLoaded
 		{
 			get

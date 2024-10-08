@@ -406,7 +406,6 @@ namespace Arcade.Compose
 			beatlineInUse = 0;
 			if (EnableBeatline)
 			{
-				int offset = ArcGameplayManager.Instance.AudioOffset;
 				foreach (var t in beatlineTimings)
 				{
 					if (!ArcTimingManager.Instance.ShouldTryRender(((int)t.Timing), timingGroup, 0, false))

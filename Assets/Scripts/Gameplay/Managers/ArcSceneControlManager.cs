@@ -64,7 +64,7 @@ public class ArcSceneControlManager : MonoBehaviour
 		}
 		foreach (ArcSceneControl sc in SceneControls.OrderBy(sc => sc.Timing))
 		{
-			if (sc.Timing + ArcGameplayManager.Instance.AudioOffset > ArcGameplayManager.Instance.AudioTiming)
+			if (sc.Timing > ArcGameplayManager.Instance.ChartTiming)
 			{
 				break;
 			}
@@ -85,7 +85,7 @@ public class ArcSceneControlManager : MonoBehaviour
 					break;
 				case SceneControlType.EnwidenCamera:
 					{
-						int offset = ArcGameplayManager.Instance.AudioTiming - ArcGameplayManager.Instance.AudioOffset - sc.Timing;
+						int offset = ArcGameplayManager.Instance.ChartTiming - sc.Timing;
 						if (offset <= 0)
 						{
 							enwidenCameraRatio = sc.Enable ? 0 : 1;
@@ -96,14 +96,14 @@ public class ArcSceneControlManager : MonoBehaviour
 						}
 						else
 						{
-							float precent = (ArcGameplayManager.Instance.AudioTiming - ArcGameplayManager.Instance.AudioOffset - sc.Timing) / sc.Duration;
+							float precent = (ArcGameplayManager.Instance.ChartTiming - sc.Timing) / sc.Duration;
 							enwidenCameraRatio = sc.Enable ? precent : 1 - precent;
 						}
 					}
 					break;
 				case SceneControlType.EnwidenLanes:
 					{
-						int offset = ArcGameplayManager.Instance.AudioTiming - ArcGameplayManager.Instance.AudioOffset - sc.Timing;
+						int offset = ArcGameplayManager.Instance.ChartTiming - sc.Timing;
 						if (offset <= 0)
 						{
 							enwidenLaneRatio = sc.Enable ? 0 : 1;
@@ -114,7 +114,7 @@ public class ArcSceneControlManager : MonoBehaviour
 						}
 						else
 						{
-							float precent = (ArcGameplayManager.Instance.AudioTiming - ArcGameplayManager.Instance.AudioOffset - sc.Timing) / sc.Duration;
+							float precent = (ArcGameplayManager.Instance.ChartTiming - sc.Timing) / sc.Duration;
 							enwidenLaneRatio = sc.Enable ? precent : 1 - precent;
 						}
 					}

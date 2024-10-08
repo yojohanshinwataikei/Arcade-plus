@@ -914,7 +914,6 @@ namespace Arcade.Gameplay.Chart
 		public void UpdatePosition()
 		{
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
 			float t = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
 			Vector3 parentLocalPosition = new Vector3(0, 0, -timingManager.CalculatePositionByTiming(Arc.Timing, Arc.TimingGroup) / 1000f);
 			Vector3 baseLocalPosition = new Vector3();
@@ -995,7 +994,6 @@ namespace Arcade.Gameplay.Chart
 		public void Relocate()
 		{
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
 			float t = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
 			LocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
 									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f,
@@ -1281,7 +1279,6 @@ namespace Arcade.Gameplay.Chart
 				throw new ArgumentOutOfRangeException("ArcTap 时间不在 Arc 范围内");
 			}
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
 			arctap.Instantiate(this);
 			float t = 1f * (arctap.Timing - Timing) / (EndTiming - Timing);
 			arctap.LocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(XStart, XEnd, t, LineType)),

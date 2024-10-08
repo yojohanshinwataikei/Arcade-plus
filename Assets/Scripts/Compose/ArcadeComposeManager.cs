@@ -227,65 +227,64 @@ namespace Arcade.Compose
 
 		private void CheckScroll()
 		{
-			int timing = GameplayManager.AudioTiming;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
+			int timing = GameplayManager.ChartTiming;
 
 			if (AdeInputManager.Instance.Hotkeys.ScrollToStart.WasPressedThisFrame())
 			{
 				CheckScrollingOperation(null, 0f, 0f);
-				timing = 0;
+				timing = GameplayManager.AllBeginChartTiming;
 			}
 			else if (AdeInputManager.Instance.Hotkeys.ScrollToEnd.WasPressedThisFrame())
 			{
 				CheckScrollingOperation(null, 0f, 0f);
-				timing = GameplayManager.Length;
+				timing = GameplayManager.AllEndChartTiming;
 			}
 			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollToNextMeasure))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollToNextMeasure, 0.5f, 0.05f))
 				{
-					timing = AdeGridManager.Instance.AttachMeasureScroll(timing - offset, 1) + offset;
+					timing = AdeGridManager.Instance.AttachMeasureScroll(timing, 1);
 				}
 			}
 			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollToPreviousMeasure))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollToPreviousBeat, 0.5f, 0.05f))
 				{
-					timing = AdeGridManager.Instance.AttachMeasureScroll(timing - offset, -1) + offset;
+					timing = AdeGridManager.Instance.AttachMeasureScroll(timing, -1);
 				}
 			}
 			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollToNextBeat))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollToNextBeat, 0.5f, 0.05f))
 				{
-					timing = AdeGridManager.Instance.AttachBeatScroll(timing - offset, 1) + offset;
+					timing = AdeGridManager.Instance.AttachBeatScroll(timing, 1);
 				}
 			}
 			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollToPreviousBeat))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollToPreviousBeat, 0.5f, 0.05f))
 				{
-					timing = AdeGridManager.Instance.AttachBeatScroll(timing - offset, -1) + offset;
+					timing = AdeGridManager.Instance.AttachBeatScroll(timing, -1);
 				}
 			}
 			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollForward))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollForward, 0.05f, 0.05f))
 				{
-					timing = AdeGridManager.Instance.AttachScroll(timing - offset, 1) + offset;
+					timing = AdeGridManager.Instance.AttachScroll(timing, 1);
 				}
 			}
 			else if (AdeInputManager.Instance.CheckHotkeyActionPressing(AdeInputManager.Instance.Hotkeys.ScrollBackward))
 			{
 				if (CheckScrollingOperation(ScrollingOperation.ScrollBackward, 0.05f, 0.05f))
 				{
-					timing = AdeGridManager.Instance.AttachScroll(timing - offset, -1) + offset;
+					timing = AdeGridManager.Instance.AttachScroll(timing, -1);
 				}
 			}
 			else if (Mouse.current.scroll.ReadValue().y != 0 && AdeGameplayContentInputHandler.InputActive)
 			{
 				CheckScrollingOperation(null, 0f, 0f);
-				timing = AdeGridManager.Instance.AttachScroll(timing - offset, Mouse.current.scroll.ReadValue().y) + offset;
+				timing = AdeGridManager.Instance.AttachScroll(timing, Mouse.current.scroll.ReadValue().y);
 			}
 			else
 			{
@@ -293,12 +292,12 @@ namespace Arcade.Compose
 				return;
 			}
 
-			if (timing > GameplayManager.Length) timing = GameplayManager.Length;
-			if (timing < 0) timing = 0;
+			if (timing > GameplayManager.AllEndChartTiming) timing = GameplayManager.AllEndChartTiming;
+			if (timing < GameplayManager.AllBeginChartTiming) timing = GameplayManager.AllBeginChartTiming;
 
-			if (GameplayManager.AudioTiming != Mathf.RoundToInt(timing))
+			if (GameplayManager.ChartTiming != Mathf.RoundToInt(timing))
 			{
-				GameplayManager.AudioTiming = Mathf.RoundToInt(timing);
+				GameplayManager.ChartTiming = Mathf.RoundToInt(timing);
 				GameplayManager.ResetJudge();
 			}
 		}

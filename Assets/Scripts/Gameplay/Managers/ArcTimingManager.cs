@@ -163,7 +163,7 @@ namespace Arcade.Gameplay
 				{
 					n++;
 					t = -n * segment;
-					if (t < -ArcGameplayManager.Instance.AudioOffset)
+					if (t < ArcGameplayManager.Instance.AllBeginChartTiming)
 					{
 						break;
 					}
@@ -183,7 +183,6 @@ namespace Arcade.Gameplay
 			{
 				return 0;
 			}
-			int offset = ArcGameplayManager.Instance.AudioOffset;
 			bool reversed = pivotTiming > targetTiming;
 			int startTiming = reversed ? targetTiming : pivotTiming;
 			int endTiming = reversed ? pivotTiming : targetTiming;
@@ -222,7 +221,7 @@ namespace Arcade.Gameplay
 				return currentTiming;
 			}
 			int currentTimingId = Timings.FindLastIndex((timing) => timing.Timing <= currentTiming);
-			int allEndTime = ArcGameplayManager.Instance.Length - ArcGameplayManager.Instance.AudioOffset;
+			int allEndTime = ArcGameplayManager.Instance.AllEndChartTiming;
 			float positionRemain = position;
 			for (int i = currentTimingId; i < Timings.Count; i++)
 			{
@@ -308,9 +307,9 @@ namespace Arcade.Gameplay
 				}
 				earliestRenderTime = float.PositiveInfinity;
 				latestRenderTime = float.NegativeInfinity;
-				int allBeginTime = -ArcGameplayManager.Instance.AudioOffset;
+				int allBeginTime = ArcGameplayManager.Instance.AllBeginChartTiming;
 				float allBeginPosition = TimingPosition[0] + (allBeginTime - Timings[0].Timing) * Timings[0].Bpm / BaseBpm * Velocity;
-				int allEndTime = ArcGameplayManager.Instance.Length - ArcGameplayManager.Instance.AudioOffset;
+				int allEndTime = ArcGameplayManager.Instance.AllEndChartTiming;
 				float allEndPosition = TimingPosition[Timings.Count - 1] + (allEndTime - Timings[Timings.Count - 1].Timing) * Timings[Timings.Count - 1].Bpm / BaseBpm * Velocity;
 
 				for (int i = -1; i < Timings.Count; i++)
@@ -402,7 +401,6 @@ namespace Arcade.Gameplay
 		private void UpdateBeatline()
 		{
 			int index = 0;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
 			foreach (float t in beatlineTimings)
 			{
 				if (!ShouldTryRender((int)(t), null, 0, false))
@@ -515,7 +513,7 @@ namespace Arcade.Gameplay
 			}
 			if (Timing + duration >= earliestRenderTime && Timing <= latestRenderTime)
 			{
-				if (note && Timing + duration + LostDelay < ArcGameplayManager.Instance.AudioTiming)
+				if (note && Timing + duration + LostDelay < ArcGameplayManager.Instance.ChartTiming)
 				{
 					return false;
 				}

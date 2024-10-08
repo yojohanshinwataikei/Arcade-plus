@@ -56,7 +56,6 @@ namespace Arcade.Gameplay
 		private void RenderTapNotes()
 		{
 			ArcTimingManager timing = ArcTimingManager.Instance;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
 
 			foreach (var t in Taps)
 			{
@@ -84,8 +83,7 @@ namespace Arcade.Gameplay
 		private void JudgeTapNotes()
 		{
 			ArcTimingManager timing = ArcTimingManager.Instance;
-			int offset = ArcGameplayManager.Instance.AudioOffset;
-			int currentTiming = ArcGameplayManager.Instance.AudioTiming;
+			int currentTiming = ArcGameplayManager.Instance.ChartTiming;
 			foreach (var t in Taps)
 			{
 				if (t.NoInput())
@@ -93,12 +91,12 @@ namespace Arcade.Gameplay
 					continue;
 				}
 				if (t.Judged) continue;
-				if (currentTiming > t.Timing + offset && currentTiming <= t.Timing + offset + 150)
+				if (currentTiming > t.Timing && currentTiming <= t.Timing + 150)
 				{
 					t.Judged = true;
 					if (ArcGameplayManager.Instance.IsPlaying) ArcEffectManager.Instance.PlayTapNoteEffectAt(new Vector2(Lanes[t.Track], 0));
 				}
-				else if (currentTiming > t.Timing + offset + 150)
+				else if (currentTiming > t.Timing + 150)
 				{
 					t.Judged = true;
 				}
