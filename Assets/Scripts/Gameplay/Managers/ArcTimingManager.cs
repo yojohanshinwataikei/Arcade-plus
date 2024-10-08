@@ -172,11 +172,11 @@ namespace Arcade.Gameplay
 			}
 		}
 
-		public float CalculatePositionByTiming(int ChartTiming, ArcTimingGroup timingGroup)
+		public float CalculatePositionByTiming(int Timing, ArcTimingGroup timingGroup)
 		{
-			return CalculatePositionByTimingAndStart(ArcGameplayManager.Instance.ChartTiming, ChartTiming, timingGroup);
+			return CalculatePositionByTimingAndStart(ArcGameplayManager.Instance.ChartTiming, Timing, timingGroup);
 		}
-		public float CalculatePositionByTimingAndStart(int pivotChartTiming, int targetChartTiming, ArcTimingGroup timingGroup)
+		public float CalculatePositionByTimingAndStart(int pivotTiming, int targetTiming, ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
 			if (Timings.Count == 0)
@@ -184,9 +184,9 @@ namespace Arcade.Gameplay
 				return 0;
 			}
 			int offset = ArcGameplayManager.Instance.AudioOffset;
-			bool reversed = pivotChartTiming > targetChartTiming;
-			int startTiming = reversed ? targetChartTiming : pivotChartTiming;
-			int endTiming = reversed ? pivotChartTiming : targetChartTiming;
+			bool reversed = pivotTiming > targetTiming;
+			int startTiming = reversed ? targetTiming : pivotTiming;
+			int endTiming = reversed ? pivotTiming : targetTiming;
 			int startTimingId = Timings.FindLastIndex((timing) => timing.Timing <= startTiming);
 			int endTimingId = Timings.FindLastIndex((timing) => timing.Timing <= endTiming);
 			if (startTimingId == -1)
@@ -499,7 +499,7 @@ namespace Arcade.Gameplay
 		}
 		// Note: this is a function used to optimize rendering by avoid not needed position calculation
 		// Invoker should manually check position again after this check passed
-		public bool ShouldTryRender(int ChartTiming, ArcTimingGroup timingGroup, int duration = 0, bool note = true)
+		public bool ShouldTryRender(int Timing, ArcTimingGroup timingGroup, int duration = 0, bool note = true)
 		{
 			float earliestRenderTime;
 			float latestRenderTime;
@@ -513,9 +513,9 @@ namespace Arcade.Gameplay
 				earliestRenderTime = timingGroup.earliestRenderTime;
 				latestRenderTime = timingGroup.latestRenderTime;
 			}
-			if (ChartTiming + duration >= earliestRenderTime && ChartTiming <= latestRenderTime)
+			if (Timing + duration >= earliestRenderTime && Timing <= latestRenderTime)
 			{
-				if (note && ChartTiming + duration + LostDelay < ArcGameplayManager.Instance.AudioTiming)
+				if (note && Timing + duration + LostDelay < ArcGameplayManager.Instance.AudioTiming)
 				{
 					return false;
 				}
