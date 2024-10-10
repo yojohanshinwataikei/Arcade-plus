@@ -389,8 +389,8 @@ MonoBehaviour:
   m_OnDidEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Arcade.Compose.Dialog.AdeSoundDialog, Arcade
+      - m_Target: {fileID: 977612714}
+        m_TargetAssemblyTypeName: Arcade.Compose.Dialog.AdeSoundDialogContent, Arcade
         m_MethodName: OnEffectAudioChange
         m_Mode: 1
         m_Arguments:
@@ -2924,8 +2924,8 @@ MonoBehaviour:
   m_OnDidEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Arcade.Compose.Dialog.AdeSoundDialog, Arcade
+      - m_Target: {fileID: 977612714}
+        m_TargetAssemblyTypeName: Arcade.Compose.Dialog.AdeSoundDialogContent, Arcade
         m_MethodName: OnChartAudioChange
         m_Mode: 1
         m_Arguments:

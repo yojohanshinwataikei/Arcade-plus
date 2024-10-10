@@ -84,7 +84,6 @@ PlayerSettings:
   defaultIsNativeResolution: 1
   macRetinaSupport: 0
   runInBackground: 1
-  captureSingleScreen: 0
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
   Force IOS Speakers When Recording: 0
@@ -142,7 +141,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.6.0-alpha.6
+  bundleVersion: 0.6.0-alpha.7
   preloadedAssets:
   - {fileID: 4800000, guid: bb26ede1beb997943a7d6295fbf075d4, type: 3}
   - {fileID: 4800000, guid: 1e340182228616b4ca7dad1e80f4d319, type: 3}
