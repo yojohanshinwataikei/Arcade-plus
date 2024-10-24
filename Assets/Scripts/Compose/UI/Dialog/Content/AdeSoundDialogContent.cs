@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
+using Arcade.Compose.UI;
 
 namespace Arcade.Compose.Dialog
 {
@@ -16,7 +17,7 @@ namespace Arcade.Compose.Dialog
 	{
 		public static AdeSoundDialogContent Instance { get; private set; }
 
-		public InputField ChartAudio, EffectAudio;
+		public AdeNumberInputWithSlider ChartAudioInput, EffectAudioInput;
 		public AudioSource ChartSource, EffectSource;
 		private SoundPreferences preferences;
 		public string PreferencesSavePath
@@ -30,6 +31,8 @@ namespace Arcade.Compose.Dialog
 		private void Awake()
 		{
 			Instance = this;
+			ChartAudioInput.onValueEdited += OnChartAudioChange;
+			EffectAudioInput.onValueEdited += OnEffectAudioChange;
 		}
 
 		private void Start()
@@ -58,8 +61,8 @@ namespace Arcade.Compose.Dialog
 			}
 			finally
 			{
-				ChartAudio.text = preferences.Chart.ToString();
-				EffectAudio.text = preferences.Effect.ToString();
+				ChartAudioInput.SetValueWithoutNotify(preferences.Chart);
+				EffectAudioInput.SetValueWithoutNotify(preferences.Effect);
 				ChartSource.volume = preferences.Chart;
 				EffectSource.volume = preferences.Effect;
 			}
@@ -69,35 +72,21 @@ namespace Arcade.Compose.Dialog
 			PlayerPrefs.SetString("AdeSoundDialog", JsonConvert.SerializeObject(preferences));
 		}
 
-		public void OnChartAudioChange()
+		public void OnChartAudioChange(float val)
 		{
-			try
-			{
-				float val = float.Parse(ChartAudio.text);
-				val = Mathf.Clamp(val, 0, 1);
-				preferences.Chart = val;
-				ChartSource.volume = val;
-				Save();
-			}
-			catch (Exception)
-			{
-				ChartAudio.text = preferences.Chart.ToString();
-			}
+			val = Mathf.Clamp(val, 0, 1);
+			preferences.Chart = val;
+			ChartSource.volume = val;
+			Save();
+			ChartAudioInput.SetValueWithoutNotify(preferences.Chart);
 		}
-		public void OnEffectAudioChange()
+		public void OnEffectAudioChange(float val)
 		{
-			try
-			{
-				float val = float.Parse(EffectAudio.text);
-				val = Mathf.Clamp(val, 0, 1);
-				preferences.Effect = val;
-				EffectSource.volume = val;
-				Save();
-			}
-			catch (Exception)
-			{
-				EffectAudio.text = preferences.Effect.ToString();
-			}
+			val = Mathf.Clamp(val, 0, 1);
+			preferences.Effect = val;
+			EffectSource.volume = val;
+			Save();
+			EffectAudioInput.SetValueWithoutNotify(preferences.Effect);
 		}
 	}
 }

@@ -1,13 +1,15 @@
 using Arcade.Compose;
 using UnityEngine;
 
-[ExecuteAlways]
-public class AdeScreenResizeListener : MonoBehaviour
+namespace Arcade.Compose.UI
 {
-	protected void OnRectTransformDimensionsChange()
+	[ExecuteAlways]
+	public class AdeScreenResizeListener : MonoBehaviour
 	{
-		ArcadeComposeManager.Instance?.UpdateResolution();
+		protected void OnRectTransformDimensionsChange()
+		{
+			ArcadeComposeManager.Instance?.UpdateResolution();
+		}
+
 	}
-
 }
-
