@@ -15,6 +15,7 @@ namespace Arcade.Gameplay
 		private void Awake()
 		{
 			Instance = this;
+			Source.time = 0;
 		}
 		private void Start()
 		{
