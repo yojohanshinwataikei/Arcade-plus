@@ -18,10 +18,13 @@ namespace Arcade.Util.Loader
 			public int position = 0;
 
 			public int channels = 2;
-			public AudioDataHost(float[] audioData, int channels)
+
+			public string name;
+			public AudioDataHost(float[] audioData, int channels, string name)
 			{
 				this.audioData = audioData;
 				this.channels = channels;
+				this.name = name;
 			}
 			public void PCMReaderCallback(float[] buffer)
 			{
@@ -34,6 +37,7 @@ namespace Arcade.Util.Loader
 					else
 					{
 						Array.Copy(audioData, position, buffer, 0, audioData.Length - position);
+						Array.Clear(audioData, audioData.Length - position, buffer.Length - (audioData.Length - position));
 					}
 				}
 				position += buffer.Length;
@@ -74,8 +78,8 @@ namespace Arcade.Util.Loader
 			{
 				return null;
 			}
-			AudioDataHost dataHost = new AudioDataHost(audioData, channels);
-			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
+			AudioDataHost dataHost = new AudioDataHost(audioData, channels, path);
+			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, false, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
 			return clip;
 		}
 		// This is used to load audio files that supported by NAudio like wav/mp3(on windows)
@@ -109,8 +113,8 @@ namespace Arcade.Util.Loader
 			{
 				return null;
 			}
-			AudioDataHost dataHost = new AudioDataHost(audioData, channels);
-			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
+			AudioDataHost dataHost = new AudioDataHost(audioData, channels, path);
+			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, false, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
 			return clip;
 		}
 		// This is used to load audio files that supported by NVorbis like ogg
@@ -142,8 +146,8 @@ namespace Arcade.Util.Loader
 			{
 				return null;
 			}
-			AudioDataHost dataHost = new AudioDataHost(audioData, channels);
-			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, true, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
+			AudioDataHost dataHost = new AudioDataHost(audioData, channels, path);
+			AudioClip clip = AudioClip.Create(path, audioData.Length / channels, channels, sampleRate, false, dataHost.PCMReaderCallback, dataHost.PCMSetPositionCallback);
 			return clip;
 		}
 		// This try all decoders used in arcade
