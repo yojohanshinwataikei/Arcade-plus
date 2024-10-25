@@ -54,7 +54,7 @@ namespace Arcade.Gameplay
 			{
 				settingVelocity = value;
 				ArcArcManager.Instance.Rebuild();
-				ArcadeComposeManager.Instance.VelocitySlider.SetValueWithoutNotify(value / 30);
+				ArcadeComposeManager.Instance.VelocitySlider.SetValueWithoutNotify(((float)value) / 30);
 			}
 		}
 

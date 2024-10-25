@@ -13,6 +13,7 @@ using System.Globalization;
 using Arcade.Compose.Command;
 using UnityEngine.InputSystem;
 using Arcade.Compose.Operation;
+using Arcade.Compose.UI;
 
 namespace Arcade.Compose
 {
@@ -100,7 +101,7 @@ namespace Arcade.Compose
 		{
 			get
 			{
-				return long.Parse(BuildTimestampText.text);
+				return long.Parse(BuildTimestampText.text, CultureInfo.InvariantCulture);
 			}
 		}
 
@@ -114,9 +115,12 @@ namespace Arcade.Compose
 		public Sprite DefaultSliderSprite, GlowSliderSprite;
 		[Header("Auto")]
 		public Button AutoButton;
+		[Header("Misc")]
 
 		public UnityEvent OnPlay = new UnityEvent();
 		public UnityEvent OnPause = new UnityEvent();
+		public AdeNumberInputWithSlider VelocitySlider;
+
 		public ArcadePreference ArcadePreference = new ArcadePreference();
 		public Text Version;
 
@@ -159,7 +163,7 @@ namespace Arcade.Compose
 			TargetFramerateDropdown.onValueChanged.AddListener((int value) =>
 			{
 				int fps;
-				if (!int.TryParse(TargetFramerateDropdown.options[value].text, out fps))
+				if (!int.TryParse(TargetFramerateDropdown.options[value].text, NumberStyles.Integer, CultureInfo.InvariantCulture, out fps))
 				{
 					fps = -1;
 				}
@@ -175,11 +179,11 @@ namespace Arcade.Compose
 				ArcGameplayManager.Instance.EnablePlaybackSync = value;
 				SavePreferences();
 			});
+			VelocitySlider.onValueEdited += OnVelocityEdited;
 			LoadPreferences();
 			SavePreferences();
 			Pause();
 		}
-
 		private enum ScrollingOperation
 		{
 			ScrollForward,
@@ -367,7 +371,7 @@ namespace Arcade.Compose
 		{
 			if (fullscreen)
 			{
-				Debug.Log($"[fullscreen]{Screen.currentResolution.width}x{Screen.currentResolution.height}");
+				Debug.Log($"[fullscreen]{Screen.currentResolution.width.ToString(CultureInfo.InvariantCulture)}x{Screen.currentResolution.height.ToString(CultureInfo.InvariantCulture)}");
 				Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, FullScreenMode.FullScreenWindow);
 				return;
 			}
@@ -379,8 +383,8 @@ namespace Arcade.Compose
 			}
 			// here we do not check format of string
 			string[] dimensions = resolution.Split('x');
-			int width = Mathf.RoundToInt(int.Parse(dimensions[0]) * scaleRatio);
-			int height = Mathf.RoundToInt(int.Parse(dimensions[1]) * scaleRatio);
+			int width = Mathf.RoundToInt(int.Parse(dimensions[0], CultureInfo.InvariantCulture) * scaleRatio);
+			int height = Mathf.RoundToInt(int.Parse(dimensions[1], CultureInfo.InvariantCulture) * scaleRatio);
 			Screen.SetResolution(width, height, FullScreenMode.Windowed);
 		}
 		public void SetTargetFramerate(int fps)
@@ -458,7 +462,7 @@ namespace Arcade.Compose
 
 		public void SetUndoBufferSize(string x)
 		{
-			uint size = uint.Parse(x);
+			uint size = uint.Parse(x, CultureInfo.InvariantCulture);
 			ArcadePreference.UndoBufferSize = size;
 			SavePreferences();
 			AdeCommandManager.Instance.SetBufferSize(size);
@@ -466,11 +470,17 @@ namespace Arcade.Compose
 
 		public void SetGlobalAudioOffset(string x)
 		{
-			int offset = int.Parse(x);
+			int offset = int.Parse(x, CultureInfo.InvariantCulture);
 			ArcadePreference.GlobalAudioOffset = offset;
 			SavePreferences();
 			ArcGameplayManager.Instance.GlobalAudioOffset = offset;
 		}
+
+		private void OnVelocityEdited(float value)
+		{
+			ArcTimingManager.Instance.SettingVelocity = Mathf.RoundToInt(value * 30);
+		}
+
 
 		public void LoadPreferences()
 		{
@@ -511,9 +521,9 @@ namespace Arcade.Compose
 				{
 					ArcadeUserAgreementDialogContent.Instance.OpenDialog();
 				}
-				UndoBufferSizeInput.SetTextWithoutNotify($"{ArcadePreference.UndoBufferSize}");
+				UndoBufferSizeInput.SetTextWithoutNotify($"{ArcadePreference.UndoBufferSize.ToString(CultureInfo.InvariantCulture)}");
 				AdeCommandManager.Instance.bufferSize = ArcadePreference.UndoBufferSize;
-				GlobalAudioOffsetInput.SetTextWithoutNotify($"{ArcadePreference.GlobalAudioOffset}");
+				GlobalAudioOffsetInput.SetTextWithoutNotify($"{ArcadePreference.GlobalAudioOffset.ToString(CultureInfo.InvariantCulture)}");
 				ArcGameplayManager.Instance.GlobalAudioOffset = ArcadePreference.GlobalAudioOffset;
 				bool resolutionHit = false;
 				for (int i = 0; i < ResolutionDropdown.options.Count; i++)
@@ -537,7 +547,7 @@ namespace Arcade.Compose
 				for (int i = 0; i < TargetFramerateDropdown.options.Count; i++)
 				{
 					Dropdown.OptionData options = TargetFramerateDropdown.options[i];
-					if (options.text == ArcadePreference.TargetFrameRate.ToString())
+					if (options.text == ArcadePreference.TargetFrameRate.ToString(CultureInfo.InvariantCulture))
 					{
 						TargetFramerateDropdown.SetValueWithoutNotify(i);
 						targetFramerateHit = true;
