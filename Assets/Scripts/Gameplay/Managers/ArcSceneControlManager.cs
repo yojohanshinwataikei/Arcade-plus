@@ -26,7 +26,8 @@ public class ArcSceneControlManager : MonoBehaviour
 	public Transform SkyInput;
 	[HideInInspector]
 	public List<ArcSceneControl> SceneControls = new List<ArcSceneControl>();
-	private const float trackAnimationDefaultTime = 1f;
+	private const float trackAnimationDefaultDuration = 1f;
+	private const float backgroundDarkenDuration = 0.2f;
 
 	public void Load(List<ArcSceneControl> sceneControls)
 	{
@@ -39,7 +40,7 @@ public class ArcSceneControlManager : MonoBehaviour
 	}
 	public void ResetScene()
 	{
-		SetEnwidenCameraRatio(0);
+		UpdateEnwidenCameraRatio(0);
 		UpdateLane(1, 0);
 	}
 
@@ -47,7 +48,7 @@ public class ArcSceneControlManager : MonoBehaviour
 	{
 		float startLaneOpacity = 1;
 		float laneOpacity = 1;
-		float startBackgroundDarkenProgress = 0;
+		bool startBackgroundDarken = false;
 		float backgroundDarkenProgress = 0;
 		float enwidenCameraRatio = 0;
 		float enwidenLaneRatio = 0;
@@ -56,7 +57,6 @@ public class ArcSceneControlManager : MonoBehaviour
 			tg.GroupHide = false;
 		}
 
-		Debug.Log("====");
 		foreach (ArcSceneControl sc in SceneControls.OrderBy(sc => sc.Timing))
 		{
 			if (sc.Timing > ArcGameplayManager.Instance.ChartTiming)
@@ -69,7 +69,7 @@ public class ArcSceneControlManager : MonoBehaviour
 				case SceneControlType.TrackShow:
 				case SceneControlType.TrackDisplay:
 					{
-						float animationDuration = trackAnimationDefaultTime;
+						float animationDuration = trackAnimationDefaultDuration;
 						if (sc.Type == SceneControlType.TrackDisplay)
 						{
 							animationDuration = sc.Duration;
@@ -90,10 +90,37 @@ public class ArcSceneControlManager : MonoBehaviour
 						}
 						float animationProgress = Mathf.Clamp01((ArcGameplayManager.Instance.ChartTiming - sc.Timing) / (animationDuration * 1000));
 						laneOpacity = Mathf.Lerp(startLaneOpacity, targetLaneOpacity, animationProgress);
-						Debug.Log($"TrackDisplay {sc.Timing}+{animationDuration}->{targetLaneOpacity} {startLaneOpacity} {laneOpacity}");
 						if (ArcGameplayManager.Instance.ChartTiming - sc.Timing > animationDuration * 1000)
 						{
 							startLaneOpacity = targetLaneOpacity;
+						}
+
+						bool backgroundDarken = true;
+						if (sc.Type == SceneControlType.TrackShow)
+						{
+							backgroundDarken = false;
+						}
+						else if (sc.Type == SceneControlType.TrackHide)
+						{
+							backgroundDarken = true;
+						}
+						else if (sc.Type == SceneControlType.TrackDisplay)
+						{
+							backgroundDarken = sc.TrackDisplayValue < 255;
+						}
+						if (startBackgroundDarken == backgroundDarken)
+						{
+							backgroundDarkenProgress = backgroundDarken ? 1 : 0;
+						}
+						else
+						{
+							float darkenProgress = Mathf.Clamp01((ArcGameplayManager.Instance.ChartTiming - sc.Timing) / (backgroundDarkenDuration * 1000));
+							float curvedDarkenProgress = (1 - darkenProgress) * (1 - darkenProgress) * (1 - darkenProgress);
+							backgroundDarkenProgress = backgroundDarken ? 1 - curvedDarkenProgress : curvedDarkenProgress;
+						}
+						if (ArcGameplayManager.Instance.ChartTiming - sc.Timing > backgroundDarkenDuration * 1000)
+						{
+							startBackgroundDarken = backgroundDarken;
 						}
 					}
 					break;
@@ -142,11 +169,12 @@ public class ArcSceneControlManager : MonoBehaviour
 					break;
 			}
 		}
-		SetEnwidenCameraRatio(enwidenCameraRatio);
+		UpdateEnwidenCameraRatio(enwidenCameraRatio);
 		UpdateLane(laneOpacity, enwidenLaneRatio);
+		UpdateBackgroundDarkenLayer(backgroundDarkenProgress);
 	}
 
-	private void SetEnwidenCameraRatio(float enwidenCameraRatio)
+	private void UpdateEnwidenCameraRatio(float enwidenCameraRatio)
 	{
 		Vector3 SkyInputPosition = SkyInput.localPosition;
 		SkyInputPosition.y = 5.5f + enwidenCameraRatio * 2.745f;
@@ -193,78 +221,9 @@ public class ArcSceneControlManager : MonoBehaviour
 		ArcTimingManager.Instance.BeatlineEnwidenRatio = enwidenLaneRatio;
 	}
 
-	// private void HideTrack()
-	// {
-	// 	foreach (SpriteRenderer r in DividerRenderers)
-	// 	{
-	// 		r.sharedMaterial.DOKill();
-	// 	};
-	// 	foreach (var TrackRenderer in TrackComponentsRenderers)
-	// 	{
-	// 		TrackRenderer.sharedMaterial.DOKill();
-	// 	}
-	// 	BackgroundDarkenLayer.DOKill();
-	// 	if (ArcGameplayManager.Instance.IsPlaying)
-	// 	{
-	// 		foreach (SpriteRenderer r in DividerRenderers)
-	// 		{
-	// 			r.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationDefaultTime).SetEase(Ease.InCubic);
-	// 		};
-	// 		foreach (var TrackRenderer in TrackComponentsRenderers)
-	// 		{
-	// 			TrackRenderer.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationDefaultTime).SetEase(Ease.InCubic);
-	// 		}
-	// 		BackgroundDarkenLayer.DOColor(Color.black, trackAnimationDefaultTime).SetEase(Ease.InCubic);
-	// 	}
-	// 	else
-	// 	{
-	// 		foreach (SpriteRenderer r in DividerRenderers)
-	// 		{
-	// 			r.sharedMaterial.SetColor("_Color", Color.clear);
-	// 		};
-	// 		foreach (var TrackRenderer in TrackComponentsRenderers)
-	// 		{
-	// 			TrackRenderer.sharedMaterial.SetColor("_Color", Color.clear);
-	// 		}
-	// 		BackgroundDarkenLayer.color = Color.black;
-	// 	}
-	// }
-
-	// private void ShowTrack()
-	// {
-	// 	foreach (SpriteRenderer r in DividerRenderers)
-	// 	{
-	// 		r.sharedMaterial.DOKill();
-	// 	};
-	// 	foreach (var TrackRenderer in TrackComponentsRenderers)
-	// 	{
-	// 		TrackRenderer.sharedMaterial.DOKill();
-	// 	}
-	// 	BackgroundDarkenLayer.DOKill();
-	// 	if (ArcGameplayManager.Instance.IsPlaying)
-	// 	{
-	// 		foreach (SpriteRenderer r in DividerRenderers)
-	// 		{
-	// 			r.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationDefaultTime).SetEase(Ease.InCubic);
-	// 		};
-	// 		foreach (var TrackRenderer in TrackComponentsRenderers)
-	// 		{
-	// 			TrackRenderer.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationDefaultTime).SetEase(Ease.InCubic);
-	// 		}
-	// 		BackgroundDarkenLayer.DOColor(Color.clear, trackAnimationDefaultTime).SetEase(Ease.OutCubic);
-	// 	}
-	// 	else
-	// 	{
-	// 		foreach (SpriteRenderer r in DividerRenderers)
-	// 		{
-	// 			r.sharedMaterial.SetColor("_Color", Color.white);
-	// 		};
-	// 		foreach (var TrackRenderer in TrackComponentsRenderers)
-	// 		{
-	// 			TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
-	// 		}
-	// 		BackgroundDarkenLayer.color = Color.clear;
-	// 	}
-	// }
+	private void UpdateBackgroundDarkenLayer(float backgroundDarkenProgress)
+	{
+		BackgroundDarkenLayer.color = new Color(0, 0, 0, backgroundDarkenProgress);
+	}
 }
 

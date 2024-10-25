@@ -7,6 +7,8 @@
 - 封面读取失败时现在会再尝试读取封面缩略图（ base_256.jpg 等）
 - 新增不同难度使用不同封面的支持
 - 新增不同难度使用不同音源的支持
+- 新增对 trackdisplay 类型的 scenecontrol 的支持
+- 重做了 trackshow 与 trackhide 类型的 scenecontrol 的实现
 - 点立得支持不在现有的 Arc 上添加 ArcTap， 而是直接添加 ArcTap 并生成其所在的 1 毫秒黑线 Arc
 - 选中含有 ArcTap 的 Arc 时可以将其上的 ArcTap 分离到单独的 1 毫秒黑线 Arc 上
 - 新增全局音频延迟设置， 此设置数值越大音频播放时间越早 ，单位为毫秒
