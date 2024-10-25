@@ -16,18 +16,17 @@ public class ArcSceneControlManager : MonoBehaviour
 		Instance = this;
 	}
 	public Image BackgroundDarkenLayer;
-	public SpriteRenderer[] TrackComponentsRenderers;
-	public SpriteRenderer[] DividerRenderers;
-	public SpriteRenderer[] ExtraLaneRenderers;
+	public SpriteRenderer[] TrackMainRenderers;
 	public SpriteRenderer[] TrackBorderRenderers;
+	public SpriteRenderer[] ExtraLaneRenderers;
 	public SpriteRenderer[] ExtraTrackBorderRenderers;
+	public SpriteRenderer[] MainLaneDividerRenderers;
 	public SpriteRenderer[] ExtraLaneDividerRenderers;
 	public SpriteRenderer[] ExtraLaneCriticalLineRenderers;
 	public Transform SkyInput;
 	[HideInInspector]
 	public List<ArcSceneControl> SceneControls = new List<ArcSceneControl>();
-	private bool trackVisible = true;
-	private const float trackAnimationTime = 0.3f;
+	private const float trackAnimationDefaultTime = 1f;
 
 	public void Load(List<ArcSceneControl> sceneControls)
 	{
@@ -40,28 +39,23 @@ public class ArcSceneControlManager : MonoBehaviour
 	}
 	public void ResetScene()
 	{
-		foreach (var r in DividerRenderers)
-		{
-			r.color = Color.white;
-		}
-		foreach (var TrackRenderer in TrackComponentsRenderers)
-		{
-			TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
-		}
-		trackVisible = true;
 		SetEnwidenCameraRatio(0);
-		SetEnwidenLaneRatio(0);
+		UpdateLane(1, 0);
 	}
 
 	private void Update()
 	{
-		bool newTrackVisible = true;
+		float startLaneOpacity = 1;
+		float laneOpacity = 1;
+		float backgroundDarkenProgress = 0;
 		float enwidenCameraRatio = 0;
 		float enwidenLaneRatio = 0;
 		foreach (ArcTimingGroup tg in ArcTimingManager.Instance.timingGroups)
 		{
 			tg.GroupHide = false;
 		}
+
+		Debug.Log("====");
 		foreach (ArcSceneControl sc in SceneControls.OrderBy(sc => sc.Timing))
 		{
 			if (sc.Timing > ArcGameplayManager.Instance.ChartTiming)
@@ -71,10 +65,38 @@ public class ArcSceneControlManager : MonoBehaviour
 			switch (sc.Type)
 			{
 				case SceneControlType.TrackHide:
-					newTrackVisible = false;
+					{
+						float animationProgress = Mathf.Clamp01((ArcGameplayManager.Instance.ChartTiming - sc.Timing) / (trackAnimationDefaultTime * 1000));
+						laneOpacity = Mathf.Lerp(startLaneOpacity, 0, animationProgress);
+						Debug.Log($"TrackHide {sc.Timing} {startLaneOpacity} -> {laneOpacity}");
+						if (ArcGameplayManager.Instance.ChartTiming - sc.Timing > trackAnimationDefaultTime * 1000)
+						{
+							startLaneOpacity = 0;
+						}
+					}
 					break;
 				case SceneControlType.TrackShow:
-					newTrackVisible = true;
+					{
+						float animationProgress = Mathf.Clamp01((ArcGameplayManager.Instance.ChartTiming - sc.Timing) / (trackAnimationDefaultTime * 1000));
+						laneOpacity = Mathf.Lerp(startLaneOpacity, 1, animationProgress);
+						Debug.Log($"TrackShow {sc.Timing} {startLaneOpacity} -> {laneOpacity}");
+						if (ArcGameplayManager.Instance.ChartTiming - sc.Timing > trackAnimationDefaultTime * 1000)
+						{
+							startLaneOpacity = 1;
+						}
+					}
+					break;
+				case SceneControlType.TrackDisplay:
+					{
+						float animationProgress = Mathf.Clamp01((ArcGameplayManager.Instance.ChartTiming - sc.Timing) / (sc.Duration * 1000));
+						float targetLaneOpacity = ((float)(sc.TrackDisplayValue % 256)) / 255;
+						laneOpacity = Mathf.Lerp(startLaneOpacity, targetLaneOpacity, animationProgress);
+						Debug.Log($"TrackDisplay {sc.Timing}+{sc.Duration}->{sc.TrackDisplayValue} {startLaneOpacity} {laneOpacity}");
+						if (ArcGameplayManager.Instance.ChartTiming - sc.Timing > sc.Duration * 1000)
+						{
+							startLaneOpacity = targetLaneOpacity;
+						}
+					}
 					break;
 				case SceneControlType.HideGroup:
 					var timingGroup = sc.TimingGroup;
@@ -121,22 +143,8 @@ public class ArcSceneControlManager : MonoBehaviour
 					break;
 			}
 		}
-
-		if (newTrackVisible != trackVisible)
-		{
-			if (newTrackVisible)
-			{
-				ShowTrack();
-			}
-			else
-			{
-				HideTrack();
-			}
-			trackVisible = newTrackVisible;
-		}
-
 		SetEnwidenCameraRatio(enwidenCameraRatio);
-		SetEnwidenLaneRatio(enwidenLaneRatio);
+		UpdateLane(laneOpacity, enwidenLaneRatio);
 	}
 
 	private void SetEnwidenCameraRatio(float enwidenCameraRatio)
@@ -147,28 +155,36 @@ public class ArcSceneControlManager : MonoBehaviour
 		ArcCameraManager.Instance.EnwidenRatio = enwidenCameraRatio;
 	}
 
-	private void SetEnwidenLaneRatio(float enwidenLaneRatio)
+	private void UpdateLane(float laneOpacity, float enwidenLaneRatio)
 	{
 		foreach (var ExtraLaneRenderer in ExtraLaneRenderers)
 		{
 			ExtraLaneRenderer.gameObject.SetActive(enwidenLaneRatio > 0);
 			ExtraLaneRenderer.size = new Vector2(ExtraLaneRenderer.size.x, 53.5f + 100 * enwidenLaneRatio);
-			ExtraLaneRenderer.color = new Color(1, 1, 1, enwidenLaneRatio);
+			ExtraLaneRenderer.color = new Color(1, 1, 1, enwidenLaneRatio * laneOpacity);
+		}
+		foreach (var TrackMainRenderer in TrackMainRenderers)
+		{
+			TrackMainRenderer.color = new Color(1, 1, 1, laneOpacity);
 		}
 		foreach (var TrackBorderRenderer in TrackBorderRenderers)
 		{
 			TrackBorderRenderer.gameObject.SetActive(enwidenLaneRatio < 1);
-			TrackBorderRenderer.color = new Color(1, 1, 1, 1 - enwidenLaneRatio);
+			TrackBorderRenderer.color = new Color(1, 1, 1, (1 - enwidenLaneRatio) * laneOpacity);
 		}
 		foreach (var ExtraTrackBorderRenderer in ExtraTrackBorderRenderers)
 		{
 			ExtraTrackBorderRenderer.gameObject.SetActive(enwidenLaneRatio > 0);
-			ExtraTrackBorderRenderer.color = new Color(1, 1, 1, enwidenLaneRatio);
+			ExtraTrackBorderRenderer.color = new Color(1, 1, 1, enwidenLaneRatio * laneOpacity);
+		}
+		foreach (var MainLaneDividerRenderer in MainLaneDividerRenderers)
+		{
+			MainLaneDividerRenderer.color = new Color(1, 1, 1, laneOpacity);
 		}
 		foreach (var ExtraLaneDividerRenderer in ExtraLaneDividerRenderers)
 		{
 			ExtraLaneDividerRenderer.gameObject.SetActive(enwidenLaneRatio > 0);
-			ExtraLaneDividerRenderer.color = new Color(1, 1, 1, enwidenLaneRatio);
+			ExtraLaneDividerRenderer.color = new Color(1, 1, 1, enwidenLaneRatio * laneOpacity);
 		}
 		foreach (var ExtraLaneCriticalLineRenderer in ExtraLaneCriticalLineRenderers)
 		{
@@ -178,78 +194,78 @@ public class ArcSceneControlManager : MonoBehaviour
 		ArcTimingManager.Instance.BeatlineEnwidenRatio = enwidenLaneRatio;
 	}
 
-	private void HideTrack()
-	{
-		foreach (SpriteRenderer r in DividerRenderers)
-		{
-			r.sharedMaterial.DOKill();
-		};
-		foreach (var TrackRenderer in TrackComponentsRenderers)
-		{
-			TrackRenderer.sharedMaterial.DOKill();
-		}
-		BackgroundDarkenLayer.DOKill();
-		if (ArcGameplayManager.Instance.IsPlaying)
-		{
-			foreach (SpriteRenderer r in DividerRenderers)
-			{
-				r.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
-			};
-			foreach (var TrackRenderer in TrackComponentsRenderers)
-			{
-				TrackRenderer.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
-			}
-			BackgroundDarkenLayer.DOColor(Color.black, trackAnimationTime).SetEase(Ease.InCubic);
-		}
-		else
-		{
-			foreach (SpriteRenderer r in DividerRenderers)
-			{
-				r.sharedMaterial.SetColor("_Color", Color.clear);
-			};
-			foreach (var TrackRenderer in TrackComponentsRenderers)
-			{
-				TrackRenderer.sharedMaterial.SetColor("_Color", Color.clear);
-			}
-			BackgroundDarkenLayer.color = Color.black;
-		}
-	}
+	// private void HideTrack()
+	// {
+	// 	foreach (SpriteRenderer r in DividerRenderers)
+	// 	{
+	// 		r.sharedMaterial.DOKill();
+	// 	};
+	// 	foreach (var TrackRenderer in TrackComponentsRenderers)
+	// 	{
+	// 		TrackRenderer.sharedMaterial.DOKill();
+	// 	}
+	// 	BackgroundDarkenLayer.DOKill();
+	// 	if (ArcGameplayManager.Instance.IsPlaying)
+	// 	{
+	// 		foreach (SpriteRenderer r in DividerRenderers)
+	// 		{
+	// 			r.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationDefaultTime).SetEase(Ease.InCubic);
+	// 		};
+	// 		foreach (var TrackRenderer in TrackComponentsRenderers)
+	// 		{
+	// 			TrackRenderer.sharedMaterial.DOColor(Color.clear, "_Color", trackAnimationDefaultTime).SetEase(Ease.InCubic);
+	// 		}
+	// 		BackgroundDarkenLayer.DOColor(Color.black, trackAnimationDefaultTime).SetEase(Ease.InCubic);
+	// 	}
+	// 	else
+	// 	{
+	// 		foreach (SpriteRenderer r in DividerRenderers)
+	// 		{
+	// 			r.sharedMaterial.SetColor("_Color", Color.clear);
+	// 		};
+	// 		foreach (var TrackRenderer in TrackComponentsRenderers)
+	// 		{
+	// 			TrackRenderer.sharedMaterial.SetColor("_Color", Color.clear);
+	// 		}
+	// 		BackgroundDarkenLayer.color = Color.black;
+	// 	}
+	// }
 
-	private void ShowTrack()
-	{
-		foreach (SpriteRenderer r in DividerRenderers)
-		{
-			r.sharedMaterial.DOKill();
-		};
-		foreach (var TrackRenderer in TrackComponentsRenderers)
-		{
-			TrackRenderer.sharedMaterial.DOKill();
-		}
-		BackgroundDarkenLayer.DOKill();
-		if (ArcGameplayManager.Instance.IsPlaying)
-		{
-			foreach (SpriteRenderer r in DividerRenderers)
-			{
-				r.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
-			};
-			foreach (var TrackRenderer in TrackComponentsRenderers)
-			{
-				TrackRenderer.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationTime).SetEase(Ease.InCubic);
-			}
-			BackgroundDarkenLayer.DOColor(Color.clear, trackAnimationTime).SetEase(Ease.OutCubic);
-		}
-		else
-		{
-			foreach (SpriteRenderer r in DividerRenderers)
-			{
-				r.sharedMaterial.SetColor("_Color", Color.white);
-			};
-			foreach (var TrackRenderer in TrackComponentsRenderers)
-			{
-				TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
-			}
-			BackgroundDarkenLayer.color = Color.clear;
-		}
-	}
+	// private void ShowTrack()
+	// {
+	// 	foreach (SpriteRenderer r in DividerRenderers)
+	// 	{
+	// 		r.sharedMaterial.DOKill();
+	// 	};
+	// 	foreach (var TrackRenderer in TrackComponentsRenderers)
+	// 	{
+	// 		TrackRenderer.sharedMaterial.DOKill();
+	// 	}
+	// 	BackgroundDarkenLayer.DOKill();
+	// 	if (ArcGameplayManager.Instance.IsPlaying)
+	// 	{
+	// 		foreach (SpriteRenderer r in DividerRenderers)
+	// 		{
+	// 			r.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationDefaultTime).SetEase(Ease.InCubic);
+	// 		};
+	// 		foreach (var TrackRenderer in TrackComponentsRenderers)
+	// 		{
+	// 			TrackRenderer.sharedMaterial.DOColor(Color.white, "_Color", trackAnimationDefaultTime).SetEase(Ease.InCubic);
+	// 		}
+	// 		BackgroundDarkenLayer.DOColor(Color.clear, trackAnimationDefaultTime).SetEase(Ease.OutCubic);
+	// 	}
+	// 	else
+	// 	{
+	// 		foreach (SpriteRenderer r in DividerRenderers)
+	// 		{
+	// 			r.sharedMaterial.SetColor("_Color", Color.white);
+	// 		};
+	// 		foreach (var TrackRenderer in TrackComponentsRenderers)
+	// 		{
+	// 			TrackRenderer.sharedMaterial.SetColor("_Color", Color.white);
+	// 		}
+	// 		BackgroundDarkenLayer.color = Color.clear;
+	// 	}
+	// }
 }
 

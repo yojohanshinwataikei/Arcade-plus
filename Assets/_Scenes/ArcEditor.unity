@@ -4726,14 +4726,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackgroundDarkenLayer: {fileID: 1217107841}
-  TrackComponentsRenderers:
-  - {fileID: 910698453}
-  - {fileID: 90194516}
-  - {fileID: 1400013566}
-  - {fileID: 418977840}
-  - {fileID: 1027423977}
-  - {fileID: 1448202006}
-  - {fileID: 917882136}
   DividerRenderers:
   - {fileID: 1418397531}
   - {fileID: 398971546}
@@ -4745,15 +4737,24 @@ MonoBehaviour:
   - {fileID: 1179785109}
   - {fileID: 1231564566}
   - {fileID: 875512364}
-  ExtraLaneRenderers:
-  - {fileID: 1448202006}
-  - {fileID: 917882136}
+  TrackMainRenderers:
+  - {fileID: 910698453}
   TrackBorderRenderers:
   - {fileID: 90194516}
   - {fileID: 1400013566}
+  ExtraLaneRenderers:
+  - {fileID: 1448202006}
+  - {fileID: 917882136}
   ExtraTrackBorderRenderers:
   - {fileID: 418977840}
   - {fileID: 1027423977}
+  MainLaneDividerRenderers:
+  - {fileID: 398971546}
+  - {fileID: 1147550522}
+  - {fileID: 2026685931}
+  - {fileID: 1012498207}
+  - {fileID: 1179785109}
+  - {fileID: 1231564566}
   ExtraLaneDividerRenderers:
   - {fileID: 1418397531}
   - {fileID: 317854336}
@@ -17034,7 +17035,7 @@ MonoBehaviour:
   input: {fileID: 364287362}
   slider: {fileID: 1055846781}
   SliderValueScale: 0.1
-  NumberFormat: f2
+  NumberFormat: f1
 --- !u!1 &512565614
 GameObject:
   m_ObjectHideFlags: 0
@@ -17514,10 +17515,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.052083332
-    y: 0.05925208
-    width: 0.8958333
-    height: 0.88149583
+    x: 0.05452563
+    y: 0.06203053
+    width: 0.8909488
+    height: 0.87593895
   near clip plane: 1
   far clip plane: 10000
   field of view: 50

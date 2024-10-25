@@ -237,6 +237,7 @@ namespace Arcade.Gameplay.Chart
 		HideGroup,
 		EnwidenCamera,
 		EnwidenLanes,
+		TrackDisplay,
 		Unknown,
 	}
 	public abstract class ArcEvent
@@ -266,6 +267,15 @@ namespace Arcade.Gameplay.Chart
 			else if (RawType == "trackshow" && RawParams.Count == 0)
 			{
 				Type = SceneControlType.TrackShow;
+			}
+			else if (RawType == "trackdisplay" && RawParams.Count == 2)
+			{
+				if ((RawParams[0] is RawAffFloat param0) && (RawParams[1] is RawAffInt param1))
+				{
+					Type = SceneControlType.TrackDisplay;
+					Duration = param0.data;
+					TrackDisplayValue = param1.data;
+				}
 			}
 			else if (RawType == "hidegroup" && RawParams.Count == 2)
 			{
@@ -311,6 +321,14 @@ namespace Arcade.Gameplay.Chart
 			{
 				item.Type = "trackshow";
 			}
+			else if (Type == SceneControlType.TrackDisplay)
+			{
+				item.Type = "trackdisplay";
+				item.Params = new List<IRawAffValue>{
+					new RawAffFloat{data=Duration},
+					new RawAffInt{data=TrackDisplayValue},
+				};
+			}
 			else if (Type == SceneControlType.HideGroup)
 			{
 				item.Type = "hidegroup";
@@ -345,6 +363,7 @@ namespace Arcade.Gameplay.Chart
 		public SceneControlType Type = SceneControlType.Unknown;
 		public bool Enable;
 		public float Duration;
+		public int TrackDisplayValue;
 		public ArcTimingGroup TimingGroup { get; set; }
 		public string RawType;
 		public List<IRawAffValue> RawParams;
