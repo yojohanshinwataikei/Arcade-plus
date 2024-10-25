@@ -47,6 +47,7 @@ public class ArcSceneControlManager : MonoBehaviour
 	{
 		float startLaneOpacity = 1;
 		float laneOpacity = 1;
+		float startBackgroundDarkenProgress = 0;
 		float backgroundDarkenProgress = 0;
 		float enwidenCameraRatio = 0;
 		float enwidenLaneRatio = 0;
@@ -65,34 +66,32 @@ public class ArcSceneControlManager : MonoBehaviour
 			switch (sc.Type)
 			{
 				case SceneControlType.TrackHide:
-					{
-						float animationProgress = Mathf.Clamp01((ArcGameplayManager.Instance.ChartTiming - sc.Timing) / (trackAnimationDefaultTime * 1000));
-						laneOpacity = Mathf.Lerp(startLaneOpacity, 0, animationProgress);
-						Debug.Log($"TrackHide {sc.Timing} {startLaneOpacity} -> {laneOpacity}");
-						if (ArcGameplayManager.Instance.ChartTiming - sc.Timing > trackAnimationDefaultTime * 1000)
-						{
-							startLaneOpacity = 0;
-						}
-					}
-					break;
 				case SceneControlType.TrackShow:
-					{
-						float animationProgress = Mathf.Clamp01((ArcGameplayManager.Instance.ChartTiming - sc.Timing) / (trackAnimationDefaultTime * 1000));
-						laneOpacity = Mathf.Lerp(startLaneOpacity, 1, animationProgress);
-						Debug.Log($"TrackShow {sc.Timing} {startLaneOpacity} -> {laneOpacity}");
-						if (ArcGameplayManager.Instance.ChartTiming - sc.Timing > trackAnimationDefaultTime * 1000)
-						{
-							startLaneOpacity = 1;
-						}
-					}
-					break;
 				case SceneControlType.TrackDisplay:
 					{
-						float animationProgress = Mathf.Clamp01((ArcGameplayManager.Instance.ChartTiming - sc.Timing) / (sc.Duration * 1000));
-						float targetLaneOpacity = ((float)(sc.TrackDisplayValue % 256)) / 255;
+						float animationDuration = trackAnimationDefaultTime;
+						if (sc.Type == SceneControlType.TrackDisplay)
+						{
+							animationDuration = sc.Duration;
+						}
+						float targetLaneOpacity = 0;
+						if (sc.Type == SceneControlType.TrackShow)
+						{
+							targetLaneOpacity = 1;
+						}
+						else if (sc.Type == SceneControlType.TrackHide)
+						{
+							targetLaneOpacity = 0;
+						}
+						else if (sc.Type == SceneControlType.TrackDisplay)
+						{
+							animationDuration = sc.Duration;
+							targetLaneOpacity = ((float)(sc.TrackDisplayValue % 256)) / 255;
+						}
+						float animationProgress = Mathf.Clamp01((ArcGameplayManager.Instance.ChartTiming - sc.Timing) / (animationDuration * 1000));
 						laneOpacity = Mathf.Lerp(startLaneOpacity, targetLaneOpacity, animationProgress);
-						Debug.Log($"TrackDisplay {sc.Timing}+{sc.Duration}->{sc.TrackDisplayValue} {startLaneOpacity} {laneOpacity}");
-						if (ArcGameplayManager.Instance.ChartTiming - sc.Timing > sc.Duration * 1000)
+						Debug.Log($"TrackDisplay {sc.Timing}+{animationDuration}->{targetLaneOpacity} {startLaneOpacity} {laneOpacity}");
+						if (ArcGameplayManager.Instance.ChartTiming - sc.Timing > animationDuration * 1000)
 						{
 							startLaneOpacity = targetLaneOpacity;
 						}
