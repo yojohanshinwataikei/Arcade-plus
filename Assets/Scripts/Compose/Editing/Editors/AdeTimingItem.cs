@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Gameplay.Chart;
 using Arcade.Compose.Command;
+using System.Globalization;
 
 namespace Arcade.Compose.Editing
 {
@@ -37,9 +38,9 @@ namespace Arcade.Compose.Editing
 			try
 			{
 				string[] splits = Text.Split(',');
-				int timing = int.Parse(splits[0]);
-				float bpm = float.Parse(splits[1]);
-				float beat = float.Parse(splits[2]);
+				int timing = int.Parse(splits[0], CultureInfo.InvariantCulture);
+				float bpm = float.Parse(splits[1], CultureInfo.InvariantCulture);
+				float beat = float.Parse(splits[2], CultureInfo.InvariantCulture);
 				ArcTiming n = TimingReference.Clone() as ArcTiming;
 				n.Timing = timing;
 				n.Bpm = bpm;

@@ -3,6 +3,7 @@ using System.IO;
 using UnityEditor;
 using Arcade.Compose;
 using UnityEngine;
+using System.Globalization;
 
 public class ArcadeBuild
 {
@@ -23,7 +24,7 @@ public class ArcadeBuild
 	{
 		DateTime buildTime = DateTime.Now;
 		//Note: seems pwd is project folder, however this is not documented
-		File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "Assets/Misc/BuildTimestamp.txt"), $"{buildTime.Ticks}");
+		File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "Assets/Misc/BuildTimestamp.txt"), $"{buildTime.Ticks.ToString(CultureInfo.InvariantCulture)}");
 		AssetDatabase.Refresh();
 	}
 	[MenuItem("Arcade/Build")]

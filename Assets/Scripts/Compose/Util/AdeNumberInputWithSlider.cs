@@ -1,3 +1,4 @@
+using System.Globalization;
 using Arcade.Compose;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,8 @@ namespace Arcade.Compose.UI
 		public InputField input;
 		public AdeSliderWithEndEdit slider;
 
-		public float SliderValueScale;
+		public float SliderValueScale = 1;
+		public string NumberFormat = "";
 
 		public delegate void OnValueEdited(float value);
 
@@ -38,13 +40,13 @@ namespace Arcade.Compose.UI
 		public void SetValueWithoutNotify(float value)
 		{
 			this.value = value;
-			input.SetTextWithoutNotify(value.ToString());
+			input.SetTextWithoutNotify(value.ToString(NumberFormat, CultureInfo.InvariantCulture));
 			slider.Slider.SetValueWithoutNotify(value / SliderValueScale);
 		}
 
 		private void OnInputFieldEndEdit(string str)
 		{
-			bool result = float.TryParse(str, out float value);
+			bool result = float.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out float value);
 			if (!result)
 			{
 				SetValueWithoutNotify(this.value);
@@ -60,7 +62,7 @@ namespace Arcade.Compose.UI
 
 		private void OnInputValueChanged(string str)
 		{
-			bool result = float.TryParse(str, out float value);
+			bool result = float.TryParse(str, NumberStyles.Float, CultureInfo.InvariantCulture, out float value);
 			if (result)
 			{
 				slider.Slider.SetValueWithoutNotify(value / SliderValueScale);
@@ -70,7 +72,7 @@ namespace Arcade.Compose.UI
 
 		private void OnSliderValueChanged(float sliderValue)
 		{
-			input.SetTextWithoutNotify((sliderValue * SliderValueScale).ToString());
+			input.SetTextWithoutNotify((sliderValue * SliderValueScale).ToString(NumberFormat, CultureInfo.InvariantCulture));
 		}
 	}
 }

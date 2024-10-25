@@ -13,6 +13,7 @@ using UnityEngine.UI;
 using Arcade.Compose.Command;
 using Arcade.Util.Loader;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Arcade.Compose
 {
@@ -466,7 +467,7 @@ namespace Arcade.Compose
 				CurrentProjectMetadata.BaseBpm;
 			ArcTimingManager.Instance.BaseBpm = rawBaseBpm == 0 ? 100 : rawBaseBpm;
 			BaseBpm.interactable = true;
-			BaseBpm.text = ArcTimingManager.Instance.BaseBpm.ToString();
+			BaseBpm.text = ArcTimingManager.Instance.BaseBpm.ToString(CultureInfo.InvariantCulture);
 
 			ArcGameplayManager.Instance.Load(chart, AudioClip);
 			CurrentDifficulty = difficulty;
@@ -477,7 +478,7 @@ namespace Arcade.Compose
 
 			AudioOffset.interactable = true;
 			CurrentTimingGroup.interactable = true;
-			AudioOffset.text = ArcGameplayManager.Instance.ChartAudioOffset.ToString();
+			AudioOffset.text = ArcGameplayManager.Instance.ChartAudioOffset.ToString(CultureInfo.InvariantCulture);
 
 			bool watching = watcher.EnableRaisingEvents;
 			watcher.EnableRaisingEvents = false;
@@ -547,7 +548,7 @@ namespace Arcade.Compose
 		public void OnBaseBpmEdited()
 		{
 			float value;
-			bool result = float.TryParse(BaseBpm.text, out value);
+			bool result = float.TryParse(BaseBpm.text, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
 			if (result)
 			{
 				if (value <= 0) value = 100;
@@ -569,17 +570,17 @@ namespace Arcade.Compose
 				ArcTimingManager.Instance.BaseBpm = value;
 				File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 				ArcArcManager.Instance.Rebuild();
-				BaseBpm.text = value.ToString();
+				BaseBpm.text = value.ToString(CultureInfo.InvariantCulture);
 			}
 		}
 		public void OnAudioOffsetEdited()
 		{
 			int value;
-			bool result = int.TryParse(AudioOffset.text, out value);
+			bool result = int.TryParse(AudioOffset.text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value);
 			if (result)
 			{
 				ArcGameplayManager.Instance.ChartAudioOffset = value;
-				AudioOffset.text = value.ToString();
+				AudioOffset.text = value.ToString(CultureInfo.InvariantCulture);
 			}
 		}
 		public void OnFileWatchClicked()

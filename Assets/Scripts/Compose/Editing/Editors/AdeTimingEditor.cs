@@ -6,6 +6,7 @@ using System.Linq;
 using Arcade.Gameplay;
 using Arcade.Compose.Command;
 using System;
+using System.Globalization;
 
 namespace Arcade.Compose.Editing
 {
@@ -60,7 +61,7 @@ namespace Arcade.Compose.Editing
 		}
 		private string GetTimingString(ArcTiming timing)
 		{
-			return $"{timing.Timing},{timing.Bpm.ToString("f2")},{timing.BeatsPerLine.ToString("f2")}";
+			return $"{timing.Timing.ToString(CultureInfo.InvariantCulture)},{timing.Bpm.ToString("f2", CultureInfo.InvariantCulture)},{timing.BeatsPerLine.ToString("f2", CultureInfo.InvariantCulture)}";
 		}
 
 		public void AddTiming(ArcTiming caller)
@@ -98,7 +99,7 @@ namespace Arcade.Compose.Editing
 			options.Add(new Dropdown.OptionData { text = "默认" });
 			foreach (var tg in ArcTimingManager.Instance.timingGroups)
 			{
-				options.Add(new Dropdown.OptionData { text = tg.Id.ToString() });
+				options.Add(new Dropdown.OptionData { text = tg.Id.ToString(CultureInfo.InvariantCulture) });
 			}
 			CurrentTimingGroupDropdown.options = options;
 
@@ -141,7 +142,7 @@ namespace Arcade.Compose.Editing
 			}
 			else
 			{
-				CurrentTimingGroupText.text = currentTimingGroup.Id.ToString();
+				CurrentTimingGroupText.text = currentTimingGroup.Id.ToString(CultureInfo.InvariantCulture);
 			}
 			AdeGridManager.Instance.ReBuildBeatline();
 		}

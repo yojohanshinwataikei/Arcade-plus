@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Arcade.Gameplay.Chart;
+using System.Globalization;
 
 namespace Arcade.Gameplay
 {
@@ -25,10 +26,10 @@ namespace Arcade.Gameplay
 			ScoreText.text = "00000000";
 			if (!ArcGameplayManager.Instance.IsLoaded) return;
 			if (ArcGameplayManager.Instance.Chart == null) return;
-			ScoreText.text = CalculateScore(ArcGameplayManager.Instance.ChartTiming).ToString("D8");
+			ScoreText.text = CalculateScore(ArcGameplayManager.Instance.ChartTiming).ToString("D8", CultureInfo.InvariantCulture);
 
 			if (combo < 2) ComboText.text = "";
-			else ComboText.text = combo.ToString();
+			else ComboText.text = combo.ToString(CultureInfo.InvariantCulture);
 		}
 
 		private double CalculateSingleScore()

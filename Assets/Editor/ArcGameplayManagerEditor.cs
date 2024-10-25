@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using Arcade.Gameplay;
+using System.Globalization;
 
 [CustomEditor(typeof(ArcGameplayManager))]
 public class ArcGameplayManagerEditor : Editor
@@ -39,7 +40,7 @@ public class ArcGameplayManagerEditor : Editor
 		GUILayout.EndHorizontal();
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Timing");
-		GUILayout.Label(ArcGameplayManager.Instance.AudioTiming.ToString());
+		GUILayout.Label(ArcGameplayManager.Instance.AudioTiming.ToString(CultureInfo.InvariantCulture));
 		GUILayout.EndHorizontal();
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Set Timing");

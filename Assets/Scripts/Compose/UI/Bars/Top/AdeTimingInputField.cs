@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Arcade.Gameplay;
 using System;
+using System.Globalization;
 
 namespace Arcade.Compose.UI
 {
@@ -40,13 +41,13 @@ namespace Arcade.Compose.UI
 			if (!TimingInput.isFocused)
 			{
 				int timing = useChartTiming ? ArcGameplayManager.Instance.ChartTiming : ArcGameplayManager.Instance.AudioTiming;
-				TimingInput.SetTextWithoutNotify(timing.ToString());
+				TimingInput.SetTextWithoutNotify(timing.ToString(CultureInfo.InvariantCulture));
 			}
 		}
 
 		public void OnValueChange(string s)
 		{
-			if (int.TryParse(s, out int value))
+			if (int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out int value))
 			{
 				if (useChartTiming)
 				{

@@ -49,11 +49,12 @@ namespace Arcade.Gameplay
 
 		public int SettingVelocity
 		{
-			get => settingVelocity; set
+			get => settingVelocity;
+			set
 			{
 				settingVelocity = value;
 				ArcArcManager.Instance.Rebuild();
-				AdeSpeedSlider.Instance.UpdateVelocity(value);
+				ArcadeComposeManager.Instance.VelocitySlider.SetValueWithoutNotify(value / 30);
 			}
 		}
 

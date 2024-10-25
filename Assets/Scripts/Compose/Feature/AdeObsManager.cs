@@ -15,6 +15,7 @@ using OBSWebsocketDotNet.Types.Events;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Arcade.Util.UniTaskHelper;
+using System.Globalization;
 
 namespace Arcade.Compose.Feature
 {
@@ -70,7 +71,7 @@ namespace Arcade.Compose.Feature
 		private void UpdatePreferencesInput()
 		{
 			ObsServerIpInput.SetTextWithoutNotify(preference.ip);
-			ObsServerPortInput.SetTextWithoutNotify(preference.port.ToString());
+			ObsServerPortInput.SetTextWithoutNotify(preference.port.ToString(CultureInfo.InvariantCulture));
 			ObsServerPasswordInput.SetTextWithoutNotify(preference.password);
 			ObsServerUsePasswordToggle.SetIsOnWithoutNotify(preference.usePassword);
 			UpdateFieldsState();
@@ -120,11 +121,11 @@ namespace Arcade.Compose.Feature
 		{
 			try
 			{
-				preference.port = int.Parse(ObsServerPortInput.text);
+				preference.port = int.Parse(ObsServerPortInput.text, CultureInfo.InvariantCulture);
 			}
 			catch (Exception)
 			{
-				ObsServerPortInput.SetTextWithoutNotify(preference.port.ToString());
+				ObsServerPortInput.SetTextWithoutNotify(preference.port.ToString(CultureInfo.InvariantCulture));
 			}
 		}
 

@@ -947,9 +947,9 @@ namespace Arcade.Compose
 				Match match = Regex.Match(color, "^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$");
 				if (match.Success)
 				{
-					byte red = Byte.Parse(match.Groups[1].Value, NumberStyles.HexNumber);
-					byte green = Byte.Parse(match.Groups[2].Value, NumberStyles.HexNumber);
-					byte blue = Byte.Parse(match.Groups[3].Value, NumberStyles.HexNumber);
+					byte red = Byte.Parse(match.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+					byte green = Byte.Parse(match.Groups[2].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+					byte blue = Byte.Parse(match.Groups[3].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
 					return new Color32(red, green, blue, 255);
 				}
 				else

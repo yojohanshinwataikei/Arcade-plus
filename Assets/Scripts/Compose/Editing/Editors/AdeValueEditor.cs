@@ -10,6 +10,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using Arcade.Util.UniTaskHelper;
 using Arcade.Util.UI;
+using System.Globalization;
 
 namespace Arcade.Compose.Editing
 {
@@ -86,35 +87,35 @@ namespace Arcade.Compose.Editing
 
 				UpdateField(
 					(note) => true,
-					(note) => note.Timing.ToString(),
+					(note) => note.Timing.ToString(CultureInfo.InvariantCulture),
 					"-",
 					(active) => Timing.gameObject.SetActive(active),
 					(data) => Timing.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
 				);
 				UpdateField(
 					(note) => note is ArcLongNote,
-					(note) => (note as ArcLongNote).EndTiming.ToString(),
+					(note) => (note as ArcLongNote).EndTiming.ToString(CultureInfo.InvariantCulture),
 					"-",
 					(active) => EndTiming.gameObject.SetActive(active),
 					(data) => EndTiming.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
 				);
 				UpdateField(
 					(note) => note is ArcTap || note is ArcHold,
-					(note) => note is ArcTap ? (note as ArcTap).Track.ToString() : (note as ArcHold).Track.ToString(),
+					(note) => note is ArcTap ? (note as ArcTap).Track.ToString(CultureInfo.InvariantCulture) : (note as ArcHold).Track.ToString(CultureInfo.InvariantCulture),
 					"-",
 					(active) => Track.gameObject.SetActive(active),
 					(data) => Track.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
 				);
 				UpdateField(
 					(note) => note is ArcArc,
-					(note) => $"{(note as ArcArc).XStart:f2},{(note as ArcArc).YStart:f2}",
+					(note) => $"{(note as ArcArc).XStart.ToString("f2", CultureInfo.InvariantCulture)},{(note as ArcArc).YStart.ToString("f2", CultureInfo.InvariantCulture)}",
 					"-,-",
 					(active) => StartPos.gameObject.SetActive(active),
 					(data) => StartPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
 				);
 				UpdateField(
 					(note) => note is ArcArc,
-					(note) => $"{(note as ArcArc).XEnd:f2},{(note as ArcArc).YEnd:f2}",
+					(note) => $"{(note as ArcArc).XEnd.ToString("f2", CultureInfo.InvariantCulture)},{(note as ArcArc).YEnd.ToString("f2", CultureInfo.InvariantCulture)}",
 					"-,-",
 					(active) => EndPos.gameObject.SetActive(active),
 					(data) => EndPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
@@ -301,7 +302,7 @@ namespace Arcade.Compose.Editing
 			}
 			else
 			{
-				return color.Value.timingGroup.Id.ToString();
+				return color.Value.timingGroup.Id.ToString(CultureInfo.InvariantCulture);
 			}
 		}
 		private void ApplyTimingGroupDropdown(ArcTimingGroupOption? data)
@@ -371,7 +372,7 @@ namespace Arcade.Compose.Editing
 				inputField.text,
 				(string raw, ref int result) =>
 				{
-					if (!int.TryParse(raw, out result))
+					if (!int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
 					{
 						return new ValueChangeErrorMessage { message = "时间数值格式错误" };
 					}
@@ -432,7 +433,7 @@ namespace Arcade.Compose.Editing
 				inputField.text,
 				(string raw, ref int result) =>
 				{
-					if (!int.TryParse(raw, out result))
+					if (!int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
 					{
 						return new ValueChangeErrorMessage { message = "轨道数值格式错误" };
 					}
@@ -465,7 +466,7 @@ namespace Arcade.Compose.Editing
 				inputField.text,
 				(string raw, ref int result) =>
 				{
-					if (!int.TryParse(raw, out result))
+					if (!int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
 					{
 						return new ValueChangeErrorMessage { message = "时间数值格式错误" };
 					}
@@ -517,11 +518,11 @@ namespace Arcade.Compose.Editing
 			{
 				return new ValueChangeErrorMessage { message = "坐标位置格式错误" };
 			}
-			if (!float.TryParse(coords[0], out x))
+			if (!float.TryParse(coords[0], NumberStyles.Float, CultureInfo.InvariantCulture, out x))
 			{
 				return new ValueChangeErrorMessage { message = "坐标位置格式错误" };
 			}
-			if (!float.TryParse(coords[1], out y))
+			if (!float.TryParse(coords[1], NumberStyles.Float, CultureInfo.InvariantCulture, out y))
 			{
 				return new ValueChangeErrorMessage { message = "坐标位置格式错误" };
 			}

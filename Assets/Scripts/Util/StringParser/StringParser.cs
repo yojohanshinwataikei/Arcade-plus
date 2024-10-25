@@ -1,3 +1,5 @@
+using System.Globalization;
+
 public class StringParser
 {
 	private int pos;
@@ -13,14 +15,14 @@ public class StringParser
 	public float ReadFloat(string ternimator = null)
 	{
 		int end = ternimator != null ? str.IndexOf(ternimator, pos) : (str.Length - 1);
-		float value = float.Parse(str.Substring(pos, end - pos));
+		float value = float.Parse(str.Substring(pos, end - pos), CultureInfo.InvariantCulture);
 		pos += (end - pos + 1);
 		return value;
 	}
 	public int ReadInt(string ternimator = null)
 	{
 		int end = ternimator != null ? str.IndexOf(ternimator, pos) : (str.Length - 1);
-		int value = int.Parse(str.Substring(pos, end - pos));
+		int value = int.Parse(str.Substring(pos, end - pos), CultureInfo.InvariantCulture);
 		pos += (end - pos + 1);
 		return value;
 	}

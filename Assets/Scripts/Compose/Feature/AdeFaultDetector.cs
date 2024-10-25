@@ -7,6 +7,7 @@ using Arcade.Aff.Faults;
 using System.Linq;
 using UnityEngine.UI;
 using System.IO;
+using System.Globalization;
 
 namespace Arcade.Aff.Faults
 {
@@ -238,14 +239,14 @@ namespace Arcade.Compose
 					sw.WriteLine(c.Reason);
 					foreach (var f in c.Faults)
 					{
-						sw.WriteLine($"\t谱面时间:{f.Timing}\t音频时间:{f.Timing + ArcGameplayManager.Instance.ChartAudioOffset}");
+						sw.WriteLine($"\t谱面时间:{f.Timing.ToString(CultureInfo.InvariantCulture)}\t音频时间:{f.Timing + ArcGameplayManager.Instance.ChartAudioOffset.ToString(CultureInfo.InvariantCulture)}");
 					}
 					count += c.Faults.Count;
 				}
 			}
 
 			sw.Close();
-			Status.text = $"检查完成，共 {count} 个错误";
+			Status.text = $"检查完成，共 {count.ToString(CultureInfo.InvariantCulture)} 个错误";
 			Arcade.Util.Shell.FileBrowser.OpenExplorer(path);
 		}
 	}

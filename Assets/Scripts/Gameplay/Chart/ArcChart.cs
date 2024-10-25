@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -1469,7 +1470,7 @@ namespace Arcade.Gameplay.Chart
 				Match matchAngleX = Regex.Match(attribute, "^anglex([0-9]+)$");
 				if (matchAngleX.Success)
 				{
-					bool result = int.TryParse(matchAngleX.Groups[1].Value, out AngleX);
+					bool result = int.TryParse(matchAngleX.Groups[1].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out AngleX);
 					if (!result)
 					{
 						Debug.LogWarning($"Timinggroup attribute applying failed:{attribute}");
@@ -1479,7 +1480,7 @@ namespace Arcade.Gameplay.Chart
 				Match matchAngleY = Regex.Match(attribute, "^angley([0-9]+)$");
 				if (matchAngleY.Success)
 				{
-					bool result = int.TryParse(matchAngleY.Groups[1].Value, out AngleY);
+					bool result = int.TryParse(matchAngleY.Groups[1].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out AngleY);
 					if (!result)
 					{
 						Debug.LogWarning($"Timinggroup attribute applying failed:{attribute}");

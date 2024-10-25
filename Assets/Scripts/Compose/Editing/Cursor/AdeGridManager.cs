@@ -9,6 +9,7 @@ using System.Linq;
 using Arcade.Compose.MarkingMenu;
 using Newtonsoft.Json;
 using Arcade.Compose.Editing;
+using System.Globalization;
 
 namespace Arcade.Compose
 {
@@ -377,9 +378,9 @@ namespace Arcade.Compose
 					{
 						int v1 = s.IndexOf('>');
 						int v2 = s.IndexOf('/');
-						float start = float.Parse(s.Substring(0, v1));
-						float end = float.Parse(s.Substring(v1 + 1, v2 - v1 - 1));
-						float interval = float.Parse(s.Substring(v2 + 1, s.Length - v2 - 1));
+						float start = float.Parse(s.Substring(0, v1), CultureInfo.InvariantCulture);
+						float end = float.Parse(s.Substring(v1 + 1, v2 - v1 - 1), CultureInfo.InvariantCulture);
+						float interval = float.Parse(s.Substring(v2 + 1, s.Length - v2 - 1), CultureInfo.InvariantCulture);
 						for (float i = start; i <= end; i += interval)
 						{
 							ret.Add(i);
@@ -387,7 +388,7 @@ namespace Arcade.Compose
 					}
 					else
 					{
-						ret.Add(float.Parse(s));
+						ret.Add(float.Parse(s, CultureInfo.InvariantCulture));
 					}
 				}
 			}
@@ -628,7 +629,7 @@ namespace Arcade.Compose
 		public void OnDensityChange()
 		{
 			float density;
-			if (!float.TryParse(DensityInputField.text, out density)) return;
+			if (!float.TryParse(DensityInputField.text, NumberStyles.Float, CultureInfo.InvariantCulture, out density)) return;
 			if (density <= 0 || density > 64) return;
 			BeatlineDensity = density;
 			CalculateBeatlineTimes();
