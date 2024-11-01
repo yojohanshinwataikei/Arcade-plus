@@ -114,7 +114,6 @@ namespace Arcade.Compose
 			if (shouldReload)
 			{
 				ReloadChart();
-				ArcGameplayManager.Instance.AudioTiming = ArcGameplayManager.Instance.Chart.LastEventTiming - 500;
 				shouldReload = false;
 			}
 			if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.Save))
