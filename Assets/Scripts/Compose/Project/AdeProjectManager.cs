@@ -423,6 +423,7 @@ namespace Arcade.Compose
 
 		private void LoadChart(int difficulty)
 		{
+			AdeSelectionManager.Instance.DeselectAllNotes();
 			if (CurrentProjectMetadata == null || CurrentProjectFolder == null || AudioClip == null)
 			{
 				return;
