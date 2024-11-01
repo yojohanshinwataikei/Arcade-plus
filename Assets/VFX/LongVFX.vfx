@@ -7930,7 +7930,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Texture, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"obj":{"fileID":2800000,"guid":"276d9e395ae18fe40a9b4988549f2349","type":3}}'
+      m_SerializableObject: '{"obj":{"fileID":2800000,"guid":"dc8e04064e5760b439e4c2970a2a9767","type":3}}'
     m_Space: -1
   m_Property:
     name: _Texture

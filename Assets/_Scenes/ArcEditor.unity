@@ -4726,17 +4726,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BackgroundDarkenLayer: {fileID: 1217107841}
-  DividerRenderers:
-  - {fileID: 1418397531}
-  - {fileID: 398971546}
-  - {fileID: 1147550522}
-  - {fileID: 2026685931}
-  - {fileID: 317854336}
-  - {fileID: 691425712}
-  - {fileID: 1012498207}
-  - {fileID: 1179785109}
-  - {fileID: 1231564566}
-  - {fileID: 875512364}
   TrackMainRenderers:
   - {fileID: 910698453}
   TrackBorderRenderers:
@@ -17515,10 +17504,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.05452563
-    y: 0.06203053
-    width: 0.8909488
-    height: 0.87593895
+    x: 0.052083332
+    y: 0.05925208
+    width: 0.8958333
+    height: 0.88149583
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
