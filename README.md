@@ -10,7 +10,7 @@ The original commit history of Sch are not being included in this repository, si
 
 ### Arcade-plus does not work on my OS!
 
-Arcade-plus is only completely tested on Latest Windows 11. However it should work on Windows 7, 8 or 10 as well. Older versions of Windows are not supported.
+Arcade-plus is only completely tested on Latest Windows 11. However it should work on Windows 8 or 10 as well. Older versions of Windows are not supported.
 
 Also, macOS and Linux support is experimental for now, if you find any bug that only happens on your OS, please help us by opening a bug-fixing pull request.
 
