@@ -1,4 +1,4 @@
-欢迎来到 Arcade-plus 0.6.0 Alpha 测试版！
+欢迎来到 Arcade-plus 0.6.0！
 本次更新的内容有
 
 - Unity 版本更新到 6000.0
