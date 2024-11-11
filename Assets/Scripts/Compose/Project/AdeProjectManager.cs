@@ -529,11 +529,13 @@ namespace Arcade.Compose
 		{
 			if (CurrentProjectMetadata == null) return;
 			CurrentProjectMetadata.Artist = Composer.text;
+			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 		}
 		public void OnNameEdited()
 		{
 			if (CurrentProjectMetadata == null) return;
 			CurrentProjectMetadata.Title = Name.text;
+			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 		}
 		public void OnDiffEdited()
 		{
@@ -544,6 +546,7 @@ namespace Arcade.Compose
 				CurrentProjectMetadata.Difficulties[CurrentDifficulty] = new AdeChartDifficultyMetadata();
 			}
 			CurrentProjectMetadata.Difficulties[CurrentDifficulty].Rating = Diff.text;
+			File.WriteAllText(ProjectMetadataFilePath, JsonConvert.SerializeObject(CurrentProjectMetadata));
 		}
 		public void OnBaseBpmEdited()
 		{
