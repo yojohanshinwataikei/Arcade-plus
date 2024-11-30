@@ -656,7 +656,7 @@ namespace Arcade.Gameplay
 				headPropertyBlock.SetColor(lowColorShaderId, lowC);
 				HeadRenderer.SetPropertyBlock(headPropertyBlock);
 			}
-			else if (arc.Timing < currentTiming)
+			if ((arc.Timing < currentTiming && arc.Timing != arc.EndTiming) || (Arc.Position < 0 && arc.Timing == arc.EndTiming))
 			{
 				HeadRenderer.GetPropertyBlock(headPropertyBlock);
 				headPropertyBlock.SetColor(highColorShaderId, currentHighColor);
@@ -669,6 +669,11 @@ namespace Arcade.Gameplay
 						ArcArcSegmentComponent s = segments[0];
 						int duration = s.ToTiming - s.FromTiming;
 						if (duration == 0)
+						{
+							EnableHead = false;
+							return;
+						}
+						if (s.ToTiming < currentTiming)
 						{
 							EnableHead = false;
 							return;
