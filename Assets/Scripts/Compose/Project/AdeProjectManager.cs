@@ -422,6 +422,7 @@ namespace Arcade.Compose
 
 		private void LoadChart(int difficulty)
 		{
+			AdeOperationManager.Instance.CancelOngoingOperation();
 			AdeSelectionManager.Instance.DeselectAllNotes();
 			if (CurrentProjectMetadata == null || CurrentProjectFolder == null || AudioClip == null)
 			{
