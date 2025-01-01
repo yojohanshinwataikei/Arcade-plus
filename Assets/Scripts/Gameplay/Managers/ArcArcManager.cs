@@ -364,6 +364,10 @@ namespace Arcade.Gameplay
 			foreach (ArcArc arc in Arcs)
 			{
 				arc.arcRenderer.ReloadColor();
+				foreach (ArcArcTap arctap in arc.ArcTaps)
+				{
+					arctap.UpdateColor();
+				}
 			}
 		}
 

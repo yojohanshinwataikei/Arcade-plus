@@ -901,6 +901,7 @@ namespace Arcade.Gameplay.Chart
 				ModelRenderer.sortingLayerName = "Arc";
 				ModelRenderer.sortingOrder = 4;
 				alphaShaderId = Shader.PropertyToID("_Alpha");
+				colorShaderId = Shader.PropertyToID("_Color");
 				ArcTapCollider = instance.GetComponentInChildren<MeshCollider>();
 				Enable = false;
 			}
@@ -909,6 +910,8 @@ namespace Arcade.Gameplay.Chart
 		{
 			RemoveArcTapConnection();
 			base.Destroy();
+			currentAlpha = 1;
+			currentTintColor = Color.white;
 			ArcTapCollider = null;
 			ModelRenderer = null;
 			ShadowRenderer = null;
@@ -935,6 +938,7 @@ namespace Arcade.Gameplay.Chart
 
 			UpdatePosition();
 			UpdateScale();
+			UpdateColor();
 			SetupArcTapConnection();
 		}
 
@@ -970,6 +974,18 @@ namespace Arcade.Gameplay.Chart
 			}
 		}
 
+		public void UpdateColor()
+		{
+			if (Arc.Designant && !Arc.IsSfx)
+			{
+				TintColor = ArcArcManager.Instance.ArcTapDesignant;
+			}
+			else
+			{
+				TintColor = Color.white;
+			}
+		}
+
 		/// <summary>
 		/// Please use the overload method.
 		/// </summary>
@@ -980,7 +996,7 @@ namespace Arcade.Gameplay.Chart
 
 		public void SetupArcTapConnection()
 		{
-			if (Arc == null || Arc.NoInput() || (Arc.EndTiming - Arc.Timing) == 0) return;
+			if (Arc == null || Arc.NoInput() || Arc.Designant || (Arc.EndTiming - Arc.Timing) == 0) return;
 			List<ArcTap> taps = ArcTapNoteManager.Instance.Taps;
 			ArcTap[] sameTimeTapNotes = taps.Where((s) => Mathf.Abs(s.Timing - Timing) <= 1).ToArray();
 			foreach (ArcTap t in sameTimeTapNotes)
@@ -1031,6 +1047,23 @@ namespace Arcade.Gameplay.Chart
 		public bool IsMyself(GameObject gameObject)
 		{
 			return Model.gameObject.Equals(gameObject);
+		}
+		public Color TintColor
+		{
+			get
+			{
+				return currentTintColor;
+			}
+			set
+			{
+				if (currentTintColor != value)
+				{
+					currentTintColor = value;
+					ModelRenderer.GetPropertyBlock(propertyBlock);
+					propertyBlock.SetColor(colorShaderId, value);
+					ModelRenderer.SetPropertyBlock(propertyBlock);
+				}
+			}
 		}
 
 		public float Alpha
@@ -1095,8 +1128,10 @@ namespace Arcade.Gameplay.Chart
 		}
 
 		private bool selected;
+		private Color currentTintColor = Color.white;
 		private float currentAlpha = 1f;
 		private int alphaShaderId = 0;
+		private int colorShaderId = 0;
 
 		public ArcArcTap()
 		{
@@ -1125,6 +1160,11 @@ namespace Arcade.Gameplay.Chart
 				return LineType != ArcLineType.FalseNotVoid;
 			}
 
+		}
+
+		public bool Designant
+		{
+			get => LineType == ArcLineType.Designant;
 		}
 		public List<ArcArcTap> ArcTaps = new List<ArcArcTap>();
 

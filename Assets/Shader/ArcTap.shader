@@ -3,6 +3,7 @@ Shader "Arcade/ArcTap"
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+		[PerRendererData] _Color ("Color", Color) = (1,1,1,1)
 		[PerRendererData] _Alpha ("Alpha", Float) = 1
 	}
 	SubShader
@@ -32,6 +33,7 @@ Shader "Arcade/ArcTap"
 			};
 
 			float _Alpha;
+			float4 _Color;
 			sampler2D _MainTex;
             float4 _MainTex_ST;
 
@@ -46,6 +48,7 @@ Shader "Arcade/ArcTap"
 			half4 frag (v2f i) : SV_Target
 			{
 				half4 c = half4(tex2D(_MainTex,i.uv).rgb, _Alpha);
+				c *= _Color;
 				c.rgb *= c.a;
 				return c;
 			}

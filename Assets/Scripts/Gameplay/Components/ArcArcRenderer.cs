@@ -66,6 +66,11 @@ namespace Arcade.Gameplay
 		{
 			get { return ArcArcManager.Instance.ArcVoid; }
 		}
+		private Color ArcDesignant
+		{
+			get { return ArcArcManager.Instance.ArcDesignant; }
+		}
+
 
 
 		public ArcArc Arc
@@ -253,8 +258,8 @@ namespace Arcade.Gameplay
 			float alpha = Alpha;
 			if (arc != null)
 			{
-				HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : arc.Color == 2 ? ArcGreenHigh : ArcUnknownHigh));
-				LowColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : arc.Color == 2 ? ArcGreenLow : ArcUnknownLow));
+				HighColor = GetColor(true);
+				LowColor = GetColor(false);
 			}
 			Alpha = alpha;
 		}
@@ -338,6 +343,37 @@ namespace Arcade.Gameplay
 		private Color currentHighColor;
 		private Color currentLowColor;
 		private List<ArcArcSegmentComponent> segments = new List<ArcArcSegmentComponent>();
+
+		private Color GetColor(bool high)
+		{
+			if (arc.LineType == ArcLineType.TrueIsVoid)
+			{
+				return ArcVoid;
+			}
+			else if (arc.LineType == ArcLineType.Designant)
+			{
+				return ArcDesignant;
+			}
+			else
+			{
+				if (arc.Color == 0)
+				{
+					return high ? ArcBlueHigh : ArcBlueLow;
+				}
+				else if (arc.Color == 1)
+				{
+					return high ? ArcRedHigh : ArcRedLow;
+				}
+				else if (arc.Color == 2)
+				{
+					return high ? ArcGreenHigh : ArcGreenLow;
+				}
+				else
+				{
+					return high ? ArcUnknownHigh : ArcUnknownLow;
+				}
+			}
+		}
 
 		private void InstantiateSegment(int quantity)
 		{
@@ -438,8 +474,8 @@ namespace Arcade.Gameplay
 								  -timingManager.CalculatePositionByTimingAndStart(arc.Timing, arc.EndTiming, arc.TimingGroup) / 1000f);
 				segments[segmentCount - 1].BuildSegment(start, end, arc.IsVoid ? OffsetVoid : OffsetNormal, arc.Timing + segSize * (segmentCount - 1), arc.EndTiming, startHeight, endHeight);
 			}
-			HighColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueHigh : arc.Color == 1 ? ArcRedHigh : arc.Color == 2 ? ArcGreenHigh : ArcUnknownHigh));
-			LowColor = (arc.IsVoid ? ArcVoid : (arc.Color == 0 ? ArcBlueLow : arc.Color == 1 ? ArcRedLow : arc.Color == 2 ? ArcGreenLow : ArcUnknownLow));
+			HighColor = GetColor(true);
+			LowColor = GetColor(false);
 		}
 
 		public void BuildHead()

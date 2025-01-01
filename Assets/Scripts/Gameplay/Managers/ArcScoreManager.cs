@@ -46,7 +46,7 @@ namespace Arcade.Gameplay
 			}
 			foreach (var arc in ArcArcManager.Instance.Arcs)
 			{
-				if (arc.NoInput())
+				if (arc.NoInput() || arc.Designant)
 				{
 					continue;
 				}
@@ -93,7 +93,7 @@ namespace Arcade.Gameplay
 			}
 			foreach (var arc in ArcArcManager.Instance.Arcs)
 			{
-				if (arc.NoInput())
+				if (arc.NoInput() || arc.Designant)
 				{
 					continue;
 				}
