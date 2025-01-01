@@ -180,6 +180,8 @@ namespace Arcade.Compose
 			public Color ArcGreenHigh;
 			public Color ArcUnknownHigh;
 			public Color ArcVoid;
+			public Color ArcDesignant;
+			public Color ArcTapDesignant;
 			public Sprite TrackLight;
 			public Sprite TrackConflict;
 			public Sprite TrackExtraLight;
@@ -274,6 +276,8 @@ namespace Arcade.Compose
 			public Color ArcGreenHigh;
 			public Color ArcUnknownHigh;
 			public Color ArcVoid;
+			public Color ArcDesignant;
+			public Color ArcTapDesignant;
 		};
 		//The data of onetheme in one side
 		public class ThemeSideData
@@ -359,6 +363,10 @@ namespace Arcade.Compose
 			public string arcUnknownHigh;
 			[JsonProperty("arc-void")]
 			public string arcVoid;
+			[JsonProperty("arc-designant")]
+			public string arcDesignant;
+			[JsonProperty("arctap-designant")]
+			public string arcTapDesignant;
 		}
 		[Serializable]
 		public class ThemeSideDataSpec
@@ -891,6 +899,10 @@ namespace Arcade.Compose
 			internalDefaultNoteData.Conflict.ArcUnknownHigh = rawDefaultData.ArcUnknownHigh;
 			internalDefaultNoteData.Light.ArcVoid = rawDefaultData.ArcVoid;
 			internalDefaultNoteData.Conflict.ArcVoid = rawDefaultData.ArcVoid;
+			internalDefaultNoteData.Light.ArcDesignant = rawDefaultData.ArcDesignant;
+			internalDefaultNoteData.Conflict.ArcDesignant = rawDefaultData.ArcDesignant;
+			internalDefaultNoteData.Light.ArcTapDesignant = rawDefaultData.ArcTapDesignant;
+			internalDefaultNoteData.Conflict.ArcTapDesignant = rawDefaultData.ArcTapDesignant;
 			internalDefaultNoteData.Colorless = internalDefaultNoteData.Light;
 			internalDefaultNoteData.Lephon = internalDefaultNoteData.Light;
 
@@ -1018,6 +1030,8 @@ namespace Arcade.Compose
 			noteSideData.ArcGreenHigh = LoadColor(spec.arcGreenHigh, fallback.ArcGreenHigh);
 			noteSideData.ArcUnknownHigh = LoadColor(spec.arcUnknownHigh, fallback.ArcUnknownHigh);
 			noteSideData.ArcVoid = LoadColor(spec.arcVoid, fallback.ArcVoid);
+			noteSideData.ArcDesignant = LoadColor(spec.arcDesignant, fallback.ArcDesignant);
+			noteSideData.ArcTapDesignant = LoadColor(spec.arcTapDesignant, fallback.ArcTapDesignant);
 
 			return noteSideData;
 		}

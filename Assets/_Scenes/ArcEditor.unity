@@ -50218,12 +50218,14 @@ MonoBehaviour:
     ArcRedLow: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
     ArcBlueLow: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}
     ArcGreenLow: {r: 0, g: 1, b: 0.47592807, a: 1}
-    ArcUnknownLow: {r: 0.6666667, g: 0.6666667, b: 0.6666667, a: 1}
+    ArcUnknownLow: {r: 0.8, g: 0.8, b: 0.8, a: 1}
     ArcRedHigh: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
     ArcBlueHigh: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}
     ArcGreenHigh: {r: 0, g: 1, b: 0.47592807, a: 1}
-    ArcUnknownHigh: {r: 0.8627451, g: 0.8627451, b: 0.8627451, a: 1}
-    ArcVoid: {r: 0.5686275, g: 0.4705882, b: 0.6666667, a: 1}
+    ArcUnknownHigh: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    ArcVoid: {r: 0.53333336, g: 0.46666667, b: 0.6666667, a: 1}
+    ArcDesignant: {r: 1, g: 0.2, b: 0.4, a: 0}
+    ArcTapDesignant: {r: 1, g: 0.2, b: 0.4, a: 0}
     TrackLight: {fileID: 21300000, guid: 5ff43f330b63ad246963a3aea13bd701, type: 3}
     TrackConflict: {fileID: 21300000, guid: 4793403f4bea26d4193833982b6ae424, type: 3}
     TrackExtraLight: {fileID: 21300000, guid: d36b8451545b4b849a79c4c1a43bbc67, type: 3}
@@ -61517,12 +61519,14 @@ MonoBehaviour:
   ArcRedLow: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
   ArcBlueLow: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}
   ArcGreenLow: {r: 0.13725491, g: 1, b: 0.42352942, a: 1}
-  ArcUnknownLow: {r: 0, g: 0, b: 0, a: 0}
+  ArcUnknownLow: {r: 0.8, g: 0.8, b: 0.8, a: 0}
   ArcRedHigh: {r: 1, g: 0.5882353, b: 0.8627451, a: 1}
   ArcBlueHigh: {r: 0.047058824, g: 0.83137256, b: 0.83137256, a: 1}
   ArcGreenHigh: {r: 0.13725491, g: 1, b: 0.42352942, a: 1}
-  ArcUnknownHigh: {r: 0, g: 0, b: 0, a: 0}
-  ArcVoid: {r: 0.5686275, g: 0.47058824, b: 0.6666667, a: 1}
+  ArcUnknownHigh: {r: 0.8, g: 0.8, b: 0.8, a: 0}
+  ArcVoid: {r: 0.53333336, g: 0.46666667, b: 0.6666667, a: 1}
+  ArcDesignant: {r: 1, g: 0.2, b: 0.4, a: 0}
+  ArcTapDesignant: {r: 1, g: 0.2, b: 0.4, a: 0}
   ShadowColor: {r: 0.3529412, g: 0.3529412, b: 0.3529412, a: 0.3529412}
   ArcJudgePos: 0
 --- !u!1 &1693975714

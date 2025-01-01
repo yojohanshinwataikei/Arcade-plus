@@ -37,6 +37,8 @@ namespace Arcade.Gameplay
 		public Color ArcGreenHigh;
 		public Color ArcUnknownHigh;
 		public Color ArcVoid;
+		public Color ArcDesignant;
+		public Color ArcTapDesignant;
 		public Color ShadowColor;
 		public readonly float[] Lanes = { 10.625f, 6.375f, 2.125f, -2.125f, -6.375f, -10.625f };
 
@@ -344,7 +346,7 @@ namespace Arcade.Gameplay
 		public void SetArcColors(
 			Color arcRedLow, Color arcBlueLow, Color arcGreenLow, Color arcUnknownLow,
 			Color arcRedHigh, Color arcBlueHigh, Color arcGreenHigh, Color arcUnknownHigh,
-			Color arcVoid)
+			Color arcVoid, Color arcDesignant, Color arcTapDesignant)
 		{
 			ArcRedLow = arcRedLow;
 			ArcBlueLow = arcBlueLow;
@@ -355,6 +357,8 @@ namespace Arcade.Gameplay
 			ArcGreenHigh = arcGreenHigh;
 			ArcUnknownHigh = arcUnknownHigh;
 			ArcVoid = arcVoid;
+			ArcDesignant = arcDesignant;
+			ArcTapDesignant = arcTapDesignant;
 			ArcArcRenderer prefabRenderer = ArcNotePrefab.GetComponent<ArcArcRenderer>();
 			prefabRenderer.ReloadColor();
 			foreach (ArcArc arc in Arcs)

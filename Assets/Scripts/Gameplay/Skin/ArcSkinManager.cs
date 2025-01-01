@@ -142,7 +142,7 @@ namespace Arcade.Gameplay
 			ArcArcManager.Instance.SetArcColors(
 				noteSideData.ArcRedLow, noteSideData.ArcBlueLow, noteSideData.ArcGreenLow, noteSideData.ArcUnknownLow,
 				noteSideData.ArcRedHigh, noteSideData.ArcBlueHigh, noteSideData.ArcGreenHigh, noteSideData.ArcUnknownHigh,
-				noteSideData.ArcVoid);
+				noteSideData.ArcVoid, noteSideData.ArcDesignant, noteSideData.ArcTapDesignant);
 		}
 		public void SetThemeSideSkin(AdeSkinHost.ThemeSideData themeSideData)
 		{

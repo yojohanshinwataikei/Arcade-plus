@@ -138,6 +138,8 @@ public class AdeSkinHostEditor : Editor
 		GUILayout.Label($"      ArcGreenHigh:{data.ArcGreenHigh}");
 		GUILayout.Label($"      ArcUnknownHigh:{data.ArcUnknownHigh}");
 		GUILayout.Label($"      ArcVoid:{data.ArcVoid}");
+		GUILayout.Label($"      ArcDesignant:{data.ArcDesignant}");
+		GUILayout.Label($"      ArcTapDesignant:{data.ArcTapDesignant}");
 	}
 
 	private void ShowThemeSideData(ThemeSideData data)
