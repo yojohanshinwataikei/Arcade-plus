@@ -127,11 +127,11 @@ namespace Arcade.Compose.Operation
 				return currentArcIsVoid ? "虚" : "实";
 			}
 		}
-		public string CurrentArcType
+		public string CurrentArcCurveType
 		{
 			get
 			{
-				return currentArcType.ToString();
+				return currentArcCurveType.ToString();
 			}
 		}
 		public string CurrentArctapMode
@@ -145,7 +145,19 @@ namespace Arcade.Compose.Operation
 		private bool enable = false;
 		private int currentArcColor;
 		private bool currentArcIsVoid;
-		private ArcCurveType currentArcType = ArcCurveType.S;
+		private ArcLineType currentArcLineType
+		{
+			get
+			{
+				if (currentArcIsVoid)
+				{
+					return ArcLineType.TrueIsVoid;
+				}
+				return ArcLineType.FalseNotVoid;
+			}
+		}
+
+		private ArcCurveType currentArcCurveType = ArcCurveType.S;
 
 		private void Awake()
 		{
@@ -192,7 +204,7 @@ namespace Arcade.Compose.Operation
 				{
 					SwitchColor();
 				}
-				if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ClickToCreateArcType))
+				if (AdeInputManager.Instance.CheckHotkeyActionPressed(AdeInputManager.Instance.Hotkeys.ClickToCreateArcCurveType))
 				{
 					SwitchType();
 				}
@@ -250,31 +262,31 @@ namespace Arcade.Compose.Operation
 		{
 			if (!AdeOperationManager.Instance.HasOngoingOperation)
 			{
-				switch (currentArcType)
+				switch (currentArcCurveType)
 				{
 					case ArcCurveType.S:
-						currentArcType = ArcCurveType.B;
+						currentArcCurveType = ArcCurveType.B;
 						break;
 					case ArcCurveType.B:
-						currentArcType = ArcCurveType.Si;
+						currentArcCurveType = ArcCurveType.Si;
 						break;
 					case ArcCurveType.Si:
-						currentArcType = ArcCurveType.So;
+						currentArcCurveType = ArcCurveType.So;
 						break;
 					case ArcCurveType.So:
-						currentArcType = ArcCurveType.SiSi;
+						currentArcCurveType = ArcCurveType.SiSi;
 						break;
 					case ArcCurveType.SiSi:
-						currentArcType = ArcCurveType.SoSo;
+						currentArcCurveType = ArcCurveType.SoSo;
 						break;
 					case ArcCurveType.SoSo:
-						currentArcType = ArcCurveType.SiSo;
+						currentArcCurveType = ArcCurveType.SiSo;
 						break;
 					case ArcCurveType.SiSo:
-						currentArcType = ArcCurveType.SoSi;
+						currentArcCurveType = ArcCurveType.SoSi;
 						break;
 					case ArcCurveType.SoSi:
-						currentArcType = ArcCurveType.S;
+						currentArcCurveType = ArcCurveType.S;
 						break;
 				}
 			}
@@ -323,7 +335,7 @@ namespace Arcade.Compose.Operation
 		{
 			if (!AdeOperationManager.Instance.HasOngoingOperation)
 			{
-				currentArcType = (ArcCurveType)type;
+				currentArcCurveType = (ArcCurveType)type;
 			}
 		}
 
@@ -410,7 +422,7 @@ namespace Arcade.Compose.Operation
 			int track = AdeCursorManager.Instance.AttachedTrack;
 			int timing = AdeCursorManager.Instance.AttachedTiming;
 			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
-			ArcArc note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, Effect = "none", IsVoid = currentArcIsVoid, CurveType = currentArcType, TimingGroup = timingGroup };
+			ArcArc note = new ArcArc() { Timing = timing, EndTiming = timing, Color = currentArcColor, Effect = "none", LineType = currentArcLineType, CurveType = currentArcCurveType, TimingGroup = timingGroup };
 			AdeCommandManager.Instance.Prepare(new AddArcEventCommand(note));
 
 			try
@@ -471,7 +483,7 @@ namespace Arcade.Compose.Operation
 		{
 			int timing = AdeCursorManager.Instance.AttachedTiming;
 			var timingGroup = AdeTimingEditor.Instance.currentTimingGroup;
-			ArcArc arc = new ArcArc() { Timing = timing, EndTiming = timing + 1, Color = currentArcColor, Effect = "none", IsVoid = true, CurveType = ArcCurveType.S, TimingGroup = timingGroup };
+			ArcArc arc = new ArcArc() { Timing = timing, EndTiming = timing + 1, Color = currentArcColor, Effect = "none", LineType = ArcLineType.TrueIsVoid, CurveType = ArcCurveType.S, TimingGroup = timingGroup };
 			ArcArcTap arctap = new ArcArcTap() { Timing = timing };
 			AdeCommandManager.Instance.Prepare(new BatchCommand(new ICommand[]{
 				new AddArcEventCommand(arc),

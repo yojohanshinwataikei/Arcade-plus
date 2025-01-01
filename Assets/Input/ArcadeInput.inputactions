@@ -150,7 +150,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Click To Create Arc Type",
+                    "name": "Click To Create Arc Curve Type",
                     "type": "Value",
                     "id": "3c40295d-171e-4c32-ab68-6e5414dc6ebb",
                     "expectedControlType": "",
@@ -1374,7 +1374,7 @@
                     "interactions": "HotKey",
                     "processors": "",
                     "groups": "",
-                    "action": "Click To Create Arc Type",
+                    "action": "Click To Create Arc Curve Type",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -1385,7 +1385,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click To Create Arc Type",
+                    "action": "Click To Create Arc Curve Type",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1396,7 +1396,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click To Create Arc Type",
+                    "action": "Click To Create Arc Curve Type",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1407,7 +1407,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click To Create Arc Type",
+                    "action": "Click To Create Arc Curve Type",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -1418,7 +1418,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click To Create Arc Type",
+                    "action": "Click To Create Arc Curve Type",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },

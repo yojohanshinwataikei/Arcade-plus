@@ -141,6 +141,7 @@ namespace Arcade.Compose.Editing
 					(active) => IsVoid.gameObject.SetActive(active),
 					(data) => ApplyIsVoid(data)
 				);
+				IsVoid.GetComponentInChildren<Toggle>().interactable = GetEditIsVoidAvailable();
 				UpdateField<ArcTimingGroupOption?>(
 					(note) => note is ISetableTimingGroup,
 					(note) => new ArcTimingGroupOption { timingGroup = (note as IHasTimingGroup).TimingGroup },
@@ -632,7 +633,7 @@ namespace Arcade.Compose.Editing
 				},
 				(value, note) =>
 				{
-					(note as ArcArc).IsVoid = value;
+					(note as ArcArc).LineType = value ? ArcLineType.TrueIsVoid : ArcLineType.FalseNotVoid;
 				}
 			);
 		}
@@ -673,6 +674,21 @@ namespace Arcade.Compose.Editing
 					AdeSelectionManager.Instance.SelectNote(arc);
 				}
 			}
+		}
+		private bool GetEditIsVoidAvailable()
+		{
+			foreach (var note in AdeSelectionManager.Instance.SelectedNotes)
+			{
+				if (note is ArcArc arc)
+				{
+					if (arc.LineType == ArcLineType.Designant)
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+
 		}
 		private bool GetSeparateArctapAvailable()
 		{
@@ -722,7 +738,7 @@ namespace Arcade.Compose.Editing
 							EndTiming = timing + 1,
 							Color = arc.Color,
 							Effect = "none",
-							IsVoid = true,
+							LineType = arc.LineType,
 							CurveType = ArcCurveType.S,
 							TimingGroup = arc.TimingGroup,
 							XStart = x,

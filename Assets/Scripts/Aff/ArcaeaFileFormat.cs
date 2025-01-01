@@ -56,7 +56,7 @@ namespace Arcade.Aff
 		public float YEnd;
 		public int Color;
 		public string Effect;
-		public bool IsVoid;
+		public ArcLineType LineType;
 		public List<RawAffArctap> ArcTaps;
 	}
 	public class RawAffCamera : IRawAffNestableItem
@@ -253,12 +253,12 @@ namespace Arcade.Aff
 			}
 			else if (item is RawAffArc arc)
 			{
-				if (arc.ArcTaps.Count > 0)
+				if (arc.ArcTaps.Count > 0 && arc.LineType == ArcLineType.FalseNotVoid)
 				{
-					arc.IsVoid = true;
+					arc.LineType = ArcLineType.TrueIsVoid;
 				}
 				writer.WriteLine($"{intent}arc({arc.Timing.ToString(CultureInfo.InvariantCulture)},{arc.EndTiming.ToString(CultureInfo.InvariantCulture)},{arc.XStart.ToString("f2", CultureInfo.InvariantCulture)},{arc.XEnd.ToString("f2", CultureInfo.InvariantCulture)}" +
-					$",{ArcCurveTypeStrings[arc.CurveType]},{arc.YStart.ToString("f2", CultureInfo.InvariantCulture)},{arc.YEnd.ToString("f2", CultureInfo.InvariantCulture)},{arc.Color},{arc.Effect},{arc.IsVoid.ToString().ToLower()})" +
+					$",{ArcCurveTypeStrings[arc.CurveType]},{arc.YStart.ToString("f2", CultureInfo.InvariantCulture)},{arc.YEnd.ToString("f2", CultureInfo.InvariantCulture)},{arc.Color},{arc.Effect},{ArcLineTypeStrings[arc.LineType]})" +
 					(arc.ArcTaps.Count > 0 ? $"[{string.Join(",", arc.ArcTaps.Select(e => $"arctap({e.Timing.ToString(CultureInfo.InvariantCulture)})"))}]" : "") +
 					";");
 			}
@@ -309,6 +309,12 @@ namespace Arcade.Aff
 			[ArcCurveType.SiSo] = "siso",
 			[ArcCurveType.SoSi] = "sosi",
 			[ArcCurveType.SoSo] = "soso",
+		};
+		public static Dictionary<ArcLineType, string> ArcLineTypeStrings = new Dictionary<ArcLineType, string>
+		{
+			[ArcLineType.TrueIsVoid] = "true",
+			[ArcLineType.FalseNotVoid] = "false",
+			[ArcLineType.Designant] = "designant",
 		};
 		public static Dictionary<CameraEaseType, string> CameraEaseTypeStrings = new Dictionary<CameraEaseType, string>
 		{
@@ -544,9 +550,9 @@ namespace Arcade.Aff
 			var yEnd = CheckValueType<RawAffFloat>(context.values().value()[6], "arc", "终点纵坐标");
 			var color = CheckValueType<RawAffInt>(context.values().value()[7], "arc", "颜色");
 			var effect = CheckValueType<RawAffWord>(context.values().value()[8], "arc", "效果类型");
-			var rawIsVoid = CheckValueType<RawAffWord>(context.values().value()[9], "arc", "是否黑线");
-			var isVoid = ParseWord(bools, rawIsVoid.data, context.values().value()[9], "arc", "是否黑线");
-			if (timing == null || endTiming == null || xStart == null || xEnd == null || curveType == null || yStart == null || yEnd == null || color == null || effect == null || isVoid == null)
+			var rawLineType = CheckValueType<RawAffWord>(context.values().value()[9], "arc", "是否黑线");
+			var lineType = ParseWord(lineTypes, rawLineType.data, context.values().value()[9], "arc", "是否黑线");
+			if (timing == null || endTiming == null || xStart == null || xEnd == null || curveType == null || yStart == null || yEnd == null || color == null || effect == null || lineType == null)
 			{
 				return;
 			}
@@ -597,7 +603,7 @@ namespace Arcade.Aff
 					YEnd = yEnd.data,
 					Color = color.data,
 					Effect = effect.data,
-					IsVoid = isVoid.Value,
+					LineType = lineType.Value,
 					ArcTaps = arctaps,
 				};
 			}
@@ -807,10 +813,11 @@ namespace Arcade.Aff
 			return null;
 		}
 
-		Dictionary<string, bool> bools = new Dictionary<string, bool>()
+		Dictionary<string, ArcLineType> lineTypes = new Dictionary<string, ArcLineType>()
 		{
-			["true"] = true,
-			["false"] = false,
+			["true"] = ArcLineType.TrueIsVoid,
+			["false"] = ArcLineType.FalseNotVoid,
+			["designant"] = ArcLineType.Designant
 		};
 
 		Dictionary<string, ArcCurveType> curveTypes = new Dictionary<string, ArcCurveType>()

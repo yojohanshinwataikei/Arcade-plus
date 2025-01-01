@@ -211,6 +211,13 @@ namespace Arcade.Gameplay.Chart
 	{
 		ArcTimingGroup TimingGroup { set; }
 	}
+	public enum ArcLineType
+	{
+		TrueIsVoid,
+		FalseNotVoid,
+		Designant
+	}
+
 	public enum ArcCurveType
 	{
 		B,
@@ -1110,7 +1117,15 @@ namespace Arcade.Gameplay.Chart
 		public float YEnd;
 		public int Color;
 		public string Effect = "none";
-		public bool IsVoid;
+		public ArcLineType LineType;
+		public bool IsVoid
+		{
+			get
+			{
+				return LineType != ArcLineType.FalseNotVoid;
+			}
+
+		}
 		public List<ArcArcTap> ArcTaps = new List<ArcArcTap>();
 
 		public ArcArcTap ConvertedVariousSizedArctap = null;
@@ -1140,7 +1155,7 @@ namespace Arcade.Gameplay.Chart
 				YEnd = YEnd,
 				Color = Color,
 				Effect = Effect,
-				IsVoid = IsVoid,
+				LineType = LineType,
 				TimingGroup = TimingGroup,
 			};
 			foreach (var arctap in ArcTaps) arc.ArcTaps.Add(arctap.Clone() as ArcArcTap);
@@ -1157,7 +1172,7 @@ namespace Arcade.Gameplay.Chart
 			YEnd = n.YEnd;
 			Color = n.Color;
 			Effect = n.Effect;
-			IsVoid = n.IsVoid;
+			LineType = n.LineType;
 			TimingGroup = n.TimingGroup;
 		}
 
@@ -1338,10 +1353,13 @@ namespace Arcade.Gameplay.Chart
 			YEnd = rawAffArc.YEnd;
 			Color = rawAffArc.Color;
 			Effect = rawAffArc.Effect;
-			IsVoid = rawAffArc.IsVoid;
+			LineType = rawAffArc.LineType;
 			if (rawAffArc.ArcTaps.Count > 0)
 			{
-				IsVoid = true;
+				if (rawAffArc.LineType == ArcLineType.FalseNotVoid)
+				{
+					rawAffArc.LineType = ArcLineType.TrueIsVoid;
+				}
 				foreach (var arctap in rawAffArc.ArcTaps)
 				{
 					ArcTaps.Add(new ArcArcTap(arctap));
@@ -1362,7 +1380,7 @@ namespace Arcade.Gameplay.Chart
 				YEnd = YEnd,
 				Color = Color,
 				Effect = Effect,
-				IsVoid = IsVoid,
+				LineType = LineType,
 				ArcTaps = ArcTaps.Select((arctap) => new RawAffArctap() { Timing = arctap.Timing, }).ToList(),
 			};
 		}

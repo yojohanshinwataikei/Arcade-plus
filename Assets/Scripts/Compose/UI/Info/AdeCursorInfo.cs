@@ -50,7 +50,7 @@ namespace Arcade.Compose
 				content += $"\n点立得: {AdeClickToCreate.Instance.Mode.ToString()}";
 				if (AdeClickToCreate.Instance.Mode == ClickToCreateMode.Arc)
 				{
-					content += $"\n{AdeClickToCreate.Instance.CurrentArcColor}/{AdeClickToCreate.Instance.CurrentArcIsVoid}/{AdeClickToCreate.Instance.CurrentArcType}";
+					content += $"\n{AdeClickToCreate.Instance.CurrentArcColor}/{AdeClickToCreate.Instance.CurrentArcIsVoid}/{AdeClickToCreate.Instance.CurrentArcCurveType}";
 				}
 				if (AdeClickToCreate.Instance.Mode == ClickToCreateMode.ArcTap)
 				{
