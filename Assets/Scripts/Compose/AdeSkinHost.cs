@@ -332,51 +332,51 @@ namespace Arcade.Compose
 		{
 			public string tapnote;
 			public string holdnote;
-			[JsonPropertyAttribute("holdnote-highlight")]
+			[JsonProperty("holdnote-highlight")]
 			public string holdnoteHighlight;
 			public string arctap;
-			[JsonPropertyAttribute("sfx-arctap-note")]
+			[JsonProperty("sfx-arctap-note")]
 			public string sfxArctapNote;
-			[JsonPropertyAttribute("sfx-arctap-core")]
+			[JsonProperty("sfx-arctap-core")]
 			public string sfxArctapCore;
-			[JsonPropertyAttribute("connection-line-color")]
+			[JsonProperty("connection-line-color")]
 			public string connectionLineColor;
-			[JsonPropertyAttribute("arc-red-low")]
+			[JsonProperty("arc-red-low")]
 			public string arcRedLow;
-			[JsonPropertyAttribute("arc-blue-low")]
+			[JsonProperty("arc-blue-low")]
 			public string arcBlueLow;
-			[JsonPropertyAttribute("arc-green-low")]
+			[JsonProperty("arc-green-low")]
 			public string arcGreenLow;
-			[JsonPropertyAttribute("arc-unknown-low")]
+			[JsonProperty("arc-unknown-low")]
 			public string arcUnknownLow;
-			[JsonPropertyAttribute("arc-red-high")]
+			[JsonProperty("arc-red-high")]
 			public string arcRedHigh;
-			[JsonPropertyAttribute("arc-blue-high")]
+			[JsonProperty("arc-blue-high")]
 			public string arcBlueHigh;
-			[JsonPropertyAttribute("arc-green-high")]
+			[JsonProperty("arc-green-high")]
 			public string arcGreenHigh;
-			[JsonPropertyAttribute("arc-unknown-high")]
+			[JsonProperty("arc-unknown-high")]
 			public string arcUnknownHigh;
-			[JsonPropertyAttribute("arc-void")]
+			[JsonProperty("arc-void")]
 			public string arcVoid;
 		}
 		[Serializable]
 		public class ThemeSideDataSpec
 		{
 			public string track;
-			[JsonPropertyAttribute("track-extra")]
+			[JsonProperty("track-extra")]
 			public string trackExtra;
-			[JsonPropertyAttribute("track-critical-line")]
+			[JsonProperty("track-critical-line")]
 			public string trackCriticalLine;
-			[JsonPropertyAttribute("track-critical-line-extra")]
+			[JsonProperty("track-critical-line-extra")]
 			public string trackCriticalLineExtra;
-			[JsonPropertyAttribute("combo-text-color")]
+			[JsonProperty("combo-text-color")]
 			public string comboTextColor;
-			[JsonPropertyAttribute("particle-note")]
+			[JsonProperty("particle-note")]
 			public string particleNote;
-			[JsonPropertyAttribute("particle-arc-start-color")]
+			[JsonProperty("particle-arc-start-color")]
 			public string particleArcStartColor;
-			[JsonPropertyAttribute("particle-arc-end-color")]
+			[JsonProperty("particle-arc-end-color")]
 			public string particleArcEndColor;
 		}
 		[Serializable]
@@ -411,7 +411,7 @@ namespace Arcade.Compose
 		[Serializable]
 		public class CollectionDataSpec<T>
 		{
-			[JsonPropertyAttribute("default-name")]
+			[JsonProperty("default-name")]
 			public string defaultName;
 			public T light;
 			public T conflict;
@@ -516,193 +516,193 @@ namespace Arcade.Compose
 			DestroyExternalResources(externalSkinDataObjects);
 			SkinDatas skinData = new SkinDatas();
 
-			skinData.SongInfo = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "SongInfo.png"), (path) =>
+			skinData.SongInfo = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "SongInfo.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.SongInfo);
-			skinData.ProgressGlow = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "ProgressGlow.png"), (path) =>
+			skinData.ProgressGlow = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "ProgressGlow.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ProgressGlow);
-			skinData.UnknownCover = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "UnknownCover.jpg"), (path) =>
+			skinData.UnknownCover = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "UnknownCover.jpg"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.UnknownCover);
 
-			skinData.DifficultyPast = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Past.png"), (path) =>
+			skinData.DifficultyPast = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Past.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.DifficultyPast);
-			skinData.DifficultyPresent = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Present.png"), (path) =>
+			skinData.DifficultyPresent = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Present.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.DifficultyPresent);
-			skinData.DifficultyFuture = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Future.png"), (path) =>
+			skinData.DifficultyFuture = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Future.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.DifficultyFuture);
-			skinData.DifficultyBeyond = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Beyond.png"), (path) =>
+			skinData.DifficultyBeyond = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Beyond.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.DifficultyBeyond);
-			skinData.DifficultyEternal = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Eternal.png"), (path) =>
+			skinData.DifficultyEternal = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Difficulties", "Eternal.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.DifficultyBeyond);
 
-			skinData.Pause = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "PlayPause", "Pause.png"), (path) =>
+			skinData.Pause = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "PlayPause", "Pause.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.Pause);
-			skinData.PausePressed = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "PlayPause", "PausePressed.png"), (path) =>
+			skinData.PausePressed = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "PlayPause", "PausePressed.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.PausePressed);
-			skinData.Play = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "PlayPause", "Play.png"), (path) =>
+			skinData.Play = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "PlayPause", "Play.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.Play);
-			skinData.PlayPressed = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "PlayPause", "PlayPressed.png"), (path) =>
+			skinData.PlayPressed = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "PlayPause", "PlayPressed.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.PlayPressed);
 
-			skinData.DialogTop = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "DialogTop.png"), (path) =>
+			skinData.DialogTop = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "DialogTop.png"), (path) =>
 			{
 				return Load9SliceSprite(path, new Vector4(36, 0, 40, 0), externalSkinDataObjects);
 			}, rawDefaultData.DialogTop);
-			skinData.DialogBackground = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "DialogBackground.png"), (path) =>
+			skinData.DialogBackground = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "DialogBackground.png"), (path) =>
 			{
 				return Load9SliceSprite(path, new Vector4(36, 60, 40, 0), externalSkinDataObjects);
 			}, rawDefaultData.DialogBackground);
 
-			skinData.ButtonSingle = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonSingle.png"), (path) =>
+			skinData.ButtonSingle = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonSingle.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ButtonSingle);
-			skinData.ButtonSinglePressed = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonSinglePressed.png"), (path) =>
+			skinData.ButtonSinglePressed = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonSinglePressed.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ButtonSinglePressed);
-			skinData.ButtonSingleDisabled = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonSingleDisabled.png"), (path) =>
+			skinData.ButtonSingleDisabled = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonSingleDisabled.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ButtonSingleDisabled);
 
-			skinData.ButtonDualLeft = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualLeft.png"), (path) =>
+			skinData.ButtonDualLeft = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualLeft.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ButtonDualLeft);
-			skinData.ButtonDualLeftPressed = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualLeftPressed.png"), (path) =>
+			skinData.ButtonDualLeftPressed = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualLeftPressed.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ButtonDualLeftPressed);
-			skinData.ButtonDualLeftDisabled = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualLeftDisabled.png"), (path) =>
+			skinData.ButtonDualLeftDisabled = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualLeftDisabled.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ButtonDualLeftDisabled);
 
-			skinData.ButtonDualRight = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualRight.png"), (path) =>
+			skinData.ButtonDualRight = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualRight.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ButtonDualRight);
-			skinData.ButtonDualRightPressed = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualRightPressed.png"), (path) =>
+			skinData.ButtonDualRightPressed = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualRightPressed.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ButtonDualRightPressed);
-			skinData.ButtonDualRightDisabled = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualRightDisabled.png"), (path) =>
+			skinData.ButtonDualRightDisabled = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Dialog", "ButtonDualRightDisabled.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ButtonDualRightDisabled);
 
-			skinData.ShutterLeft = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Shutter", "ShutterLeft.png"), (path) =>
+			skinData.ShutterLeft = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Shutter", "ShutterLeft.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ShutterLeft);
-			skinData.ShutterRight = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "UI", "Shutter", "ShutterRight.png"), (path) =>
+			skinData.ShutterRight = LoadLabelled(Path.Combine(SkinFolderPath, "UI", "Shutter", "ShutterRight.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ShutterRight);
-			skinData.ShutterOpen = LoadLabelled<AudioClip>(Path.Combine(SkinFolderPath, "Sound", "ShutterOpen.wav"), (path) =>
+			skinData.ShutterOpen = LoadLabelled(Path.Combine(SkinFolderPath, "Sound", "ShutterOpen.wav"), (path) =>
 			{
 				return LoadWavAudioClip(path, externalSkinDataObjects);
 			}, rawDefaultData.ShutterOpen);
-			skinData.ShutterClose = LoadLabelled<AudioClip>(Path.Combine(SkinFolderPath, "Sound", "ShutterClose.wav"), (path) =>
+			skinData.ShutterClose = LoadLabelled(Path.Combine(SkinFolderPath, "Sound", "ShutterClose.wav"), (path) =>
 			{
 				return LoadWavAudioClip(path, externalSkinDataObjects);
 			}, rawDefaultData.ShutterClose);
 
-			skinData.TapSound = LoadLabelled<AudioClip>(Path.Combine(SkinFolderPath, "Sound", "Tap.wav"), (path) =>
+			skinData.TapSound = LoadLabelled(Path.Combine(SkinFolderPath, "Sound", "Tap.wav"), (path) =>
 			{
 				return LoadWavAudioClip(path, externalSkinDataObjects);
 			}, rawDefaultData.TapSound);
-			skinData.ArcSound = LoadLabelled<AudioClip>(Path.Combine(SkinFolderPath, "Sound", "Arc.wav"), (path) =>
+			skinData.ArcSound = LoadLabelled(Path.Combine(SkinFolderPath, "Sound", "Arc.wav"), (path) =>
 			{
 				return LoadWavAudioClip(path, externalSkinDataObjects);
 			}, rawDefaultData.ArcSound);
 
-			skinData.TutorialBanner = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Tutorial.png"), (path) =>
+			skinData.TutorialBanner = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Tutorial.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.TutorialBanner);
-			skinData.BackgroundDarken = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "BackgroundDarken.png"), (path) =>
+			skinData.BackgroundDarken = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "BackgroundDarken.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.TutorialBanner);
 
-			skinData.SkyInputLabel = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "SkyInput", "SkyInputLabel.png"), (path) =>
+			skinData.SkyInputLabel = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "SkyInput", "SkyInputLabel.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.SkyInputLabel);
-			skinData.SkyInputLine = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "SkyInput", "SkyInputLine.png"), (path) =>
+			skinData.SkyInputLine = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "SkyInput", "SkyInputLine.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.SkyInputLine);
 
-			skinData.TrackLaneDivider = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "TrackLaneDivider.png"), (path) =>
+			skinData.TrackLaneDivider = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Track", "TrackLaneDivider.png"), (path) =>
 			{
 				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, rawDefaultData.TrackLaneDivider);
-			skinData.LaneHit = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "LaneHit.png"), (path) =>
+			skinData.LaneHit = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Track", "LaneHit.png"), (path) =>
 			{
 				return LoadPivotSprite(path, new Vector2(0.0f, 0.0f), externalSkinDataObjects);
 			}, rawDefaultData.LaneHit);
 
-			skinData.ParticleSfxTap = LoadLabelled<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Particle", "ParticleSfxTap.png"), (path) =>
+			skinData.ParticleSfxTap = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Particle", "ParticleSfxTap.png"), (path) =>
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, rawDefaultData.ParticleSfxTap);
 
-			skinData.ParticleArc = LoadLabelled<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Particle", "ParticleArc.png"), (path) =>
+			skinData.ParticleArc = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Particle", "ParticleArc.png"), (path) =>
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, rawDefaultData.ParticleArc);
 
-			skinData.ArcCap = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcCap.png"), (path) =>
+			skinData.ArcCap = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcCap.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ArcCap);
 
-			skinData.ArcTapShadow = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcTapShadow.png"), (path) =>
+			skinData.ArcTapShadow = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcTapShadow.png"), (path) =>
 			{
 				return LoadNormalSprite(path, externalSkinDataObjects);
 			}, rawDefaultData.ArcTapShadow);
 
-			skinData.HeightIndicator = LoadLabelled<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Note", "HeightIndicator.png"), (path) =>
+			skinData.HeightIndicator = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Note", "HeightIndicator.png"), (path) =>
 			{
 				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, rawDefaultData.HeightIndicator);
 
-			skinData.ArcBody = LoadLabelled<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcBody", "ArcBody.png"), (path) =>
+			skinData.ArcBody = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcBody", "ArcBody.png"), (path) =>
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, rawDefaultData.ArcBody);
-			skinData.ArcBodyHighlight = LoadLabelled<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcBody", "ArcBodyHighlight.png"), (path) =>
+			skinData.ArcBodyHighlight = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcBody", "ArcBodyHighlight.png"), (path) =>
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, rawDefaultData.ArcBodyHighlight);
 
-			skinData.SfxArcTapModel = LoadLabelled<Mesh>(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap", "SfxArcTap.obj"), (path) =>
+			skinData.SfxArcTapModel = LoadLabelled(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap", "SfxArcTap.obj"), (path) =>
 			{
 				return LoadObjMesh(path, externalSkinDataObjects);
 			}, rawDefaultData.SfxArcTapModel);
@@ -894,7 +894,7 @@ namespace Arcade.Compose
 			internalDefaultNoteData.Colorless = internalDefaultNoteData.Light;
 			internalDefaultNoteData.Lephon = internalDefaultNoteData.Light;
 
-			LoadCollectionData<NoteSideData, NoteSideDataSpec>(internalDefaultNoteData, skinData.NoteDatas, (name) => { skinData.DefaultNoteData = name; }, spec, LoadNoteSideData);
+			LoadCollectionData(internalDefaultNoteData, skinData.NoteDatas, (name) => { skinData.DefaultNoteData = name; }, spec, LoadNoteSideData);
 		}
 		private void LoadThemeDatas(SkinDatas skinData, CollectionDataSpec<ThemeSideDataSpec> spec)
 		{
@@ -921,7 +921,7 @@ namespace Arcade.Compose
 			internalDefaultThemeData.Conflict.ParticleArcEndColor = rawDefaultData.ParticleArcEndColor;
 			internalDefaultThemeData.Colorless = internalDefaultThemeData.Light;
 			internalDefaultThemeData.Lephon = internalDefaultThemeData.Light;
-			LoadCollectionData<ThemeSideData, ThemeSideDataSpec>(internalDefaultThemeData, skinData.ThemeDatas, (name) => { skinData.DefaultThemeData = name; }, spec, LoadThemeSideData);
+			LoadCollectionData(internalDefaultThemeData, skinData.ThemeDatas, (name) => { skinData.DefaultThemeData = name; }, spec, LoadThemeSideData);
 		}
 		private delegate void NameSetter(string name);
 		private delegate T SideDataLoader<T, S>(S spec, T fallback);
@@ -942,13 +942,13 @@ namespace Arcade.Compose
 			defaultSpec.conflict = spec.conflict;
 			defaultSpec.colorless = spec.colorless;
 			defaultSpec.lephon = spec.lephon;
-			LoadWithSideData<T, S>(datas, defaultSpec, internalDefault, sideDataLoader);
+			LoadWithSideData(datas, defaultSpec, internalDefault, sideDataLoader);
 			WithSideData<T> defaultData = datas[defaultName];
 			if (spec.additional != null)
 			{
 				foreach (WithSideDataSpec<S> additionalSpec in spec.additional)
 				{
-					LoadWithSideData<T, S>(datas, additionalSpec, defaultData, sideDataLoader);
+					LoadWithSideData(datas, additionalSpec, defaultData, sideDataLoader);
 				}
 			}
 		}
@@ -984,27 +984,27 @@ namespace Arcade.Compose
 			}
 			NoteSideData noteSideData = new NoteSideData();
 
-			noteSideData.TapNote = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Note", "TapNote"), spec.tapnote, ".png", (path) =>
+			noteSideData.TapNote = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Note", "TapNote"), spec.tapnote, ".png", (path) =>
 			{
 				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.TapNote);
-			noteSideData.HoldNote = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Note", "HoldNote"), spec.holdnote, ".png", (path) =>
+			noteSideData.HoldNote = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Note", "HoldNote"), spec.holdnote, ".png", (path) =>
 			{
 				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.HoldNote);
-			noteSideData.HoldNoteHighlight = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Note", "HoldNote"), spec.holdnoteHighlight, ".png", (path) =>
+			noteSideData.HoldNoteHighlight = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Note", "HoldNote"), spec.holdnoteHighlight, ".png", (path) =>
 			{
 				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.HoldNoteHighlight);
-			noteSideData.ArcTap = LoadLabelledWithFallback<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcTap"), spec.arctap, ".png", (path) =>
+			noteSideData.ArcTap = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Note", "ArcTap"), spec.arctap, ".png", (path) =>
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, fallback.ArcTap);
-			noteSideData.SfxArcTapNote = LoadLabelledWithFallback<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap"), spec.sfxArctapNote, ".jpg", (path) =>
+			noteSideData.SfxArcTapNote = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap"), spec.sfxArctapNote, ".jpg", (path) =>
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, fallback.SfxArcTapNote);
-			noteSideData.SfxArcTapCore = LoadLabelledWithFallback<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap"), spec.sfxArctapCore, ".jpg", (path) =>
+			noteSideData.SfxArcTapCore = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Note", "SfxArcTap"), spec.sfxArctapCore, ".jpg", (path) =>
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, fallback.SfxArcTapCore);
@@ -1030,24 +1030,24 @@ namespace Arcade.Compose
 			}
 			ThemeSideData themeSideData = new ThemeSideData();
 
-			themeSideData.Track = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "TrackBase"), spec.track, ".png", (path) =>
+			themeSideData.Track = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Track", "TrackBase"), spec.track, ".png", (path) =>
 			{
 				return LoadWarpRepeatPivotFullRectSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.Track);
-			themeSideData.TrackExtra = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "TrackExtra"), spec.trackExtra, ".png", (path) =>
+			themeSideData.TrackExtra = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Track", "TrackExtra"), spec.trackExtra, ".png", (path) =>
 			{
 				return LoadWarpRepeatPivotFullRectSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.TrackExtra);
-			themeSideData.CriticalLine = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "CriticalLine"), spec.trackCriticalLine, ".png", (path) =>
+			themeSideData.CriticalLine = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Track", "CriticalLine"), spec.trackCriticalLine, ".png", (path) =>
 			{
 				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.CriticalLine);
-			themeSideData.CriticalLineExtra = LoadLabelledWithFallback<Sprite>(Path.Combine(SkinFolderPath, "Playfield", "Track", "CriticalLine"), spec.trackCriticalLineExtra, ".png", (path) =>
+			themeSideData.CriticalLineExtra = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Track", "CriticalLine"), spec.trackCriticalLineExtra, ".png", (path) =>
 			{
 				return LoadPivotSprite(path, new Vector2(0.5f, 0.0f), externalSkinDataObjects);
 			}, fallback.CriticalLineExtra);
 			themeSideData.ComboTextColor = LoadColor(spec.comboTextColor, fallback.ComboTextColor);
-			themeSideData.ParticleNote = LoadLabelledWithFallback<Texture2D>(Path.Combine(SkinFolderPath, "Playfield", "Particle", "ParticleNote"), spec.particleNote, ".png", (path) =>
+			themeSideData.ParticleNote = LoadLabelledWithFallback(Path.Combine(SkinFolderPath, "Playfield", "Particle", "ParticleNote"), spec.particleNote, ".png", (path) =>
 			{
 				return LoadTexture2D(path, externalSkinDataObjects);
 			}, fallback.ParticleNote);
