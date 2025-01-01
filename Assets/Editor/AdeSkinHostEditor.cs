@@ -114,6 +114,10 @@ public class AdeSkinHostEditor : Editor
 		shower(data.Light);
 		GUILayout.Label("    Conflict:");
 		shower(data.Conflict);
+		GUILayout.Label("    Colorless:");
+		shower(data.Colorless);
+		GUILayout.Label("    Lephon:");
+		shower(data.Lephon);
 	}
 
 	private void ShowNoteSideData(NoteSideData data)

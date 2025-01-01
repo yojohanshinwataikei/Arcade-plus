@@ -33,12 +33,35 @@ namespace Arcade.Compose.Dialog
 				{
 					return Side.Colorless;
 				}
+				else if (SelectedSide == "Lephon")
+				{
+					return Side.Lephon;
+				}
 				SelectedSide = "Light";
 				return Side.Light;
 			}
 			set
 			{
-				SelectedSide = value == Side.Light ? "Light" : value == Side.Colorless ? "Colorless" : "Conflict";
+				if (value == Side.Light)
+				{
+					SelectedSide = "Light";
+				}
+				else if (value == Side.Conflict)
+				{
+					SelectedSide = "Conflict";
+				}
+				else if (value == Side.Colorless)
+				{
+					SelectedSide = "Colorless";
+				}
+				else if (value == Side.Lephon)
+				{
+					SelectedSide = "Lephon";
+				}
+				else
+				{
+					SelectedSide = "Light";
+				}
 			}
 		}
 	}
@@ -227,7 +250,7 @@ namespace Arcade.Compose.Dialog
 
 		private void Initialize()
 		{
-			SideDropdown.SetValueWithoutNotify(preference.SkinSide == Side.Light ? 0 : preference.SkinSide == Side.Colorless ? 2 : 1);
+			SideDropdown.SetValueWithoutNotify(preference.SkinSide.Id());
 			ThemeDropdown.SetValueWithoutNotify(ThemeIds[preference.SelectedTheme]);
 			NoteDropdown.SetValueWithoutNotify(NoteIds[preference.SelectedNote]);
 			CurrentBackgroundOption.SetSelected(true);
@@ -280,7 +303,7 @@ namespace Arcade.Compose.Dialog
 				if (BgData.side != null)
 				{
 					preference.SkinSide = BgData.side.Value;
-					SideDropdown.SetValueWithoutNotify(preference.SkinSide == Side.Light ? 0 : preference.SkinSide == Side.Colorless ? 2 : 1);
+					SideDropdown.SetValueWithoutNotify(preference.SkinSide.Id());
 				}
 				SideDropdown.interactable = BgData.side == null;
 				if (BgData.theme != null)
@@ -307,8 +330,9 @@ namespace Arcade.Compose.Dialog
 
 		public void SelectSide(int id)
 		{
-			Side side = id == 0 ? Side.Light : id == 2 ? Side.Colorless : Side.Conflict;
-			preference.SkinSide = side;
+			Side? side;
+			SideExtension.TryFromId(id, out side);
+			preference.SkinSide = side ?? Side.Light;
 			ApplyThemeSideSkin();
 			ApplyNoteSideSkin();
 		}
@@ -372,34 +396,12 @@ namespace Arcade.Compose.Dialog
 		private void ApplyNoteSideSkin()
 		{
 			AdeSkinHost.WithSideData<AdeSkinHost.NoteSideData> note = AdeSkinHost.Instance.skinData.NoteDatas[preference.SelectedNote];
-			if (preference.SkinSide == Side.Light)
-			{
-				ArcSkinManager.Instance.SetNoteSideSkin(note.Light);
-			}
-			else if (preference.SkinSide == Side.Colorless)
-			{
-				ArcSkinManager.Instance.SetNoteSideSkin(note.Colorless);
-			}
-			else
-			{
-				ArcSkinManager.Instance.SetNoteSideSkin(note.Conflict);
-			}
+			ArcSkinManager.Instance.SetNoteSideSkin(note.SelectWithSide(preference.SkinSide));
 		}
 		private void ApplyThemeSideSkin()
 		{
 			AdeSkinHost.WithSideData<AdeSkinHost.ThemeSideData> theme = AdeSkinHost.Instance.skinData.ThemeDatas[preference.SelectedTheme];
-			if (preference.SkinSide == Side.Light)
-			{
-				ArcSkinManager.Instance.SetThemeSideSkin(theme.Light);
-			}
-			else if (preference.SkinSide == Side.Colorless)
-			{
-				ArcSkinManager.Instance.SetThemeSideSkin(theme.Colorless);
-			}
-			else
-			{
-				ArcSkinManager.Instance.SetThemeSideSkin(theme.Conflict);
-			}
+			ArcSkinManager.Instance.SetThemeSideSkin(theme.SelectWithSide(preference.SkinSide));
 		}
 
 		public void SavePreferences()

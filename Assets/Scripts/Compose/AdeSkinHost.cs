@@ -11,7 +11,99 @@ namespace Arcade.Compose
 {
 	public enum Side
 	{
-		Light, Conflict, Colorless
+		Light, Conflict, Colorless, Lephon
+	}
+
+	public static class SideExtension
+	{
+		public static int Id(this Side side)
+		{
+			if (side == Side.Light)
+			{
+				return 0;
+			}
+			else if (side == Side.Conflict)
+			{
+				return 1;
+			}
+			else if (side == Side.Colorless)
+			{
+				return 2;
+			}
+			else if (side == Side.Lephon)
+			{
+				return 3;
+			}
+			return 0;
+		}
+		public static bool TryFromId(int id, out Side? side)
+		{
+			if (id == 0)
+			{
+				side = Side.Light;
+				return true;
+			}
+			else if (id == 1)
+			{
+				side = Side.Conflict;
+				return true;
+			}
+			else if (id == 2)
+			{
+				side = Side.Colorless;
+				return true;
+			}
+			else if (id == 3)
+			{
+				side = Side.Lephon;
+				return true;
+			}
+			side = null;
+			return false;
+		}
+		public static Side FromId(int id)
+		{
+			Side? side;
+			if (!TryFromId(id, out side))
+			{
+				throw new ArgumentException("id is not a valid side id", "id");
+			}
+			return side.Value;
+		}
+		public static bool TryFromName(string name, out Side? side)
+		{
+			if (name == "light")
+			{
+				side = Side.Light;
+				return true;
+			}
+			else if (name == "conflict")
+			{
+				side = Side.Conflict;
+				return true;
+			}
+			else if (name == "colorless")
+			{
+				side = Side.Colorless;
+				return true;
+			}
+			else if (name == "lephon")
+			{
+				side = Side.Lephon;
+				return true;
+			}
+			side = null;
+			return false;
+		}
+		public static Side FromName(string name)
+		{
+			Side? side;
+			if (!TryFromName(name, out side))
+			{
+				throw new ArgumentException("name is not a valid side name", "name");
+			}
+			return side.Value;
+		}
 	}
 
 	// This class store all skin related data read from skin folder
@@ -206,6 +298,27 @@ namespace Arcade.Compose
 			public T Light;
 			public T Conflict;
 			public T Colorless;
+			public T Lephon;
+			public T SelectWithSide(Side side)
+			{
+				if (side == Side.Light)
+				{
+					return Light;
+				}
+				else if (side == Side.Conflict)
+				{
+					return Conflict;
+				}
+				else if (side == Side.Colorless)
+				{
+					return Colorless;
+				}
+				else if (side == Side.Lephon)
+				{
+					return Lephon;
+				}
+				throw new ArgumentOutOfRangeException();
+			}
 		};
 		[Serializable]
 		public class SkinDataSpec
@@ -273,6 +386,27 @@ namespace Arcade.Compose
 			public T light;
 			public T conflict;
 			public T colorless;
+			public T lephon;
+			public T SelectWithSide(Side side)
+			{
+				if (side == Side.Light)
+				{
+					return light;
+				}
+				else if (side == Side.Conflict)
+				{
+					return conflict;
+				}
+				else if (side == Side.Colorless)
+				{
+					return colorless;
+				}
+				else if (side == Side.Lephon)
+				{
+					return lephon;
+				}
+				throw new ArgumentOutOfRangeException();
+			}
 		};
 		[Serializable]
 		public class CollectionDataSpec<T>
@@ -282,7 +416,28 @@ namespace Arcade.Compose
 			public T light;
 			public T conflict;
 			public T colorless;
+			public T lephon;
 			public List<WithSideDataSpec<T>> additional;
+			public T SelectWithSide(Side side)
+			{
+				if (side == Side.Light)
+				{
+					return light;
+				}
+				else if (side == Side.Conflict)
+				{
+					return conflict;
+				}
+				else if (side == Side.Colorless)
+				{
+					return colorless;
+				}
+				else if (side == Side.Lephon)
+				{
+					return lephon;
+				}
+				throw new ArgumentOutOfRangeException();
+			}
 		}
 		[Serializable]
 		public class BackgroundDataSpec
@@ -645,6 +800,12 @@ namespace Arcade.Compose
 					side = Side.Colorless,
 					theme = skinData.DefaultThemeData
 				});
+				skinData.BackgroundDatas.Add("\"DefaultLephon\"", new BackgroundData()
+				{
+					background = new Labelled<Sprite>() { value = rawDefaultData.BackgroundLight, label = "<internal:light>" },
+					side = Side.Colorless,
+					theme = skinData.DefaultThemeData
+				});
 			}
 		}
 
@@ -675,18 +836,7 @@ namespace Arcade.Compose
 			BackgroundData data = new BackgroundData();
 			data.background = new Labelled<Sprite> { value = background, label = path };
 			data.side = null;
-			if (spec.side == "light")
-			{
-				data.side = Side.Light;
-			}
-			else if (spec.side == "conflict")
-			{
-				data.side = Side.Conflict;
-			}
-			else if (spec.side == "colorless")
-			{
-				data.side = Side.Colorless;
-			}
+			SideExtension.TryFromName(spec.side, out data.side);
 			data.theme = null;
 			if (spec.theme != null)
 			{
@@ -742,6 +892,7 @@ namespace Arcade.Compose
 			internalDefaultNoteData.Light.ArcVoid = rawDefaultData.ArcVoid;
 			internalDefaultNoteData.Conflict.ArcVoid = rawDefaultData.ArcVoid;
 			internalDefaultNoteData.Colorless = internalDefaultNoteData.Light;
+			internalDefaultNoteData.Lephon = internalDefaultNoteData.Light;
 
 			LoadCollectionData<NoteSideData, NoteSideDataSpec>(internalDefaultNoteData, skinData.NoteDatas, (name) => { skinData.DefaultNoteData = name; }, spec, LoadNoteSideData);
 		}
@@ -769,6 +920,7 @@ namespace Arcade.Compose
 			internalDefaultThemeData.Light.ParticleArcEndColor = rawDefaultData.ParticleArcEndColor;
 			internalDefaultThemeData.Conflict.ParticleArcEndColor = rawDefaultData.ParticleArcEndColor;
 			internalDefaultThemeData.Colorless = internalDefaultThemeData.Light;
+			internalDefaultThemeData.Lephon = internalDefaultThemeData.Light;
 			LoadCollectionData<ThemeSideData, ThemeSideDataSpec>(internalDefaultThemeData, skinData.ThemeDatas, (name) => { skinData.DefaultThemeData = name; }, spec, LoadThemeSideData);
 		}
 		private delegate void NameSetter(string name);
@@ -789,6 +941,7 @@ namespace Arcade.Compose
 			defaultSpec.light = spec.light;
 			defaultSpec.conflict = spec.conflict;
 			defaultSpec.colorless = spec.colorless;
+			defaultSpec.lephon = spec.lephon;
 			LoadWithSideData<T, S>(datas, defaultSpec, internalDefault, sideDataLoader);
 			WithSideData<T> defaultData = datas[defaultName];
 			if (spec.additional != null)
@@ -820,6 +973,7 @@ namespace Arcade.Compose
 			sideData.Light = sideDataLoader(spec.light, fallback.Light);
 			sideData.Conflict = sideDataLoader(spec.conflict, fallback.Conflict);
 			sideData.Colorless = sideDataLoader(spec.colorless, fallback.Colorless);
+			sideData.Lephon = sideDataLoader(spec.lephon, fallback.Lephon);
 			datas.Add(spec.name, sideData);
 		}
 		private NoteSideData LoadNoteSideData(NoteSideDataSpec spec, NoteSideData fallback)

@@ -32079,11 +32079,13 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: "\u5149"
+    - m_Text: "\u5149\u8292"
       m_Image: {fileID: 0}
-    - m_Text: "\u5BF9\u7ACB"
+    - m_Text: "\u7EB7\u4E89"
       m_Image: {fileID: 0}
-    - m_Text: "\u65E0\u8272"
+    - m_Text: "\u6D88\u8272"
+      m_Image: {fileID: 0}
+    - m_Text: "\u6BB8\u754C"
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -38227,7 +38229,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u5149"
+  m_Text: "\u5149\u8292"
 --- !u!222 &1096890399
 CanvasRenderer:
   m_ObjectHideFlags: 0
