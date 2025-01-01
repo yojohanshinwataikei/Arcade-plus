@@ -51,7 +51,7 @@ namespace Arcade.Aff
 		public int EndTiming;
 		public float XStart;
 		public float XEnd;
-		public ArcLineType LineType;
+		public ArcCurveType CurveType;
 		public float YStart;
 		public float YEnd;
 		public int Color;
@@ -258,7 +258,7 @@ namespace Arcade.Aff
 					arc.IsVoid = true;
 				}
 				writer.WriteLine($"{intent}arc({arc.Timing.ToString(CultureInfo.InvariantCulture)},{arc.EndTiming.ToString(CultureInfo.InvariantCulture)},{arc.XStart.ToString("f2", CultureInfo.InvariantCulture)},{arc.XEnd.ToString("f2", CultureInfo.InvariantCulture)}" +
-					$",{ArcLineTypeStrings[arc.LineType]},{arc.YStart.ToString("f2", CultureInfo.InvariantCulture)},{arc.YEnd.ToString("f2", CultureInfo.InvariantCulture)},{arc.Color},{arc.Effect},{arc.IsVoid.ToString().ToLower()})" +
+					$",{ArcCurveTypeStrings[arc.CurveType]},{arc.YStart.ToString("f2", CultureInfo.InvariantCulture)},{arc.YEnd.ToString("f2", CultureInfo.InvariantCulture)},{arc.Color},{arc.Effect},{arc.IsVoid.ToString().ToLower()})" +
 					(arc.ArcTaps.Count > 0 ? $"[{string.Join(",", arc.ArcTaps.Select(e => $"arctap({e.Timing.ToString(CultureInfo.InvariantCulture)})"))}]" : "") +
 					";");
 			}
@@ -299,16 +299,16 @@ namespace Arcade.Aff
 				writer.WriteLine($"{intent}}};");
 			}
 		}
-		public static Dictionary<ArcLineType, string> ArcLineTypeStrings = new Dictionary<ArcLineType, string>
+		public static Dictionary<ArcCurveType, string> ArcCurveTypeStrings = new Dictionary<ArcCurveType, string>
 		{
-			[ArcLineType.B] = "b",
-			[ArcLineType.S] = "s",
-			[ArcLineType.Si] = "si",
-			[ArcLineType.So] = "so",
-			[ArcLineType.SiSi] = "sisi",
-			[ArcLineType.SiSo] = "siso",
-			[ArcLineType.SoSi] = "sosi",
-			[ArcLineType.SoSo] = "soso",
+			[ArcCurveType.B] = "b",
+			[ArcCurveType.S] = "s",
+			[ArcCurveType.Si] = "si",
+			[ArcCurveType.So] = "so",
+			[ArcCurveType.SiSi] = "sisi",
+			[ArcCurveType.SiSo] = "siso",
+			[ArcCurveType.SoSi] = "sosi",
+			[ArcCurveType.SoSo] = "soso",
 		};
 		public static Dictionary<CameraEaseType, string> CameraEaseTypeStrings = new Dictionary<CameraEaseType, string>
 		{
@@ -538,15 +538,15 @@ namespace Arcade.Aff
 			var endTiming = CheckValueType<RawAffInt>(context.values().value()[1], "arc", "结束时间");
 			var xStart = CheckValueType<RawAffFloat>(context.values().value()[2], "arc", "起点横坐标");
 			var xEnd = CheckValueType<RawAffFloat>(context.values().value()[3], "arc", "终点横坐标");
-			var rawLineType = CheckValueType<RawAffWord>(context.values().value()[4], "arc", "arc 类型");
-			var lineType = ParseWord(lineTypes, rawLineType.data, context.values().value()[4], "arc", "arc 类型");
+			var rawCurveType = CheckValueType<RawAffWord>(context.values().value()[4], "arc", "arc 曲线类型");
+			var curveType = ParseWord(curveTypes, rawCurveType.data, context.values().value()[4], "arc", "arc 曲线类型");
 			var yStart = CheckValueType<RawAffFloat>(context.values().value()[5], "arc", "起点纵坐标");
 			var yEnd = CheckValueType<RawAffFloat>(context.values().value()[6], "arc", "终点纵坐标");
 			var color = CheckValueType<RawAffInt>(context.values().value()[7], "arc", "颜色");
 			var effect = CheckValueType<RawAffWord>(context.values().value()[8], "arc", "效果类型");
 			var rawIsVoid = CheckValueType<RawAffWord>(context.values().value()[9], "arc", "是否黑线");
 			var isVoid = ParseWord(bools, rawIsVoid.data, context.values().value()[9], "arc", "是否黑线");
-			if (timing == null || endTiming == null || xStart == null || xEnd == null || lineType == null || yStart == null || yEnd == null || color == null || effect == null || isVoid == null)
+			if (timing == null || endTiming == null || xStart == null || xEnd == null || curveType == null || yStart == null || yEnd == null || color == null || effect == null || isVoid == null)
 			{
 				return;
 			}
@@ -592,7 +592,7 @@ namespace Arcade.Aff
 					EndTiming = endTiming.data,
 					XStart = xStart.data,
 					XEnd = xEnd.data,
-					LineType = lineType.Value,
+					CurveType = curveType.Value,
 					YStart = yStart.data,
 					YEnd = yEnd.data,
 					Color = color.data,
@@ -813,16 +813,16 @@ namespace Arcade.Aff
 			["false"] = false,
 		};
 
-		Dictionary<string, ArcLineType> lineTypes = new Dictionary<string, ArcLineType>()
+		Dictionary<string, ArcCurveType> curveTypes = new Dictionary<string, ArcCurveType>()
 		{
-			["b"] = ArcLineType.B,
-			["s"] = ArcLineType.S,
-			["si"] = ArcLineType.Si,
-			["so"] = ArcLineType.So,
-			["sisi"] = ArcLineType.SiSi,
-			["soso"] = ArcLineType.SoSo,
-			["siso"] = ArcLineType.SiSo,
-			["sosi"] = ArcLineType.SoSi,
+			["b"] = ArcCurveType.B,
+			["s"] = ArcCurveType.S,
+			["si"] = ArcCurveType.Si,
+			["so"] = ArcCurveType.So,
+			["sisi"] = ArcCurveType.SiSi,
+			["soso"] = ArcCurveType.SoSo,
+			["siso"] = ArcCurveType.SiSo,
+			["sosi"] = ArcCurveType.SoSi,
 		};
 
 		Dictionary<string, CameraEaseType> cameraTypes = new Dictionary<string, CameraEaseType>()

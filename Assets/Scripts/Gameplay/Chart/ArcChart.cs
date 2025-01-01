@@ -211,7 +211,7 @@ namespace Arcade.Gameplay.Chart
 	{
 		ArcTimingGroup TimingGroup { set; }
 	}
-	public enum ArcLineType
+	public enum ArcCurveType
 	{
 		B,
 		S,
@@ -943,8 +943,8 @@ namespace Arcade.Gameplay.Chart
 			}
 			else
 			{
-				baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
-										ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f, 0);
+				baseLocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.CurveType)),
+										ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.CurveType)) - 0.5f, 0);
 			}
 			Vector3 offsetLocalPosition = -timingManager.CalculatePositionByTiming(Timing, Arc.TimingGroup) / 1000f * this.FallDirection();
 			Vector3 additionalLocalPosition = new Vector3(0, 0, -0.6f);
@@ -980,8 +980,8 @@ namespace Arcade.Gameplay.Chart
 			{
 				LineRenderer l = UnityEngine.Object.Instantiate(ArcArcManager.Instance.ConnectionPrefab, t.transform).GetComponent<LineRenderer>();
 				float p = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
-				Vector3 pos = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, p, Arc.LineType)),
-											 ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, p, Arc.LineType)) - 0.5f)
+				Vector3 pos = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, p, Arc.CurveType)),
+											 ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, p, Arc.CurveType)) - 0.5f)
 											 - new Vector3(ArcArcManager.Instance.Lanes[t.Track], 0);
 				l.SetPosition(1, new Vector3(pos.x, 0, pos.y));
 				l.startColor = l.endColor = ArcArcManager.Instance.ConnectionColor;
@@ -1015,8 +1015,8 @@ namespace Arcade.Gameplay.Chart
 		{
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			float t = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
-			LocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.LineType)),
-									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.LineType)) - 0.5f,
+			LocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, t, Arc.CurveType)),
+									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, t, Arc.CurveType)) - 0.5f,
 									  -timingManager.CalculatePositionByTimingAndStart(Arc.Timing, Timing, Arc.TimingGroup) / 1000f - 0.6f);
 			SetupArcTapConnection();
 		}
@@ -1105,7 +1105,7 @@ namespace Arcade.Gameplay.Chart
 		public ArcTimingGroup TimingGroup { get; set; }
 		public float XStart;
 		public float XEnd;
-		public ArcLineType LineType;
+		public ArcCurveType CurveType;
 		public float YStart;
 		public float YEnd;
 		public int Color;
@@ -1135,7 +1135,7 @@ namespace Arcade.Gameplay.Chart
 				EndTiming = EndTiming,
 				XStart = XStart,
 				XEnd = XEnd,
-				LineType = LineType,
+				CurveType = CurveType,
 				YStart = YStart,
 				YEnd = YEnd,
 				Color = Color,
@@ -1152,7 +1152,7 @@ namespace Arcade.Gameplay.Chart
 			ArcArc n = newValues as ArcArc;
 			XStart = n.XStart;
 			XEnd = n.XEnd;
-			LineType = n.LineType;
+			CurveType = n.CurveType;
 			YStart = n.YStart;
 			YEnd = n.YEnd;
 			Color = n.Color;
@@ -1301,8 +1301,8 @@ namespace Arcade.Gameplay.Chart
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			arctap.Instantiate(this);
 			float t = 1f * (arctap.Timing - Timing) / (EndTiming - Timing);
-			arctap.LocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(XStart, XEnd, t, LineType)),
-									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(YStart, YEnd, t, LineType)) - 0.5f,
+			arctap.LocalPosition = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(XStart, XEnd, t, CurveType)),
+									  ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(YStart, YEnd, t, CurveType)) - 0.5f,
 									  -timingManager.CalculatePositionByTimingAndStart(Timing, arctap.Timing, TimingGroup) / 1000f - 0.6f);
 			ArcTaps.Add(arctap);
 		}
@@ -1333,7 +1333,7 @@ namespace Arcade.Gameplay.Chart
 			EndTiming = rawAffArc.EndTiming;
 			XStart = rawAffArc.XStart;
 			XEnd = rawAffArc.XEnd;
-			LineType = rawAffArc.LineType;
+			CurveType = rawAffArc.CurveType;
 			YStart = rawAffArc.YStart;
 			YEnd = rawAffArc.YEnd;
 			Color = rawAffArc.Color;
@@ -1357,7 +1357,7 @@ namespace Arcade.Gameplay.Chart
 				EndTiming = EndTiming,
 				XStart = XStart,
 				XEnd = XEnd,
-				LineType = LineType,
+				CurveType = CurveType,
 				YStart = YStart,
 				YEnd = YEnd,
 				Color = Color,

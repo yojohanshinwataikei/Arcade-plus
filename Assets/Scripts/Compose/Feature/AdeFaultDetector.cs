@@ -101,8 +101,8 @@ namespace Arcade.Aff.Faults
 				foreach (var at in arc.ArcTaps)
 				{
 					float t = 1f * (at.Timing - arc.Timing) / (arc.EndTiming - arc.Timing);
-					float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, t, arc.LineType);
-					float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, t, arc.LineType);
+					float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, t, arc.CurveType);
+					float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, t, arc.CurveType);
 					ats.Add((at, x, y));
 				}
 			}

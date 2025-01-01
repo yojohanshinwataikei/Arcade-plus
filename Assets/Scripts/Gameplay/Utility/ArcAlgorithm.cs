@@ -39,41 +39,41 @@ namespace Arcade.Gameplay
 			return Mathf.Pow(o, 3) * start + 3 * Mathf.Pow(o, 2) * t * start + 3 * o * Mathf.Pow(t, 2) * end + Mathf.Pow(t, 3) * end;
 		}
 
-		public static float X(float start, float end, float t, ArcLineType type)
+		public static float X(float start, float end, float t, ArcCurveType type)
 		{
 			switch (type)
 			{
 				default:
-				case ArcLineType.S:
+				case ArcCurveType.S:
 					return S(start, end, t);
-				case ArcLineType.B:
+				case ArcCurveType.B:
 					return B(start, end, t);
-				case ArcLineType.Si:
-				case ArcLineType.SiSi:
-				case ArcLineType.SiSo:
+				case ArcCurveType.Si:
+				case ArcCurveType.SiSi:
+				case ArcCurveType.SiSo:
 					return I(start, end, t);
-				case ArcLineType.So:
-				case ArcLineType.SoSi:
-				case ArcLineType.SoSo:
+				case ArcCurveType.So:
+				case ArcCurveType.SoSi:
+				case ArcCurveType.SoSo:
 					return O(start, end, t);
 			}
 		}
-		public static float Y(float start, float end, float t, ArcLineType type)
+		public static float Y(float start, float end, float t, ArcCurveType type)
 		{
 			switch (type)
 			{
 				default:
-				case ArcLineType.S:
-				case ArcLineType.Si:
-				case ArcLineType.So:
+				case ArcCurveType.S:
+				case ArcCurveType.Si:
+				case ArcCurveType.So:
 					return S(start, end, t);
-				case ArcLineType.B:
+				case ArcCurveType.B:
 					return B(start, end, t);
-				case ArcLineType.SiSi:
-				case ArcLineType.SoSi:
+				case ArcCurveType.SiSi:
+				case ArcCurveType.SoSi:
 					return I(start, end, t);
-				case ArcLineType.SiSo:
-				case ArcLineType.SoSo:
+				case ArcCurveType.SiSo:
+				case ArcCurveType.SoSo:
 					return O(start, end, t);
 			}
 		}

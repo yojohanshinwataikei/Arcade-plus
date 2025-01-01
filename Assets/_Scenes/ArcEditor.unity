@@ -15474,7 +15474,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetArcTypeMode
+      value: SetArcCurveTypeMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Arcade.Compose.Operation.AdeClickToCreate, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
@@ -17504,10 +17509,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.052083332
-    y: 0.05925208
-    width: 0.8958333
-    height: 0.88149583
+    x: 0.05452563
+    y: 0.06203053
+    width: 0.8909488
+    height: 0.87593895
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -23854,7 +23859,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetArcTypeMode
+      value: SetArcCurveTypeMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Arcade.Compose.Operation.AdeClickToCreate, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
@@ -25817,7 +25827,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetArcTypeMode
+      value: SetArcCurveTypeMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Arcade.Compose.Operation.AdeClickToCreate, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
@@ -26578,7 +26593,7 @@ GameObject:
   m_Component:
   - component: {fileID: 780229684}
   m_Layer: 10
-  m_Name: ArcType
+  m_Name: ArcCurveType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32141,7 +32156,7 @@ MonoBehaviour:
   EndTiming: {fileID: 582029129}
   StartPos: {fileID: 2035215951}
   EndPos: {fileID: 1728661374}
-  LineType: {fileID: 2112687125}
+  CurveType: {fileID: 2112687125}
   Color: {fileID: 1973914352}
   IsVoid: {fileID: 1149132868}
   SelectParent: {fileID: 82739073}
@@ -33318,7 +33333,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetArcTypeMode
+      value: SetArcCurveTypeMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Arcade.Compose.Operation.AdeClickToCreate, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
@@ -35171,7 +35191,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetArcTypeMode
+      value: SetArcCurveTypeMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Arcade.Compose.Operation.AdeClickToCreate, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
@@ -43036,7 +43061,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetArcTypeMode
+      value: SetArcCurveTypeMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Arcade.Compose.Operation.AdeClickToCreate, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
@@ -54162,7 +54192,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetArcTypeMode
+      value: SetArcCurveTypeMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Arcade.Compose.Operation.AdeClickToCreate, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
@@ -64742,7 +64777,12 @@ PrefabInstance:
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
       propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetArcTypeMode
+      value: SetArcCurveTypeMode
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: OnConfirmed.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Arcade.Compose.Operation.AdeClickToCreate, Arcade
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}
@@ -75068,7 +75108,7 @@ GameObject:
   - component: {fileID: 2112687125}
   - component: {fileID: 2112687126}
   m_Layer: 10
-  m_Name: LineType
+  m_Name: CurveType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

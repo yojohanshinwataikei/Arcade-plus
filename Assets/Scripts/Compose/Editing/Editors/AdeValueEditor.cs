@@ -19,7 +19,7 @@ namespace Arcade.Compose.Editing
 		public static AdeValueEditor Instance { get; private set; }
 
 		public RectTransform Panel;
-		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, LineType, Color, IsVoid, SelectParent, SeparateArctap, TimingGroup;
+		public RectTransform Timing, Track, EndTiming, StartPos, EndPos, CurveType, Color, IsVoid, SelectParent, SeparateArctap, TimingGroup;
 		public RectTransform MoveTiming, MoveTrack, MoveEndTiming, MoveStartPos, MoveEndPos;
 
 		public Image IsVoidIntermediate;
@@ -46,7 +46,7 @@ namespace Arcade.Compose.Editing
 		}
 		private void Start()
 		{
-			lineTypeDropdownHelper = new DropdownHelper<ArcLineType?>(LineType.GetComponentInChildren<Dropdown>());
+			curveTypeDropdownHelper = new DropdownHelper<ArcCurveType?>(CurveType.GetComponentInChildren<Dropdown>());
 			colorDropdownHelper = new DropdownHelper<int?>(Color.GetComponentInChildren<Dropdown>());
 			timingGroupDropdownHelper = new DropdownHelper<ArcTimingGroupOption?>(TimingGroup.GetComponentInChildren<Dropdown>());
 			AdeSelectionManager.Instance.NoteEventListeners.Add(this);
@@ -120,12 +120,12 @@ namespace Arcade.Compose.Editing
 					(active) => EndPos.gameObject.SetActive(active),
 					(data) => EndPos.GetComponentInChildren<InputField>().SetTextWithoutNotify(data)
 				);
-				UpdateField<ArcLineType?>(
+				UpdateField<ArcCurveType?>(
 					(note) => note is ArcArc,
-					(note) => (note as ArcArc).LineType,
+					(note) => (note as ArcArc).CurveType,
 					null,
-					(active) => LineType.gameObject.SetActive(active),
-					(data) => ApplyLineTypeDropDown(data)
+					(active) => CurveType.gameObject.SetActive(active),
+					(data) => ApplyCurveTypeDropDown(data)
 				);
 				UpdateField<int?>(
 					(note) => note is ArcArc,
@@ -191,53 +191,53 @@ namespace Arcade.Compose.Editing
 			}
 		}
 
-		private DropdownHelper<ArcLineType?> lineTypeDropdownHelper;
+		private DropdownHelper<ArcCurveType?> curveTypeDropdownHelper;
 
-		private Dictionary<ValueTuple<ArcLineType?>, string> lineTypeToDropDownLabel = new Dictionary<ValueTuple<ArcLineType?>, string>{
-			{ValueTuple.Create<ArcLineType?>(ArcLineType.B),"B"},
-			{ValueTuple.Create<ArcLineType?>(ArcLineType.S),"S"},
-			{ValueTuple.Create<ArcLineType?>(ArcLineType.Si),"Si"},
-			{ValueTuple.Create<ArcLineType?>(ArcLineType.So),"So"},
-			{ValueTuple.Create<ArcLineType?>(ArcLineType.SiSi),"SiSi"},
-			{ValueTuple.Create<ArcLineType?>(ArcLineType.SiSo),"SiSo"},
-			{ValueTuple.Create<ArcLineType?>(ArcLineType.SoSi),"SoSi"},
-			{ValueTuple.Create<ArcLineType?>(ArcLineType.SoSo),"SoSo"},
-			{ValueTuple.Create<ArcLineType?>(null),"-"},
+		private Dictionary<ValueTuple<ArcCurveType?>, string> curveTypeToDropDownLabel = new Dictionary<ValueTuple<ArcCurveType?>, string>{
+			{ValueTuple.Create<ArcCurveType?>(ArcCurveType.B),"B"},
+			{ValueTuple.Create<ArcCurveType?>(ArcCurveType.S),"S"},
+			{ValueTuple.Create<ArcCurveType?>(ArcCurveType.Si),"Si"},
+			{ValueTuple.Create<ArcCurveType?>(ArcCurveType.So),"So"},
+			{ValueTuple.Create<ArcCurveType?>(ArcCurveType.SiSi),"SiSi"},
+			{ValueTuple.Create<ArcCurveType?>(ArcCurveType.SiSo),"SiSo"},
+			{ValueTuple.Create<ArcCurveType?>(ArcCurveType.SoSi),"SoSi"},
+			{ValueTuple.Create<ArcCurveType?>(ArcCurveType.SoSo),"SoSo"},
+			{ValueTuple.Create<ArcCurveType?>(null),"-"},
 		};
 
-		private readonly List<ArcLineType?> defaultLineTypeOptions = new List<ArcLineType?>{
-			ArcLineType.B,
-			ArcLineType.S,
-			ArcLineType.Si,
-			ArcLineType.So,
-			ArcLineType.SiSi,
-			ArcLineType.SiSo,
-			ArcLineType.SoSi,
-			ArcLineType.SoSo,
+		private readonly List<ArcCurveType?> defaultCurveTypeOptions = new List<ArcCurveType?>{
+			ArcCurveType.B,
+			ArcCurveType.S,
+			ArcCurveType.Si,
+			ArcCurveType.So,
+			ArcCurveType.SiSi,
+			ArcCurveType.SiSo,
+			ArcCurveType.SoSi,
+			ArcCurveType.SoSo,
 		};
-		private readonly List<ArcLineType?> unknownLineTypeOptions = new List<ArcLineType?>{
+		private readonly List<ArcCurveType?> unknownCurveTypeOptions = new List<ArcCurveType?>{
 			null,
-			ArcLineType.B,
-			ArcLineType.S,
-			ArcLineType.Si,
-			ArcLineType.So,
-			ArcLineType.SiSi,
-			ArcLineType.SiSo,
-			ArcLineType.SoSi,
-			ArcLineType.SoSo,
+			ArcCurveType.B,
+			ArcCurveType.S,
+			ArcCurveType.Si,
+			ArcCurveType.So,
+			ArcCurveType.SiSi,
+			ArcCurveType.SiSo,
+			ArcCurveType.SoSi,
+			ArcCurveType.SoSo,
 		};
 
-		private void ApplyLineTypeDropDown(ArcLineType? data)
+		private void ApplyCurveTypeDropDown(ArcCurveType? data)
 		{
 			if (data == null)
 			{
-				lineTypeDropdownHelper.UpdateOptions(unknownLineTypeOptions, (lineType, _) => lineTypeToDropDownLabel[ValueTuple.Create(lineType)]);
+				curveTypeDropdownHelper.UpdateOptions(unknownCurveTypeOptions, (curveType, _) => curveTypeToDropDownLabel[ValueTuple.Create(curveType)]);
 			}
 			else
 			{
-				lineTypeDropdownHelper.UpdateOptions(defaultLineTypeOptions, (lineType, _) => lineTypeToDropDownLabel[ValueTuple.Create(lineType)]);
+				curveTypeDropdownHelper.UpdateOptions(defaultCurveTypeOptions, (curveType, _) => curveTypeToDropDownLabel[ValueTuple.Create(curveType)]);
 			}
-			lineTypeDropdownHelper.SetValueWithoutNotify(data);
+			curveTypeDropdownHelper.SetValueWithoutNotify(data);
 		}
 
 		private DropdownHelper<int?> colorDropdownHelper;
@@ -562,16 +562,16 @@ namespace Arcade.Compose.Editing
 				}
 			);
 		}
-		public void OnLineType(Dropdown dropdown)
+		public void OnCurveType(Dropdown dropdown)
 		{
-			ArcLineType? lineType = lineTypeDropdownHelper.QueryDataById(dropdown.value);
-			if (lineType == null)
+			ArcCurveType? curveType = curveTypeDropdownHelper.QueryDataById(dropdown.value);
+			if (curveType == null)
 			{
 				return;
 			}
 			HandleValueChange(
-				lineType.Value,
-				(ArcLineType raw, ref ArcLineType result) =>
+				curveType.Value,
+				(ArcCurveType raw, ref ArcCurveType result) =>
 				{
 					result = raw;
 					return null;
@@ -582,7 +582,7 @@ namespace Arcade.Compose.Editing
 				},
 				(value, note) =>
 				{
-					(note as ArcArc).LineType = value;
+					(note as ArcArc).CurveType = value;
 				}
 			);
 		}
@@ -711,8 +711,8 @@ namespace Arcade.Compose.Editing
 					{
 						int timing = arcTap.Timing;
 						float t = 1f * (timing - arc.Timing) / (arc.EndTiming - arc.Timing);
-						float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, t, arc.LineType);
-						float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, t, arc.LineType);
+						float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, t, arc.CurveType);
+						float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, t, arc.CurveType);
 						x = Mathf.RoundToInt(x * 100) / 100f;
 						y = Mathf.RoundToInt(y * 100) / 100f;
 						commands.Add(new RemoveArcTapCommand(arc, arcTap));
@@ -723,7 +723,7 @@ namespace Arcade.Compose.Editing
 							Color = arc.Color,
 							Effect = "none",
 							IsVoid = true,
-							LineType = ArcLineType.S,
+							CurveType = ArcCurveType.S,
 							TimingGroup = arc.TimingGroup,
 							XStart = x,
 							XEnd = x,

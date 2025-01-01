@@ -68,8 +68,8 @@ namespace Arcade.Compose
 					float p = ((float)(cursor.AttachedTiming - arc.Timing)) / ((float)(arc.EndTiming - arc.Timing));
 					if (p >= 0 && p <= 1)
 					{
-						float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, p, arc.LineType);
-						float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, p, arc.LineType);
+						float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, p, arc.CurveType);
+						float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, p, arc.CurveType);
 						content += $"\nArc: {(p * 100).ToString("f2", CultureInfo.InvariantCulture)}%, {x.ToString("f2", CultureInfo.InvariantCulture)}, {y.ToString("f2", CultureInfo.InvariantCulture)}";
 					}
 				}
