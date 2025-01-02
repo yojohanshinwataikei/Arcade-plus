@@ -13966,7 +13966,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u7C7B\u578B"
+  m_Text: "\u66F2\u7EBF\u7C7B\u578B"
 --- !u!222 &431859858
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17509,10 +17509,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.05452563
-    y: 0.06203053
-    width: 0.8909488
-    height: 0.87593895
+    x: 0.052083332
+    y: 0.05925208
+    width: 0.8958333
+    height: 0.88149583
   near clip plane: 1
   far clip plane: 10000
   field of view: 50
@@ -37108,8 +37108,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 928958754}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnLineType
+        m_TargetAssemblyTypeName: Arcade.Compose.Editing.AdeValueEditor, Arcade
+        m_MethodName: OnCurveType
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 1071136720}
