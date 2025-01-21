@@ -13067,7 +13067,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EventSystem: {fileID: 409941036}
-  Dialog: {fileID: 0}
+  Dialog: {fileID: 718584905}
 --- !u!114 &409941040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40448,7 +40448,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u5207\u6362Arc\u7C7B\u578B"
+  m_Text: "\u5207\u6362Arc\u66F2\u7EBF\u7C7B\u578B"
 --- !u!222 &1148112017
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -53846,7 +53846,7 @@ GameObject:
   - component: {fileID: 1487112878}
   - component: {fileID: 1487112881}
   m_Layer: 10
-  m_Name: ClickToCreateArcType
+  m_Name: ClickToCreateArcCurveType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53978,7 +53978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e988a27ee9f62b498b0909ef22441ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HotkeyName: Click To Create Arc Type
+  HotkeyName: Click To Create Arc Curve Type
   Text: {fileID: 926126051}
 --- !u!1 &1487420587
 GameObject:
@@ -67610,7 +67610,7 @@ GameObject:
   - component: {fileID: 1862864743}
   - component: {fileID: 1862864744}
   m_Layer: 10
-  m_Name: ClickToCreateArcType
+  m_Name: ClickToCreateArcCurveType
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
