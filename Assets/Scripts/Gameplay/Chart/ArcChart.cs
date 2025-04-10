@@ -966,11 +966,11 @@ namespace Arcade.Gameplay.Chart
 		{
 			if (IsConvertedVariousSizedArctap)
 			{
-				LocalScale = Mathf.Abs(ArcAlgorithm.ArcXToWorld(Arc.XEnd) - ArcAlgorithm.ArcXToWorld(Arc.XStart));
+				LocalScale = Mathf.Abs(Arc.XEnd - Arc.XStart) * 2;
 			}
 			else
 			{
-				LocalScale = 4.25f;
+				LocalScale = 1.0f;
 			}
 		}
 
@@ -1098,16 +1098,22 @@ namespace Arcade.Gameplay.Chart
 				Shadow.localPosition = p;
 			}
 		}
+
+		internal static readonly Vector3 NormalArcTapScale = new Vector3(-4.4625f, 0.6f, -1.2f);
+		internal static readonly Vector3 SfxArcTapScale = new Vector3(4.2f, 4.2f, 4.2f);
+
+		public Vector3 BaseModelScale { get { return Arc.IsSfx ? SfxArcTapScale : NormalArcTapScale; } }
+
 		public float LocalScale
 		{
 			get
 			{
-				return Model.localScale.x;
+				return Model.localScale.x / BaseModelScale.x;
 			}
 			set
 			{
-				Model.localScale = new Vector3(value, Model.localScale.y, Model.localScale.z);
-				Shadow.localScale = new Vector3(value / 4.25f, 1f, 1f);
+				Model.localScale = new Vector3(value * BaseModelScale.x, BaseModelScale.y, BaseModelScale.z);
+				Shadow.localScale = new Vector3(value, 1f, 1f);
 			}
 		}
 		public override bool Selected
