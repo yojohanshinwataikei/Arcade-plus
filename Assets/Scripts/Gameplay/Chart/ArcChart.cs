@@ -583,10 +583,19 @@ namespace Arcade.Gameplay.Chart
 		{
 			foreach (var l in ConnectionLines.Values) UnityEngine.Object.Destroy(l.gameObject);
 			ConnectionLines.Clear();
+			if (this.NoInput()) return;
 			foreach (var arc in ArcArcManager.Instance.Arcs)
 			{
-				if (arc.ArcTaps == null) continue;
 				if (arc.NoInput()) continue;
+				if (arc.IsVariousSizedArctap)
+				{
+					var arctap = arc.ConvertedVariousSizedArctap;
+					if (Mathf.Abs(arctap.Timing - Timing) <= 1)
+					{
+						arctap.SetupArcTapConnection();
+					}
+				}
+				if (arc.ArcTaps == null) continue;
 				foreach (var arctap in arc.ArcTaps)
 				{
 					if (Mathf.Abs(arctap.Timing - Timing) <= 1)
@@ -996,15 +1005,24 @@ namespace Arcade.Gameplay.Chart
 
 		public void SetupArcTapConnection()
 		{
-			if (Arc == null || Arc.NoInput() || Arc.Designant || (Arc.EndTiming - Arc.Timing) == 0) return;
+			if (Arc == null || Arc.NoInput() || Arc.Designant || ((Arc.EndTiming - Arc.Timing) == 0 && !IsConvertedVariousSizedArctap)) return;
 			List<ArcTap> taps = ArcTapNoteManager.Instance.Taps;
-			ArcTap[] sameTimeTapNotes = taps.Where((s) => Mathf.Abs(s.Timing - Timing) <= 1).ToArray();
+			ArcTap[] sameTimeTapNotes = taps.Where((s) => (Mathf.Abs(s.Timing - Timing) <= 1) && !s.NoInput()).ToArray();
 			foreach (ArcTap t in sameTimeTapNotes)
 			{
 				LineRenderer l = UnityEngine.Object.Instantiate(ArcArcManager.Instance.ConnectionPrefab, t.transform).GetComponent<LineRenderer>();
 				float p = 1f * (Timing - Arc.Timing) / (Arc.EndTiming - Arc.Timing);
-				Vector3 pos = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, p, Arc.CurveType)),
-											 ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, p, Arc.CurveType)) - 0.5f)
+				Vector3 arcTapPos = new Vector3();
+				if (IsConvertedVariousSizedArctap)
+				{
+					arcTapPos = new Vector3(ArcAlgorithm.ArcXToWorld((Arc.XStart + Arc.XEnd) / 2f), ArcAlgorithm.ArcYToWorld(Arc.YStart) - 0.5f, 0);
+				}
+				else
+				{
+					arcTapPos = new Vector3(ArcAlgorithm.ArcXToWorld(ArcAlgorithm.X(Arc.XStart, Arc.XEnd, p, Arc.CurveType)),
+											 ArcAlgorithm.ArcYToWorld(ArcAlgorithm.Y(Arc.YStart, Arc.YEnd, p, Arc.CurveType)) - 0.5f);
+				}
+				Vector3 pos = arcTapPos
 											 - new Vector3(ArcArcManager.Instance.Lanes[t.Track], 0);
 				l.SetPosition(1, new Vector3(pos.x, 0, pos.y));
 				l.startColor = l.endColor = ArcArcManager.Instance.ConnectionColor;
@@ -1024,7 +1042,7 @@ namespace Arcade.Gameplay.Chart
 		public void RemoveArcTapConnection()
 		{
 			List<ArcTap> taps = ArcTapNoteManager.Instance.Taps;
-			ArcTap[] sameTimeTapNotes = taps.Where((s) => Mathf.Abs(s.Timing - Timing) <= 1).ToArray();
+			ArcTap[] sameTimeTapNotes = taps.Where((s) => (Mathf.Abs(s.Timing - Timing) <= 1) && !s.NoInput()).ToArray();
 			foreach (ArcTap t in sameTimeTapNotes)
 			{
 				if (t.ConnectionLines.ContainsKey(this))
@@ -1300,7 +1318,8 @@ namespace Arcade.Gameplay.Chart
 			{
 				JudgeTimings.Add(Timing);
 				return;
-			};
+			}
+			;
 			double interval = 60000f / bpm / (bpm >= 255 ? 1 : 2) / ArcGameplayManager.Instance.TimingPointDensityFactor;
 			int total = (int)((EndTiming - Timing) / interval);
 			if ((u ^ 1) >= total)
