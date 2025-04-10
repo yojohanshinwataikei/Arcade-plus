@@ -715,6 +715,10 @@ namespace Arcade.Gameplay
 							return;
 						}
 						float t = duration == 0 ? 0 : ((-arc.Position / 1000f) / (-s.ToPos.z));
+						if (float.IsNaN(t))
+						{
+							t = duration == 0 ? 0 : ((float)(currentTiming - s.FromTiming)) / ((float)(duration));
+						}
 						if (t > 1)
 						{
 							EnableHead = false;
@@ -790,6 +794,10 @@ namespace Arcade.Gameplay
 					if (s.FromTiming < currentTiming && s.ToTiming >= currentTiming)
 					{
 						float t = (s.FromPos.z - arc.Position / 1000f) / (s.FromPos.z - s.ToPos.z);
+						if (float.IsNaN(t))
+						{
+							t = ((float)(currentTiming - s.FromTiming)) / ((float)(s.ToTiming - s.FromTiming));
+						}
 						ArcCap.position = new Vector3(s.FromPos.x + (s.ToPos.x - s.FromPos.x) * t,
 													  s.FromPos.y + (s.ToPos.y - s.FromPos.y) * t);
 						JudgeEffectTransform.position = ArcEffectManager.Instance.EffectPlane.GetPositionOnPlane(ArcCap.position);
