@@ -494,7 +494,7 @@ namespace Arcade.Gameplay
 			vertices[1] = pos + new Vector3(offset, -offset / 2, 0);
 			uv[1] = new Vector2(1, 0);
 			uv2[1] = new Vector2(arc.YStart, 0);
-			vertices[2] = pos + new Vector3(0, -offset / 2, offset / 2);
+			vertices[2] = pos + new Vector3(0, -offset / 2, offset);
 			uv[2] = new Vector2(1, 1);
 			uv2[2] = new Vector2(arc.YStart, 0);
 			vertices[3] = pos + new Vector3(-offset, -offset / 2, 0);
