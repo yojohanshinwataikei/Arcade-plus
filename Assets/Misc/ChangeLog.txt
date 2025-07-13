@@ -1,5 +1,6 @@
 0.6.5
 
+- 调整了部分分辨率下 enwidencamera 的行为
 - 调整了 Arc 的开头部分的形状
 - 调整了添加 ArcTap 时显示的 ArcTap 的渲染尺寸和朝向
 

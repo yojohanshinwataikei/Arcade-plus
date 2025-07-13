@@ -27,7 +27,7 @@ namespace Arcade.Gameplay
 		{
 			get
 			{
-				return new Vector3(0, 9f + 4.5f * EnwidenRatio, (Is16By9 ? 9f : 8f) + 4.5f * EnwidenRatio);
+				return new Vector3(0, 9f + 4.5f * EnwidenRatio, (Is16By9 ? 9f : 8f) + (Is16By9 ? 4.5f : 4f) * EnwidenRatio);
 			}
 		}
 		public Vector3 ResetRotation
@@ -157,7 +157,7 @@ namespace Arcade.Gameplay
 			{
 				CurrentTilt = pos;
 			}
-			GameplayCamera.transform.LookAt(new Vector3(0, -5.5f + 4.5f * EnwidenRatio, -20f + 4.5f * EnwidenRatio), new Vector3(CurrentTilt, 1 - CurrentTilt, 0));
+			GameplayCamera.transform.LookAt(new Vector3(0, -5.5f + 4.5f * EnwidenRatio, -20f + (Is16By9 ? 4.5f : 4f) * EnwidenRatio), new Vector3(CurrentTilt, 1 - CurrentTilt, 0));
 		}
 	}
 }
