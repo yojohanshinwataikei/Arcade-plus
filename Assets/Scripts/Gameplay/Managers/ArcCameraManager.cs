@@ -70,8 +70,8 @@ namespace Arcade.Gameplay
 		public void ResetCamera()
 		{
 			GameplayCamera.fieldOfView = Is16By9 ? 50 : 65;
-			GameplayCamera.nearClipPlane = 1;
-			GameplayCamera.farClipPlane = 10000;
+			GameplayCamera.nearClipPlane = 1f / 100f;
+			GameplayCamera.farClipPlane = 10000f;
 			SkyInputLabel.localPosition = new Vector3(Is16By9 ? -7.1f : -6.5f, 0.1f, 0);
 			GameplayCamera.transform.position = new Vector3(0, 9, Is16By9 ? 9 : 8);
 			GameplayCamera.transform.LookAt(new Vector3(0, -5.5f, -20), new Vector3(0, 1, 0));
