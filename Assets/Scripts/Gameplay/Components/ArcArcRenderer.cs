@@ -343,6 +343,7 @@ namespace Arcade.Gameplay
 		private Color currentHighColor;
 		private Color currentLowColor;
 		private List<ArcArcSegmentComponent> segments = new List<ArcArcSegmentComponent>();
+		private int zeroLengthVoidArcDisappearTime = int.MaxValue;
 
 		private Color GetColor(bool high)
 		{
@@ -431,8 +432,18 @@ namespace Arcade.Gameplay
 		{
 			if (arc == null) return;
 
+
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			int duration = arc.EndTiming - arc.Timing;
+
+			if (duration == 0 && (arc.IsVoid || arc.NoInput()))
+			{
+				zeroLengthVoidArcDisappearTime = timingManager.CalculateZeroLengthVoidArcDisappearTime(arc.Timing, arc.TimingGroup);
+			}
+			else
+			{
+				zeroLengthVoidArcDisappearTime = int.MaxValue;
+			}
 
 			int v1 = duration < 1000 ? 14 : 7;
 			float v2 = 1f / (v1 * duration / 1000f);
@@ -601,6 +612,11 @@ namespace Arcade.Gameplay
 					s.Enable = false;
 					continue;
 				}
+				if (s.ToTiming == s.FromTiming && currentTiming > zeroLengthVoidArcDisappearTime)
+				{
+					s.Enable = false;
+					continue;
+				}
 				float pos = -(z + s.FromPos.z);
 				float endPos = -(z + s.ToPos.z);
 				if (endPos > 100 && pos < 100)
@@ -672,6 +688,12 @@ namespace Arcade.Gameplay
 			}
 
 			int currentTiming = ArcGameplayManager.Instance.ChartTiming;
+			if (arc.Timing == arc.EndTiming && currentTiming > zeroLengthVoidArcDisappearTime)
+			{
+				EnableHead = false;
+				return;
+			}
+
 
 			if (arc.Position > 100000 || arc.Position < -100000)
 			{

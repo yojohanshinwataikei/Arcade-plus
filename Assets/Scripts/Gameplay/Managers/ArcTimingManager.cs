@@ -244,7 +244,54 @@ namespace Arcade.Gameplay
 			return allEndTime;
 		}
 
-
+		public int CalculateZeroLengthVoidArcDisappearTime(int ChartTiming, ArcTimingGroup timingGroup)
+		{
+			var Timings = GetTiming(timingGroup);
+			if (Timings.Count == 0)
+			{
+				return ChartTiming;
+			}
+			int startTimingId = Timings.FindLastIndex((timing) => timing.Timing <= ChartTiming);
+			if (startTimingId == -1)
+			{
+				startTimingId = 0;
+			}
+			float distance = 0;
+			for (int i = startTimingId; i < Timings.Count; i++)
+			{
+				var currentTiming = i == startTimingId ? ChartTiming : Timings[i].Timing;
+				var currentBpm = Timings[i].Bpm;
+				if (distance < 0)
+				{
+					return currentTiming;
+				}
+				if (i == Timings.Count - 1)
+				{
+					if (currentBpm > 0)
+					{
+						return Mathf.CeilToInt(currentTiming + distance / (currentBpm / BaseBpm * Velocity));
+					}
+				}
+				else
+				{
+					var nextTiming = Timings[i + 1].Timing;
+					if (nextTiming == currentTiming)
+					{
+						continue;
+					}
+					if (currentBpm > 0)
+					{
+						int resultTiming = Mathf.CeilToInt(currentTiming + distance / (currentBpm / BaseBpm * Velocity));
+						if (resultTiming < nextTiming)
+						{
+							return resultTiming;
+						}
+					}
+					distance -= (nextTiming - currentTiming) * Timings[i].Bpm / BaseBpm * Velocity;
+				}
+			}
+			return int.MaxValue;
+		}
 		public float CalculateBpmByTiming(int ChartTiming, ArcTimingGroup timingGroup)
 		{
 			var Timings = GetTiming(timingGroup);
