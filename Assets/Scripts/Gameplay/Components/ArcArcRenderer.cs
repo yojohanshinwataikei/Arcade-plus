@@ -810,6 +810,7 @@ namespace Arcade.Gameplay
 				EnableArcCap = true;
 				ArcCapRenderer.color = new Color(1, 1, 1, arc.IsVoid ? 0.5f : 1f);
 				ArcCap.localScale = Vector3.Scale(new Vector3(arc.IsVoid ? 0.21f : 0.35f, arc.IsVoid ? 0.21f : 0.35f), arcCapScaleFactor);
+				ArcCapRenderer.sortingOrder = -1;
 
 				foreach (var s in segments)
 				{
@@ -837,6 +838,8 @@ namespace Arcade.Gameplay
 				ArcCap.localScale = Vector3.Scale(new Vector3(scale, scale), arcCapScaleFactor);
 				ArcCap.position = new Vector3(ArcAlgorithm.ArcXToWorld(arc.XStart), ArcAlgorithm.ArcYToWorld(arc.YStart));
 				JudgeEffectTransform.position = ArcCap.position;
+				//TODO: arccap position should be decided by z instead of time
+				ArcCapRenderer.sortingOrder = arc.Position < 0 ? -1 : 2;
 			}
 			else
 			{
