@@ -257,6 +257,19 @@ namespace Arcade.Gameplay
 				startTimingId = 0;
 			}
 			float distance = 0;
+			float direction;
+			if (Timings[0].Bpm == 0)
+			{
+				direction = Mathf.Sign(CalculatePositionByTimingAndStart(0, ChartTiming, timingGroup));
+			}
+			else
+			{
+				direction = Mathf.Sign(Timings[0].Bpm);
+			}
+			if (direction == 0)
+			{
+				direction = 1;
+			}
 			for (int i = startTimingId; i < Timings.Count; i++)
 			{
 				var currentTiming = i == startTimingId ? ChartTiming : Timings[i].Timing;
@@ -267,9 +280,9 @@ namespace Arcade.Gameplay
 				}
 				if (i == Timings.Count - 1)
 				{
-					if (currentBpm > 0)
+					if (currentBpm * direction > 0)
 					{
-						return Mathf.CeilToInt(currentTiming + distance / (currentBpm / BaseBpm * Velocity));
+						return Mathf.CeilToInt(currentTiming + distance / (currentBpm / BaseBpm * Velocity * direction));
 					}
 				}
 				else
@@ -279,15 +292,15 @@ namespace Arcade.Gameplay
 					{
 						continue;
 					}
-					if (currentBpm > 0)
+					if (currentBpm * direction > 0)
 					{
-						int resultTiming = Mathf.CeilToInt(currentTiming + distance / (currentBpm / BaseBpm * Velocity));
+						int resultTiming = Mathf.CeilToInt(currentTiming + distance / (currentBpm / BaseBpm * Velocity * direction));
 						if (resultTiming < nextTiming)
 						{
 							return resultTiming;
 						}
 					}
-					distance -= (nextTiming - currentTiming) * Timings[i].Bpm / BaseBpm * Velocity;
+					distance -= (nextTiming - currentTiming) * Timings[i].Bpm / BaseBpm * Velocity * direction;
 				}
 			}
 			return int.MaxValue;
