@@ -797,7 +797,7 @@ namespace Arcade.Gameplay
 			int currentTiming = ArcGameplayManager.Instance.ChartTiming;
 			int duration = arc.EndTiming - arc.Timing;
 
-			if (duration == 0 || arc.IsVariousSizedArctap)
+			if (arc.IsVariousSizedArctap)
 			{
 				EnableArcCap = false;
 				return;
