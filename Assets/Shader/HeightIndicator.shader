@@ -9,6 +9,7 @@ Shader "Arcade/HeightIndicator"
 		Tags { "Queue" = "Transparent"  "RenderType"="Transparent" "CanUseSpriteAtlas"="true"  }
 		Cull Off
 		ZTest Always
+		ZWrite Off
 		Blend One OneMinusSrcAlpha
 
 		Pass
