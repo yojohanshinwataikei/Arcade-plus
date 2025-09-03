@@ -1177,6 +1177,7 @@ namespace Arcade.Gameplay.Chart
 		public int Color;
 		public string Effect = "none";
 		public ArcLineType LineType;
+		public float? Smoothness;
 		public bool IsVoid
 		{
 			get
@@ -1221,6 +1222,7 @@ namespace Arcade.Gameplay.Chart
 				Effect = Effect,
 				LineType = LineType,
 				TimingGroup = TimingGroup,
+				Smoothness = Smoothness
 			};
 			foreach (var arctap in ArcTaps) arc.ArcTaps.Add(arctap.Clone() as ArcArcTap);
 			return arc;
@@ -1419,6 +1421,7 @@ namespace Arcade.Gameplay.Chart
 			Color = rawAffArc.Color;
 			Effect = rawAffArc.Effect;
 			LineType = rawAffArc.LineType;
+			Smoothness = rawAffArc.Smoothness;
 			if (rawAffArc.ArcTaps.Count > 0)
 			{
 				if (rawAffArc.LineType == ArcLineType.FalseNotVoid)
@@ -1446,6 +1449,7 @@ namespace Arcade.Gameplay.Chart
 				Color = Color,
 				Effect = Effect,
 				LineType = LineType,
+				Smoothness = Smoothness,
 				ArcTaps = ArcTaps.Select((arctap) => new RawAffArctap() { Timing = arctap.Timing, }).ToList(),
 			};
 		}

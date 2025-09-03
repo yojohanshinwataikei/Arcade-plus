@@ -57,6 +57,7 @@ namespace Arcade.Aff
 		public int Color;
 		public string Effect;
 		public ArcLineType LineType;
+		public float? Smoothness;
 		public List<RawAffArctap> ArcTaps;
 	}
 	public class RawAffCamera : IRawAffNestableItem
@@ -258,7 +259,8 @@ namespace Arcade.Aff
 					arc.LineType = ArcLineType.TrueIsVoid;
 				}
 				writer.WriteLine($"{intent}arc({arc.Timing.ToString(CultureInfo.InvariantCulture)},{arc.EndTiming.ToString(CultureInfo.InvariantCulture)},{arc.XStart.ToString("f2", CultureInfo.InvariantCulture)},{arc.XEnd.ToString("f2", CultureInfo.InvariantCulture)}" +
-					$",{ArcCurveTypeStrings[arc.CurveType]},{arc.YStart.ToString("f2", CultureInfo.InvariantCulture)},{arc.YEnd.ToString("f2", CultureInfo.InvariantCulture)},{arc.Color},{arc.Effect},{ArcLineTypeStrings[arc.LineType]})" +
+					$",{ArcCurveTypeStrings[arc.CurveType]},{arc.YStart.ToString("f2", CultureInfo.InvariantCulture)},{arc.YEnd.ToString("f2", CultureInfo.InvariantCulture)},{arc.Color},{arc.Effect},{ArcLineTypeStrings[arc.LineType]}"
+					 + (arc.Smoothness == null ? "" : $",{arc.Smoothness.Value.ToString("f2", CultureInfo.InvariantCulture)}") + ")" +
 					(arc.ArcTaps.Count > 0 ? $"[{string.Join(",", arc.ArcTaps.Select(e => $"arctap({e.Timing.ToString(CultureInfo.InvariantCulture)})"))}]" : "") +
 					";");
 			}
@@ -536,7 +538,11 @@ namespace Arcade.Aff
 		void GenArc(ArcaeaFileFormatParser.EventContext context)
 		{
 			RejectSegment(context, "arc");
-			if (!CheckValuesCount(context, "arc", 10))
+			if (!EnsureValuesCount(context, "arc", 10))
+			{
+				return;
+			}
+			if (!LimitValuesCount(context, "arc", 11))
 			{
 				return;
 			}
@@ -552,6 +558,11 @@ namespace Arcade.Aff
 			var effect = CheckValueType<RawAffWord>(context.values().value()[8], "arc", "效果类型");
 			var rawLineType = CheckValueType<RawAffWord>(context.values().value()[9], "arc", "是否黑线");
 			var lineType = ParseWord(lineTypes, rawLineType.data, context.values().value()[9], "arc", "是否黑线");
+			RawAffFloat smoothness = null;
+			if (context.values().value().Length >= 11)
+			{
+				smoothness = CheckValueType<RawAffFloat>(context.values().value()[10], "arc", "平滑度");
+			}
 			if (timing == null || endTiming == null || xStart == null || xEnd == null || curveType == null || yStart == null || yEnd == null || color == null || effect == null || lineType == null)
 			{
 				return;
@@ -604,6 +615,7 @@ namespace Arcade.Aff
 					Color = color.data,
 					Effect = effect.data,
 					LineType = lineType.Value,
+					Smoothness = smoothness?.data,
 					ArcTaps = arctaps,
 				};
 			}
