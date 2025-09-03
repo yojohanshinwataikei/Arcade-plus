@@ -445,8 +445,8 @@ namespace Arcade.Gameplay
 				zeroLengthVoidArcDisappearTime = int.MaxValue;
 			}
 
-			int v1 = duration < 1000 ? 14 : 7;
-			float v2 = 1f / (v1 * duration / 1000f);
+			float baseSize = duration < 1000 ? 14 : 7;
+			float v2 = 1f / (baseSize * arc.EffectiveSmoothness * duration / 1000f);
 			int segSize = (int)(duration * v2);
 			segmentCount = 0;
 			if (segSize != 0)

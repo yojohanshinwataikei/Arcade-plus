@@ -1191,6 +1191,10 @@ namespace Arcade.Gameplay.Chart
 		{
 			get => LineType == ArcLineType.Designant;
 		}
+		public float EffectiveSmoothness
+		{
+			get => Mathf.Max(Smoothness ?? 1.00f, 1.00f);
+		}
 		public List<ArcArcTap> ArcTaps = new List<ArcArcTap>();
 
 		public ArcArcTap ConvertedVariousSizedArctap = null;
