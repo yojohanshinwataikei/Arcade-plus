@@ -811,7 +811,7 @@ namespace Arcade.Compose
 				skinData.BackgroundDatas.Add("\"DefaultLephon\"", new BackgroundData()
 				{
 					background = new Labelled<Sprite>() { value = rawDefaultData.BackgroundLight, label = "<internal:light>" },
-					side = Side.Colorless,
+					side = Side.Lephon,
 					theme = skinData.DefaultThemeData
 				});
 			}
