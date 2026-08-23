@@ -237,7 +237,9 @@ namespace Arcade.Compose
 					sw.WriteLine(c.Reason);
 					foreach (var f in c.Faults)
 					{
-						sw.WriteLine(I18n.Translate("compose.fault_detector.report.line", f.Timing.ToString(CultureInfo.InvariantCulture)), f.Timing + ArcGameplayManager.Instance.ChartAudioOffset.ToString(CultureInfo.InvariantCulture));
+						sw.WriteLine(I18n.Translate("compose.fault_detector.report.line", 
+							f.Timing.ToString(CultureInfo.InvariantCulture), 
+							f.Timing + ArcGameplayManager.Instance.ChartAudioOffset.ToString(CultureInfo.InvariantCulture)));
 					}
 					count += c.Faults.Count;
 				}
