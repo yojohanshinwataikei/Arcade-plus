@@ -1,3 +1,5 @@
+using System;
+using Arcade.Util.I18n;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -16,6 +18,7 @@ namespace Arcade.Compose.MarkingMenu
 		public Color InColor, OutColor;
 
 		[Header("Settings")]
+		public string StartupTextI18nKey;
 		public string StartupText;
 		public UnityEvent OnConfirmed = new UnityEvent();
 
@@ -61,9 +64,21 @@ namespace Arcade.Compose.MarkingMenu
 		private float pointerInItemTiming;
 		private bool active = false;
 
+		private void UpdateLocale()
+		{
+			Text = !string.IsNullOrEmpty(StartupTextI18nKey) 
+				? I18n.Translate(StartupTextI18nKey) 
+				: StartupText;
+		}
+		
 		private void Start()
 		{
-			Text = StartupText;
+			I18n.OnLocaleChanged += UpdateLocale;
+			UpdateLocale();
+		}
+		private void OnDestroy()
+		{
+			I18n.OnLocaleChanged -= UpdateLocale;
 		}
 		public void Show()
 		{

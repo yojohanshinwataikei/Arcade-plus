@@ -14,6 +14,7 @@ using Arcade.Compose.Command;
 using UnityEngine.InputSystem;
 using Arcade.Compose.Operation;
 using Arcade.Compose.UI;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose
 {
@@ -31,6 +32,7 @@ namespace Arcade.Compose
 		public bool Auto;
 		public int GlobalAudioOffset = 0;
 		public Arcade.Gameplay.Chart.ChartSortMode ChartSortMode;
+		public string CurrentLocale = "";
 	}
 
 	public class ArcadeComposeManager : MonoBehaviour
@@ -359,7 +361,7 @@ namespace Arcade.Compose
 			if (type != LogType.Exception) return;
 			try
 			{
-				AdeBasicSingleDialogContent.Instance.Show(condition + "\n" + stackTrace, "异常", "确定");
+				AdeBasicSingleDialogContent.Instance.Show(condition + "\n" + stackTrace, I18n.TranslateOrDefault("dialogs.exception.title", "Exception"), I18n.TranslateOrDefault("dialogs.button.confirm", "Confirm"));
 			}
 			catch
 			{
@@ -396,7 +398,7 @@ namespace Arcade.Compose
 		{
 			if (AdeProjectManager.Instance.CurrentProjectMetadata == null || !ArcGameplayManager.Instance.IsLoaded)
 			{
-				AdeToast.Instance.Show("请先加载谱面");
+				AdeToast.Instance.Show(I18n.Translate("compose.error_message.no_chart_loaded"));
 				return;
 			}
 
@@ -508,9 +510,10 @@ namespace Arcade.Compose
 				{
 					ArcadePreference.Velocity = 195;
 				}
+				I18n.Initialize(ArcadePreference.CurrentLocale);
 				ArcTimingManager.Instance.SettingVelocity = ArcadePreference.Velocity;
 				ArcGameplayManager.Instance.Auto = ArcadePreference.Auto;
-				AdeProjectManager.Instance.SaveMode.text = ArcadePreference.ChartSortMode == Gameplay.Chart.ChartSortMode.Timing ? "按时间" : "按类别";
+				AdeProjectManager.Instance.SaveMode.text = I18n.Translate(ArcadePreference.ChartSortMode == Gameplay.Chart.ChartSortMode.Timing ? "leftbar.save_mode_timing" : "leftbar.save_mode_type");
 				AutoButton.image.color = ArcGameplayManager.Instance.Auto ? new Color(0.59f, 0.55f, 0.65f, 1f) : new Color(0.9f, 0.9f, 0.9f, 1);
 				if (ArcadePreference.ReadWhatsNewVersion < BuildTimestamp)
 				{
@@ -566,6 +569,7 @@ namespace Arcade.Compose
 		{
 			ArcadePreference.Velocity = ArcTimingManager.Instance.SettingVelocity;
 			ArcadePreference.Auto = ArcGameplayManager.Instance.Auto;
+			ArcadePreference.CurrentLocale = I18n.CurrentLocale;
 			PlayerPrefs.SetString("ArcadeComposeManagerPreference", JsonConvert.SerializeObject(ArcadePreference));
 		}
 

@@ -11,6 +11,7 @@ using System.Threading;
 using Arcade.Util.UniTaskHelper;
 using Arcade.Util.UI;
 using System.Globalization;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose.Editing
 {
@@ -245,9 +246,9 @@ namespace Arcade.Compose.Editing
 
 		private Dictionary<ValueTuple<int?>, string> colorToDropDownLabel = new Dictionary<ValueTuple<int?>, string>{
 			{ValueTuple.Create<int?>(null),"-"},
-			{ValueTuple.Create<int?>(0),"蓝"},
-			{ValueTuple.Create<int?>(1),"红"},
-			{ValueTuple.Create<int?>(2),"绿"},
+			{ValueTuple.Create<int?>(0),"compose.value_edit_panel.color.0"},
+			{ValueTuple.Create<int?>(1),"compose.value_edit_panel.color.1"},
+			{ValueTuple.Create<int?>(2),"compose.value_edit_panel.color.2"},
 		};
 
 		private string GetColorOptionString(int? color)
@@ -258,7 +259,7 @@ namespace Arcade.Compose.Editing
 			}
 			else
 			{
-				return "其他";
+				return I18n.Translate("compose.value_edit_panel.color.other");
 			}
 		}
 
@@ -266,15 +267,15 @@ namespace Arcade.Compose.Editing
 		{
 			if (data == null)
 			{
-				colorDropdownHelper.UpdateOptions(new List<int?> { null, 0, 1 }, (color, _) => GetColorOptionString(color));
+				colorDropdownHelper.UpdateOptions(new List<int?> { null, 0, 1 }, (color, _) => I18n.Translate(GetColorOptionString(color)));
 			}
 			else if (data >= 2 || data < 0)
 			{
-				colorDropdownHelper.UpdateOptions(new List<int?> { 0, 1, data }, (color, _) => GetColorOptionString(color));
+				colorDropdownHelper.UpdateOptions(new List<int?> { 0, 1, data }, (color, _) => I18n.Translate(GetColorOptionString(color)));
 			}
 			else
 			{
-				colorDropdownHelper.UpdateOptions(new List<int?> { 0, 1 }, (color, _) => GetColorOptionString(color));
+				colorDropdownHelper.UpdateOptions(new List<int?> { 0, 1 }, (color, _) => I18n.Translate(GetColorOptionString(color)));
 			}
 			colorDropdownHelper.SetValueWithoutNotify(data);
 		}
@@ -299,7 +300,7 @@ namespace Arcade.Compose.Editing
 			}
 			else if (color.Value.timingGroup == null)
 			{
-				return "默认";
+				return I18n.Translate("compose.value_edit_panel.timing_group.default");
 			}
 			else
 			{
@@ -363,7 +364,7 @@ namespace Arcade.Compose.Editing
 			}
 			else if (commands.Count > 1)
 			{
-				AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "批量修改 Note"));
+				AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), I18n.Translate("compose.batch_command.batch_modify")));
 			}
 		}
 
@@ -375,11 +376,11 @@ namespace Arcade.Compose.Editing
 				{
 					if (!int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
 					{
-						return new ValueChangeErrorMessage { message = "时间数值格式错误" };
+						return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.format") };
 					}
 					if (result < 0)
 					{
-						return new ValueChangeErrorMessage { message = "时间数值不能为负数" };
+						return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.negative") };
 					}
 					return null;
 				},
@@ -389,14 +390,14 @@ namespace Arcade.Compose.Editing
 					{
 						if (hold.EndTiming <= value)
 						{
-							return new ValueChangeErrorMessage { message = "Hold 的时间不能晚于结束时间" };
+							return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.negative_duration", "Hold") };
 						}
 					}
 					if (note is ArcArc arc)
 					{
 						if (arc.EndTiming < value || (arc.EndTiming <= value && arc.ArcTaps.Count > 0))
 						{
-							return new ValueChangeErrorMessage { message = "Arc 的时间不能晚于结束时间" };
+							return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.negative_duration", "Arc") };
 						}
 						foreach (var arctap in arc.ArcTaps)
 						{
@@ -404,7 +405,7 @@ namespace Arcade.Compose.Editing
 							{
 								if (!AdeSelectionManager.Instance.SelectedNotes.Contains(arctap))
 								{
-									return new ValueChangeErrorMessage { message = "Arc 的时间不能晚于其上 Arctap 的时间" };
+									return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.arctap_overflow_before") };
 								}
 							}
 						}
@@ -416,7 +417,7 @@ namespace Arcade.Compose.Editing
 						{
 							if (!AdeSelectionManager.Instance.SelectedNotes.Contains(arctap.Arc))
 							{
-								return new ValueChangeErrorMessage { message = "Arctap 的时间不能超过所在 Arc 的时间范围" };
+								return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.arctap_overflow_after") };
 							}
 						}
 					}
@@ -436,11 +437,11 @@ namespace Arcade.Compose.Editing
 				{
 					if (!int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
 					{
-						return new ValueChangeErrorMessage { message = "轨道数值格式错误" };
+						return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_track.format") };
 					}
 					if (result < 0 || result > 5)
 					{
-						return new ValueChangeErrorMessage { message = "轨道只能为 0 - 5" };
+						return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_trace.overflow") };
 					}
 					return null;
 				},
@@ -469,11 +470,11 @@ namespace Arcade.Compose.Editing
 				{
 					if (!int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out result))
 					{
-						return new ValueChangeErrorMessage { message = "时间数值格式错误" };
+						return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.format") };
 					}
 					if (result < 0)
 					{
-						return new ValueChangeErrorMessage { message = "时间数值不能为负数" };
+						return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.negative") };
 					}
 					return null;
 				},
@@ -484,7 +485,7 @@ namespace Arcade.Compose.Editing
 						var hold = note as ArcHold;
 						if (hold.Timing >= value)
 						{
-							return new ValueChangeErrorMessage { message = "Hold 的结束时间不能早于时间" };
+							return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.negative_duration_end", "Hold") };
 						}
 					}
 					if (note is ArcArc)
@@ -492,13 +493,13 @@ namespace Arcade.Compose.Editing
 						var arc = note as ArcArc;
 						if (arc.Timing > value || (arc.Timing >= value && arc.ArcTaps.Count > 0))
 						{
-							return new ValueChangeErrorMessage { message = "Arc 的结束时间不能早于时间" };
+							return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.negative_duration_end", "Arc") };
 						}
 						foreach (var arctap in arc.ArcTaps)
 						{
 							if (arctap.Timing > value)
 							{
-								return new ValueChangeErrorMessage { message = "Arc 的结束时间不早于其上 Arctap 的时间" };
+								return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_time.arctap_overflow_end") };
 							}
 						}
 					}
@@ -517,15 +518,15 @@ namespace Arcade.Compose.Editing
 			float x, y;
 			if (coords.Length != 2)
 			{
-				return new ValueChangeErrorMessage { message = "坐标位置格式错误" };
+				return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_coordinate.format") };
 			}
 			if (!float.TryParse(coords[0], NumberStyles.Float, CultureInfo.InvariantCulture, out x))
 			{
-				return new ValueChangeErrorMessage { message = "坐标位置格式错误" };
+				return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_coordinate.format") };
 			}
 			if (!float.TryParse(coords[1], NumberStyles.Float, CultureInfo.InvariantCulture, out y))
 			{
-				return new ValueChangeErrorMessage { message = "坐标位置格式错误" };
+				return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.invalid_coordinate.format") };
 			}
 			result = new Vector2(x, y);
 			return null;
@@ -626,7 +627,7 @@ namespace Arcade.Compose.Editing
 					{
 						if ((!value) && arc.ArcTaps.Count > 0)
 						{
-							return new ValueChangeErrorMessage { message = "Arc 含有 ArcTap 时必须是黑线" };
+							return new ValueChangeErrorMessage { message = I18n.Translate("compose.error_message.arctap_must_be_on_trace") };
 						}
 					}
 					return null;
@@ -755,7 +756,7 @@ namespace Arcade.Compose.Editing
 			}
 			if (commands.Count > 0)
 			{
-				AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "分离 Arctap"));
+				AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), I18n.Translate("compose.batch_command.separate_arctap")));
 			}
 		}
 

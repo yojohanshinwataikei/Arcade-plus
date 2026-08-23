@@ -4,6 +4,7 @@ using Arcade.Compose.Command;
 using Arcade.Compose.MarkingMenu;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
+using Arcade.Util.I18n;
 using Arcade.Util.UnityExtension;
 using UnityEngine;
 
@@ -109,7 +110,7 @@ namespace Arcade.Compose
 				if (s is ArcArcTap arcTap) deleteCommands.Add(new RemoveArcTapCommand(arcTap.Arc, arcTap));
 				else deleteCommands.Add(new RemoveArcEventCommand(s));
 			}
-			if (deleteCommands.Count != 0) AdeCommandManager.Instance.Add(new BatchCommand(deleteCommands.ToArray(), "删除"));
+			if (deleteCommands.Count != 0) AdeCommandManager.Instance.Add(new BatchCommand(deleteCommands.ToArray(), I18n.Translate("compose.operation.delete")));
 			SelectedNotes.Clear();
 		}
 	}

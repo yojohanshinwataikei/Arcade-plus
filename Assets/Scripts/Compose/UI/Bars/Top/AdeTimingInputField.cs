@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using Arcade.Gameplay;
 using System;
 using System.Globalization;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose.UI
 {
@@ -16,6 +17,13 @@ namespace Arcade.Compose.UI
 			TimingInput.onValueChanged.AddListener(OnValueChange);
 			SwitchModeButton.onClick.AddListener(OnSwitchMode);
 			UpdateLabel();
+
+			I18n.OnLocaleChanged += UpdateLabel;
+		}
+
+		private void OnDestroy()
+		{
+			I18n.OnLocaleChanged -= UpdateLabel;
 		}
 
 		public InputField TimingInput;
@@ -28,11 +36,11 @@ namespace Arcade.Compose.UI
 		{
 			if (useChartTiming)
 			{
-				Label.text = "谱面时间";
+				Label.text = I18n.Translate("topbar.timing.chart");
 			}
 			else
 			{
-				Label.text = "音频时间";
+				Label.text = I18n.Translate("topbar.timing.audio");
 			}
 		}
 

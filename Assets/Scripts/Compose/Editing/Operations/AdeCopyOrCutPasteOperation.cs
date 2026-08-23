@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
+using Arcade.Util.I18n;
 using Arcade.Util.UniTaskHelper;
 
 namespace Arcade.Compose.Operation
@@ -75,7 +76,8 @@ namespace Arcade.Compose.Operation
 				}
 				newNotes.Add(newNote as ArcNote);
 			}
-			AdeCommandManager.Instance.Prepare(new BatchCommand(commands.ToArray(), isCut ? "剪切" : "复制"));
+			AdeCommandManager.Instance.Prepare(new BatchCommand(commands.ToArray(), 
+				I18n.Translate($"compose.operation.{(isCut ? "cut" : "copy")}")));
 
 			try
 			{
@@ -145,7 +147,7 @@ namespace Arcade.Compose.Operation
 					}
 					else
 					{
-						AdeToast.Instance.Show("粘贴的 Arctap 中有一部分超出了所在 Arc 的时间范围，无法粘贴");
+						AdeToast.Instance.Show(I18n.Translate("compose.error_message.illegal_arctap"));
 					}
 				}
 			}

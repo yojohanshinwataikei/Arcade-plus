@@ -5,6 +5,7 @@ using Arcade.Compose.Editing;
 using Arcade.Compose.Operation;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
+using Arcade.Util.I18n;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,28 +39,31 @@ namespace Arcade.Compose
 			EnableInfo = cursor.WallEnabled || cursor.TrackEnabled;
 			string content = string.Empty;
 			if (!EnableInfo) return;
-			content += $"音乐时间: {(cursor.AttachedTiming + ArcGameplayManager.Instance.ChartAudioOffset).ToString(CultureInfo.InvariantCulture)}\n";
-			content += $"谱面时间: {cursor.AttachedTiming.ToString(CultureInfo.InvariantCulture)}";
+			content += I18n.Translate("compose.cursor_info.timing.audio", (cursor.AttachedTiming + ArcGameplayManager.Instance.ChartAudioOffset).ToString(CultureInfo.InvariantCulture));
+			content += "\n" + I18n.Translate("compose.cursor_info.timing.chart", cursor.AttachedTiming.ToString(CultureInfo.InvariantCulture));
 			if (cursor.WallEnabled)
 			{
 				Vector3 pos = cursor.AttachedWallPoint;
-				content += $"\n坐标: ({ArcAlgorithm.WorldXToArc(pos.x).ToString("f2", CultureInfo.InvariantCulture)},{ArcAlgorithm.WorldYToArc(pos.y).ToString("f2", CultureInfo.InvariantCulture)})";
+				content += "\n" + I18n.Translate("compose.cursor_info.coordinate", ArcAlgorithm.WorldXToArc(pos.x).ToString("f2", CultureInfo.InvariantCulture),ArcAlgorithm.WorldYToArc(pos.y).ToString("f2", CultureInfo.InvariantCulture));
 			}
 			if (AdeClickToCreate.Instance.Enable && AdeClickToCreate.Instance.Mode != ClickToCreateMode.Idle)
 			{
-				content += $"\n点立得: {AdeClickToCreate.Instance.Mode.ToString()}";
+				content += "\n" + I18n.Translate("compose.cursor_info.click_to_create.mode", AdeClickToCreate.Instance.Mode.ToString());
 				if (AdeClickToCreate.Instance.Mode == ClickToCreateMode.Arc)
 				{
-					content += $"\n{AdeClickToCreate.Instance.CurrentArcColor}/{AdeClickToCreate.Instance.CurrentArcIsVoid}/{AdeClickToCreate.Instance.CurrentArcCurveType}";
+					content += "\n" + I18n.Translate("compose.cursor_info.click_to_create.arc_info", 
+						AdeClickToCreate.Instance.CurrentArcColor, 
+						AdeClickToCreate.Instance.CurrentArcIsVoid,
+						AdeClickToCreate.Instance.CurrentArcCurveType);
 				}
 				if (AdeClickToCreate.Instance.Mode == ClickToCreateMode.ArcTap)
 				{
-					content += $"\n{AdeClickToCreate.Instance.CurrentArctapMode}";
+					content += "\n" + I18n.Translate("compose.cursor_info.click_to_create.arctap_info", AdeClickToCreate.Instance.CurrentArctapMode);
 				}
 			}
 			if (AdeSelectNoteOperation.Instance.RangeSelectPosition != null)
 			{
-				content += $"\n段落选择起点: {AdeSelectNoteOperation.Instance.RangeSelectPosition?.ToString(CultureInfo.InvariantCulture)}";
+				content += "\n" + I18n.Translate("compose.cursor_info.range_select", AdeSelectNoteOperation.Instance.RangeSelectPosition?.ToString(CultureInfo.InvariantCulture));
 			}
 			if (AdeSelectionManager.Instance.SelectedNotes.Count == 1 && AdeSelectionManager.Instance.SelectedNotes[0] is ArcArc arc)
 			{
@@ -70,7 +74,10 @@ namespace Arcade.Compose
 					{
 						float x = ArcAlgorithm.X(arc.XStart, arc.XEnd, p, arc.CurveType);
 						float y = ArcAlgorithm.Y(arc.YStart, arc.YEnd, p, arc.CurveType);
-						content += $"\nArc: {(p * 100).ToString("f2", CultureInfo.InvariantCulture)}%, {x.ToString("f2", CultureInfo.InvariantCulture)}, {y.ToString("f2", CultureInfo.InvariantCulture)}";
+						content += "\n" + I18n.Translate("compose.cursor_info.select_arc",
+							(p * 100).ToString("f2", CultureInfo.InvariantCulture),
+							x.ToString("f2", CultureInfo.InvariantCulture),
+							y.ToString("f2", CultureInfo.InvariantCulture));
 					}
 				}
 			}
