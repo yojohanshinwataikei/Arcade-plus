@@ -147,6 +147,7 @@
   "dialogs.agreement.agree_button": "同意",
   "dialogs.agreement.disagree_button": "拒绝",
   
+  "compose.click_to_create.title": "点立得",
   "compose.click_to_create.menu.idle": "不创建",
   "compose.click_to_create.menu.tap": "Tap",
   "compose.click_to_create.menu.hold": "Hold",

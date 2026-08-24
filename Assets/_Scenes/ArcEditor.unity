@@ -19160,10 +19160,10 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.07263483
-    y: 0.072295964
-    width: 0.85473037
-    height: 0.8554081
+    x: 0.052083332
+    y: 0.051840346
+    width: 0.8958333
+    height: 0.8963193
   near clip plane: 0.01
   far clip plane: 10000
   field of view: 65
@@ -77613,6 +77613,11 @@ PrefabInstance:
         type: 3}
       propertyPath: StartupText
       value: "\u70B9\u7ACB\u5F97"
+      objectReference: {fileID: 0}
+    - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
+        type: 3}
+      propertyPath: StartupTextI18nKey
+      value: compose.click_to_create.title
       objectReference: {fileID: 0}
     - target: {fileID: 114982240789257556, guid: 1b2db23b92abc01459b7b21100436c9d,
         type: 3}

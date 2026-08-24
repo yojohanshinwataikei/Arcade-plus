@@ -147,6 +147,7 @@
   "dialogs.agreement.agree_button": "Agree",
   "dialogs.agreement.disagree_button": "Disagree",
   
+  "compose.click_to_create.title": "C2C",
   "compose.click_to_create.menu.idle": "Idle",
   "compose.click_to_create.menu.tap": "Tap",
   "compose.click_to_create.menu.hold": "Hold",
