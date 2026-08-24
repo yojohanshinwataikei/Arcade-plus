@@ -1,0 +1,12 @@
+[
+  {
+    "Id": "zh_Hans",
+    "LanguageKey": "ChineseSimplified",
+    "LocalizedName": "中文 (简体)"
+  },
+  {
+    "Id": "en_us",
+    "LanguageKey": "English",
+    "LocalizedName": "English"
+  }
+]

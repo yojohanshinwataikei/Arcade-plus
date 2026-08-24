@@ -16,6 +16,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Arcade.Util.UniTaskHelper;
 using System.Globalization;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose.Feature
 {
@@ -161,22 +162,22 @@ namespace Arcade.Compose.Feature
 			{
 				if (obs.IsConnected)
 				{
-					ConnectionButtonLabel.text = "正在断开 OBS……";
+					ConnectionButtonLabel.text = I18n.Translate("dialogs.obs.connect_button_label.disconnect");
 				}
 				else
 				{
-					ConnectionButtonLabel.text = "正在连接 OBS……";
+					ConnectionButtonLabel.text = I18n.Translate("dialogs.obs.connect_button_label.connect");
 				}
 			}
 			else
 			{
 				if (obs.IsConnected)
 				{
-					ConnectionButtonLabel.text = "断开 OBS";
+					ConnectionButtonLabel.text = I18n.Translate("dialogs.obs.connect_button_label.disconnected");
 				}
 				else
 				{
-					ConnectionButtonLabel.text = "连接到 OBS";
+					ConnectionButtonLabel.text = I18n.Translate("dialogs.obs.connect_button_label.connected");
 				}
 			}
 			OBSDialog.RightButton.interactable = obs.IsConnected && ArcGameplayManager.Instance.IsLoaded && !obsIsRecording && RecordingCancellation == null;
@@ -209,7 +210,7 @@ namespace Arcade.Compose.Feature
 				hasOngoingConnectionTask = false;
 				obsIsRecording = obs.GetRecordStatus().IsRecording;
 				UpdateFieldsState();
-				AdeToast.Instance.Show($"OBS 已连接");
+				AdeToast.Instance.Show(I18n.Translate("dialogs.obs.connect_message.connected"));
 			});
 		}
 
@@ -221,7 +222,7 @@ namespace Arcade.Compose.Feature
 				obsIsRecording = false;
 				StopRecord();
 				UpdateFieldsState();
-				AdeToast.Instance.Show($"OBS 连接已断开");
+				AdeToast.Instance.Show(I18n.Translate("dialogs.obs.connect_message.disconnected"));
 			});
 		}
 		public void OnRecordStateChanged(object sender, RecordStateChangedEventArgs e)
@@ -282,7 +283,7 @@ namespace Arcade.Compose.Feature
 				}
 				ArcadeComposeManager.Instance.Pause();
 				ArcGameplayManager.Instance.Pause();
-				AdeToast.Instance.Show($"OBS 快速录制已结束");
+				AdeToast.Instance.Show(I18n.Translate("dialogs.obs.connect_message.finished"));
 				UpdateFieldsState();
 			}
 		}
@@ -306,7 +307,7 @@ namespace Arcade.Compose.Feature
 		{
 			if (RecordingCancellation != null)
 			{
-				AdeBasicSingleDialogContent.Instance.Show("OBS 快速录制被手动中断", "提示");
+				AdeBasicSingleDialogContent.Instance.Show(I18n.Translate("dialogs.obs.connect_message.interrupted"));
 				StopRecord();
 			}
 		}

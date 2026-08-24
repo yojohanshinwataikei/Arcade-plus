@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Arcade.Util.I18n;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,7 +73,7 @@ namespace Arcade.Compose.Command
 		{
 			if (preparing != null)
 			{
-				throw new Exception("有正在进行的命令，暂时不能执行新命令");
+				throw new Exception(I18n.Translate("compose.error_message.ongoing_operation"));
 			}
 			command.Do();
 			onCommandExecuted(command, false);
@@ -93,7 +94,7 @@ namespace Arcade.Compose.Command
 			}
 			if (preparing != null)
 			{
-				AdeToast.Instance.Show("有正在进行的命令，暂时不能撤销");
+				AdeToast.Instance.Show(I18n.Translate("compose.error_message.ongoing_operation.undo"));
 				return;
 			}
 			if (undo.Count == 0) return;
@@ -108,7 +109,7 @@ namespace Arcade.Compose.Command
 		{
 			if (preparing != null)
 			{
-				AdeToast.Instance.Show("有正在进行的命令，暂时不能重做");
+				AdeToast.Instance.Show(I18n.Translate("compose.error_message.ongoing_operation.redo"));
 				return;
 			}
 			if (redo.Count == 0) return;
@@ -145,7 +146,7 @@ namespace Arcade.Compose.Command
 		{
 			if (preparing != null)
 			{
-				throw new Exception("有正在进行的命令，暂时不能准备新命令");
+				throw new Exception(I18n.Translate("compose.error_message.ongoing_operation.new"));
 			}
 			preparing = command;
 			preparing.Do();

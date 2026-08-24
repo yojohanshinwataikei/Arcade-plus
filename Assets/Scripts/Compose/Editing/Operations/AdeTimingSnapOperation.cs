@@ -5,6 +5,7 @@ using Arcade.Compose;
 using Arcade.Compose.MarkingMenu;
 using Arcade.Compose.Command;
 using Arcade.Gameplay;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose.Operation
 {
@@ -128,7 +129,7 @@ namespace Arcade.Compose.Operation
 					}
 				}
 			}
-			AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "时间对齐"));
+			AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), I18n.Translate("compose.operation.timing_snap")));
 		}
 
 		public int GetSnappedTiming(int timing)

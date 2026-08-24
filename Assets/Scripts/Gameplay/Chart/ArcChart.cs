@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Arcade.Aff;
+using Arcade.Util.I18n;
 using Arcade.Util.Misc;
 using UnityEngine;
 
@@ -1382,7 +1383,7 @@ namespace Arcade.Gameplay.Chart
 		{
 			if (arctap.Timing > EndTiming || arctap.Timing < Timing)
 			{
-				throw new ArgumentOutOfRangeException("ArcTap 时间不在 Arc 范围内");
+				throw new ArgumentOutOfRangeException(I18n.Translate("compose.error_message.invalid_time.arctap_overflow"));
 			}
 			ArcTimingManager timingManager = ArcTimingManager.Instance;
 			arctap.Instantiate(this);

@@ -7,6 +7,7 @@ using Arcade.Compose.Editing;
 using Arcade.Compose.MarkingMenu;
 using Arcade.Gameplay;
 using Arcade.Gameplay.Chart;
+using Arcade.Util.I18n;
 using Arcade.Util.UniTaskHelper;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -46,7 +47,7 @@ namespace Arcade.Compose.Operation
 			{
 				if (value && !ArcGameplayManager.Instance.IsLoaded)
 				{
-					AdeToast.Instance.Show("请先加载谱面");
+					AdeToast.Instance.Show(I18n.Translate("compose.error_message.no_chart_loaded"));
 					return;
 				}
 				if (enable != value)
@@ -117,14 +118,14 @@ namespace Arcade.Compose.Operation
 		{
 			get
 			{
-				return currentArcColor == 0 ? "蓝" : "红";
+				return I18n.Translate($"compose.value_edit_panel.color.{currentArcColor}");
 			}
 		}
 		public string CurrentArcIsVoid
 		{
 			get
 			{
-				return currentArcIsVoid ? "虚" : "实";
+				return I18n.Translate($"compose.value_edit_panel.is_void.{currentArcIsVoid.ToString().ToLowerInvariant()}");
 			}
 		}
 		public string CurrentArcCurveType
@@ -138,7 +139,9 @@ namespace Arcade.Compose.Operation
 		{
 			get
 			{
-				return arctapMode == ClickToCreateArctapMode.OnArc ? "加在 Arc 上" : "单独创建";
+				return arctapMode == ClickToCreateArctapMode.OnArc
+					? I18n.Translate("compose.click_to_create.menu.arctap_mode.on_arc") 
+					: I18n.Translate("compose.click_to_create.menu.arctap_mode.single");
 			}
 		}
 
@@ -488,7 +491,7 @@ namespace Arcade.Compose.Operation
 			AdeCommandManager.Instance.Prepare(new BatchCommand(new ICommand[]{
 				new AddArcEventCommand(arc),
 				new AddArcTapCommand(arc,arctap),
-			}, "添加单个 ArcTap"));
+			}, I18n.Translate("compose.batch_command.single_arctap")));
 			try
 			{
 				Action<Vector2> updateStartCoordinate = (coord) =>

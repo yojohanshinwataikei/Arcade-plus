@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Arcade.Compose.MarkingMenu;
+using Arcade.Util.I18n;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -97,7 +98,7 @@ namespace Arcade.Compose
 		{
 			if (ongoingOperation != null)
 			{
-				AdeToast.Instance.Show("有正在进行的操作，不能执行其他操作");
+				AdeToast.Instance.Show(I18n.Translate("compose.error_message.ongoing_operation"));
 			}
 			else
 			{

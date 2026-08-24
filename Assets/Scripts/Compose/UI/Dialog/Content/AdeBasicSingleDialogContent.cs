@@ -1,4 +1,5 @@
 using System;
+using Arcade.Util.I18n;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,8 +25,8 @@ namespace Arcade.Compose.Dialog
 		public void Show(string Content, string Title = null, string Button1 = null, Action Callback = null)
 		{
 			this.Content.text = Content;
-			this.Dialog.Title.text = Title ?? "提示";
-			this.Dialog.ButtonText.text = Button1 ?? "确认";
+			this.Dialog.Title.text = Title ?? I18n.Translate("dialogs.title");
+			this.Dialog.ButtonText.text = Button1 ?? I18n.Translate("dialogs.button.confirm");
 			callback = Callback;
 			OpenDialog();
 		}

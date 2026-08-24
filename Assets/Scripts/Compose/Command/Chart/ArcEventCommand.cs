@@ -1,5 +1,6 @@
 using Arcade.Gameplay.Chart;
 using Arcade.Gameplay;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose.Command
 {
@@ -14,7 +15,7 @@ namespace Arcade.Compose.Command
 		{
 			get
 			{
-				return "添加 Note";
+				return I18n.Translate("compose.hint.arc_event.add.note");
 			}
 		}
 		public void Do()
@@ -67,7 +68,7 @@ namespace Arcade.Compose.Command
 		{
 			get
 			{
-				return "删除 Note";
+				return I18n.Translate("compose.hint.arc_event.remove.note");
 			}
 		}
 		public void Do()
@@ -123,7 +124,7 @@ namespace Arcade.Compose.Command
 		{
 			get
 			{
-				return "修改 Note";
+				return I18n.Translate("compose.hint.arc_event.modify.note");
 			}
 		}
 		public void Do()
@@ -161,7 +162,7 @@ namespace Arcade.Compose.Command
 		{
 			get
 			{
-				return "添加 ArcTap";
+				return I18n.Translate("compose.hint.arc_event.add.arctap");
 			}
 		}
 		public void Do()
@@ -187,7 +188,7 @@ namespace Arcade.Compose.Command
 		{
 			get
 			{
-				return "删除 ArcTap";
+				return I18n.Translate("compose.hint.arc_event.remove.arctap");
 			}
 		}
 		public void Do()

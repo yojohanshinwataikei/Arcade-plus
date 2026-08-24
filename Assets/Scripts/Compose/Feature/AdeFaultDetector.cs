@@ -8,6 +8,7 @@ using System.Linq;
 using UnityEngine.UI;
 using System.IO;
 using System.Globalization;
+using Arcade.Util.I18n;
 
 namespace Arcade.Aff.Faults
 {
@@ -25,7 +26,7 @@ namespace Arcade.Aff.Faults
 
 	public class ShortHoldFault : Fault
 	{
-		public ShortHoldFault() : base("Hold 持续时间 <= 0ms")
+		public ShortHoldFault() : base(I18n.Translate("compose.fault_detector.reason.short_hold"))
 		{
 
 		}
@@ -43,7 +44,7 @@ namespace Arcade.Aff.Faults
 	}
 	public class ShortArcFault : Fault
 	{
-		public ShortArcFault() : base("Arc 持续时间 <= 0ms 且坐标相同")
+		public ShortArcFault() : base(I18n.Translate("compose.fault_detector.reason.short_arc"))
 		{
 
 		}
@@ -67,7 +68,7 @@ namespace Arcade.Aff.Faults
 	}
 	public class TileTapFault : Fault
 	{
-		public TileTapFault() : base("Tap 重叠")
+		public TileTapFault() : base(I18n.Translate("compose.fault_detector.reason.tile_tap"))
 		{
 
 		}
@@ -89,7 +90,7 @@ namespace Arcade.Aff.Faults
 	}
 	public class TileArcTapFault : Fault
 	{
-		public TileArcTapFault() : base("ArcTap 重叠")
+		public TileArcTapFault() : base(I18n.Translate("compose.fault_detector.reason.tile_arctap"))
 		{
 
 		}
@@ -123,7 +124,7 @@ namespace Arcade.Aff.Faults
 	}
 	public class TileTapHoldFault : Fault
 	{
-		public TileTapHoldFault() : base("Hold 与 Tap 重叠")
+		public TileTapHoldFault() : base(I18n.Translate("compose.fault_detector.reason.tile_tap_hold"))
 		{
 
 		}
@@ -145,7 +146,7 @@ namespace Arcade.Aff.Faults
 	}
 	public class TileHoldFault : Fault
 	{
-		public TileHoldFault() : base("Hold 重叠")
+		public TileHoldFault() : base(I18n.Translate("compose.fault_detector.reason.tile_hold"))
 		{
 
 		}
@@ -168,7 +169,7 @@ namespace Arcade.Aff.Faults
 	}
 	public class CrossTimingFault : Fault
 	{
-		public CrossTimingFault() : base("跨越 Timing")
+		public CrossTimingFault() : base(I18n.Translate("compose.fault_detector.reason.cross_timing"))
 		{
 
 		}
@@ -214,11 +215,11 @@ namespace Arcade.Compose
 		{
 			if (!ArcGameplayManager.Instance.IsLoaded)
 			{
-				AdeToast.Instance.Show("未加载工程");
+				AdeToast.Instance.Show(I18n.Translate("compose.error_message.no_chart_loaded"));
 				return;
 			}
 
-			Status.text = "请点击检查";
+			Status.text = I18n.Translate("dialogs.check.hint");
 
 			ArcChart chart = ArcGameplayManager.Instance.Chart;
 			Fault[] checks = new Fault[] {new ShortHoldFault(), new ShortArcFault(), new TileTapFault(), new TileArcTapFault(), new TileTapHoldFault(),
@@ -227,10 +228,7 @@ namespace Arcade.Compose
 			FileStream fs = new FileStream(path, FileMode.Create);
 			StreamWriter sw = new StreamWriter(fs);
 			int count = 0;
-			sw.WriteLine("错误报告");
-			sw.WriteLine("\t时间(原始)为aff中定义的Timing，便于在aff中搜索");
-			sw.WriteLine("\t时间(偏移)为偏移后时间，便于在Arcade的时间框中直接跳转定位");
-			sw.WriteLine();
+			sw.WriteLine(I18n.Translate("compose.fault_detector.report.header"));
 			foreach (var c in checks)
 			{
 				c.Check(chart);
@@ -239,14 +237,16 @@ namespace Arcade.Compose
 					sw.WriteLine(c.Reason);
 					foreach (var f in c.Faults)
 					{
-						sw.WriteLine($"\t谱面时间:{f.Timing.ToString(CultureInfo.InvariantCulture)}\t音频时间:{f.Timing + ArcGameplayManager.Instance.ChartAudioOffset.ToString(CultureInfo.InvariantCulture)}");
+						sw.WriteLine(I18n.Translate("compose.fault_detector.report.line", 
+							f.Timing.ToString(CultureInfo.InvariantCulture), 
+							f.Timing + ArcGameplayManager.Instance.ChartAudioOffset.ToString(CultureInfo.InvariantCulture)));
 					}
 					count += c.Faults.Count;
 				}
 			}
 
 			sw.Close();
-			Status.text = $"检查完成，共 {count.ToString(CultureInfo.InvariantCulture)} 个错误";
+			Status.text = I18n.Translate("dialogs.check.finished", count.ToString(CultureInfo.InvariantCulture));
 			Arcade.Util.Shell.FileBrowser.OpenExplorer(path);
 		}
 	}

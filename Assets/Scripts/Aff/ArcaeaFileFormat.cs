@@ -7,6 +7,7 @@ using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Arcade.Gameplay.Chart;
 using System.Globalization;
+using Arcade.Util.I18n;
 
 namespace Arcade.Aff
 {
@@ -127,7 +128,9 @@ namespace Arcade.Aff
 					int pos = line.IndexOf(":");
 					if (pos < 0)
 					{
-						chart.warning.Add($"第 {(metadataLinesCount).ToString(CultureInfo.InvariantCulture)} 行：{line} 元信息格式错误，此行会被忽略");
+						chart.warning.Add(I18n.Translate("compose.chart_format.warning.ignored_metadata", 
+							metadataLinesCount.ToString(CultureInfo.InvariantCulture),
+							line));
 						continue;
 					}
 					string key = line.Substring(0, pos);
@@ -136,7 +139,9 @@ namespace Arcade.Aff
 					{
 						if (AudioOffsetSet)
 						{
-							chart.warning.Add($"第 {(metadataLinesCount).ToString(CultureInfo.InvariantCulture)} 行：AudioOffset 被重复设置为 {value}，此行会被忽略");
+							chart.warning.Add(I18n.Translate("compose.chart_format.warning.duplicated_offset", 
+								metadataLinesCount.ToString(CultureInfo.InvariantCulture),
+								value));
 						}
 						else
 						{
@@ -148,7 +153,8 @@ namespace Arcade.Aff
 							}
 							else
 							{
-								chart.warning.Add($"第 {(metadataLinesCount).ToString(CultureInfo.InvariantCulture)} 行：AudioOffset 的值不是整数，此行会被忽略");
+								chart.warning.Add(I18n.Translate("compose.chart_format.warning.floated_offset",
+									metadataLinesCount.ToString(CultureInfo.InvariantCulture)));
 							}
 						}
 					}
@@ -156,7 +162,9 @@ namespace Arcade.Aff
 					{
 						if (TimingPointDensityFactorSet)
 						{
-							chart.warning.Add($"第 {(metadataLinesCount).ToString(CultureInfo.InvariantCulture)} 行：TimingPointDensityFactor 被重复设置为 {value}，此行会被忽略");
+							chart.warning.Add(I18n.Translate("compose.chart_format.warning.duplicated_tpdf",
+								metadataLinesCount.ToString(CultureInfo.InvariantCulture),
+								value));
 						}
 						else
 						{
@@ -170,12 +178,14 @@ namespace Arcade.Aff
 								}
 								else
 								{
-									chart.warning.Add($"第 {(metadataLinesCount).ToString(CultureInfo.InvariantCulture)} 行：TimingPointDensityFactor 的值不是正数，此行会被忽略");
+									chart.warning.Add(I18n.Translate("compose.chart_format.warning.negative_tpdf",
+										metadataLinesCount.ToString(CultureInfo.InvariantCulture)));
 								}
 							}
 							else
 							{
-								chart.warning.Add($"第 {(metadataLinesCount).ToString(CultureInfo.InvariantCulture)} 行：TimingPointDensityFactor 的值不是浮点数，此行会被忽略");
+								chart.warning.Add(I18n.Translate("compose.chart_format.warning.int_tpdf",
+									metadataLinesCount.ToString(CultureInfo.InvariantCulture)));
 							}
 						}
 					}
@@ -183,7 +193,10 @@ namespace Arcade.Aff
 					{
 						if (chart.additionalMetadata.ContainsKey(key))
 						{
-							chart.warning.Add($"第 {(metadataLinesCount).ToString(CultureInfo.InvariantCulture)} 行：{key}被重复设置为{value}，此行会被忽略");
+							chart.warning.Add(I18n.Translate("compose.chart_format.warning.duplicated_key",
+								metadataLinesCount.ToString(CultureInfo.InvariantCulture),
+								key,
+								value));
 						}
 						else
 						{
@@ -340,7 +353,10 @@ namespace Arcade.Aff
 
 		public void SyntaxError(TextWriter output, IRecognizer recognizer, T offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
 		{
-			chart.error.Add($"第 {(line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(charPositionInLine + 1).ToString(CultureInfo.InvariantCulture)} 列，谱面文件语法错误：{msg}");
+			chart.error.Add(I18n.Translate("compose.chart_format.error.synatx",
+				(line + lineOffset).ToString(CultureInfo.InvariantCulture),
+				(charPositionInLine + 1).ToString(CultureInfo.InvariantCulture),
+				msg));
 		}
 	}
 
@@ -367,7 +383,9 @@ namespace Arcade.Aff
 				}
 				else
 				{
-					chart.warning.Add($"第 {(context.Int().Symbol.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.Int().Symbol.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，整数无法解析，可能是超出了数据范围，相关事件将被忽略");
+					chart.warning.Add(I18n.Translate("compose.chart_format.warning.invalid_int",
+						(context.Int().Symbol.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+						(context.Int().Symbol.Column + 1).ToString(CultureInfo.InvariantCulture)));
 				}
 			}
 			else if (context.Float() != null)
@@ -379,7 +397,9 @@ namespace Arcade.Aff
 				}
 				else
 				{
-					chart.warning.Add($"第 {(context.Int().Symbol.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.Int().Symbol.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，浮点数无法解析，可能是超出了数据范围，相关事件将被忽略");
+					chart.warning.Add(I18n.Translate("compose.chart_format.warning.invalid_float",
+						(context.Int().Symbol.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+						(context.Int().Symbol.Column + 1).ToString(CultureInfo.InvariantCulture)));
 				}
 			}
 			else if (context.Word() != null)
@@ -426,7 +446,10 @@ namespace Arcade.Aff
 				}
 				else
 				{
-					chart.warning.Add($"第 {(context.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，不支持的事件类型：{context.Word().GetText()}，该事件将被忽略");
+					chart.warning.Add(I18n.Translate("compose.chart_format.warning.invalid_event",
+						(context.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+						(context.Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+						context.Word().GetText()));
 				}
 			}
 		}
@@ -444,7 +467,10 @@ namespace Arcade.Aff
 					}
 					else
 					{
-						chart.warning.Add($"第 {(item.@event().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(item.@event().Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，不可作为物件使用的事件：{item.@event().GetText()}，该事件将被忽略");
+						chart.warning.Add(I18n.Translate("compose.chart_format.warning.non_note_event",
+							(item.@event().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+							(item.@event().Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+							item.@event().GetText()));
 					}
 				}
 			}
@@ -459,8 +485,8 @@ namespace Arcade.Aff
 			{
 				return;
 			}
-			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "tap", "时间");
-			var track = CheckValueType<RawAffInt>(context.values().value()[1], "tap", "轨道");
+			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "tap", I18n.Translate("compose.chart_format.field.timing"));
+			var track = CheckValueType<RawAffInt>(context.values().value()[1], "tap", I18n.Translate("compose.chart_format.field.track"));
 			if (timing == null || track == null)
 			{
 				return;
@@ -468,7 +494,9 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (track.data > 5 || track.data < 0)
 			{
-				chart.warning.Add($"第 {(context.values().value()[1].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.values().value()[1].Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，tap 事件的轨道参数超过范围，此 tap 将被忽略");
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.tap_overflow",
+					(context.values().value()[1].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.values().value()[1].Start.Column + 1).ToString(CultureInfo.InvariantCulture)));
 				valueError = true;
 			}
 			if (!valueError)
@@ -484,9 +512,9 @@ namespace Arcade.Aff
 			{
 				return;
 			}
-			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "hold", "时间");
-			var endTiming = CheckValueType<RawAffInt>(context.values().value()[1], "hold", "结束时间");
-			var track = CheckValueType<RawAffInt>(context.values().value()[2], "hold", "轨道");
+			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "hold", I18n.Translate("compose.chart_format.field.timing"));
+			var endTiming = CheckValueType<RawAffInt>(context.values().value()[1], "hold", I18n.Translate("compose.chart_format.field.end_timing"));
+			var track = CheckValueType<RawAffInt>(context.values().value()[2], "hold", I18n.Translate("compose.chart_format.field.track"));
 			if (timing == null || endTiming == null || track == null)
 			{
 				return;
@@ -494,14 +522,16 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (endTiming.data < timing.data)
 			{
-				chart.warning.Add($"第 {(context.values().value()[1].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.values().value()[1].Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，hold 事件的结束时间早于开始时间，作为修复将会交换起止时间");
-				var tmp = timing;
-				timing = endTiming;
-				endTiming = tmp;
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.hold_negative_duration",
+					(context.values().value()[1].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.values().value()[1].Start.Column + 1).ToString(CultureInfo.InvariantCulture)));
+				(timing, endTiming) = (endTiming, timing);
 			}
 			if (track.data > 5 || track.data < 0)
 			{
-				chart.warning.Add($"第 {(context.values().value()[2].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.values().value()[2].Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，hold 事件的轨道参数超过范围，此 hold 将被忽略");
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.hold_overflow",
+					(context.values().value()[2].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.values().value()[2].Start.Column + 1).ToString(CultureInfo.InvariantCulture)));
 				valueError = true;
 			}
 			if (!valueError)
@@ -517,9 +547,9 @@ namespace Arcade.Aff
 			{
 				return;
 			}
-			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "hold", "时间");
-			var bpm = CheckValueType<RawAffFloat>(context.values().value()[1], "hold", "BPM");
-			var segment = CheckValueType<RawAffFloat>(context.values().value()[2], "hold", "单个小节拍数");
+			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "hold", I18n.Translate("compose.chart_format.field.timing"));
+			var bpm = CheckValueType<RawAffFloat>(context.values().value()[1], "hold", I18n.Translate("compose.chart_format.field.bpm"));
+			var segment = CheckValueType<RawAffFloat>(context.values().value()[2], "hold", I18n.Translate("compose.chart_format.field.beats"));
 			if (timing == null || bpm == null || segment == null)
 			{
 				return;
@@ -527,7 +557,9 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (segment.data < 0)
 			{
-				chart.warning.Add($"第 {(context.values().value()[2].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.values().value()[2].Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，timing 事件的单个小节拍数小于 0，此 timing 将被忽略");
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.timing_negative_beats",
+					(context.values().value()[2].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.values().value()[2].Start.Column + 1).ToString(CultureInfo.InvariantCulture)));
 				valueError = true;
 			}
 			if (!valueError)
@@ -546,22 +578,22 @@ namespace Arcade.Aff
 			{
 				return;
 			}
-			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "arc", "时间");
-			var endTiming = CheckValueType<RawAffInt>(context.values().value()[1], "arc", "结束时间");
-			var xStart = CheckValueType<RawAffFloat>(context.values().value()[2], "arc", "起点横坐标");
-			var xEnd = CheckValueType<RawAffFloat>(context.values().value()[3], "arc", "终点横坐标");
-			var rawCurveType = CheckValueType<RawAffWord>(context.values().value()[4], "arc", "arc 曲线类型");
-			var curveType = ParseWord(curveTypes, rawCurveType.data, context.values().value()[4], "arc", "arc 曲线类型");
-			var yStart = CheckValueType<RawAffFloat>(context.values().value()[5], "arc", "起点纵坐标");
-			var yEnd = CheckValueType<RawAffFloat>(context.values().value()[6], "arc", "终点纵坐标");
-			var color = CheckValueType<RawAffInt>(context.values().value()[7], "arc", "颜色");
-			var effect = CheckValueType<RawAffWord>(context.values().value()[8], "arc", "效果类型");
-			var rawLineType = CheckValueType<RawAffWord>(context.values().value()[9], "arc", "是否黑线");
-			var lineType = ParseWord(lineTypes, rawLineType.data, context.values().value()[9], "arc", "是否黑线");
+			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "arc", I18n.Translate("compose.chart_format.field.timing"));
+			var endTiming = CheckValueType<RawAffInt>(context.values().value()[1], "arc", I18n.Translate("compose.chart_format.field.end_timing"));
+			var xStart = CheckValueType<RawAffFloat>(context.values().value()[2], "arc", I18n.Translate("compose.chart_format.field.x_start"));
+			var xEnd = CheckValueType<RawAffFloat>(context.values().value()[3], "arc", I18n.Translate("compose.chart_format.field.x_end"));
+			var rawCurveType = CheckValueType<RawAffWord>(context.values().value()[4], "arc", I18n.Translate("compose.chart_format.field.curve_type"));
+			var curveType = ParseWord(curveTypes, rawCurveType.data, context.values().value()[4], "arc", I18n.Translate("compose.chart_format.field.curve_type"));
+			var yStart = CheckValueType<RawAffFloat>(context.values().value()[5], "arc", I18n.Translate("compose.chart_format.field.y_start"));
+			var yEnd = CheckValueType<RawAffFloat>(context.values().value()[6], "arc", I18n.Translate("compose.chart_format.field.y_end"));
+			var color = CheckValueType<RawAffInt>(context.values().value()[7], "arc", I18n.Translate("compose.chart_format.field.color"));
+			var effect = CheckValueType<RawAffWord>(context.values().value()[8], "arc", I18n.Translate("compose.chart_format.field.effect"));
+			var rawLineType = CheckValueType<RawAffWord>(context.values().value()[9], "arc", I18n.Translate("compose.chart_format.field.line_type"));
+			var lineType = ParseWord(lineTypes, rawLineType.data, context.values().value()[9], "arc", I18n.Translate("compose.chart_format.field.line_type"));
 			RawAffFloat smoothness = null;
 			if (context.values().value().Length >= 11)
 			{
-				smoothness = CheckValueType<RawAffFloat>(context.values().value()[10], "arc", "平滑度");
+				smoothness = CheckValueType<RawAffFloat>(context.values().value()[10], "arc", I18n.Translate("compose.chart_format.field.smoothness"));
 			}
 			if (timing == null || endTiming == null || xStart == null || xEnd == null || curveType == null || yStart == null || yEnd == null || color == null || effect == null || lineType == null)
 			{
@@ -570,10 +602,10 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (endTiming.data < timing.data)
 			{
-				chart.warning.Add($"第 {(context.values().value()[1].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.values().value()[1].Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，arc 事件的结束时间早于开始时间，作为修复将会交换起止时间");
-				var tmp = timing;
-				timing = endTiming;
-				endTiming = tmp;
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.arc_negative_duration",
+					(context.values().value()[1].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.values().value()[1].Start.Column + 1).ToString(CultureInfo.InvariantCulture)));
+				(timing, endTiming) = (endTiming, timing);
 			}
 			List<RawAffArctap> arctaps = new List<RawAffArctap>();
 			var subevents = context.subevents();
@@ -587,7 +619,9 @@ namespace Arcade.Aff
 						{
 							if (arctap.Timing < timing.data || arctap.Timing > endTiming.data)
 							{
-								chart.warning.Add($"第 {(@event.values().value()[0].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(@event.values().value()[0].Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，arctap 事件的时间超出所属 arc 的时间范围，此 arctap 事件将被忽略");
+								chart.warning.Add(I18n.Translate("compose.chart_format.warning.arctap_overflow",
+									(@event.values().value()[0].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+									(@event.values().value()[0].Start.Column + 1).ToString(CultureInfo.InvariantCulture)));
 							}
 							else
 							{
@@ -596,7 +630,9 @@ namespace Arcade.Aff
 						}
 						else
 						{
-							chart.warning.Add($"第 {(@event.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(@event.Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，arc 事件的子事件必须为 arctap 事件，此事件将被忽略");
+							chart.warning.Add(I18n.Translate("compose.chart_format.warning.invalid_arc_subevent",
+								(@event.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+								(@event.Start.Column + 1).ToString(CultureInfo.InvariantCulture)));
 						}
 					}
 				}
@@ -628,7 +664,7 @@ namespace Arcade.Aff
 			{
 				return;
 			}
-			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "arctap", "时间");
+			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "arctap", I18n.Translate("compose.chart_format.field.timing"));
 			if (timing == null)
 			{
 				return;
@@ -643,16 +679,16 @@ namespace Arcade.Aff
 			{
 				return;
 			}
-			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "camera", "时间");
-			var moveX = CheckValueType<RawAffFloat>(context.values().value()[1], "camera", "平移 X 轴");
-			var moveY = CheckValueType<RawAffFloat>(context.values().value()[2], "camera", "平移 Y 轴");
-			var moveZ = CheckValueType<RawAffFloat>(context.values().value()[3], "camera", "平移 Z 轴");
-			var rotateX = CheckValueType<RawAffFloat>(context.values().value()[4], "camera", "旋转 X 轴");
-			var rotateY = CheckValueType<RawAffFloat>(context.values().value()[5], "camera", "旋转 Y 轴");
-			var rotateZ = CheckValueType<RawAffFloat>(context.values().value()[6], "camera", "旋转 Z 轴");
-			var rawCameraType = CheckValueType<RawAffWord>(context.values().value()[7], "camera", "camera 类型");
-			var cameraType = ParseWord<CameraEaseType>(cameraTypes, rawCameraType.data, context.values().value()[7], "camera", "camera 类型");
-			var duration = CheckValueType<RawAffInt>(context.values().value()[8], "camera", "时长");
+			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "camera", I18n.Translate("compose.chart_format.field.timing"));
+			var moveX = CheckValueType<RawAffFloat>(context.values().value()[1], "camera", I18n.Translate("compose.chart_format.field.x_move"));
+			var moveY = CheckValueType<RawAffFloat>(context.values().value()[2], "camera", I18n.Translate("compose.chart_format.field.y_move"));
+			var moveZ = CheckValueType<RawAffFloat>(context.values().value()[3], "camera", I18n.Translate("compose.chart_format.field.z_move"));
+			var rotateX = CheckValueType<RawAffFloat>(context.values().value()[4], "camera", I18n.Translate("compose.chart_format.field.x_rotate"));
+			var rotateY = CheckValueType<RawAffFloat>(context.values().value()[5], "camera", I18n.Translate("compose.chart_format.field.y_rotate"));
+			var rotateZ = CheckValueType<RawAffFloat>(context.values().value()[6], "camera", I18n.Translate("compose.chart_format.field.z_rotate"));
+			var rawCameraType = CheckValueType<RawAffWord>(context.values().value()[7], "camera", I18n.Translate("compose.chart_format.field.camera_type"));
+			var cameraType = ParseWord<CameraEaseType>(cameraTypes, rawCameraType.data, context.values().value()[7], "camera", I18n.Translate("compose.chart_format.field.camera_type"));
+			var duration = CheckValueType<RawAffInt>(context.values().value()[8], "camera", I18n.Translate("compose.chart_format.field.duration"));
 			if (timing == null || moveX == null || moveY == null || moveZ == null || rotateX == null || rotateY == null || rotateZ == null || cameraType == null || duration == null)
 			{
 				return;
@@ -660,7 +696,9 @@ namespace Arcade.Aff
 			bool valueError = false;
 			if (duration.data < 0)
 			{
-				chart.warning.Add($"第 {(context.values().value()[8].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.values().value()[8].Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，camera 事件的时长小于零，作为修复其时长见会被设为零");
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.camera_negative_duration",
+					(context.values().value()[8].Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.values().value()[8].Start.Column + 1).ToString(CultureInfo.InvariantCulture)));
 				duration.data = 0;
 			}
 			if (!valueError)
@@ -687,8 +725,8 @@ namespace Arcade.Aff
 			{
 				return;
 			}
-			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "scenecontrol", "时间");
-			var type = CheckValueType<RawAffWord>(context.values().value()[1], "scenecontrol", "类型");
+			var timing = CheckValueType<RawAffInt>(context.values().value()[0], "scenecontrol", I18n.Translate("compose.chart_format.field.timing"));
+			var type = CheckValueType<RawAffWord>(context.values().value()[1], "scenecontrol", I18n.Translate("compose.chart_format.field.type"));
 			if (timing == null || type == null)
 			{
 				return;
@@ -717,20 +755,26 @@ namespace Arcade.Aff
 			Arcade.Aff.RawAffWord timingGroupAttributes = new RawAffWord { data = "" };
 			if (context.values().value().Length > 0)
 			{
-				timingGroupAttributes = CheckValueType<RawAffWord>(context.values().value()[0], "arc", "arc 类型");
+				timingGroupAttributes = CheckValueType<RawAffWord>(context.values().value()[0], "timinggroup", I18n.Translate("compose.chart_format.field.tg_properties"));
 			}
 			foreach (var item in context.segment().body().item())
 			{
 				IRawAffEvent @event = item.@event().value;
 				if (!(@event is IRawAffItem))
 				{
-					chart.warning.Add($"第 {(item.@event().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(item.@event().Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，不可作为物件使用的事件：{item.@event().GetText()}，此事件将被忽略");
+					chart.warning.Add(I18n.Translate("compose.chart_format.warning.non_note_event", 
+						(item.@event().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+						(item.@event().Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+						item.@event().GetText()));
 					continue;
 				}
 				IRawAffItem rawItem = @event as IRawAffItem;
 				if (!(rawItem is IRawAffNestableItem))
 				{
-					chart.warning.Add($"第 {(item.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(item.Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，不可在 timinggroup 中嵌套使用的物件：{item.@event().GetText()}，此物件将被忽略");
+					chart.warning.Add(I18n.Translate("compose.chart_format.warning.nested",
+						(item.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+						(item.Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+						item.@event().GetText()));
 					nonNestableItems.Add(rawItem);
 					continue;
 				}
@@ -751,7 +795,10 @@ namespace Arcade.Aff
 		{
 			if (context.subevents() != null)
 			{
-				chart.warning.Add($"第 {(context.subevents().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.subevents().Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，{type} 事件不应包含子事件，这些子事件将被忽略");
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.reject_subevent",
+					(context.subevents().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.subevents().Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+					type));
 			}
 		}
 
@@ -759,7 +806,10 @@ namespace Arcade.Aff
 		{
 			if (context.segment() != null)
 			{
-				chart.warning.Add($"第 {(context.subevents().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.subevents().Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，{type} 事件不应包含事件块，此事件块将被忽略");
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.reject_segment",
+					(context.subevents().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.subevents().Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+					type));
 			}
 		}
 
@@ -767,7 +817,12 @@ namespace Arcade.Aff
 		{
 			if (context.values().value().Length != count)
 			{
-				chart.warning.Add($"第 {(context.values().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.values().Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，{type} 事件的参数个数应当为 {count} 个而非 {context.values().value().Length} 个，此事件将被忽略");
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.value_count_mismatch",
+					(context.values().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.values().Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+					type,
+					count,
+					context.values().value().Length));
 				return false;
 			}
 			return true;
@@ -777,7 +832,12 @@ namespace Arcade.Aff
 		{
 			if (context.values().value().Length < count)
 			{
-				chart.warning.Add($"第 {(context.values().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.values().Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，{type} 事件的参数个数应当为至少 {count} 个而非 {context.values().value().Length} 个，此事件将被忽略");
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.value_missing",
+					(context.values().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.values().Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+					type,
+					count,
+					context.values().value().Length));
 				return false;
 			}
 			return true;
@@ -787,7 +847,12 @@ namespace Arcade.Aff
 		{
 			if (context.values().value().Length > count)
 			{
-				chart.warning.Add($"第 {(context.values().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.values().Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，{type} 事件的参数个数应当为至多 {count} 个而非 {context.values().value().Length} 个，此事件将被忽略");
+				chart.warning.Add(I18n.Translate("compose.chart_format.warning.value_exceed",
+					(context.values().Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+					(context.values().Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+					type,
+					count,
+					context.values().value().Length));
 				return false;
 			}
 			return true;
@@ -804,7 +869,11 @@ namespace Arcade.Aff
 				}
 				else
 				{
-					chart.warning.Add($"第 {(context.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，{type} 事件的 {field} 参数的值类型错误，此事件将被忽略");
+					chart.warning.Add(I18n.Translate("compose.chart_format.warning.value_type",
+						(context.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+						(context.Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+						type,
+						field));
 				}
 			}
 			return null;
@@ -821,7 +890,11 @@ namespace Arcade.Aff
 			{
 				return result;
 			}
-			chart.warning.Add($"第 {(context.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture)} 行第 {(context.Start.Column + 1).ToString(CultureInfo.InvariantCulture)} 列，{type} 事件的 {field} 参数的值不是合法的几个值之一，此事件将被忽略");
+			chart.warning.Add(I18n.Translate("compose.chart_format.warning.out_of_options",
+				(context.Start.Line + lineOffset).ToString(CultureInfo.InvariantCulture),
+				(context.Start.Column + 1).ToString(CultureInfo.InvariantCulture),
+				type,
+				field));
 			return null;
 		}
 

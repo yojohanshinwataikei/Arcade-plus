@@ -5,6 +5,7 @@ using Arcade.Compose;
 using Arcade.Compose.MarkingMenu;
 using Arcade.Compose.Command;
 using Arcade.Gameplay;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose.Operation
 {
@@ -61,7 +62,7 @@ namespace Arcade.Compose.Operation
 						break;
 				}
 			}
-			AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), "镜像"));
+			AdeCommandManager.Instance.Add(new BatchCommand(commands.ToArray(), I18n.Translate("compose.operation.mirror")));
 		}
 
 		public override AdeOperationResult TryExecuteOperation()

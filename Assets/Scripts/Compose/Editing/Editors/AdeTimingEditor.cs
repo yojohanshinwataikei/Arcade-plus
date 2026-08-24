@@ -7,6 +7,7 @@ using Arcade.Gameplay;
 using Arcade.Compose.Command;
 using System;
 using System.Globalization;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose.Editing
 {
@@ -36,10 +37,12 @@ namespace Arcade.Compose.Editing
 		private void Start()
 		{
 			ArcGameplayManager.Instance.OnChartLoad.AddListener(UpdateTiming);
+			I18n.OnLocaleChanged += ForceUpdateAll;
 		}
 		private void OnDestroy()
 		{
 			ArcGameplayManager.Instance.OnChartLoad.RemoveListener(UpdateTiming);
+			I18n.OnLocaleChanged -= ForceUpdateAll;
 		}
 
 		private int inUse = 0;
@@ -96,7 +99,7 @@ namespace Arcade.Compose.Editing
 			inUse = 0;
 
 			List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
-			options.Add(new Dropdown.OptionData { text = "默认" });
+			options.Add(new Dropdown.OptionData { text = I18n.Translate("bottombar.current_timing_group.default") });
 			foreach (var tg in ArcTimingManager.Instance.timingGroups)
 			{
 				options.Add(new Dropdown.OptionData { text = tg.Id.ToString(CultureInfo.InvariantCulture) });
@@ -138,7 +141,7 @@ namespace Arcade.Compose.Editing
 			}
 			if (currentTimingGroup == null)
 			{
-				CurrentTimingGroupText.text = "默认";
+				CurrentTimingGroupText.text = I18n.Translate("bottombar.current_timing_group.default");
 			}
 			else
 			{
@@ -202,7 +205,7 @@ namespace Arcade.Compose.Editing
 		{
 			get
 			{
-				return "添加 Timing";
+				return I18n.Translate("compose.hint.timing_edit.add.timing");
 			}
 		}
 		public void Do()
@@ -228,7 +231,7 @@ namespace Arcade.Compose.Editing
 		{
 			get
 			{
-				return "删除 Timing";
+				return I18n.Translate("compose.hint.timing_edit.remove.timing");
 			}
 		}
 		public void Do()
@@ -256,7 +259,7 @@ namespace Arcade.Compose.Editing
 		{
 			get
 			{
-				return "修改 Timing";
+				return I18n.Translate("compose.hint.timing_edit.modify.timing");
 			}
 		}
 		public void Do()
@@ -282,7 +285,7 @@ namespace Arcade.Compose.Editing
 		{
 			get
 			{
-				return "添加 Timing Group";
+				return I18n.Translate("compose.hint.timing_edit.add.timing_group");
 			}
 		}
 		public void Do()
@@ -316,7 +319,7 @@ namespace Arcade.Compose.Editing
 		{
 			get
 			{
-				return "删除 Timing Group";
+				return I18n.Translate("compose.hint.timing_edit.remove.timing_group");
 			}
 		}
 		public void Do()

@@ -14,6 +14,7 @@ using Arcade.Compose.Command;
 using Arcade.Util.Loader;
 using System.Collections.Generic;
 using System.Globalization;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose
 {
@@ -107,7 +108,12 @@ namespace Arcade.Compose
 			watcher.NotifyFilter = NotifyFilters.LastWrite;
 			watcher.Changed += OnWatcherChanged;
 			watcher.EnableRaisingEvents = false;
+			I18n.OnLocaleChanged += UpdateSaveModeLocale;
 			StartCoroutine(AutosaveCoroutine());
+		}
+		private void OnDestroy()
+		{
+			I18n.OnLocaleChanged -= UpdateSaveModeLocale;
 		}
 		private void Update()
 		{
@@ -176,13 +182,13 @@ namespace Arcade.Compose
 			}
 			try
 			{
-				string folder = Util.Shell.FileBrowser.OpenFolderDialog("选择您的 Arcaea 自制谱文件夹 (包含 0/1/2.aff, base.mp3/ogg/wav, base.jpg)");
+				string folder = Util.Shell.FileBrowser.OpenFolderDialog(I18n.Translate("compose.project.open_folder_dialog_hint"));
 				if (folder == null) return;
 				loadingCoroutine = StartCoroutine(LoadProjectCoroutine(folder));
 			}
 			catch (Exception Ex)
 			{
-				AdeBasicSingleDialogContent.Instance.Show(Ex.Message, "读取错误");
+				AdeBasicSingleDialogContent.Instance.Show(Ex.Message, I18n.Translate("dialogs.exception.open_project.title"));
 				Debug.Log(Ex);
 				CurrentProjectMetadata = null;
 				CurrentProjectFolder = null;
@@ -205,9 +211,9 @@ namespace Arcade.Compose
 			}
 			catch (Exception Ex)
 			{
-				AdeBasicSingleDialogContent.Instance.Show(Ex.Message + "\n" + Ex.ToString(), "保存错误");
+				AdeBasicSingleDialogContent.Instance.Show(Ex.Message + "\n" + Ex.ToString(), I18n.Translate("compose.error_message.unable_to_save"));
 			}
-			AdeToast.Instance.Show("谱面已保存至\n" + path + "\n原文件已备份至\n" + backupPath);
+			AdeToast.Instance.Show(I18n.Translate("compose.hint_message.backup", path, backupPath));
 			fs.Close();
 		}
 
@@ -227,7 +233,7 @@ namespace Arcade.Compose
 				}
 				catch (Exception Ex)
 				{
-					AdeBasicSingleDialogContent.Instance.Show(Ex.Message + "\n" + Ex.ToString(), "自动保存错误");
+					AdeBasicSingleDialogContent.Instance.Show(Ex.Message + "\n" + Ex.ToString(), I18n.Translate("compose.error_message.unable_to_save.auto"));
 				}
 				fs.Close();
 			}
@@ -239,7 +245,7 @@ namespace Arcade.Compose
 			LoadChart(difficulty);
 			if (!ArcGameplayManager.Instance.IsLoaded)
 			{
-				SetTutorialMessage("无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹");
+				SetTutorialMessage(I18n.Translate("compose.error_message.unable_to_load"));
 			}
 			yield return AdeShutterManager.Instance.OpenCoroutine();
 			loadingCoroutine = null;
@@ -251,7 +257,7 @@ namespace Arcade.Compose
 			LoadDifficulty(difficulty);
 			if (!ArcGameplayManager.Instance.IsLoaded)
 			{
-				SetTutorialMessage("无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹");
+				SetTutorialMessage(I18n.Translate("compose.error_message.unable_to_load"));
 			}
 			yield return AdeShutterManager.Instance.OpenCoroutine();
 			loadingCoroutine = null;
@@ -303,13 +309,13 @@ namespace Arcade.Compose
 			LoadAudio(difficulty);
 			if (AudioClip == null)
 			{
-				SetTutorialMessage("无法加载音频文件，请确认音频文件存在且格式正确后重新打开谱面文件夹");
+				SetTutorialMessage(I18n.Translate("compose.error_message.unable_to_load.audio"));
 				return;
 			}
 			LoadChart(difficulty);
 			if (!ArcGameplayManager.Instance.IsLoaded)
 			{
-				SetTutorialMessage("无法加载谱面文件，请修正谱面文件格式或删除谱面文件后重新打开谱面文件夹");
+				SetTutorialMessage(I18n.Translate("compose.error_message.unable_to_load"));
 				return;
 			}
 			LoadSpecialEffectAudio();
@@ -329,8 +335,8 @@ namespace Arcade.Compose
 			}
 			catch (Exception Ex)
 			{
-				AdeBasicSingleDialogContent.Instance.Show(Ex.Message, "元信息读取错误");
-				SetTutorialMessage("无法加载工程元信息，请删除谱面文件夹下的 Arcade 文件夹后重新打开谱面文件夹");
+				AdeBasicSingleDialogContent.Instance.Show(Ex.Message, I18n.Translate("compose.error_message.unable_to_load.metadata.title"));
+				SetTutorialMessage(I18n.Translate("compose.error_message.unable_to_load.metadata"));
 				return;
 			}
 			LoadDifficulty(CurrentProjectMetadata.LastWorkingDifficulty);
@@ -444,20 +450,28 @@ namespace Arcade.Compose
 			catch (Exception Ex)
 			{
 				Debug.LogWarning(Ex);
-				AdeBasicSingleDialogContent.Instance.Show(Ex.Message, "谱面读取错误");
+				AdeBasicSingleDialogContent.Instance.Show(Ex.Message, I18n.Translate("compose.error_message.unable_to_read_chart"));
 			}
 			Gameplay.Chart.ArcChart chart = null;
 			if (raw != null)
 			{
 				if (raw.error.Count > 0)
 				{
-					AdeBasicSingleDialogContent.Instance.Show($"格式问题：\n{(raw.error.Count > 256 ? "* 谱面错误太多，仅显示前 256 条" : "")}{string.Join("\n", raw.error.Take(256).Select(s => $"- {s}"))}", "谱面解析失败");
+					AdeBasicSingleDialogContent.Instance.Show(
+						I18n.Translate("compose.error_message.format_error", 
+							raw.error.Count > 256 ? I18n.Translate("compose.error_message.pre_256") : "",
+							string.Join("\n", raw.error.Take(256).Select(s => $"- {s}"))),
+						I18n.Translate("compose.error_message.unable_to_parse_chart"));
 				}
 				else
 				{
 					if (raw.warning.Count > 0)
 					{
-						AdeBasicSingleDialogContent.Instance.Show($"Arcade-Plus 检测到谱面存在问题，并对谱面进行了自动修复\n谱面在存在的问题：\n{(raw.warning.Count > 256 ? "* 谱面错误太多，仅显示前 256 条" : "")}{string.Join("\n", raw.warning.Take(256).Select(s => $"- {s}"))}", "谱面解析出现问题");
+						AdeBasicSingleDialogContent.Instance.Show(
+							I18n.Translate("compose.error_message.format_warning",
+								raw.warning.Count > 256 ? I18n.Translate("compose.error_message.pre_256") : "",
+								string.Join("\n", raw.warning.Take(256).Select(s => $"- {s}"))),
+							I18n.Translate("compose.error_message.parse_chart_problems"));
 					}
 					chart = new Gameplay.Chart.ArcChart(raw);
 				}
@@ -621,7 +635,11 @@ namespace Arcade.Compose
 		public void OnSaveModeClicked()
 		{
 			ArcadeComposeManager.Instance.ArcadePreference.ChartSortMode = ArcadeComposeManager.Instance.ArcadePreference.ChartSortMode == ChartSortMode.Timing ? ChartSortMode.Type : ChartSortMode.Timing;
-			SaveMode.text = ArcadeComposeManager.Instance.ArcadePreference.ChartSortMode == ChartSortMode.Timing ? "按时间" : "按类型";
+			UpdateSaveModeLocale();
+		}
+		public void UpdateSaveModeLocale()
+		{
+			SaveMode.text = I18n.Translate(ArcadeComposeManager.Instance.ArcadePreference.ChartSortMode == ChartSortMode.Timing ? "leftbar.save_mode_timing" : "leftbar.save_mode_type");
 		}
 		public void OnOpenFolder()
 		{

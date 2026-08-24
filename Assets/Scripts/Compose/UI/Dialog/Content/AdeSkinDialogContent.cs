@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using Arcade.Gameplay;
 using System.Text.RegularExpressions;
+using Arcade.Util.I18n;
 
 namespace Arcade.Compose.Dialog
 {
@@ -177,7 +178,7 @@ namespace Arcade.Compose.Dialog
 				option.Initialize(bg, false, AdeSkinHost.Instance.skinData.BackgroundDatas[bg].background.value);
 				InternalBackgroundButtons.Add(bg, option);
 			}
-			InternalBackgroundLabel.text = "皮肤内置背景";
+			InternalBackgroundLabel.text = I18n.Translate("dialogs.skin.internal_bg");
 		}
 
 		private void LoadExternalBackgroundOptions()
@@ -196,7 +197,9 @@ namespace Arcade.Compose.Dialog
 				option.Initialize(bg, true, AdeSkinHost.Instance.ExternalBackgrounds[bg].value);
 				ExternalBackgroundButtons.Add(bg, option);
 			}
-			ExternalBackgroundLabel.text = AdeSkinHost.Instance.ExternalBackgrounds.Count > 0 ? "自定义背景" : "没有可用的自定义背景";
+			ExternalBackgroundLabel.text = AdeSkinHost.Instance.ExternalBackgrounds.Count > 0 
+				? I18n.Translate("dialogs.skin.external_bg") 
+				: I18n.Translate("dialogs.skin.external_bg.no_available");
 		}
 
 		private void VerifySkinOptions()
@@ -457,8 +460,14 @@ namespace Arcade.Compose.Dialog
 					externalMatchedBgCount += 1;
 				}
 			}
-			InternalBackgroundLabel.text = internalMatchedBgCount > 0 ? "皮肤内置背景" : "没有匹配的皮肤内置背景";
-			ExternalBackgroundLabel.text = AdeSkinHost.Instance.ExternalBackgrounds.Count > 0 ? externalMatchedBgCount > 0 ? "自定义背景" : "没有匹配的自定义背景" : "没有可用的自定义背景";
+			InternalBackgroundLabel.text = internalMatchedBgCount > 0 
+				? I18n.Translate("dialogs.skin.internal_bg") 
+				: I18n.Translate("dialogs.skin.internal_bg.no_matched");
+			ExternalBackgroundLabel.text = AdeSkinHost.Instance.ExternalBackgrounds.Count > 0 
+				? externalMatchedBgCount > 0 
+					? I18n.Translate("dialogs.skin.external_bg")
+					: I18n.Translate("dialogs.skin.external_bg.no_matched") 
+				: I18n.Translate("dialogs.skin.external_bg.no_available");
 		}
 	}
 }
